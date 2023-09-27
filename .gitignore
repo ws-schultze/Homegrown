@@ -23,5 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Firebase
-/src/firebase.config.ts
+# Only track firbase.config.ts once you have abstracted the sensitive information away from it via environmental variables
+
+# /src/firebase.config.ts
 
