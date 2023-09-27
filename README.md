@@ -1,6 +1,6 @@
 # Setup
 
-Start by cloning the repo to a location of your choosing.
+Start by cloning this repo to a location of your choosing.
 
 Open a terminal from within the project's root directory and run `npm install`
 
