@@ -1,4 +1,4 @@
-# Getting the app setup
+# Setup
 
 Start by cloning the repo to a location of your choosing.
 
