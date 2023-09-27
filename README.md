@@ -4,7 +4,7 @@ Start by cloning this repo to a location of your choosing.
 
 Open a terminal from within the project's root directory and run `npm install`
 
-## Firestore database
+## Firestore Database
 
 Setup a firestore database that has two collections:
 
@@ -41,24 +41,43 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 ```
 
-Copy the contents of the config file into the firebase.config.ts file you just made.
+In the project's root, create a new dot file .env.local and in it, create an environmental variable for each of the firebaseConfig key/value pairs like so:
 
-In order to have the firebase API key in only one location, write this:
+```
+REACT_APP_GOOGLE_API_KEY = supersecret key
+
+REACT_APP_FIREBASE_AUTH_DOMAIN = something
+
+REACT_APP_FIREBASE_PROJECT_ID = something
+
+REACT_APP_FIREBASE_STORAGE_BUCKET = something
+
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID = something
+
+REACT_APP_FIREBASE_APP_ID = something
+
+REACT_APP_FIREBASE_MEASUREMENT_ID = something
+```
+
+Now these environmental variable can be called from within firebase.config.ts
 
 ```javascript
 // ... same as before ...
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-  // ... same as before ...
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 // ... same as before ...
 ```
 
-Later we will make a place to store environmental variables.
-
-Now add the following rules to your new firestore database:
+In order to be able to do some crud actions, apply the following rules to your new firestore database:
 
 ```javascript
 rules_version = '2';
@@ -85,21 +104,9 @@ service cloud.firestore {
 }
 ```
 
-## Local environmental variables
-
-From the SDK config file, copy the apiKey's value (without the parenthesis)
-
-In the root directory create a ".env.local" file and paste the API key into it:
-
-```-
-REACT_APP_GOOGLE_API_KEY = The API key found in the SDK config
-```
-
-The reason for moving the API key is because a number of components need to access it, and using process.env.REACT_APP_GOOGLE_API_KEY seems like a clean way to achieve that.
-
 ## Storage
 
-Setup a storage bucket storage that will hold images for the firebase project and apply the following rules to it:
+Setup a storage in the project, then make a storage bucket that will hold images for the project and apply the following rules to it:
 
 ```javascript
 rules_version = '2';
