@@ -4,7 +4,7 @@ Start by cloning the repo to a location of your choosing.
 
 Open a terminal from within the project's root directory and run `npm install`
 
-#### Firestore database
+## Firestore database
 
 Setup a firestore database that has two collections:
 
@@ -85,7 +85,7 @@ service cloud.firestore {
 }
 ```
 
-#### Local environmental variables
+## Local environmental variables
 
 From the SDK config file, copy the apiKey's value (without the parenthesis)
 
@@ -97,7 +97,7 @@ REACT_APP_GOOGLE_API_KEY = The API key found in the SDK config
 
 The reason for moving the API key is because a number of components need to access it, and using process.env.REACT_APP_GOOGLE_API_KEY seems like a clean way to achieve that.
 
-#### Storage
+## Storage
 
 Setup a storage bucket storage that will hold images for the firebase project and apply the following rules to it:
 
