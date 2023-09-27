@@ -1,0 +1,239 @@
+.map {
+  height: 100%;
+  opacity: 0;
+}
+
+.fade {
+  animation-name: fadeIn;
+  animation-duration: 500ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+:root {
+  --width-map-marker-small: 0.8rem;
+  --color-for-sale: blue;
+  --color-for-rent: darkviolet;
+  --color-active: lime;
+}
+
+.map-marker-wrap {
+  position: relative;
+  /* Must include pointer events, or the info window will not get triggered to show/hide */
+  pointer-events: all !important;
+  cursor: pointer;
+}
+
+.map-marker {
+  font-size: 14px;
+  padding: 2px 5px;
+  width: -moz-fit-content;
+  border-radius: 100px;
+  color: white;
+  box-shadow: var(--box-shadow);
+  border: 1px solid white;
+}
+
+.large {
+  border: none !important;
+}
+
+.small {
+  height: var(--width-map-marker-small);
+  width: var(--width-map-marker-small);
+}
+
+.for-sale {
+  background: var(--color-primary);
+}
+
+.for-rent {
+  background: var(--color-for-rent);
+}
+
+.active {
+  border: 1px solid transparent; /* Creates a lift-up effect of the marker */
+}
+
+.map-marker-wrap .map-marker.for-sale.large::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0px);
+  width: 0px;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--color-primary);
+}
+
+.map-marker-wrap .map-marker.for-rent.large::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0px);
+  width: 0px;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--color-for-rent);
+}
+
+/*
+ * info-window styles in highlighted state.
+ */
+.map-marker-wrap.active .info-window {
+  display: flex;
+}
+
+.map-marker-wrap.active .map-marker {
+  color: black;
+  background: var(--color-active);
+}
+
+.map-marker-wrap.active .map-marker::after {
+  border-top: 10px solid var(--color-active) !important;
+}
+
+.move-right {
+  left: 100% !important;
+  bottom: 100% !important;
+  transform: none !important;
+}
+
+.move-left {
+  left: unset;
+  right: 100%;
+  bottom: 100%;
+  transform: none;
+}
+
+.move-down {
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0);
+}
+
+.move-up {
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, 0%);
+}
+
+.move-southeast {
+  left: 100%;
+  top: 100%;
+  transform: none;
+}
+
+.move-southwest {
+  left: unset;
+  right: 100%;
+  top: 100%;
+  transform: none;
+}
+
+.move-northeast {
+  left: 100%;
+  bottom: 100%;
+  transform: none;
+}
+
+.move-northwest {
+  left: unset;
+  right: 100%;
+  bottom: 100%;
+  transform: none;
+}
+
+.info-window {
+  display: none;
+  position: absolute;
+  /* left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, 0%); */
+  flex-direction: column;
+  /* Height and width are used in ExploreListingsMap.tsx in moveMarkerContent() */
+  width: 200px;
+  height: 200px;
+  transition: all 0.3s ease-out;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--box-shadow);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.info-window.mobile {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  flex-direction: column;
+  width: 200px;
+  height: 200px;
+  transition: all 0.3s ease-out;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--box-shadow);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* transparent border makes the info window stay open on hover 
+when it is positioned seemingly outside of the marker */
+.info-window::after {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: -0.5rem;
+  right: -0.5rem;
+  bottom: -0.5rem;
+  border: 1rem solid rgba(0, 128, 0, 0);
+}
+
+.info-window img {
+  width: 100%;
+  height: 110px;
+  object-fit: fill;
+}
+
+.info-window__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 5px;
+  padding: 5px;
+}
+
+.info-window__body__header {
+  font: 400 14px Roboto, Arial, sans-serif !important;
+}
+
+.info-window__body__features {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  font: 400 14px Roboto, Arial, sans-serif !important;
+}
+
+.info-window__body__address {
+  font: 400 12px Roboto, Arial, sans-serif !important;
+}

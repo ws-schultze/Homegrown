@@ -1,0 +1,80 @@
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper {
+  width: 100%;
+  height: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-slide {
+  overflow: hidden;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center;
+}
+
+.big-swiper {
+  height: 710px;
+  box-sizing: border-box;
+}
+
+.small-swiper {
+  height: 150px;
+  box-sizing: border-box;
+}
+
+.small-swiper .swiper-slide {
+  opacity: 0.5;
+}
+
+/* Highlight the thumb slide that corresponds to the current main slide */
+.small-swiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+/* Thumb slide images */
+.small-swiper img {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide:hover {
+  cursor: pointer;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  left: 10px;
+  right: auto;
+  background: var(--color-bg-primary);
+  height: 60px !important;
+  width: 50px !important;
+  border-radius: 5px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--box-shadow);
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  border: 1px solid var(--color-primary);
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  color: var(--color-text);
+}
+
+.swiper-button-prev:hover:after,
+.swiper-button-next:hover:after {
+  color: var(--color-primary);
+}

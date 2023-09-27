@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  margin: 0 1rem;
+}
+
+.icon {
+  background-color: var(--color-bg-secondary);
+  height: var(--heigh-input-icon);
+  width: var(--width-input-icon);
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+  fill: var(--color-border);
+  padding: var(--padding-input-icon);
+}
+
+.input {
+  height: 3rem;
+  width: 100%;
+
+  flex: 1;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  font-family: "Montserrat", sans-serif;
+  outline: none;
+
+  background: var(--color-bg-secondary);
+  border: none;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}

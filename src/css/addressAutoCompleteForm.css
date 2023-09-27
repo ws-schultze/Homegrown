@@ -1,0 +1,103 @@
+/* To keep the .pac-container open while inspecting with dev tools in a browser, 
+run the following in the dev tools console:
+>> document.querySelector('.pac-container').style.display = 'block'
+
+This should keep the address autocomplete dropdown open so you can more easily style it
+*/
+
+/* .pac-card {
+  margin: 10px;
+  padding: 0 0.5em;
+  font: 400 18px Roboto, Arial, sans-serif;
+  overflow: hidden;
+  font-family: Roboto;
+  padding: 0;
+  border-radius: var(--border-radius);
+  box-shadow: none !important;
+  background-color: var(--color-bg-secondary) !important;
+} */
+
+.pac-container {
+  /* margin-right: 12px; */
+  /* background: var(--color-bg-secondary) !important; */
+  /* box-shadow: var(--box-shadow) !important; */
+  /* border-radius: var(--border-radius); */
+  padding: 0;
+  /* color: var(--color-text); */
+  /* border: 1px solid var(--color-border); */
+}
+
+/* .pac-item-query {
+  font-size: 13px;
+  padding-right: 3px;
+  color: var(--color-text);
+} */
+
+/* .pac-item {
+  color: var(--color-text);
+  border-top: 1px solid var(--color-border);
+} */
+
+/* .pac-item:hover,
+.pac-item:active,
+.pac-item:focus {
+  background-color: var(--color-primary);
+} */
+
+/* div.pac-item:nth-child(1) {
+  border: none;
+} */
+
+.pac-controls {
+  display: inline-block;
+  padding: 5px 11px;
+}
+
+.pac-controls label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#pac-input {
+  background-color: var(--color-bg-secondary);
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+.title {
+  width: 100%;
+  margin-block-end: 0;
+  font-weight: 500;
+}
+
+.my-button {
+  background-color: #000;
+  border-radius: var(--border-radius);
+  color: #fff;
+  margin: 10px;
+  padding: 6px 24px;
+  text-decoration: none;
+}
+
+.my-button:hover {
+  background-color: #666;
+}
+
+.my-button:active {
+  position: relative;
+  top: 1px;
+}
+
+img.powered-by-google {
+  margin: 0.5em;
+}

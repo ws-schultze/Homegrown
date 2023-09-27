@@ -1,0 +1,176 @@
+import { useEffect, useRef } from "react";
+import styles from "./styles.module.scss";
+import Spinner from "../../common/loaders/Spinner";
+import { useUserContext } from "../../../UserProvider";
+import { Wrapper } from "@googlemaps/react-wrapper";
+import TopImage from "../../../assets/jpg/francesca-tosolini-XcVm8mn7NUM-unsplash.jpg";
+import Footer from "../../common/footer/Footer";
+import { toast } from "react-toastify";
+import { useAppSelector } from "../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { setPlace } from "../../pages/exploreListings/filters/placeFilter/placeFilterSlice";
+import { useNavigate } from "react-router";
+import PlaceFilter from "../../pages/exploreListings/filters/placeFilter/PlaceFilter";
+import { setForSaleOrRent } from "../../pages/exploreListings/filters/forSaleOrRentFilter/forSaleOrRentSlice";
+import { renderMap } from "../exploreListings/map/mapHelpers";
+import ListingCard from "../../common/listingCard/ListingCard";
+import "./swiper.css";
+import { register } from "swiper/element/bundle";
+import { Link } from "react-router-dom";
+
+register();
+
+export default function Home() {
+  const userContext = useUserContext();
+  const commonState = useAppSelector((state) => state.common);
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const swiperElRef = useRef<HTMLDivElement>(null);
+  // const swiperProgressBarRef = useRef<HTMLSpanElement>(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   const progressBar = document.querySelector(
+  //     ".swiper-pagination-progressbar-fill"
+  //   ) as HTMLElement;
+  //   if (progressBar) {
+  //     console.log("Styling Bar: ", progressBar);
+  //     progressBar.style.background = "yellow !important";
+  //   }
+  // }, []);
+
+  function handleSearchboxPlace(
+    place: google.maps.places.PlaceResult | undefined
+  ) {
+    if (place) {
+      const p = JSON.stringify(place);
+      dispatch(setPlace(p));
+    }
+
+    if (place) {
+      navigate(`/explore-listings/${place.formatted_address}`);
+    } else {
+      console.warn("place is undefined");
+      toast.warn("Something went wrong, please try your search again.");
+    }
+  }
+
+  if (commonState.status === "loading") {
+    return <Spinner size="large" />;
+  }
+
+  return (
+    <>
+      {commonState.status === "idle" &&
+      commonState.listings &&
+      commonState.listings.length >= 1 ? (
+        <div
+          // className="page-wrap"
+          className={`page-wrap ${styles["fade"]}`}
+          style={{ animationDelay: `${0}ms` }}
+        >
+          <main>
+            <div className={styles["top-container"]}>
+              <img src={TopImage} alt="" />
+
+              {userContext.isAuthenticated ? (
+                <p>Welcome Back</p>
+              ) : (
+                <p className="page__header">Explore The Market</p>
+              )}
+
+              <div className={styles["searchbox-container"]}>
+                <input
+                  className={styles.searchbox}
+                  id="place-filter-searchbox"
+                  type="search"
+                  ref={searchRef}
+                  placeholder="Search by City, Postal Code, County, State or Country"
+                />
+              </div>
+
+              <Wrapper
+                apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+                render={renderMap}
+                version="beta"
+                libraries={["places", "marker"]}
+              >
+                <PlaceFilter emitPlace={handleSearchboxPlace} />
+              </Wrapper>
+            </div>
+
+            <div className={styles["most-recent-listings"]}>
+              <h2>Most recent listings</h2>
+              {/* @ts-ignore */}
+              <swiper-container
+                ref={swiperElRef}
+                class="swiper-container"
+                slides-per-view="auto"
+                space-between="10"
+                pagination="true"
+                pagination-type="progressbar"
+                navigation="true"
+                loop="false"
+              >
+                {commonState.listings.map((listing, index) => (
+                  //@ts-ignore
+                  <swiper-slide class="swiper-slide" key={index}>
+                    <ListingCard listing={listing} />
+                    {/* @ts-ignore */}
+                  </swiper-slide>
+                ))}
+                {/* @ts-ignore */}
+              </swiper-container>
+            </div>
+
+            <div className={styles["bottom-btn-container"]}>
+              <Link
+                to="explore-listings/"
+                className={`${styles["link-btn"]} primary-btn`}
+                onClick={() => {
+                  dispatch(
+                    setForSaleOrRent({ id: "for-sale", label: "For Sale" })
+                  );
+                }}
+              >
+                Browse Sales
+              </Link>
+              <Link
+                to="explore-listings/"
+                className={`${styles["link-btn"]} primary-btn`}
+                onClick={() => {
+                  dispatch(
+                    setForSaleOrRent({ id: "for-rent", label: "For Rent" })
+                  );
+                }}
+              >
+                Browse Rentals
+              </Link>
+              <>
+                {userContext.isAuthenticated ? (
+                  <Link
+                    to="/create-listing"
+                    className={`${styles["link-btn"]} primary-btn`}
+                  >
+                    Create a Listing
+                  </Link>
+                ) : (
+                  <Link
+                    to="/sign-in"
+                    className={`${styles["link-btn"]} primary-btn`}
+                  >
+                    Create a Listing
+                  </Link>
+                )}
+              </>
+            </div>
+
+            <Footer />
+          </main>
+        </div>
+      ) : (
+        <div>No listings found</div>
+      )}
+    </>
+  );
+}

@@ -1,0 +1,163 @@
+.navbar-wrap,
+.mobile-navbar-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: var(--height-navbar);
+  background-color: var(--color-bg-primary);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  height: 100%;
+  width: 100%;
+}
+
+.navbar-link {
+  color: var(--color-text);
+}
+
+.navbar-link.active {
+  color: var(--color-primary);
+}
+
+.navbar__list-items {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.navbar__list-item {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.navbar__list-item__name {
+  margin-top: 0.25rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-navbar-list-item-name);
+}
+
+.navbar__list-item__name--active {
+  margin-top: 0.25rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.navbar__list-item__icon {
+  margin-top: 0.25rem;
+  fill: var(--color-navbar-list-item-icon);
+  height: var(--height-navbar-icon);
+  width: var(--height-navbar-icon);
+}
+
+.navbar__list-item:hover .navbar__list-item__icon,
+.navbar__list-item:hover .navbar__list-item__name {
+  fill: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.navbar__list-item__icon--active {
+  margin-top: 0.25rem;
+  fill: var(--color-primary) !important;
+  height: var(--height-navbar-icon);
+  width: var(--height-navbar-icon);
+}
+
+.mobile-navbar-wrap {
+  height: var(--height-navbar);
+}
+
+.mobile-navbar {
+  height: 100%;
+  width: 100%;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.mobile-navbar svg {
+  fill: var(--color-primary);
+  width: 24px;
+  cursor: pointer;
+}
+
+.mobile-navbar svg:hover {
+  fill: var(--color-label);
+}
+
+.mobile-navbar-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: absolute;
+  top: var(--height-navbar);
+  background: var(--color-bg-primary);
+}
+
+.mobile-navbar-menu.hide {
+  display: none;
+}
+
+.mobile-navbar-menu-open-btn,
+.mobile-navbar-menu-close-btn {
+  transition: 0.3s linear;
+}
+
+.mobile-navbar-menu-open-btn.hide,
+.mobile-navbar-menu-close-btn.hide {
+  display: none;
+}
+
+.mobile-navbar-menu-link,
+.mobile-navbar-menu-item {
+  display: flex;
+  color: var(--color-primary);
+  align-items: center;
+  gap: 5px;
+  height: 3rem;
+  padding: 0 1rem 0 1rem;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+}
+
+.mobile-navbar-menu-item {
+  width: 100%;
+  cursor: pointer;
+}
+
+.mobile-navbar-menu-link svg,
+.mobile-navbar-menu-item svg {
+  fill: var(--color-primary);
+  width: 24px;
+}
+
+.mobile-navbar-menu-link.active,
+.mobile-navbar-menu-link:hover,
+.mobile-navbar-menu-item:hover {
+  color: var(--color-label);
+}
+
+.mobile-navbar-menu-link.active svg,
+.mobile-navbar-menu-link:hover svg,
+.mobile-navbar-menu-item:hover svg {
+  fill: var(--color-label);
+}

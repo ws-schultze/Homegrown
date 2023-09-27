@@ -1,0 +1,11 @@
+/* make the map fill its container */
+.map {
+  height: 100%;
+}
+
+.zoomControlsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 10px;
+}
