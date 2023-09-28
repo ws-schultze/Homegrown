@@ -27,7 +27,7 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "something", // This value gets moved to .env.local in the root
+  apiKey: "something",
   authDomain: "something.firebaseapp.com",
   projectId: "something",
   storageBucket: "something.appspot.com",
@@ -106,7 +106,7 @@ service cloud.firestore {
 
 ## Storage
 
-Setup a storage in the project, then make a storage bucket that will hold images for the project and apply the following rules to it:
+Setup storage in the project, then make a storage bucket, other than the default bucket, that will hold images for the project and apply the following rules to it:
 
 ```javascript
 rules_version = '2';

@@ -445,36 +445,6 @@ button {
   padding: 0.5rem;
 }
 
-.socialLogin {
-  margin-top: 4rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: 1px solid var(--color-border);
-}
-
-.socialLoginText {
-  color: var(--color-text);
-}
-
-.socialIconDiv {
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.75rem;
-  margin: 1.5rem;
-  width: 3rem;
-  height: 3rem;
-  background-color: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-}
-
-.socialIconImg {
-  width: 100%;
-}
-
 .registerLink {
   cursor: pointer;
   color: #00cc66;

@@ -1,22 +1,18 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../../firebase.config";
+import { db } from "../../../../firebase.config";
 import { toast } from "react-toastify";
-import styles from "./styles.module.scss";
-// import googleIcon from "../../../assets/svg/googleIcon.svg";
-import GoogleOAuth from "./google/GoogleOAuth";
-import GitHubOAuth from "./gitHub/GitHubOAuth";
+import styles from "../styles.module.scss";
+import googleIcon from "./assets/googleIcon.svg";
 
-function OAuth() {
+export default function GoogleOAuth() {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const onGoogleClick = async () => {
+  async function handleClick() {
     try {
       // Get the user from the Google sign in
       const auth = getAuth();
-
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
@@ -35,18 +31,13 @@ function OAuth() {
       navigate("/");
     } catch (error) {
       toast.error("Could not authorize with Google");
+      console.error(error);
     }
-  };
+  }
 
   return (
-    <div className={styles["container"]}>
-      <p>Sign {location.pathname === "/sign-up" ? "up" : "in"} with</p>
-      {/* <button className={styles["icon-container"]} onClick={onGoogleClick}>
-        <img src={googleIcon} alt="Google" />
-      </button> */}
-      <GoogleOAuth />
-      <GitHubOAuth />
-    </div>
+    <button className={styles["icon-container"]} onClick={handleClick}>
+      <img src={googleIcon} alt="Google" />
+    </button>
   );
 }
-export default OAuth;

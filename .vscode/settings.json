@@ -4,5 +4,6 @@
     "formik",
     "maptype",
     "textbox"
-  ]
+  ],
+  "svg.preview.background": "black"
 }
