@@ -17,28 +17,30 @@ import React, {
   ReactNode,
   forwardRef,
 } from "react";
-import repositionCursor from "../../pages/createListing/components/utils/repositionCursor";
-import formatUSDCommaSeparatedNoDecimal from "../../pages/createListing/components/utils/format-input/formatUSDCommaSeparatedNoDecimal";
-import formatCompactCurrencyNoDecimal from "../../pages/createListing/components/utils/format-input/formatCompactCurrencyNoDecimal";
-import removeNonNumericCharacters from "../../pages/createListing/components/utils/format-input/removeNonNumericChars";
+import { repositionCursor, validatePassword } from "./utils";
 import ErrorMsg from "../../pages/createListing/components/ErrorMsg";
-import { TypeListingData, TypeStr } from "../../../index";
-import formatCommaSeparatedWithDecimal from "../../pages/createListing/components/utils/format-input/formatCommaSeparatedWithDecimal";
-import formatCommaSeparatedNoDecimal from "../../pages/createListing/components/utils/format-input/formatCommaSeparatedNoDecimal";
-import formatPhoneNumber from "../../pages/createListing/components/utils/format-input/formatPhoneNumber";
-import validatePhoneNumber from "../../pages/createListing/components/utils/form-validation/validatePhoneNumber";
-import removeNonNumericChars from "../../pages/createListing/components/utils/format-input/removeNonNumericChars";
-import setKeyDown from "../../pages/createListing/components/utils/setKeyDown";
-import formatRealEstateLicenseId from "../../pages/createListing/components/utils/format-input/formatRealEstateLicenseId";
-import compareObjects from "../../pages/createListing/components/utils/compareObjects";
-import validateDescription from "../../pages/createListing/components/utils/form-validation/validateDescription";
-import validateNumber from "../../pages/createListing/components/utils/form-validation/validateNumber";
-import validateRealEstateLicenseIdNumber from "../../pages/createListing/components/utils/form-validation/validateRealEstateLicenseIdNumber";
-import validateName from "../../pages/createListing/components/utils/form-validation/validateName";
-import formatCompactCommaSeparatedWithDecimal from "../../pages/createListing/components/utils/format-input/formatCompactCommaSeparatedWithDecimal";
-import removeCommas from "../../pages/createListing/components/utils/format-input/removeCommas";
-import formatYear from "../../pages/createListing/components/utils/format-input/formatYear";
-import validateEmail from "../../pages/createListing/components/utils/form-validation/validateEmail";
+import { TypeStr } from "../../../index";
+import {
+  removeNonNumericChars,
+  formatPhoneNumber,
+  formatCompactCurrencyNoDecimal,
+  formatUSDCommaSeparatedNoDecimal,
+  formatCommaSeparatedWithDecimal,
+  formatCompactCommaSeparatedWithDecimal,
+  formatCommaSeparatedNoDecimal,
+  formatRealEstateLicenseId,
+  formatYear,
+  validatePhoneNumber,
+  validateDescription,
+  validateEmail,
+  validateName,
+  validateNumber,
+  validateRealEstateLicenseIdNumber,
+} from "../../../components/common/inputTypeStr/utils";
+import { getKeyDown } from "./utils";
+import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
+import styles from "./styles.module.scss";
+import { stat } from "fs";
 
 interface Props<T> {
   /**
@@ -86,6 +88,7 @@ interface Props<T> {
     | "comma-separated-with-decimal"
     | "phone-number"
     | "email"
+    | "password"
     | "real-estate-license-id"
     | "name"
     | "description"
@@ -97,7 +100,7 @@ interface Props<T> {
    * State from the parent that this component emits
    */
   parent: TypeStr;
-  // listingFormState: TypeListingData;
+
   emit: (object: TypeStr, key: keyof T) => void;
 }
 
@@ -130,7 +133,6 @@ function InputTypeStrInner<T>(
     min,
     max,
     parent,
-    // listingFormState,
     emit,
   } = props;
 
@@ -139,6 +141,13 @@ function InputTypeStrInner<T>(
   const [lastKeyDown, setLastKeyDown] = useState("");
   const [priceChangePercent, setPriceChangePercent] = useState(0);
   const [formattedPercent, setFormattedPercent] = useState("");
+  const [showInputText, setShowInputText] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (formatType === "password") {
+      setShowInputText(false);
+    }
+  }, [formatType]);
 
   /**
    * This ref is used to make cursorPosition work, because the ref that gets passed in with props
@@ -188,9 +197,7 @@ function InputTypeStrInner<T>(
       const percent = ((state.number / originalPrice) * 100 - 100).toFixed(2);
       setPriceChangePercent(Number(percent));
       const cleanPercent = removeNonNumericChars(percent);
-      const formattedPercent = formatCommaSeparatedWithDecimal({
-        value: cleanPercent,
-      });
+      const formattedPercent = formatCommaSeparatedWithDecimal(cleanPercent);
       setFormattedPercent(formattedPercent);
     }
 
@@ -242,7 +249,7 @@ function InputTypeStrInner<T>(
       groupSeparators: groupSeparators,
     });
 
-    const _numberStr = removeNonNumericCharacters(modifiedValue); // Can look like "00123" when decimal separated.
+    const _numberStr = removeNonNumericChars(modifiedValue); // Can look like "00123" when decimal separated.
     const _number = Number(_numberStr); // Becomes 123
     const _numStrNoLeadingZeros = _number.toString(); // Turns into "123"
     let _value = value;
@@ -257,10 +264,9 @@ function InputTypeStrInner<T>(
       // Comma separated with decimal
     } else if (formatType === "comma-separated-with-decimal") {
       if (min || min === 0) {
-        const fmt = formatCommaSeparatedWithDecimal({
-          value: _numStrNoLeadingZeros,
-        });
-        const noCommas = removeCommas(fmt);
+        const fmt = formatCommaSeparatedWithDecimal(_numStrNoLeadingZeros);
+        // const noCommas = removeCommas(fmt);
+        const noCommas = fmt.replace(",", "");
         const shortFmt = formatCompactCommaSeparatedWithDecimal(
           parseFloat(noCommas)
         );
@@ -280,7 +286,8 @@ function InputTypeStrInner<T>(
     } else if (formatType === "comma-separated-no-decimal") {
       if (min || min === 0) {
         const fmt = formatCommaSeparatedNoDecimal(_numberStr);
-        const noCommas = removeCommas(fmt);
+        // const noCommas = removeCommas(fmt);
+        const noCommas = fmt.replace(",", "");
         const shortFmt = formatCompactCommaSeparatedWithDecimal(
           parseInt(noCommas)
         );
@@ -348,9 +355,15 @@ function InputTypeStrInner<T>(
       const { valid, errorMsg } = validateEmail(value);
       _valid = valid;
       _errorMsg = errorMsg;
-
-      // Real estate license ID
+    } else if (formatType === "password") {
+      //TODO: make validatePassword()
+      // Password
+      _formatted = value;
+      const { valid, errorMsg } = validatePassword(value);
+      _valid = valid;
+      _errorMsg = errorMsg;
     } else if (formatType === "real-estate-license-id") {
+      // Real estate license ID
       _formatted = formatRealEstateLicenseId(_numberStr);
       const { valid, errorMsg } = validateRealEstateLicenseIdNumber(_numberStr);
       _valid = valid;
@@ -358,7 +371,6 @@ function InputTypeStrInner<T>(
 
       // Name
     } else if (formatType === "name") {
-      console.log("value: ", value);
       _formatted = _value;
       const { valid, errorMsg } = validateName(value, parent.required);
       _valid = valid;
@@ -447,7 +459,7 @@ function InputTypeStrInner<T>(
    * Set last key down to state
    */
   function handleKeyDown(e: React.KeyboardEvent<Element>) {
-    const lastKeyDown: string = setKeyDown(e);
+    const lastKeyDown: string = getKeyDown(e);
     setLastKeyDown(lastKeyDown);
   }
 
@@ -464,26 +476,36 @@ function InputTypeStrInner<T>(
           >
             {placeholder}
           </label>
-          <input
-            placeholder={placeholder}
-            className={`hg-input ${
-              state.errorMsg && state.errorMsg.length > 0 ? "error" : ""
-            }`}
-            onKeyDown={handleKeyDown}
-            ref={(node) => {
-              localRef.current = node;
-              if (typeof ref === "function") {
-                ref(node);
-              } else if (ref) {
-                ref.current = node;
-              }
-            }}
-            type="text"
-            value={state.formatted}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            disabled={parent.readOnly}
-          />
+
+          <div className={styles["input-container"]}>
+            <input
+              placeholder={placeholder}
+              className={`${styles["hg-input"]} ${
+                state.errorMsg && state.errorMsg.length > 0 ? "error" : ""
+              }`}
+              onKeyDown={handleKeyDown}
+              ref={(node) => {
+                localRef.current = node;
+                if (typeof ref === "function") {
+                  ref(node);
+                } else if (ref) {
+                  ref.current = node;
+                }
+              }}
+              type={showInputText ? "text" : "password"}
+              value={state.formatted}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={parent.readOnly}
+            />
+
+            {formatType === "password" ? (
+              <VisibilityIcon
+                className={styles["visibility-icon"]}
+                onClick={() => setShowInputText((prev) => !prev)}
+              />
+            ) : null}
+          </div>
 
           {isPriceChange && state.valid === true ? (
             <div
@@ -556,7 +578,6 @@ function InputTypeStrInner<T>(
 
 const InputTypeStr = forwardRef(InputTypeStrInner);
 export default InputTypeStr;
-// export default React.memo(InputTypeStr, arePropsEqual) as typeof InputTypeStr;
 
 /**
  * ==========================================================================
@@ -609,7 +630,8 @@ function arePropsEqual<T>(oldProps: Props<T>, newProps: Props<T>): boolean {
     oldProps.formatType === newProps.formatType &&
     oldProps.min === newProps.min &&
     oldProps.max === newProps.max &&
-    compareObjects(oldProps.parent, newProps.parent) &&
+    JSON.stringify(oldProps.parent) === JSON.stringify(newProps.parent) &&
+    // compareObjects(oldProps.parent, newProps.parent) &&
     oldProps.emit === newProps.emit // useCallback in the parent should make this true/false
   ) {
     console.log("All props are the same...");

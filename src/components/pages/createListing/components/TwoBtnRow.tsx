@@ -9,9 +9,7 @@ import {
   TypeForSaleByValue,
   TypeForSaleOrRent,
   TypeForSaleOrRentValue,
-  TypeStr,
 } from "../../../../index";
-import compareObjects from "./utils/compareObjects";
 
 export type TypeTwoBtnRowState =
   | TypeBool

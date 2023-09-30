@@ -41,7 +41,7 @@ import {
   listingKindValuesForRent,
   listingKindValuesForSale,
 } from "../../../../initialValues";
-import compareObjects from "./utils/compareObjects";
+import compareObjects from "../../../utils/compareObjects";
 import Dropdown from "../../../common/dropdown/Dropdown";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
