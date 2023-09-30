@@ -1,4 +1,4 @@
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import { ReactComponent as LockIcon } from "./assets/lockIcon.svg";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
 import { useState } from "react";

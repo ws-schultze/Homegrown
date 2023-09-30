@@ -7,7 +7,7 @@ import OAuth from "../../common/oAuth/OAuth";
 import SignInBtn from "./components/signInButton/SignInBtn";
 import EmailInput from "./components/emailInput/EmailInput";
 import PasswordInput from "./components/passwordInput/PasswordInput";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +53,7 @@ export default function SignIn() {
     <>
       <div className="page-wrap">
         <div className={styles["container"]}>
-          <form className={styles["form"]}>
+          <form>
             <EmailInput emit={handleChange} />
             <PasswordInput emit={handleChange} />
             <SignInBtn emit={handleSubmit} />

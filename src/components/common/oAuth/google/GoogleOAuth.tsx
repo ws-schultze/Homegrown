@@ -1,13 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../../firebase.config";
 import { toast } from "react-toastify";
-import styles from "../styles.module.scss";
+import styles from "./styles.module.scss";
 import googleIcon from "./assets/googleIcon.svg";
 
 export default function GoogleOAuth() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   async function handleClick() {
     try {
@@ -36,8 +37,15 @@ export default function GoogleOAuth() {
   }
 
   return (
-    <button className={styles["icon-container"]} onClick={handleClick}>
+    <button
+      id="google-o-auth-btn"
+      className={styles["container"]}
+      onClick={handleClick}
+      aria-label="Sign in with Google"
+    >
       <img src={googleIcon} alt="Google" />
+      Sign
+      {location.pathname === "/sign-up" ? " up" : " in"} with Google
     </button>
   );
 }

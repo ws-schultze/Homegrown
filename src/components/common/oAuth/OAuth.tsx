@@ -40,12 +40,12 @@ function OAuth() {
 
   return (
     <div className={styles["container"]}>
-      <p>Sign {location.pathname === "/sign-up" ? "up" : "in"} with</p>
+      {/* <p>Sign {location.pathname === "/sign-up" ? "up" : "in"} with</p> */}
       {/* <button className={styles["icon-container"]} onClick={onGoogleClick}>
         <img src={googleIcon} alt="Google" />
       </button> */}
       <GoogleOAuth />
-      <GitHubOAuth />
+      {/* <GitHubOAuth /> */}
     </div>
   );
 }
