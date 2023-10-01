@@ -40,7 +40,6 @@ import {
 import { getKeyDown } from "./utils";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
 import styles from "./styles.module.scss";
-import { stat } from "fs";
 
 interface Props<T> {
   /**

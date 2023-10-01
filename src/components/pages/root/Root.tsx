@@ -5,12 +5,10 @@ import {
   useNavigation,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import styles from "./root.module.css";
 import { useThemeContext } from "../../../ThemeProvider";
 import Navbar from "../../common/navbar/Navbar";
 import Spinner from "../../common/loaders/Spinner";
-import { RootLayout } from "./styledComponents";
-import { useEffect, useState } from "react";
+import styles from "./styles.module.scss";
 
 export default function Root({
   children,
@@ -25,17 +23,10 @@ export default function Root({
   }
 
   return (
-    <RootLayout>
+    <div className={`${styles["container"]}`}>
       <Navbar theme={theme} />
 
-      <main
-        id="root-main-outlet"
-        // className={styles.fade}
-        // style={{ animationDelay: `${1000}ms` }}
-        // className={navigation.state === "loading" ? "loading" : ""}
-      >
-        {children ?? <Outlet />}
-      </main>
+      <main id="root-main-outlet">{children ?? <Outlet />}</main>
 
       <ToastContainer
         position="top-right"
@@ -49,6 +40,6 @@ export default function Root({
         pauseOnHover
         theme={theme}
       />
-    </RootLayout>
+    </div>
   );
 }

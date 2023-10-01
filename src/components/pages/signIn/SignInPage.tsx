@@ -6,17 +6,20 @@ import Spinner from "../../common/loaders/Spinner";
 import OAuth from "../../common/oAuth/OAuth";
 import SignInBtn from "./components/signInButton/SignInBtn";
 import EmailInput from "./components/emailInput/EmailInput";
-import PasswordInput from "./components/passwordInput/PasswordInput";
+
 import styles from "./styles.module.scss";
 import InputTypeStr from "../../common/inputTypeStr/InputTypeStr";
 import { TypeStr } from "../../..";
 import { initTypeStrReq } from "../../../initialValues";
+import PasswordInput, {
+  Password,
+} from "../../common/passwordInput/PasswordInput";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<{
     email: TypeStr;
-    password: TypeStr;
+    password: Password;
   }>({
     email: initTypeStrReq,
     password: initTypeStrReq,
@@ -61,6 +64,13 @@ export default function SignIn() {
     }));
   }
 
+  function handlePassword(obj: Password) {
+    setFormData((s) => ({
+      ...s,
+      password: obj,
+    }));
+  }
+
   if (isLoading) {
     return <Spinner size="large" />;
   }
@@ -79,14 +89,15 @@ export default function SignIn() {
               emit={handleInputTypeStr}
             />
 
-            <InputTypeStr<typeof formData>
+            {/* <InputTypeStr<typeof formData>
               size="lg"
               fieldName="password"
               placeholder="Password"
               formatType="password"
               parent={formData.password}
               emit={handleInputTypeStr}
-            />
+            /> */}
+            <PasswordInput emit={handlePassword} />
 
             {/* <EmailInput emit={handleChange} />
             <PasswordInput emit={handleChange} /> */}
