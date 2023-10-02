@@ -18,7 +18,7 @@ import { ReactComponent as PlusIcon } from "../../../../assets/svg/plusIcon.svg"
 import { ReactComponent as DeleteIcon } from "../../../../assets/svg/deleteIcon.svg";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
-import ErrorMsg from "./ErrorMsg";
+import ErrorMsg from "../../../common/errorMsg/ErrorMsg";
 import deleteImageFromFirestore from "../../utils/deleteImageFromFirestore";
 import storeImageInFirestore from "../../utils/storeImageInFirestore";
 import makeFileNameForUpload from "../../utils/makeFileNameForUpload";

@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ReactComponent as Icon } from "../../../assets/svg/dropdownIcon.svg";
 import { ReactComponent as CloseIcon } from "../../../assets/svg/closeIcon.svg";
-import ErrorMsg from "../../pages/createListing/components/ErrorMsg";
+import ErrorMsg from "../errorMsg/ErrorMsg";
 
 export type DropdownMenuItem = {
   id: string;

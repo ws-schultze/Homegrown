@@ -4,10 +4,10 @@ interface Props {
   emit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }
 
-export default function SignInBtn({ emit }: Props) {
+export default function SignUpBtn({ emit }: Props) {
   return (
-    <button className={styles["btn"]} onClick={(e) => emit(e)}>
-      Sign In
+    <button className={styles.btn} onClick={(e) => emit(e)}>
+      Sign up
     </button>
   );
 }

@@ -19,12 +19,12 @@ import Root from "./components/pages/root/Root";
 import ContactLandlord from "./components/pages/contactLandlord/ContactLandlord";
 import EditListing from "./components/pages/editListing/EditListing";
 import CreateListing from "./components/pages/createListing/CreateListing";
-import ForgotPassword from "./components/pages/forgotPassword/ForgotPassword";
-import SignIn from "./components/pages/signIn/SignInPage";
-import SignUp from "./components/pages/signUp/SignUp";
 import Profile from "./components/pages/profile/Profile";
 import ExploreListings from "./components/pages/exploreListings/ExploreListings";
 import Home from "./components/pages/home/Home";
+import SignInPage from "./components/pages/signInPage/SignInPage";
+import SignUpPage from "./components/pages/signUpPage/SignUpPage";
+import ForgotPasswordPage from "./components/pages/forgotPasswordPage/ForgotPasswordPage";
 
 export const appRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -46,12 +46,12 @@ export const appRouter = createBrowserRouter(
           element={<ExploreListings />}
         />
       </Route>
-      <Route path={"forgot-password/"} element={<ForgotPassword />} />
+      <Route path={"forgot-password/"} element={<ForgotPasswordPage />} />
       <Route path="profile/" element={<PrivateRoute />}>
         <Route path="" element={<Profile />} />
       </Route>
-      <Route path="sign-in/" element={<SignIn />} />
-      <Route path="sign-up/" element={<SignUp />} />
+      <Route path="sign-in/" element={<SignInPage />} />
+      <Route path="sign-up/" element={<SignUpPage />} />
       <Route path="create-listing/" element={<CreateListing />} />
       <Route path="edit-listing/:listingId/" element={<EditListing />} />
       <Route

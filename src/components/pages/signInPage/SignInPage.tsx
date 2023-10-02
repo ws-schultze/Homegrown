@@ -4,9 +4,8 @@ import { toast } from "react-toastify";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Spinner from "../../common/loaders/Spinner";
 import OAuth from "../../common/oAuth/OAuth";
-import SignInBtn from "./components/signInButton/SignInBtn";
-import styles from "./styles.module.scss";
-import { TypeStr } from "../../..";
+import SignInBtn from "../../common/signInButton/SignInBtn";
+import styles from "./signInPageStyles.module.scss";
 import PasswordInput, {
   Password,
   initPassword,
@@ -16,7 +15,7 @@ import EmailInput, {
   initEmail,
 } from "../../common/emailInput/EmailInput";
 
-export default function SignIn() {
+export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<{
     email: Email;
@@ -28,13 +27,6 @@ export default function SignIn() {
   const { email, password } = formData;
 
   const navigate = useNavigate();
-
-  function handleChange(id: string, value: string) {
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  }
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     // e.preventDefault();
@@ -55,16 +47,6 @@ export default function SignIn() {
     setIsLoading(false);
   };
 
-  function handleInputTypeStr(
-    object: TypeStr,
-    fieldName: keyof typeof formData
-  ) {
-    setFormData((s) => ({
-      ...s,
-      [fieldName]: object,
-    }));
-  }
-
   function handleEmail(obj: Email) {
     setFormData((s) => ({
       ...s,
@@ -84,23 +66,21 @@ export default function SignIn() {
   }
 
   return (
-    <>
-      <div className="page-wrap">
-        <div className={styles["container"]}>
-          <form>
-            <EmailInput emit={handleEmail} />
-            <PasswordInput emit={handlePassword} />
-            <SignInBtn emit={handleSubmit} />
-            <Link to="/forgot-password" className={styles["link"]}>
-              Forgot Password
-            </Link>
-            <Link to="/sign-up" className={styles["link"]}>
-              Create an Account
-            </Link>
-            <OAuth />
-          </form>
-        </div>
+    <div className="page-wrap">
+      <div className={styles.container}>
+        <form>
+          <EmailInput emit={handleEmail} />
+          <PasswordInput emit={handlePassword} />
+          <SignInBtn emit={handleSubmit} />
+          <Link to="/forgot-password" className={styles.link}>
+            Forgot password
+          </Link>
+          <Link to="/sign-up" className={styles.link}>
+            Create an account
+          </Link>
+          <OAuth />
+        </form>
       </div>
-    </>
+    </div>
   );
 }

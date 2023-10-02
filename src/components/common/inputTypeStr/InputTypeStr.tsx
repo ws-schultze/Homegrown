@@ -18,7 +18,7 @@ import React, {
   forwardRef,
 } from "react";
 import { repositionCursor, validatePassword } from "./utils";
-import ErrorMsg from "../../pages/createListing/components/ErrorMsg";
+import ErrorMsg from "../errorMsg/ErrorMsg";
 import { TypeStr } from "../../../index";
 import {
   removeNonNumericChars,

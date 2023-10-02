@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import ErrorMsg from "../../pages/createListing/components/ErrorMsg";
+import ErrorMsg from "../errorMsg/ErrorMsg";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
-import styles from "./styles.module.scss";
+import styles from "./passwordInputStyles.module.scss";
+import { ReactComponent as LockIcon } from "./assets/lockIcon.svg";
 
 interface Props {
   emit: (object: Password) => void;
@@ -69,16 +70,21 @@ export default function PasswordInput(props: Props) {
     <div className={`${styles.container}`}>
       <label
         htmlFor="password"
-        className={`${state.value.length > 0 ? styles.active : ""}`}
+        className={`${styles.label} ${
+          state.value.length > 0 ? styles.active : ""
+        }`}
       >
         Password
       </label>
 
       <div className={`${styles["input-wrap"]}`}>
+        <LockIcon className={styles.icon} />
         <input
           id="password"
           placeholder="Password"
-          className={`${state.errorMsg.length > 0 ? "error" : ""}`}
+          className={`${styles.input} ${
+            state.errorMsg.length > 0 ? "error" : ""
+          }`}
           ref={inputRef}
           type={showPassword ? "text" : "password"}
           value={state.value}
