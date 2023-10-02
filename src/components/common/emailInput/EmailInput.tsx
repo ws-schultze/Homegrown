@@ -1,13 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
+
 import ErrorMsg from "../../pages/createListing/components/ErrorMsg";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
 import styles from "./styles.module.scss";
+import isEmail from "validator/lib/isEmail";
 
-interface Props {
-  emit: (object: Password) => void;
-}
-
-export interface Password {
+export interface Email {
   value: string;
   errorMsg: string;
   valid: boolean;
@@ -15,7 +13,7 @@ export interface Password {
   required: boolean;
 }
 
-export const initPassword = {
+export const initEmail = {
   value: "",
   errorMsg: "",
   valid: false,
@@ -23,26 +21,29 @@ export const initPassword = {
   required: true,
 };
 
-export default function PasswordInput(props: Props) {
-  const [state, setState] = useState<Password>(initPassword);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+interface Props {
+  emit: (object: Email) => void;
+}
+
+export default function EmailInput(props: Props) {
+  const [state, setState] = useState<Email>(initEmail);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  function validatePassword(value: string): {
+  function validateEmail(value: string): {
     valid: boolean;
     errorMsg: string;
   } {
-    //TODO: Decide what constraints and requirements a password should have
-    if (value.length < 12) {
-      return { valid: false, errorMsg: "Must be at least 12 characters" };
+    if (isEmail(value)) {
+      return { valid: true, errorMsg: "" };
+    } else {
+      return { valid: false, errorMsg: "Enter a valid email" };
     }
-    return { valid: false, errorMsg: "" };
   }
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
-    const { valid } = validatePassword(e.target.value);
+    const { valid } = validateEmail(e.target.value);
     setState((s) => ({
       ...s,
       value: e.target.value,
@@ -53,7 +54,7 @@ export default function PasswordInput(props: Props) {
   function handleBlur(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
-    const { valid, errorMsg } = validatePassword(e.target.value);
+    const { valid, errorMsg } = validateEmail(e.target.value);
 
     setState((s) => ({
       ...s,
@@ -68,27 +69,24 @@ export default function PasswordInput(props: Props) {
   return (
     <div className={`${styles.container}`}>
       <label
-        htmlFor="password"
+        htmlFor="email"
         className={`${state.value.length > 0 ? styles.active : ""}`}
       >
-        Password
+        Email
       </label>
 
       <div className={`${styles["input-wrap"]}`}>
         <input
-          id="password"
-          placeholder="Password"
+          id="email"
+          placeholder="Email"
           className={`${state.errorMsg.length > 0 ? "error" : ""}`}
           ref={inputRef}
-          type={showPassword ? "text" : "password"}
+          type={"text"}
           value={state.value}
           onChange={handleChange}
           onBlur={handleBlur}
           disabled={false}
-        />
-        <VisibilityIcon
-          className={`${styles["visibility-icon"]}`}
-          onClick={() => setShowPassword((sp) => !sp)}
+          autoComplete="on"
         />
       </div>
 

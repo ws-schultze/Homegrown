@@ -5,24 +5,25 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Spinner from "../../common/loaders/Spinner";
 import OAuth from "../../common/oAuth/OAuth";
 import SignInBtn from "./components/signInButton/SignInBtn";
-import EmailInput from "./components/emailInput/EmailInput";
-
 import styles from "./styles.module.scss";
-import InputTypeStr from "../../common/inputTypeStr/InputTypeStr";
 import { TypeStr } from "../../..";
-import { initTypeStrReq } from "../../../initialValues";
 import PasswordInput, {
   Password,
+  initPassword,
 } from "../../common/passwordInput/PasswordInput";
+import EmailInput, {
+  Email,
+  initEmail,
+} from "../../common/emailInput/EmailInput";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<{
-    email: TypeStr;
+    email: Email;
     password: Password;
   }>({
-    email: initTypeStrReq,
-    password: initTypeStrReq,
+    email: initEmail,
+    password: initPassword,
   });
   const { email, password } = formData;
 
@@ -64,6 +65,13 @@ export default function SignIn() {
     }));
   }
 
+  function handleEmail(obj: Email) {
+    setFormData((s) => ({
+      ...s,
+      email: obj,
+    }));
+  }
+
   function handlePassword(obj: Password) {
     setFormData((s) => ({
       ...s,
@@ -80,27 +88,8 @@ export default function SignIn() {
       <div className="page-wrap">
         <div className={styles["container"]}>
           <form>
-            <InputTypeStr<typeof formData>
-              size="lg"
-              fieldName="email"
-              placeholder="Email"
-              formatType="email"
-              parent={formData.email}
-              emit={handleInputTypeStr}
-            />
-
-            {/* <InputTypeStr<typeof formData>
-              size="lg"
-              fieldName="password"
-              placeholder="Password"
-              formatType="password"
-              parent={formData.password}
-              emit={handleInputTypeStr}
-            /> */}
+            <EmailInput emit={handleEmail} />
             <PasswordInput emit={handlePassword} />
-
-            {/* <EmailInput emit={handleChange} />
-            <PasswordInput emit={handleChange} /> */}
             <SignInBtn emit={handleSubmit} />
             <Link to="/forgot-password" className={styles["link"]}>
               Forgot Password
@@ -108,8 +97,8 @@ export default function SignIn() {
             <Link to="/sign-up" className={styles["link"]}>
               Create an Account
             </Link>
+            <OAuth />
           </form>
-          <OAuth />
         </div>
       </div>
     </>

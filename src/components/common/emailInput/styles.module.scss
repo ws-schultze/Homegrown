@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  &:focus-within label {
+    color: var(--color-primary);
+    visibility: visible;
+  }
+}
+
+label {
+  font-size: 16px;
+  color: var(--color-border);
+  visibility: hidden;
+  &.active {
+    visibility: visible;
+  }
+}
+
+.input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid var(--color-border);
+  outline: none;
+  color: var(--color-text);
+  &:focus::placeholder {
+    color: transparent;
+  }
+  &:focus-within {
+    border-color: var(--color-primary);
+  }
+}
+
+.visibility-icon {
+  cursor: pointer;
+  fill: var(--color-border);
+  background: transparent;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  &:hover {
+    fill: var(--color-primary);
+  }
+}

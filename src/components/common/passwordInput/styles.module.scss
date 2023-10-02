@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  &:focus-within label {
+    color: var(--color-primary);
+    visibility: visible;
+  }
 }
 
 .input-wrap {
@@ -13,15 +17,9 @@ label {
   font-size: 16px;
   color: var(--color-border);
   visibility: hidden;
-}
-
-label.active {
-  visibility: visible;
-}
-
-.container:focus-within label {
-  color: var(--color-primary);
-  visibility: visible;
+  &.active {
+    visibility: visible;
+  }
 }
 
 input {
@@ -32,14 +30,12 @@ input {
   border-bottom: 3px solid var(--color-border);
   outline: none;
   color: var(--color-text);
-}
-
-input:focus::placeholder {
-  color: transparent;
-}
-
-input:focus-within {
-  border-color: var(--color-primary);
+  &:focus::placeholder {
+    color: transparent;
+  }
+  &:focus-within {
+    border-color: var(--color-primary);
+  }
 }
 
 .visibility-icon {
@@ -49,8 +45,7 @@ input:focus-within {
   height: 100%;
   position: absolute;
   right: 0;
-}
-
-.visibility-icon:hover {
-  fill: var(--color-primary);
+  &:hover {
+    fill: var(--color-primary);
+  }
 }
