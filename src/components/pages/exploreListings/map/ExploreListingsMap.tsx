@@ -37,7 +37,7 @@ import {
   setMapZoom,
 } from "../exploreListingsSlice";
 import { setPlace } from "../filters/placeFilter/placeFilterSlice";
-import { MapType } from "../../../common/mapTypeMenu/mapTypeMenuSlice";
+import { MapType } from "../../../shared/mapTypeMenu/mapTypeMenuSlice";
 import { useDispatch } from "react-redux";
 import { useMapContext } from "../../../../MapProvider";
 import useSetupMapZoomControls from "../../../../hooks/useSetupMapZoomControls";

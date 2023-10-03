@@ -6,8 +6,8 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useThemeContext } from "../../../ThemeProvider";
-import Navbar from "../../common/navbar/Navbar";
-import Spinner from "../../common/loaders/Spinner";
+import Navbar from "../../shared/navbar/Navbar";
+import Spinner from "../../shared/loaders/Spinner";
 import styles from "./styles.module.scss";
 
 export default function Root({

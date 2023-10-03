@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ErrorMsg from "../../../common/errorMsg/ErrorMsg";
+import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import {
   TypeBool,
   TypeBoolValue,

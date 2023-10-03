@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import ErrorMsg from "../errorMsg/ErrorMsg";
+import ErrorMsg from "../../errorMsg/ErrorMsg";
 import { ReactComponent as EnvelopeIcon } from "./envelopeIcon.svg";
 import styles from "./emailInputStyles.module.scss";
 import isEmail from "validator/lib/isEmail";
@@ -22,11 +22,20 @@ export const initEmail = {
 };
 
 interface Props {
+  value?: string;
+  readonly?: boolean;
   emit: (object: Email) => void;
 }
 
 export default function EmailInput(props: Props) {
-  const [state, setState] = useState<Email>(initEmail);
+  const [state, setState] = useState<Email>({
+    value: props.value || "",
+    errorMsg: "",
+    valid: false,
+    readOnly: props.readonly || false,
+
+    required: true,
+  });
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   function validateEmail(value: string): {
@@ -90,7 +99,7 @@ export default function EmailInput(props: Props) {
           value={state.value}
           onChange={handleChange}
           onBlur={handleBlur}
-          disabled={false}
+          disabled={props.readonly}
           autoComplete="on"
         />
       </div>

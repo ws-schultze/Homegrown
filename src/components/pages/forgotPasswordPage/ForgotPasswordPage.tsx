@@ -6,8 +6,8 @@ import styles from "./forgotPasswordStyles.module.scss";
 import EmailInput, {
   Email,
   initEmail,
-} from "../../common/emailInput/EmailInput";
-import Button from "../../common/button/Button";
+} from "../../shared/inputs/emailInput/EmailInput";
+import Button from "../../shared/button/Button";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<Email>(initEmail);

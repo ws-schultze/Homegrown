@@ -2,18 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import Spinner from "../../common/loaders/Spinner";
-import OAuth from "../../common/oAuth/OAuth";
-import SignInBtn from "../../common/signInButton/SignInBtn";
+import Spinner from "../../shared/loaders/Spinner";
+import OAuth from "../../shared/oAuth/OAuth";
+import SignInBtn from "../../shared/signInButton/SignInBtn";
 import styles from "./signInPageStyles.module.scss";
 import PasswordInput, {
   Password,
   initPassword,
-} from "../../common/passwordInput/PasswordInput";
+} from "../../shared/inputs/passwordInput/PasswordInput";
 import EmailInput, {
   Email,
   initEmail,
-} from "../../common/emailInput/EmailInput";
+} from "../../shared/inputs/emailInput/EmailInput";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);

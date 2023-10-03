@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import ReactDOM from "react-dom/client";
 import { Status } from "@googlemaps/react-wrapper";
-import ErrorComponent from "../../../common/error/Error";
-import Spinner from "../../../common/loaders/Spinner";
+import ErrorComponent from "../../../shared/error/Error";
+import Spinner from "../../../shared/loaders/Spinner";
 import {
   TypePlacesRegion,
   TypeFetchedListing,

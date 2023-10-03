@@ -2,7 +2,7 @@
 // https://kennethlange.com/drag-and-drop-in-pure-typescript-and-react/
 
 import React, { useState, useEffect, useRef } from "react";
-import Spinner from "../../../common/loaders/Spinner";
+import Spinner from "../../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 import PageBtns from "./PageBtns";
 import {
@@ -18,7 +18,7 @@ import { ReactComponent as PlusIcon } from "../../../../assets/svg/plusIcon.svg"
 import { ReactComponent as DeleteIcon } from "../../../../assets/svg/deleteIcon.svg";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
-import ErrorMsg from "../../../common/errorMsg/ErrorMsg";
+import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import deleteImageFromFirestore from "../../utils/deleteImageFromFirestore";
 import storeImageInFirestore from "../../utils/storeImageInFirestore";
 import makeFileNameForUpload from "../../utils/makeFileNameForUpload";

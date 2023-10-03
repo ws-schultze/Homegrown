@@ -17,7 +17,7 @@ import { initialListingTypeFilterState } from "../components/pages/exploreListin
 import { initialBedAndBathFilterState } from "../components/pages/exploreListings/filters/bedAndBathFilter/bedAndBathFilterSlice";
 import mapTypeMenuReducer, {
   initialMapTypeMenuState,
-} from "../components/common/mapTypeMenu/mapTypeMenuSlice";
+} from "../components/shared/mapTypeMenu/mapTypeMenuSlice";
 
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage";
 

@@ -1,9 +1,14 @@
 import React, { useState, useRef } from "react";
-import ErrorMsg from "../errorMsg/ErrorMsg";
-import styles from "./styles.module.scss";
-import { ReactComponent as PersonIcon } from "./personIcon.svg";
+import ErrorMsg from "../../errorMsg/ErrorMsg";
+import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
+import styles from "./passwordInputStyles.module.scss";
+import { ReactComponent as LockIcon } from "./assets/lockIcon.svg";
 
-export interface Username {
+interface Props {
+  emit: (object: Password) => void;
+}
+
+export interface Password {
   value: string;
   errorMsg: string;
   valid: boolean;
@@ -11,7 +16,7 @@ export interface Username {
   required: boolean;
 }
 
-export const initUsername: Username = {
+export const initPassword = {
   value: "",
   errorMsg: "",
   valid: false,
@@ -19,30 +24,26 @@ export const initUsername: Username = {
   required: true,
 };
 
-interface Props {
-  emit: (object: Username) => void;
-}
-
-export default function UsernameInput(props: Props) {
-  const [state, setState] = useState<Username>(initUsername);
+export default function PasswordInput(props: Props) {
+  const [state, setState] = useState<Password>(initPassword);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  function validateUsername(value: string): {
+  function validatePassword(value: string): {
     valid: boolean;
     errorMsg: string;
   } {
-    //TODO: Define some rules for what a valid username is and check if the username is already being used by another user
-    if (value.length >= 1) {
-      return { valid: true, errorMsg: "" };
-    } else {
-      return { valid: false, errorMsg: "Username is too short" };
+    //TODO: Decide what constraints and requirements a password should have
+    if (value.length < 12) {
+      return { valid: false, errorMsg: "Must be at least 12 characters" };
     }
+    return { valid: false, errorMsg: "" };
   }
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
-    const { valid } = validateUsername(e.target.value);
+    const { valid } = validatePassword(e.target.value);
     setState((s) => ({
       ...s,
       value: e.target.value,
@@ -53,7 +54,7 @@ export default function UsernameInput(props: Props) {
   function handleBlur(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
-    const { valid, errorMsg } = validateUsername(e.target.value);
+    const { valid, errorMsg } = validatePassword(e.target.value);
 
     setState((s) => ({
       ...s,
@@ -68,29 +69,32 @@ export default function UsernameInput(props: Props) {
   return (
     <div className={`${styles.container}`}>
       <label
-        htmlFor="username"
+        htmlFor="password"
         className={`${styles.label} ${
           state.value.length > 0 ? styles.active : ""
         }`}
       >
-        Username
+        Password
       </label>
 
       <div className={`${styles["input-wrap"]}`}>
-        <PersonIcon className={styles.icon} />
+        <LockIcon className={styles.icon} />
         <input
-          id="username"
-          placeholder="Username"
+          id="password"
+          placeholder="Password"
           className={`${styles.input} ${
             state.errorMsg.length > 0 ? "error" : ""
           }`}
           ref={inputRef}
-          type={"text"}
+          type={showPassword ? "text" : "password"}
           value={state.value}
           onChange={handleChange}
           onBlur={handleBlur}
           disabled={false}
-          autoComplete="off"
+        />
+        <VisibilityIcon
+          className={`${styles["visibility-icon"]}`}
+          onClick={() => setShowPassword((sp) => !sp)}
         />
       </div>
 

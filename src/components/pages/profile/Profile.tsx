@@ -13,36 +13,49 @@ import {
 import { db } from "../../../firebase.config";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { TypeFetchedListing, TypeListingData, TypeStr } from "../../..";
+import { TypeFetchedListing, TypeListingData } from "../../..";
 import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
-import InputTypeStr from "../../common/inputTypeStr/InputTypeStr";
 import { ReactComponent as EditUserSVG } from "../../../assets/svg/user-pen-solid.svg";
 import { ReactComponent as MoneySVG } from "../../../assets/svg/circle-dollar-to-slot-solid.svg";
 import { ReactComponent as SignOutSVG } from "../../../assets/svg/person-running-solid.svg";
 import { ReactComponent as SubmitChangesSVG } from "../../../assets/svg/cloud-arrow-up-solid.svg";
-import { initTypeStrReq } from "../../../initialValues";
-import ListingCard from "../../common/listingCard/ListingCard";
-
+import ListingCard from "../../shared/listingCard/ListingCard";
 import { Btn, BtnsContainer, Header, LinkBtn } from "./styledComponents";
+import UsernameInput, {
+  Username,
+} from "../../shared/inputs/usernameInput/UsernameInput";
+import EmailInput, { Email } from "../../shared/inputs/emailInput/EmailInput";
 
 export interface TypeProfile {
-  userName: TypeStr;
-  email: TypeStr;
+  username: Username;
+  email: Email;
   listings: TypeFetchedListing[] | [];
   unfinishedListing: TypeListingData | null;
   loading: boolean;
+  editable: boolean;
 }
 
-export const initProfile: TypeProfile = {
-  userName: initTypeStrReq,
-  email: initTypeStrReq,
-  listings: [],
-  unfinishedListing: null,
-  loading: true,
-};
-
 export default function Profile() {
-  const [state, setState] = useState<TypeProfile>(initProfile);
+  const [state, setState] = useState<TypeProfile>({
+    username: {
+      value: "",
+      errorMsg: "",
+      valid: false,
+      readOnly: true,
+      required: true,
+    },
+    email: {
+      value: "",
+      errorMsg: "",
+      valid: false,
+      readOnly: true,
+      required: true,
+    },
+    listings: [],
+    unfinishedListing: null,
+    loading: true,
+    editable: false,
+  });
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -52,56 +65,61 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserListings = async () => {
       const listingsRef = collection(db, "listings");
-      if (
-        auth.currentUser &&
-        auth.currentUser.displayName !== null &&
-        auth.currentUser.email !== null
-      ) {
-        const q = query(
-          listingsRef,
-          where("userRef.uid", "==", auth.currentUser.uid),
-          orderBy("timestamp", "desc")
-        );
-        const querySnap = await getDocs(q);
 
-        let listings: TypeFetchedListing[] = [];
-        querySnap.forEach((doc) => {
-          return listings.push({
-            id: doc.id,
-            //@ts-ignore
-            data: doc.data(),
-          });
-        });
+      if (auth.currentUser) {
+        if (auth.currentUser.displayName !== null) {
+          if (auth.currentUser.email !== null) {
+            const q = query(
+              listingsRef,
+              where("userRef.uid", "==", auth.currentUser.uid),
+              orderBy("timestamp", "desc")
+            );
+            const querySnap = await getDocs(q);
 
-        // Get unfinished listings from local storage
-        let unfinishedListing = localStorage.getItem("unfinished-listing");
-        if (unfinishedListing !== null) {
-          unfinishedListing = JSON.parse(unfinishedListing);
+            let listings: TypeFetchedListing[] = [];
+            querySnap.forEach((doc) => {
+              return listings.push({
+                id: doc.id,
+                //@ts-ignore
+                data: doc.data(),
+              });
+            });
+
+            // Get unfinished listings from local storage
+            let unfinishedListing = localStorage.getItem("unfinished-listing");
+            if (unfinishedListing !== null) {
+              unfinishedListing = JSON.parse(unfinishedListing);
+            }
+
+            if (auth.currentUser.displayName) {
+            }
+            //Get user info to populate the state
+            const s: TypeProfile = {
+              ...state,
+              username: {
+                ...state.username,
+                value: auth.currentUser.displayName,
+                readOnly: true,
+              },
+              email: {
+                ...state.email,
+                value: auth.currentUser.email,
+                readOnly: true,
+              },
+              listings: listings,
+              //@ts-ignore
+              unfinishedListing: unfinishedListing,
+              loading: false,
+            };
+            setState(s);
+          } else {
+            console.error("auth.currentUser.email is null");
+          }
+        } else {
+          console.error("auth.currentUser.displayName is null");
         }
-
-        //Get user info to populate the state
-        const s: TypeProfile = {
-          ...state,
-          userName: {
-            ...state.userName,
-            value: auth.currentUser.displayName,
-            formatted: auth.currentUser.displayName,
-            readOnly: true,
-          },
-          email: {
-            ...state.email,
-            value: auth.currentUser.email,
-            formatted: auth.currentUser.email,
-            readOnly: true,
-          },
-          listings: listings,
-          //@ts-ignore
-          unfinishedListing: unfinishedListing,
-          loading: false,
-        };
-        setState(s);
       } else {
-        console.log("No authorized user found...");
+        console.error("auth.currentUser is undefined");
       }
     };
     fetchUserListings();
@@ -130,26 +148,48 @@ export default function Profile() {
   /**
    * Update the user's profile
    */
-  async function handleSubmit() {
+  async function handleSubmitDetailsUpdate() {
     try {
-      if (
-        auth.currentUser &&
-        auth.currentUser.displayName !== state.userName.value
-      ) {
-        // Update display name in firebase
-        await updateProfile(auth.currentUser, {
-          displayName: state.userName.value,
-        });
+      if (auth.currentUser) {
+        if (auth.currentUser.displayName !== state.username.value) {
+          // Update display name in firebase
+          await updateProfile(auth.currentUser, {
+            displayName: state.username.value,
+          });
 
-        // Update display name in firestore
-        const userRef = doc(db, "users", auth.currentUser.uid);
-        await updateDoc(userRef, {
-          name: state.userName.value,
-        });
+          // Update display name in firestore
+          const userRef = doc(db, "users", auth.currentUser.uid);
+          await updateDoc(userRef, {
+            username: state.username.value,
+            email: state.email.value,
+          });
+
+          setState((s) => ({
+            ...s,
+            username: {
+              ...s.username,
+              readOnly: true,
+            },
+            email: {
+              ...s.email,
+              readOnly: true,
+            },
+            editable: false,
+          }));
+
+          toast.success("Profile Updated Successfully");
+        } else {
+          console.error(
+            `auth.currentUser.displayName == state.username.value => ${auth.currentUser.displayName} ==? ${state.username.value}`
+          );
+        }
+      } else {
+        console.error("auth.currentUser is undefined");
       }
-      toast.success("Profile Updated Successfully");
     } catch (error) {
-      toast.error("Could not update profile...");
+      toast.error("Could not update profile");
+      //@ts-ignore
+      console.error(error.message);
     }
   }
 
@@ -199,32 +239,37 @@ export default function Profile() {
     navigate(`/edit-listing/${listingId}`);
   }
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleUsername(username: Username) {
+    // Set the username
     setState((s) => ({
       ...s,
-      [fieldName]: object,
+      username: username,
     }));
   }
 
-  function handleReadOnly() {
-    if (state.userName.readOnly === false && state.email.readOnly === false) {
-      // Click submit profile details changes
-      handleSubmit();
-    }
+  function handleEmail(email: Email) {
+    // Set the email
+    setState((s) => ({
+      ...s,
+      email: email,
+    }));
+  }
 
-    // Toggle readyOnly on profile details inputs
-    const s: TypeProfile = {
-      ...state,
-      userName: {
-        ...state.userName,
-        readOnly: !state.userName.readOnly,
+  function handleEditDetails() {
+    // Make username and email editable
+    console.log("Making details editable");
+    setState((s) => ({
+      ...s,
+      username: {
+        ...s.username,
+        readOnly: false,
       },
       email: {
-        ...state.email,
-        readOnly: !state.email.readOnly,
+        ...s.email,
+        readOnly: false,
       },
-    };
-    setState(s);
+      editable: true,
+    }));
   }
 
   return (
@@ -236,34 +281,25 @@ export default function Profile() {
               <Header>Personal Details</Header>
               <div>
                 <form className="personal-details-form">
-                  <InputTypeStr<typeof state>
-                    size="lg"
-                    fieldName="userName"
-                    placeholder="Username"
-                    formatType="name"
-                    parent={state.userName}
-                    emit={handleInputTypeStr}
+                  <UsernameInput
+                    value={state.username.value}
+                    emit={handleUsername}
+                    readonly={state.username.readOnly}
                   />
-                  <InputTypeStr<typeof state>
-                    size="lg"
-                    fieldName="email"
-                    placeholder="Email"
-                    formatType="email"
-                    parent={state.email}
-                    emit={handleInputTypeStr}
+                  <EmailInput
+                    value={state.email.value}
+                    emit={handleEmail}
+                    readonly={state.email.readOnly}
                   />
-                  <Btn type="button" onClick={handleReadOnly}>
-                    {state.userName.readOnly === false &&
-                    state.email.readOnly === false ? (
-                      <>
-                        <SubmitChangesSVG /> Submit Changes
-                      </>
-                    ) : (
-                      <>
-                        <EditUserSVG /> Edit Details
-                      </>
-                    )}
-                  </Btn>
+                  {state.editable === false ? (
+                    <Btn type="button" onClick={handleEditDetails}>
+                      <EditUserSVG /> Edit Details
+                    </Btn>
+                  ) : (
+                    <Btn type="button" onClick={handleSubmitDetailsUpdate}>
+                      <SubmitChangesSVG /> Submit Updates
+                    </Btn>
+                  )}
                 </form>
               </div>
               <BtnsContainer>

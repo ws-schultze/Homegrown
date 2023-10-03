@@ -42,12 +42,12 @@ import {
   listingKindValuesForSale,
 } from "../../../../initialValues";
 import compareObjects from "../../../utils/compareObjects";
-import Dropdown from "../../../common/dropdown/Dropdown";
+import Dropdown from "../../../shared/dropdown/Dropdown";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import PageBtns from "./PageBtns";
-import InputTypeStr from "../../../common/inputTypeStr/InputTypeStr";
+import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
 import { Header } from "./styledComponents";
 
 interface Props {

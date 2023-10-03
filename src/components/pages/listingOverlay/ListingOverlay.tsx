@@ -26,7 +26,7 @@ import { ReactComponent as ToiletSVG } from "../../../assets/svg/toilet-solid.sv
 
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { useThemeContext } from "../../../ThemeProvider";
-import AddressMap from "../../common/addressMap/AddressMap";
+import AddressMap from "../../shared/addressMap/AddressMap";
 import assertIsNode from "../../utils/assertIsNode";
 import logoPNG from "../../../assets/logo/logo.png";
 import {

@@ -12,7 +12,7 @@ import {
   SearchBox,
   SearchResultsHeader,
 } from "./styledComponents";
-import Footer from "../../common/footer/Footer";
+import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
 import { useParams } from "react-router";
@@ -23,7 +23,7 @@ import ListingOverlay from "../listingOverlay/ListingOverlay";
 import ForSaleOrRentFilter from "./filters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import PriceFilter from "./filters/priceFilter/PriceFilter";
 import ListingsTypeFilter from "./filters/listingTypeFilter/ListingTypeFilter";
-import ListingCard from "../../common/listingCard/ListingCard";
+import ListingCard from "../../shared/listingCard/ListingCard";
 import { ListingTypeValue, TypeForSaleOrRentValue, TypeStr } from "../../..";
 
 export interface ExploreListingsFilters {

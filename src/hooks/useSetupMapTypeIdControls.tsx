@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { makeElement } from "../components/pages/exploreListings/map/mapHelpers";
-import MapTypeDropdown from "../components/common/mapTypeMenu/MapTypeDropdown";
+import MapTypeDropdown from "../components/shared/mapTypeMenu/MapTypeDropdown";
 
 /**
  * Setup the mapTypeId menu on the map

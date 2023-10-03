@@ -13,7 +13,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import PrivateRoute from "./components/common/privateRoute/PrivateRoute";
+import PrivateRoute from "./components/shared/privateRoute/PrivateRoute";
 import RootBoundary from "./components/pages/rootBoundary/RootBoundary";
 import Root from "./components/pages/root/Root";
 import ContactLandlord from "./components/pages/contactLandlord/ContactLandlord";

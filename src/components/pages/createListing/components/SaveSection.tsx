@@ -10,7 +10,7 @@ import setBeingVerifiedToState from "./utils/address/setBeingVerifiedToState";
 import { toast } from "react-toastify";
 import getAddressValidationApiResponse from "./utils/address/getAddressValidationApiResponse";
 import { TypeAddressOptional, TypeStr, TypeBool } from "../../../../index";
-import Spinner from "../../../common/loaders/Spinner";
+import Spinner from "../../../shared/loaders/Spinner";
 
 interface Props<T> {
   parentInitialState: T;

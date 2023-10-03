@@ -6,6 +6,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
+  UserCredential,
 } from "firebase/auth";
 import { db } from "../../../firebase.config";
 import { setDoc, doc, serverTimestamp, FieldValue } from "firebase/firestore";
@@ -14,105 +15,129 @@ import styles from "./signUpPageStyles.module.scss";
 // import { ReactComponent as EnvelopeIcon } from "../../../assets/svg/envelopeIcon.svg";
 // import { ReactComponent as LockIcon } from "../../../assets/svg/lockIcon.svg";
 // import { ReactComponent as VisibilityIcon } from "../../../assets/svg/visibilityIcon.svg";
-import OAuth from "../../common/oAuth/OAuth";
+import OAuth from "../../shared/oAuth/OAuth";
 import EmailInput, {
   Email,
   initEmail,
-} from "../../common/emailInput/EmailInput";
+} from "../../shared/inputs/emailInput/EmailInput";
 import PasswordInput, {
   Password,
   initPassword,
-} from "../../common/passwordInput/PasswordInput";
-import SignUpBtn from "../../common/signUpButton/SignUpBtn";
+} from "../../shared/inputs/passwordInput/PasswordInput";
+import SignUpBtn from "../../shared/signUpButton/SignUpBtn";
 import UsernameInput, {
   Username,
   initUsername,
-} from "../../common/usernameInput/UsernameInput";
+} from "../../shared/inputs/usernameInput/UsernameInput";
+import Spinner from "../../shared/loaders/Spinner";
 
 interface State {
-  name: Username;
+  username: Username;
   email: Email;
-  password: Password;
+  password?: Password;
   timestamp?: FieldValue;
-  showPassword: boolean;
+  showPassword?: boolean;
+  loading?: boolean;
 }
 
 const initState: State = {
-  name: initUsername,
+  username: initUsername,
   email: initEmail,
   password: initPassword,
   showPassword: false,
+  loading: false,
 };
 
 export default function SignUpPage() {
-  const [state, setFormData] = useState<State>(initState);
+  const [state, setState] = useState<State>(initState);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     // https://firebase.google.com/docs/auth/web/start?hl=en&authuser=0#sign_up_new_users
     e.preventDefault();
+    setState((s) => ({ ...s, loading: true }));
+
     try {
       // Get firebase authentication
       const auth = getAuth();
 
       // Create the user by returning a promise to userCredential
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        state.email.value,
-        state.password.value
-      );
+      const userCredential: UserCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          state.email.value,
+          state.password!.value
+        );
+
       // User is now created and signed in, get user info
       const user = userCredential.user;
 
       // Update the signed-in user's display name
       if (auth.currentUser) {
-        updateProfile(auth.currentUser, {
-          displayName: state.name.value,
+        await updateProfile(auth.currentUser, {
+          displayName: state.username.value,
         });
+
+        console.log("Updated display name: ", user.displayName);
+
+        const newUser = {
+          username: state.username.value,
+          email: state.email.value,
+          timestamp: serverTimestamp(),
+        };
+
+        // Add user data copy to database
+        await setDoc(doc(db, "users", user.uid), newUser);
+
+        // Hide loading spinner
+        setState((s) => ({ ...s, loading: false }));
+
+        console.log(state);
+
+        // Redirect user to home page
+        navigate("/");
       } else {
         console.log("auth.currentUser is undefined.");
       }
-
-      // Copy the name, email, and password of the current user
-      const stateCopy = { ...state };
-
-      // Delete the password from the data copy
-      //@ts-ignore
-      delete stateCopy.password;
-
-      // Set the timestamp for when the data is uploaded
-      stateCopy.timestamp = serverTimestamp();
-
-      // Add user data copy to database
-      await setDoc(doc(db, "users", user.uid), stateCopy);
-
-      // Redirect user to home page
-      navigate("/");
     } catch (error) {
       toast.error("Something went wrong...");
+      setState((s) => ({ ...s, loading: false }));
     }
-  };
+  }
 
-  const handleUserName = (obj: Username) => {
-    setFormData((s) => ({
-      ...s,
-      userName: obj,
+  function handleUserName(username: Username) {
+    setState((s) => ({
+      username: username,
+      email: s.email,
+      password: s.password,
+      loading: s.loading,
+      showPassword: s.showPassword,
     }));
-  };
+  }
 
-  const handleEmail = (obj: Email) => {
-    setFormData((s) => ({
-      ...s,
-      email: obj,
+  function handleEmail(email: Email) {
+    setState((s) => ({
+      username: s.username,
+      email: email,
+      password: s.password,
+      loading: s.loading,
+      showPassword: s.showPassword,
     }));
-  };
+  }
 
-  const handlePassword = (obj: Password) => {
-    setFormData((s) => ({
-      ...s,
-      password: obj,
+  function handlePassword(password: Password) {
+    setState((s) => ({
+      username: s.username,
+      email: s.email,
+      password: password,
+      loading: s.loading,
+      showPassword: s.showPassword,
     }));
-  };
+  }
+
+  if (state.loading) {
+    return <Spinner size="small" />;
+  }
 
   return (
     <div className="page-wrap">

@@ -10,7 +10,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
-import Spinner from "../../common/loaders/Spinner";
+import Spinner from "../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../../UserProvider";
 import { TypeAddressValidationApi_Response, TypeListingData } from "../../..";

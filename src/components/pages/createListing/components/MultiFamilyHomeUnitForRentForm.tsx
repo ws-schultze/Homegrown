@@ -12,7 +12,7 @@ import {
   initTypeBoolReqNull,
   initTypeStrReq,
 } from "../../../../initialValues";
-import Dropdown from "../../../common/dropdown/Dropdown";
+import Dropdown from "../../../shared/dropdown/Dropdown";
 import {
   heatingOptions,
   coolingOptions,
@@ -24,7 +24,7 @@ import {
   TypeWaterOption,
   TypePowerOption,
 } from "../../../../index";
-import InputTypeStr from "../../../common/inputTypeStr/InputTypeStr";
+import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
 import TwoBtnRow, { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";

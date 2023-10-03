@@ -4,7 +4,7 @@ import { DocumentData, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { toast } from "react-toastify";
 // import ListingCard from "../components/ListingCard";
-import Spinner from "../../common/loaders/Spinner";
+import Spinner from "../../shared/loaders/Spinner";
 
 export default function ContactLandlord() {
   const [loading, setLoading] = useState(true);

@@ -9,7 +9,7 @@ import {
 import { db } from "../../../firebase.config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../../common/loaders/Spinner";
+import Spinner from "../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../../UserProvider";
 import { TypeAddressValidationApi_Response, TypeImage } from "../../../index";
@@ -33,7 +33,7 @@ import BasicInfoForm from "./components/BasicInfoForm";
 import UploadsForm from "./components/UploadsForm";
 import ReviewForm from "./components/ReviewForm";
 import makeFileNameForUpload from "../utils/makeFileNameForUpload";
-import Footer from "../../common/footer/Footer";
+import Footer from "../../shared/footer/Footer";
 
 export default function CreateListing(): JSX.Element {
   const { userId, isAuthenticated, isLoading } = useUserContext();

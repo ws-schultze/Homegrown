@@ -1,5 +1,5 @@
 import React from "react";
-import { TypeFormField } from "../../..";
+import { TypeFormField } from "../../../..";
 import isEmail from "validator/lib/isEmail";
 
 /**

@@ -8,14 +8,14 @@ import {
 } from "../../../../index";
 import { initAddress } from "../../../../initialValues";
 import { Wrapper } from "@googlemaps/react-wrapper";
-import AddressMap from "../../../common/addressMap/AddressMap";
+import AddressMap from "../../../shared/addressMap/AddressMap";
 import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
 import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
-import InputTypeStr from "../../../common/inputTypeStr/InputTypeStr";
+import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { Header } from "./styledComponents";

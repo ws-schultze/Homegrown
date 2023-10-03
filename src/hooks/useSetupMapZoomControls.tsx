@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { makeElement } from "../components/pages/exploreListings/map/mapHelpers";
 import {
-  MapZoomControl,
   MapZoomInBtn,
   MapZoomOutBtn,
 } from "../components/pages/exploreListings/map/styledComponents";
-import css from "../components/common/addressMap/styles.module.css";
+import css from "../components/shared/addressMap/styles.module.css";
 import { ReactComponent as PlusSVG } from "../assets/svg/plus-solid.svg";
 import { ReactComponent as MinusSVG } from "../assets/svg/minus-solid.svg";
 

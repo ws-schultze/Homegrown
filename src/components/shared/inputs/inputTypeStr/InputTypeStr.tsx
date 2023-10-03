@@ -18,8 +18,8 @@ import React, {
   forwardRef,
 } from "react";
 import { repositionCursor, validatePassword } from "./utils";
-import ErrorMsg from "../errorMsg/ErrorMsg";
-import { TypeStr } from "../../../index";
+import ErrorMsg from "../../errorMsg/ErrorMsg";
+import { TypeStr } from "../../../../index";
 import {
   removeNonNumericChars,
   formatPhoneNumber,
@@ -36,7 +36,7 @@ import {
   validateName,
   validateNumber,
   validateRealEstateLicenseIdNumber,
-} from "../../../components/common/inputTypeStr/utils";
+} from "./utils";
 import { getKeyDown } from "./utils";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
 import styles from "./styles.module.scss";

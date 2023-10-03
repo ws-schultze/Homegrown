@@ -7,7 +7,7 @@ import {
   TypeListingData,
 } from "../../../../index";
 import { initCompany } from "../../../../initialValues";
-import InputTypeStr from "../../../common/inputTypeStr/InputTypeStr";
+import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
 import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";

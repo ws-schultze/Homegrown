@@ -15,7 +15,7 @@ import { ReactComponent as PlusIcon } from "../../../../assets/svg/plusIcon.svg"
 import { ReactComponent as DeleteIcon } from "../../../../assets/svg/deleteIcon.svg";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
-import ErrorMsg from "../../../common/errorMsg/ErrorMsg";
+import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import makeFileNameForUpload from "../../utils/makeFileNameForUpload";
 import { Header } from "./styledComponents";
 
