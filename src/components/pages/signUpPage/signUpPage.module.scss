@@ -18,12 +18,9 @@
   form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     width: 500px;
     margin: auto;
-    @include respond-to("medium") {
-      width: 100%;
-    }
   }
 
   .link {

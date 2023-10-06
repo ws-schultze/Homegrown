@@ -37,7 +37,7 @@ export default function GoogleOAuth() {
       }
       setTimeout(() => {
         setLoading(false);
-      }, 1000);
+      }, 2000);
       navigate("/");
     } catch (error) {
       toast.error("Could not authorize with Google");

@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { db } from "../../../firebase.config";
 import { setDoc, doc, serverTimestamp, FieldValue } from "firebase/firestore";
-import styles from "./signUpPageStyles.module.scss";
+import styles from "./signUpPage.module.scss";
 // import { ReactComponent as PersonIcon } from "../../../assets/svg/personIcon.svg";
 // import { ReactComponent as EnvelopeIcon } from "../../../assets/svg/envelopeIcon.svg";
 // import { ReactComponent as LockIcon } from "../../../assets/svg/lockIcon.svg";
@@ -142,18 +142,20 @@ export default function SignUpPage() {
   return (
     <div className="page-wrap">
       <div className={styles.container}>
-        <form className="form">
+        <form id="sign-up-form">
           <UsernameInput emit={handleUserName} />
           <EmailInput emit={handleEmail} />
           <PasswordInput emit={handlePassword} />
-          <SignUpBtn emit={handleSubmit} />
-          <Link to="/forgot-password" className={styles.link}>
-            Forgot password
-          </Link>
-          <Link to="/sign-in" className={styles.link}>
-            Sign in to an existing account
-          </Link>
-          <OAuth />
+          <div className={styles.btns}>
+            <SignUpBtn emit={handleSubmit} />
+            <Link to="/forgot-password" className={styles.link}>
+              Forgot password
+            </Link>
+            <Link to="/sign-in" className={styles.link}>
+              Already have an account?
+            </Link>
+            <OAuth />
+          </div>
         </form>
       </div>
     </div>

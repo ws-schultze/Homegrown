@@ -14,6 +14,7 @@ import EmailInput, {
   Email,
   initEmail,
 } from "../../shared/inputs/emailInput/EmailInput";
+import "../../../index.scss";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +70,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="page-wrap">
+    <div className={styles["page-wrap"]}>
       <div className={styles.container}>
         <form className={styles.form}>
           <EmailInput emit={handleEmail} />

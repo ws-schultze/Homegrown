@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
-import styles from "./styles.module.scss";
+import styles from "./usernameInput.module.scss";
 import { ReactComponent as PersonIcon } from "./personIcon.svg";
 
 export interface Username {
@@ -71,12 +71,12 @@ export default function UsernameInput(props: Props) {
       errorMsg: errorMsg,
     };
 
-    // setState((s) => ({
-    //   ...s,
-    //   value: e.target.value,
-    //   valid: valid,
-    //   errorMsg: errorMsg,
-    // }));
+    setState((s) => ({
+      ...s,
+      value: e.target.value,
+      valid: valid,
+      errorMsg: errorMsg,
+    }));
 
     console.log("emitting state ", s);
 
