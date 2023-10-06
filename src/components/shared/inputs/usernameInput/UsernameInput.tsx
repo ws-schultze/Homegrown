@@ -63,14 +63,24 @@ export default function UsernameInput(props: Props) {
   ): void {
     const { valid, errorMsg } = validateUsername(e.target.value);
 
-    setState((s) => ({
-      ...s,
+    const s: typeof state = {
+      ...state,
       value: e.target.value,
+      readOnly: false, // Make sure to keep the field enabled
       valid: valid,
       errorMsg: errorMsg,
-    }));
+    };
 
-    props.emit(state);
+    // setState((s) => ({
+    //   ...s,
+    //   value: e.target.value,
+    //   valid: valid,
+    //   errorMsg: errorMsg,
+    // }));
+
+    console.log("emitting state ", s);
+
+    props.emit(s);
   }
 
   return (

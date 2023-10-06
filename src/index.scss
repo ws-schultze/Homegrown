@@ -1,5 +1,42 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap");
 
+$breakpoints: (
+  "small": (
+    max-width: 767px,
+  ),
+  "medium": (
+    max-width: 992px,
+  ),
+  "large": (
+    min-width: 1024px,
+  ),
+) !default;
+
+$border: 1px solid var(--color-border);
+$border-radius: 5px;
+
+/// ---------------------------------------------
+/// Mixin to manage responsive breakpoints
+/// @author Kitty Giraudel
+/// @param {String} $breakpoint - Breakpoint name
+/// @require $breakpoints
+@mixin respond-to($breakpoint) {
+  // If the key exists in the map
+  @if map-has-key($breakpoints, $breakpoint) {
+    // Prints a media query based on the value
+    @media #{inspect(map-get($breakpoints, $breakpoint))} {
+      @content;
+    }
+  }
+
+  // If the key doesn't exist in the map
+  @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+          + "Available breakpoints are: #{map-keys($breakpoints)}.";
+  }
+}
+/// ---------------------------------------------
+
 :root {
   --height-navbar: 4rem;
   --height-navbar-icon: 2.25rem;
@@ -767,8 +804,8 @@ button {
 
 .categoryListingInfoIcon {
   background-color: red;
-  -webkit-mask: url("../assets/svg/bedIcon.svg") no-repeat center;
-  mask: url("../assets/svg/bedIcon.svg") no-repeat center;
+  -webkit-mask: url("./assets/svg/bedIcon.svg") no-repeat center;
+  mask: url("./assets/svg/bedIcon.svg") no-repeat center;
 }
 
 .listingInfoSvg {
@@ -947,85 +984,6 @@ button {
   color: var(--color-text);
 }
 
-.profile-wrap {
-  width: 1116px;
-  margin: auto;
-}
-
-.profile {
-  display: flex;
-  flex-direction: row !important;
-}
-
-@media (max-width: 1023px) {
-  .profile {
-    flex-direction: row;
-  }
-}
-
-.profile__header {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0.5rem;
-}
-
-.profile__header div {
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-}
-
-.profile__btn,
-.sign-out-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  height: 2.5rem;
-  padding: 0.5rem;
-  width: fit-content;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text);
-  font-weight: 500;
-  font-size: 1.2rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  /* box-shadow: var(--box-shadow); */
-}
-
-.profile__btn svg,
-.sign-out-btn svg {
-  height: 100%;
-  fill: var(--color-text);
-}
-
-.sign-out-btn {
-  margin-left: auto;
-}
-
-.profile__btn:hover,
-.profile__btn:hover svg,
-.sign-out-btn:hover,
-.sign-out-btn:hover svg {
-  fill: black;
-  color: black;
-  background: var(--color-primary);
-}
-
-.personal-details-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 350px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: 20px;
-}
-
 .btnRound {
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
@@ -1037,46 +995,9 @@ button {
   border-radius: 1rem;
 }
 
-.profile section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  /* background: var(--color-bg-tertiary); */
-  padding: 1rem 0.5rem;
-  border-radius: var(--border-radius);
-  /* border: 1px solid var(--color-border); */
-}
-
-.profile section header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: 500;
-  width: 100%;
-}
-
-.my-listings-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  width: 730px;
-}
-
 header {
   color: var(--color-primary);
   background: var(--color-bg-secondary);
-}
-
-.profile section form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.profileDetailsText {
-  margin: 1rem 0 2rem 0;
 }
 
 .personalDetailsText {
@@ -1090,41 +1011,6 @@ header {
 button:hover {
   /* box-shadow: var(--color-btn-hover-box-shadow); */
   cursor: pointer;
-}
-
-.profileDetails {
-  display: flex;
-  flex-direction: column;
-}
-
-.profileName,
-.profileEmail,
-.profileAddress,
-.profileAddressActive,
-.profileEmailActive,
-.profileNameActive {
-  all: unset;
-  margin: 0.3rem 0;
-  /* font-weight: 600; */
-  width: 100%;
-}
-.profileNameActive {
-  background-color: #71ff211a !important;
-}
-
-/* .profileEmail,
-.profileAddress,
-.profileAddressActive,
-.profileEmailActive {
-  font-weight: 500;
-} */
-
-.profileEmailActive {
-  background-color: #71ff211a !important;
-}
-
-.profileAddressActive {
-  background-color: rgba(44, 44, 44, 0.1);
 }
 
 .listingText {

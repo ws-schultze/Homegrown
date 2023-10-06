@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import { ReactComponent as EnvelopeIcon } from "./envelopeIcon.svg";
-import styles from "./emailInputStyles.module.scss";
+import styles from "./emailInput.module.scss";
 import isEmail from "validator/lib/isEmail";
 
 export interface Email {
@@ -68,6 +68,7 @@ export default function EmailInput(props: Props) {
     setState((s) => ({
       ...s,
       value: e.target.value,
+      readOnly: false, // Make sure to keep the field enabled
       valid: valid,
       errorMsg: errorMsg,
     }));

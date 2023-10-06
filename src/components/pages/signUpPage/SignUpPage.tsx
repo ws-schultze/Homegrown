@@ -142,7 +142,7 @@ export default function SignUpPage() {
   return (
     <div className="page-wrap">
       <div className={styles.container}>
-        <form>
+        <form className="form">
           <UsernameInput emit={handleUserName} />
           <EmailInput emit={handleEmail} />
           <PasswordInput emit={handlePassword} />

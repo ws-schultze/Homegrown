@@ -5,13 +5,19 @@ import { db } from "../../../../firebase.config";
 import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
 import googleIcon from "./assets/googleIcon.svg";
+import { useState } from "react";
+import Spinner from "../../loaders/Spinner";
 
 export default function GoogleOAuth() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  async function handleClick() {
+  async function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setLoading(true);
     try {
+      console.log(`Signing in with Google...`);
       // Get the user from the Google sign in
       const auth = getAuth();
       const provider = new GoogleAuthProvider();
@@ -29,18 +35,26 @@ export default function GoogleOAuth() {
           timestamp: serverTimestamp(),
         });
       }
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
       navigate("/");
     } catch (error) {
       toast.error("Could not authorize with Google");
       console.error(error);
+      setLoading(false);
     }
+  }
+
+  if (loading) {
+    return <Spinner size="small" />;
   }
 
   return (
     <button
       id="google-o-auth-btn"
       className={styles["container"]}
-      onClick={handleClick}
+      onClick={(e) => handleClick(e)}
       aria-label="Sign in with Google"
     >
       <img src={googleIcon} alt="Google" />

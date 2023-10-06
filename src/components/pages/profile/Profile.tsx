@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAuth, updateProfile } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import {
   updateDoc,
   doc,
@@ -11,7 +11,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../../firebase.config";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TypeFetchedListing, TypeListingData } from "../../..";
 import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
@@ -20,11 +20,12 @@ import { ReactComponent as MoneySVG } from "../../../assets/svg/circle-dollar-to
 import { ReactComponent as SignOutSVG } from "../../../assets/svg/person-running-solid.svg";
 import { ReactComponent as SubmitChangesSVG } from "../../../assets/svg/cloud-arrow-up-solid.svg";
 import ListingCard from "../../shared/listingCard/ListingCard";
-import { Btn, BtnsContainer, Header, LinkBtn } from "./styledComponents";
 import UsernameInput, {
   Username,
 } from "../../shared/inputs/usernameInput/UsernameInput";
 import EmailInput, { Email } from "../../shared/inputs/emailInput/EmailInput";
+import styles from "./profile.module.scss";
+import { ReactComponent as LockSVG } from "./assets/lockIcon.svg";
 
 export interface TypeProfile {
   username: Username;
@@ -58,8 +59,6 @@ export default function Profile() {
   });
   const auth = getAuth();
   const navigate = useNavigate();
-
-  // const { signedIn, checkingStatus } = useAuthStatus();
 
   // Fetch the user's listings
   useEffect(() => {
@@ -149,40 +148,37 @@ export default function Profile() {
    * Update the user's profile
    */
   async function handleSubmitDetailsUpdate() {
+    console.log("submitting updates");
     try {
       if (auth.currentUser) {
-        if (auth.currentUser.displayName !== state.username.value) {
-          // Update display name in firebase
-          await updateProfile(auth.currentUser, {
-            displayName: state.username.value,
-          });
+        // Make sure the signed in user is only able to modify their own profile
 
-          // Update display name in firestore
-          const userRef = doc(db, "users", auth.currentUser.uid);
-          await updateDoc(userRef, {
-            username: state.username.value,
-            email: state.email.value,
-          });
+        // Update display name in firebase
+        await updateProfile(auth.currentUser, {
+          displayName: state.username.value,
+        });
 
-          setState((s) => ({
-            ...s,
-            username: {
-              ...s.username,
-              readOnly: true,
-            },
-            email: {
-              ...s.email,
-              readOnly: true,
-            },
-            editable: false,
-          }));
+        // Update display name in firestore
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(userRef, {
+          username: state.username.value,
+          email: state.email.value,
+        });
 
-          toast.success("Profile Updated Successfully");
-        } else {
-          console.error(
-            `auth.currentUser.displayName == state.username.value => ${auth.currentUser.displayName} ==? ${state.username.value}`
-          );
-        }
+        setState((s) => ({
+          ...s,
+          username: {
+            ...s.username,
+            readOnly: true,
+          },
+          email: {
+            ...s.email,
+            readOnly: true,
+          },
+          editable: false,
+        }));
+
+        toast.success("Profile Updated Successfully");
       } else {
         console.error("auth.currentUser is undefined");
       }
@@ -241,6 +237,7 @@ export default function Profile() {
 
   function handleUsername(username: Username) {
     // Set the username
+    console.log("setting state with username: ", username);
     setState((s) => ({
       ...s,
       username: username,
@@ -257,7 +254,6 @@ export default function Profile() {
 
   function handleEditDetails() {
     // Make username and email editable
-    console.log("Making details editable");
     setState((s) => ({
       ...s,
       username: {
@@ -272,78 +268,108 @@ export default function Profile() {
     }));
   }
 
+  async function handlePasswordReset(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      if (auth.currentUser !== null && auth.currentUser.email) {
+        await sendPasswordResetEmail(auth, auth.currentUser.email);
+        toast.success(
+          `Password reset email was went to ${auth.currentUser.email}`
+        );
+      }
+    } catch (error) {
+      toast.error("Password reset email could not be sent");
+    }
+  }
+
   return (
     <div className="page-wrap">
-      <div className="profile-wrap">
-        <main className="profile">
-          {state.loading === false ? (
-            <section>
-              <Header>Personal Details</Header>
-              <div>
-                <form className="personal-details-form">
-                  <UsernameInput
-                    value={state.username.value}
-                    emit={handleUsername}
-                    readonly={state.username.readOnly}
-                  />
-                  <EmailInput
-                    value={state.email.value}
-                    emit={handleEmail}
-                    readonly={state.email.readOnly}
-                  />
-                  {state.editable === false ? (
-                    <Btn type="button" onClick={handleEditDetails}>
-                      <EditUserSVG /> Edit Details
-                    </Btn>
-                  ) : (
-                    <Btn type="button" onClick={handleSubmitDetailsUpdate}>
-                      <SubmitChangesSVG /> Submit Updates
-                    </Btn>
-                  )}
-                </form>
-              </div>
-              <BtnsContainer>
-                {state.unfinishedListing === null ? (
-                  <LinkBtn to="/create-listing" className="profile__btn">
-                    <MoneySVG />
-                    <p>List a Property</p>
-                  </LinkBtn>
-                ) : (
-                  <LinkBtn to="/create-listing" className="profile__btn">
-                    <MoneySVG />
-                    <p>Continue Listing</p>
-                  </LinkBtn>
-                )}
-                <Btn type="button" onClick={handleSignOut}>
-                  <SignOutSVG />
-                  Sign Out
-                </Btn>
-              </BtnsContainer>
-            </section>
-          ) : null}
+      <div className={styles.container}>
+        {state.loading === false ? (
+          <form id={styles["personal-details"]}>
+            <header>Personal Details</header>
+            <UsernameInput
+              value={state.username.value}
+              emit={handleUsername}
+              readonly={state.username.readOnly}
+            />
+            <EmailInput
+              value={state.email.value}
+              emit={handleEmail}
+              readonly={state.email.readOnly}
+            />
 
-          <section>
-            <Header>My Listings</Header>
-            <div className="my-listings-wrap">
-              {state.loading === false && state.listings?.length > 0 ? (
-                <>
-                  {state.listings.map((listing, index) => (
-                    <ListingCard
-                      handleDelete={handleDelete}
-                      handleEdit={handleEdit}
-                      key={listing.id}
-                      listing={listing}
-                    />
-                  ))}
-                </>
+            <div className={styles["btns-container"]}>
+              {state.editable === false ? (
+                <button
+                  className={styles.btn}
+                  type="button"
+                  onClick={handleEditDetails}
+                >
+                  <EditUserSVG /> Edit Details
+                </button>
               ) : (
-                <>
-                  <p>You have no listings.</p>
-                </>
+                <button
+                  className={styles.btn}
+                  type="button"
+                  onClick={handleSubmitDetailsUpdate}
+                >
+                  <SubmitChangesSVG /> Submit Updates
+                </button>
               )}
+
+              <button
+                className={styles.btn}
+                type="button"
+                onClick={handlePasswordReset}
+              >
+                <LockSVG />
+                Reset password
+              </button>
+              {state.unfinishedListing === null ? (
+                <Link to="/create-listing" className={styles.btn}>
+                  <MoneySVG />
+                  <p>List a Property</p>
+                </Link>
+              ) : (
+                <Link to="/create-listing" className={styles.btn}>
+                  <MoneySVG />
+                  <p>Continue Listing</p>
+                </Link>
+              )}
+              <button
+                className={styles.btn}
+                type="button"
+                onClick={handleSignOut}
+              >
+                <SignOutSVG />
+                Sign Out
+              </button>
             </div>
-          </section>
-        </main>
+          </form>
+        ) : null}
+
+        <div className={styles["listings-container"]}>
+          <header className={styles.header}>My Listings</header>
+          <div className={styles.listings}>
+            {state.loading === false && state.listings?.length > 0 ? (
+              <>
+                {state.listings.map((listing, index) => (
+                  <ListingCard
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    key={listing.id}
+                    listing={listing}
+                  />
+                ))}
+              </>
+            ) : (
+              <>
+                <p>You have no listings.</p>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

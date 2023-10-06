@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
-import styles from "./passwordInputStyles.module.scss";
+import styles from "./passwordInput.module.scss";
 import { ReactComponent as LockIcon } from "./assets/lockIcon.svg";
 
 interface Props {

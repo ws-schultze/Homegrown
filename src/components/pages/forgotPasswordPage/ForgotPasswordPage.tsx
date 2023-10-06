@@ -30,7 +30,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="page-wrap">
       <div className={styles.container}>
-        <form onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
           <p className={styles.notice}>
             Please enter the email address associated with the account that you
             would like to recover.

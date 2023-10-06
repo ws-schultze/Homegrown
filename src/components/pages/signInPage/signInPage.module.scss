@@ -1,3 +1,5 @@
+@import "../../../index.scss";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -6,14 +8,22 @@
   padding: 50px;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
+  @include respond-to("medium") {
+    padding: 5px;
+    width: 100%;
+    border: none;
+  }
 }
 
-form {
+.form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   width: 500px;
   margin: auto;
+  @include respond-to("medium") {
+    width: 100%;
+  }
 }
 
 .link {
@@ -25,4 +35,11 @@ form {
   &:hover {
     color: var(--color-primary);
   }
+}
+
+.btns {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
