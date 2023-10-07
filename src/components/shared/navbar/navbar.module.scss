@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+@import "../../../index.scss";
 
-export const Container = styled.header`
+.container {
   position: fixed;
   left: 0;
   top: 0;
@@ -13,36 +12,33 @@ export const Container = styled.header`
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid var(--color-border);
-  // box-shadow: var(--box-shadow);
-`;
+}
 
-export const Nav = styled.nav`
+.nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
   height: 100%;
   width: 100%;
-`;
+}
 
-export const NavLeft = styled.div`
+.nav-left {
   display: flex;
   height: 100%;
   align-items: center;
   & :first-child {
     padding-left: 0 !important;
   }
-`;
+}
 
-export const NavRight = styled.div`
+.nav-right {
   display: flex;
   height: 100%;
   align-items: center;
-`;
+}
 
-interface NavLinkProps {}
-
-export const NavLink = styled(Link)`
+.nav-link {
   color: var(--color-text);
   font-size: 1.2rem;
   text-decoration: none;
@@ -61,11 +57,9 @@ export const NavLink = styled(Link)`
   &.active {
     color: var(--color-primary);
   }
-`;
+}
 
-interface NavMenuProps {}
-
-export const NavMenuWrap = styled.div`
+.nav-menu-wrap {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -83,24 +77,39 @@ export const NavMenuWrap = styled.div`
   border-bottom: 1px solid var(--color-border);
   box-shadow: 0px 24px 19px 1px black;
   visibility: hidden;
-  ${NavLink}:hover & {
+  .nav-link:hover & {
     visibility: visible;
     z-index: 1;
   }
-`;
+}
 
-export const NavLogo = styled(Link)`
+.nav-logo {
   color: blue;
-  height: 100%;
+
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
   padding: 10px;
   svg {
-    height: 100%;
-    width: 63px;
+    height: 50px;
   }
   img {
     height: 100%;
   }
-`;
+}
+
+.mobile-logo {
+  height: 50px !important;
+  display: none;
+  @include respond-to("small") {
+    display: block;
+  }
+}
+
+.desktop-logo {
+  display: block;
+  height: 50px !important;
+  @include respond-to("small") {
+    display: none;
+  }
+}

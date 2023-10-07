@@ -1,16 +1,11 @@
 import { TypeTheme, useThemeContext } from "../../../ThemeProvider";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logoPNG from "../../../assets/logo/logo.png";
+import { ReactComponent as MobileLogo } from "./assets/mobile-logo.svg";
+import { ReactComponent as DesktopLogo } from "./assets/desktop-logo.svg";
 import ProfileBtn from "../profileBtn/ProfileBtn";
 import pathMatchRoute from "../../utils/pathMatchRoute";
-import {
-  Container,
-  Nav,
-  NavLeft,
-  NavLink,
-  NavLogo,
-  NavRight,
-} from "./styledComponents";
+import styles from "./navbar.module.scss";
 import ThemeBtn from "../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../redux/hooks";
 
@@ -29,33 +24,38 @@ export default function Navbar({ theme }: { theme: TypeTheme }) {
   }
 
   return (
-    <Container>
-      <Nav>
-        <NavLeft>
-          <NavLink
+    <nav className={styles.container}>
+      <div className={styles.nav}>
+        <div className={styles["nav-left"]}>
+          <Link
             to={navigateToMapPage()}
-            className={pathMatchRoute("/listings", location) ? "active" : ""}
+            className={` 
+            ${styles["nav-link"]}
+            ${pathMatchRoute("/listings", location) ? "active" : ""}`}
           >
-            Explore Listings
-          </NavLink>
+            Explore
+          </Link>
 
-          <NavLink
+          <Link
             to={"/create-listing"}
-            className={pathMatchRoute("/listings", location) ? "active" : ""}
+            className={` 
+            ${styles["nav-link"]}
+            ${pathMatchRoute("/listings", location) ? "active" : ""}`}
           >
-            Create a Listing
-          </NavLink>
-        </NavLeft>
+            Create
+          </Link>
+        </div>
 
-        <NavLogo to={"/"}>
-          <img src={logoPNG} alt="" />
-        </NavLogo>
+        <div>
+          <MobileLogo className={styles["mobile-logo"]} />
+          <DesktopLogo className={styles["desktop-logo"]} />
+        </div>
 
-        <NavRight>
+        <div className={styles["nav-right"]}>
           <ProfileBtn />
           <ThemeBtn onChange={() => toggleTheme()} theme={theme} />
-        </NavRight>
-      </Nav>
-    </Container>
+        </div>
+      </div>
+    </nav>
   );
 }
