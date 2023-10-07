@@ -1,14 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap");
 
+$mobile-max-width: 480px;
+$tablet-min-width: 481px;
+$tablet-max-width: 1023px;
+$desktop-min-width: 1024px;
+
 $breakpoints: (
-  "small": (
-    max-width: 767px,
+  "mobile": (
+    max-width: $mobile-max-width,
   ),
-  "medium": (
-    max-width: 992px,
+  "tablet": (
+    max-width: $tablet-max-width,
   ),
-  "large": (
-    min-width: 1024px,
+  "desktop": (
+    min-width: $desktop-min-width,
   ),
 ) !default;
 
@@ -16,6 +21,14 @@ $color-primary: #33c1ff;
 $border: 1px solid var(--color-border);
 $border-radius: 5px;
 $hover-border-color: #16526c;
+
+:export {
+  mobile-max-width: $mobile-max-width;
+  tablet-min-width: $tablet-min-width;
+  tablet-max-width: $tablet-max-width;
+  desktop-min-width: $desktop-min-width;
+  color-primary: $color-primary;
+}
 
 /// ---------------------------------------------
 /// Mixin to manage responsive breakpoints

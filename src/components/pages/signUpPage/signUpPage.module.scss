@@ -9,7 +9,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   width: fit-content;
-  @include respond-to("small") {
+  @include respond-to("mobile") {
     padding: 5px;
     border: none;
   }
@@ -21,7 +21,7 @@
     max-width: 500px;
     min-width: 300px;
     margin: auto;
-    @include respond-to("small") {
+    @include respond-to("mobile") {
       width: 100%;
     }
   }

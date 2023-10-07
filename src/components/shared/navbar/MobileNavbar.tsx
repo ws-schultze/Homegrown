@@ -1,14 +1,14 @@
-import { TypeTheme, useThemeContext } from "../../../ThemeProvider";
+import { useThemeContext } from "../../../ThemeProvider";
 import { Link, useLocation } from "react-router-dom";
-// import { ReactComponent as MobileLogo } from "./assets/mobile-logo.svg";
-import { ReactComponent as DesktopLogo } from "./assets/desktop-logo.svg";
+import { ReactComponent as MobileLogo } from "./assets/mobile-logo.svg";
+import { ReactComponent as Hamburger } from "./assets/bars-solid.svg";
 import ProfileBtn from "../profileBtn/ProfileBtn";
 import pathMatchRoute from "../../utils/pathMatchRoute";
 import styles from "./navbar.module.scss";
 import ThemeBtn from "../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../redux/hooks";
 
-export default function Navbar() {
+export default function MobileNavbar() {
   const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const placeFilter = useAppSelector((state) => state.placeFilter);
@@ -23,9 +23,10 @@ export default function Navbar() {
   }
 
   return (
-    <nav className={`${styles.container} `}>
+    <nav className={`${styles.container} ${styles.mobile}`}>
       <div className={styles.nav}>
         <div className={styles["nav-left"]}>
+          <Hamburger className={styles.hamburger} />
           <Link
             to={navigateToMapPage()}
             className={` 
@@ -46,7 +47,7 @@ export default function Navbar() {
         </div>
 
         <Link to={"/"}>
-          <DesktopLogo className={styles.logo} />
+          <MobileLogo className={styles.logo} />
         </Link>
 
         <div className={styles["nav-right"]}>
