@@ -25,7 +25,7 @@ import clearMarkerContentClassList, {
 import { useAppSelector } from "../../../../redux/hooks";
 
 import css from "./styles.module.css";
-import "./index.css"; // styles that override default google styles
+// import "./index.scss"; // styles that override default google styles
 
 import {
   MapMarkerSize,

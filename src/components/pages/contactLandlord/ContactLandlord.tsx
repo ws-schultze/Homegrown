@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { DocumentData, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { toast } from "react-toastify";
-// import ListingCard from "../components/ListingCard";
 import Spinner from "../../shared/loaders/Spinner";
+import styles from "./contactLandlord.module.scss";
+import ListingCard from "../../shared/listingCard/ListingCard";
+import { TypeFetchedListing, TypeFetchedListingData } from "../../..";
 
 export default function ContactLandlord() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [landlord, setLandlord] = useState<DocumentData | null>(null);
-  const [listing, setListing] = useState<DocumentData | null>(null);
-  // The useSearchParams hook is used to read and modify the query string in the URL for the current location.
-  // eslint-disable-next-line
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [listing, setListing] = useState<TypeFetchedListing | null>(null);
   const params = useParams();
 
   // Fetch landlord
@@ -30,76 +29,86 @@ export default function ContactLandlord() {
       }
     };
     getLandlord();
-    console.log(landlord);
   }, [params.landlordId]);
 
   // Fetch listing
   useEffect(() => {
-    const fetchListing = async () => {
+    async function fetchListing() {
       if (params.listingId) {
+        console.log("getting listing data for ", params.listingId);
         const docRef = doc(db, "listings", params.listingId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setListing(docSnap.data());
+          const data = docSnap.data() as TypeFetchedListingData;
+          setListing({ id: params.listingId, data: data });
           setLoading(false);
-          console.log(docSnap.data());
+        } else {
+          console.error("docSnap.exists() is undefined");
         }
       }
-    };
+    }
     fetchListing();
   }, [params.listingId]);
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setMessage(e.target.value);
+  }
 
   if (loading) {
     return <Spinner size="large" />;
   }
 
-  return (
-    <div className="page-wrap">
-      <header>{/* <p className='page__header'>Contact Landlord</p> */}</header>
-      {landlord !== null && (
-        <main>
-          <div className="contactLandlordPageHeader">
-            <div className="contactLandlordName">
-              Landlord: {landlord?.name}
-            </div>
+  if (landlord !== null && listing !== null) {
+    return (
+      <div className="page-wrap">
+        <div className={styles.container}>
+          <header>
+            <p className={styles["landlord-name"]}>
+              {listing.data.agent
+                ? `Listing Agent: ${listing.data.agent.firstName.value} ${listing.data.agent.lastName.value}`
+                : listing.data.privateOwner
+                ? `Property Owner: ${listing.data.privateOwner.firstName.value} ${listing.data.privateOwner.lastName.value}`
+                : listing.data.company
+                ? `Property Management Company: ${listing.data.company.name.value}`
+                : listing.data.owner
+                ? `Property Owner: ${listing.data.owner.firstName.value} ${listing.data.owner.lastName.value}`
+                : null}
+            </p>
+            <ListingCard listing={listing} />
+          </header>
 
-            {/* <ListingCard listing={listing} id={params.listingId} key={params.listingId} /> */}
-          </div>
-
-          <form className="message-form">
-            <div className="messageDiv">
-              {/* <label htmlFor='message' className='messageLabel'>
-                
-              </label> */}
+          <form>
+            <div className={styles["msg-container"]}>
+              <label htmlFor="message">Email Content</label>
               <textarea
                 name="message"
                 id="message"
-                className="contactLandlordMessageInput"
+                className={styles.message}
                 value={message}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => handleChange(e)}
                 placeholder="Please type your message here..."
               ></textarea>
             </div>
-            {listing ? (
-              <a
-                href={`mailto:${landlord.email}?Subject=${listing.address}&body=${message}`}
-              >
-                <button
-                  style={{ marginBottom: "10rem" }}
-                  type="button"
-                  className="primary-btn"
+
+            {/* {listing && listing.data.address.formattedAddress.value ? (
+                <a
+                  href={`mailto:${landlord.email}?Subject=${listing.data.address.formattedAddress.value}&body=${message}`}
                 >
-                  Send Message
-                </button>
-              </a>
-            ) : null}
+                  <button
+                    style={{ marginBottom: "10rem" }}
+                    type="button"
+                    className="primary-btn"
+                  >
+                    Send Message
+                  </button>
+                </a>
+              ) : null} */}
           </form>
-        </main>
-      )}
-    </div>
-  );
+        </div>
+      </div>
+    );
+  }
+
+  return <Spinner size="large" />;
 }

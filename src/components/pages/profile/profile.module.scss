@@ -1,4 +1,4 @@
-@import "../../../index.scss";
+@import "../../../scss/functions.scss";
 // $breakpoints: (
 //   "small": (
 //     max-width: 767px,
@@ -109,7 +109,7 @@
     justify-content: center;
     color: var(--color-text);
     background: transparent;
-    border-bottom: $border;
+    border-bottom: var(--border);
   }
 
   .listings {

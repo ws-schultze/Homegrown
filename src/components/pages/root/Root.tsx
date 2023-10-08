@@ -4,9 +4,8 @@ import { useThemeContext } from "../../../ThemeProvider";
 import Navbar from "../../shared/navbar/Navbar";
 import Spinner from "../../shared/loaders/Spinner";
 import MobileNavbar from "../../shared/navbar/MobileNavbar";
-import styles from "./styles.module.scss";
-import "./styles.module.scss";
-import { useEffect, useMemo, useState } from "react";
+import styles from "./root.module.scss";
+import { useMemo } from "react";
 import useScreenSize from "../../../hooks/useScreenSize";
 
 export default function Root({

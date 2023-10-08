@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import css from "./styles.module.css";
-import "./index.css";
+// import "./index.scss";
 import { useThemeContext } from "../../../ThemeProvider";
 import { useMapContext } from "../../../MapProvider";
 import useSetupMapZoomControls from "../../../hooks/useSetupMapZoomControls";
