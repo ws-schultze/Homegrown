@@ -1,14 +1,14 @@
-import { TypeTheme, useThemeContext } from "../../../ThemeProvider";
+import { TypeTheme, useThemeContext } from "../../../../ThemeProvider";
 import { Link, useLocation } from "react-router-dom";
 // import { ReactComponent as MobileLogo } from "./assets/mobile-logo.svg";
 import { ReactComponent as DesktopLogo } from "./assets/desktop-logo.svg";
-import ProfileBtn from "../profileBtn/ProfileBtn";
-import pathMatchRoute from "../../utils/pathMatchRoute";
-import styles from "./navbar.module.scss";
-import ThemeBtn from "../themeBtn/ThemeBtn";
-import { useAppSelector } from "../../../redux/hooks";
+import ProfileBtn from "../../profileBtn/ProfileBtn";
+import pathMatchRoute from "../../../utils/pathMatchRoute";
+import styles from "./desktopNavbar.module.scss";
+import ThemeBtn from "../../themeBtn/ThemeBtn";
+import { useAppSelector } from "../../../../redux/hooks";
 
-export default function Navbar() {
+export default function DesktopNavbar() {
   const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const placeFilter = useAppSelector((state) => state.placeFilter);

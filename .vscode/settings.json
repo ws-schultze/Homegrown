@@ -5,5 +5,5 @@
     "maptype",
     "textbox"
   ],
-  "svg.preview.background": "black"
+  "svg.preview.background": "transparent"
 }
