@@ -5,7 +5,7 @@ import { ReactComponent as DeleteIcon } from "../../../assets/svg/deleteIcon.svg
 import { ReactComponent as EditIcon } from "../../../assets/svg/editIcon.svg";
 import { TypeFetchedListing } from "../../..";
 import { ReactComponent as ImageSVG } from "../../../assets/svg/image-regular.svg";
-import css from "./styles.module.css";
+import styles from "./listingCard.module.css";
 import Spinner from "../loaders/Spinner";
 
 interface Props {
@@ -74,12 +74,12 @@ export default function ListingCard({
   console.log("Listing to put on card: ", listing);
 
   return (
-    <div className={css.container}>
+    <div className={styles.container}>
       {listing ? (
-        <div className="listing-card">
+        <div className={styles.card}>
           <Link
             to={`/explore-listings/details/${listing.data.address.formattedAddress.value}/${listing.id}`}
-            className="listing-card__link"
+            className={styles.link}
           >
             {listing.data.uploads.images.value[0] !== undefined ? (
               <img
@@ -89,7 +89,7 @@ export default function ListingCard({
             ) : (
               <ImageSVG />
             )}
-            <div className="body">
+            <div className={styles.body}>
               <>
                 <div>
                   <div>
@@ -104,7 +104,7 @@ export default function ListingCard({
                 {listing.data.singleFamilyHome ||
                 listing.data.multiFamilyHomeUnit ||
                 listing.data.apartment ? (
-                  <div className="features">
+                  <div className={styles.features}>
                     {/* Bedrooms */}
                     <div>
                       <b>
@@ -149,12 +149,12 @@ export default function ListingCard({
               </>
 
               {/* Address */}
-              <div className="listing-card__address">
+              <div className={styles.address}>
                 {listing.data.address.formattedAddress.value}
               </div>
 
               {/* Lister */}
-              <div className="listing-card__lister">
+              <div className={styles.lister}>
                 {listing.data.agent ? (
                   <div>Listed by: {listing.data.agent.companyName.value}</div>
                 ) : listing.data.owner ? (
@@ -170,9 +170,9 @@ export default function ListingCard({
           {auth.currentUser !== null &&
           listing.data.userRef.uid === auth.currentUser.uid &&
           (handleDelete !== undefined || handleEdit !== undefined) ? (
-            <div className="listing-card__btns">
+            <div className={styles.btns}>
               {handleDelete ? (
-                <button type="button" className="listing-card__btn">
+                <button type="button" className={styles.btn}>
                   {
                     <DeleteIcon
                       className="removeListingSvg"
@@ -182,7 +182,7 @@ export default function ListingCard({
                 </button>
               ) : null}
               {handleEdit ? (
-                <button type="button" className="listing-card__btn">
+                <button type="button" className={styles.btn}>
                   {<EditIcon onClick={() => handleEdit(listing.id)} />}
                 </button>
               ) : null}

@@ -1,0 +1,89 @@
+.container {
+  width: fit-content;
+  height: fit-content;
+
+  img {
+    height: 15rem;
+    object-position: center;
+  }
+}
+
+.link {
+  display: contents;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  width: 360px;
+  margin: auto;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  background: var(--color-bg-primary);
+  border: var(--border);
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+  color: var(--color-text);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px 5px;
+  margin: auto;
+  width: 100%;
+  color: var(--color-text);
+}
+
+.btns {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  position: absolute;
+  padding: 5px;
+  right: 0.5rem;
+  top: 0.5rem;
+  background: var(--color-bg-primary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.btn {
+  background: none;
+  border: none;
+  border-radius: var(--border-radius);
+}
+
+.btn:hover {
+  background: var(--color-primary);
+}
+
+.btn svg {
+  fill: var(--color-text);
+}
+
+.btn:hover svg {
+  fill: var(--color-black);
+}
+
+.lister {
+  font-size: 0.8rem;
+}
+
+.features {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

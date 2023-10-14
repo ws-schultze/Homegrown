@@ -91,19 +91,13 @@ export default function ContactLandlord() {
               ></textarea>
             </div>
 
-            {/* {listing && listing.data.address.formattedAddress.value ? (
-                <a
-                  href={`mailto:${landlord.email}?Subject=${listing.data.address.formattedAddress.value}&body=${message}`}
-                >
-                  <button
-                    style={{ marginBottom: "10rem" }}
-                    type="button"
-                    className="primary-btn"
-                  >
-                    Send Message
-                  </button>
-                </a>
-              ) : null} */}
+            {listing && listing.data.address.formattedAddress.value ? (
+              <a
+                href={`mailto:${landlord.email}?Subject=${listing.data.address.formattedAddress.value}&body=${message}`}
+              >
+                <button type="button">Send Message</button>
+              </a>
+            ) : null}
           </form>
         </div>
       </div>
