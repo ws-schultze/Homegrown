@@ -23,18 +23,6 @@
   width: 100%;
 }
 
-.nav-left {
-  display: flex;
-  height: 100%;
-  align-items: center;
-}
-
-.nav-right {
-  display: flex;
-  height: 100%;
-  align-items: center;
-}
-
 .nav-link {
   color: var(--color-text);
   font-size: 1.2rem;
@@ -73,7 +61,7 @@
   border-radius: var(--border-radius);
   padding: 10px;
   position: absolute;
-  left: 0;
+  right: 5px;
   top: calc(var(--height-navbar) + 5px);
   background-color: var(--color-bg-primary);
   box-shadow: var(--box-shadow);
@@ -93,5 +81,23 @@
   padding: 5px;
   &:hover svg {
     fill: var(--color-primary);
+  }
+  &[wobble="1"] {
+    animation: wobble 1s 1;
+  }
+}
+
+@keyframes wobble {
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }

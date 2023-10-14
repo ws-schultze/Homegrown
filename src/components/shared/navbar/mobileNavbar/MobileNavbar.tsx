@@ -7,7 +7,7 @@ import pathMatchRoute from "../../../utils/pathMatchRoute";
 import styles from "./mobileNavbar.module.scss";
 import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import useCloseMenu from "./hooks/useCloseMenu";
 
 export default function MobileNavbar() {
@@ -17,6 +17,7 @@ export default function MobileNavbar() {
   const showMenuBtnRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef(null);
   const { showMenu, setShowMenu } = useCloseMenu(menuRef, showMenuBtnRef);
+  const [wobble, setWobble] = useState<0 | 1>(0);
 
   function navigateToMapPage(): string {
     if (placeFilter.place) {
@@ -27,18 +28,17 @@ export default function MobileNavbar() {
     }
   }
 
-  function toggleMenu() {
+  function handleClick() {
     setShowMenu(!showMenu);
+    setWobble(1);
   }
 
   return (
     <nav className={`${styles.container} `}>
       <div className={styles.nav}>
-        <div className={styles["nav-left"]}>
-          <button ref={showMenuBtnRef} className={styles["show-menu-btn"]}>
-            <Hamburger className={styles.hamburger} onClick={toggleMenu} />
-          </button>
-        </div>
+        <Link to={"/"}>
+          <LogoSVG className={styles.logo} />
+        </Link>
 
         {showMenu ? (
           <div ref={menuRef} className={styles.menu}>
@@ -66,11 +66,16 @@ export default function MobileNavbar() {
           </div>
         ) : null}
 
-        <div className={styles["nav-right"]}>
-          <Link to={"/"}>
-            <LogoSVG className={styles.logo} />
-          </Link>
-        </div>
+        <button
+          ref={showMenuBtnRef}
+          className={styles["show-menu-btn"]}
+          onClick={handleClick}
+          onAnimationEnd={() => setWobble(0)}
+          //@ts-ignore
+          wobble={wobble}
+        >
+          <Hamburger className={styles.hamburger} />
+        </button>
       </div>
     </nav>
   );
