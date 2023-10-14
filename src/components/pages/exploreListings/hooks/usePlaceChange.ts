@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { defineBoundaries, setupBoundaryForPlace } from "../map/mapHelpers";
-import { TypeBoundaries } from "../../../..";
+import { Boundaries } from "../../../../types/index";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 function usePlaceChange(
@@ -9,7 +9,7 @@ function usePlaceChange(
   searchBox: google.maps.places.SearchBox | undefined,
   largeMarkers: google.maps.marker.AdvancedMarkerView[],
   smallMarkers: google.maps.marker.AdvancedMarkerView[],
-  boundaries: TypeBoundaries,
+  boundaries: Boundaries,
   boundaryStyle: google.maps.FeatureStyleOptions,
   dispatch: Dispatch<AnyAction>
 ) {

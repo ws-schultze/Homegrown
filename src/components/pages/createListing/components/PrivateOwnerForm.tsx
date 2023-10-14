@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  TypeStr,
-  TypePrivateOwner,
-  TypeAddressValidationApi_Response,
-  TypeListingData,
-  TypeVerifyActionName,
-} from "../../../../index";
+  Str,
+  PrivateOwner,
+  AddressValidationApi_Response,
+  ListingData,
+  VerifyActionName,
+} from "../../../../types/index";
 import {
   initPrivateOwner,
-  initTypeStrOpt,
-  initTypeStrReq,
+  initStrOpt,
+  initStrReq,
 } from "../../../../initialValues";
-import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
+import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
 import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
@@ -26,14 +26,14 @@ import { Header } from "./styledComponents";
 import { renderMap } from "../../exploreListings/map/mapHelpers";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   prevPage: () => void;
   nextPage: () => void;
   toPageNumber: (number: number) => void;
   deleteListing: () => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
 }
 
 export default function PrivateOwnerForm({
@@ -46,11 +46,11 @@ export default function PrivateOwnerForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<TypePrivateOwner>(initPrivateOwner);
+  const [state, setState] = useState<PrivateOwner>(initPrivateOwner);
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<TypeAddressValidationApi_Response | null>(null);
+    useState<AddressValidationApi_Response | null>(null);
   const streetAddressRef = useRef<HTMLInputElement | null>(null);
 
   /**
@@ -89,7 +89,7 @@ export default function PrivateOwnerForm({
     }
   }
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof state) {
     if (fieldName === "streetAddress") {
       handleAutocompleteWidget();
     } else if (fieldName === "unitNumber") {
@@ -132,12 +132,12 @@ export default function PrivateOwnerForm({
         setState((s) => ({
           ...s,
           provideAddress: obj,
-          streetAddress: initTypeStrReq,
-          unitNumber: initTypeStrOpt,
-          city: initTypeStrReq,
-          adminAreaLevel1: initTypeStrReq,
-          country: initTypeStrReq,
-          zipCode: initTypeStrReq,
+          streetAddress: initStrReq,
+          unitNumber: initStrOpt,
+          city: initStrReq,
+          adminAreaLevel1: initStrReq,
+          country: initStrReq,
+          zipCode: initStrReq,
         }));
       } else if (value === false) {
         // Do not provide address --> remove address props from state
@@ -158,9 +158,9 @@ export default function PrivateOwnerForm({
   }
 
   function handleVerify(
-    actionName: TypeVerifyActionName,
-    obj: TypePrivateOwner,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    actionName: VerifyActionName,
+    obj: PrivateOwner,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (addressValidationApiResponse) {
       setAddressValidationApiResponse(addressValidationApiResponse);
@@ -200,48 +200,48 @@ export default function PrivateOwnerForm({
 
       <div className="listing-form__section">
         <Header>Private Owner Information</Header>
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="firstName"
           placeholder="First Name"
           formatType="name"
           parent={state.firstName}
-          emit={handleInputTypeStr}
+          emit={handleInputStr}
         />
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="middleName"
           placeholder="Middle Name*"
           formatType="name"
           parent={state.middleName}
-          emit={handleInputTypeStr}
+          emit={handleInputStr}
         />
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="lastName"
           placeholder="Last Name"
           formatType="name"
           parent={state.lastName}
-          emit={handleInputTypeStr}
+          emit={handleInputStr}
         />
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="phoneNumber"
             placeholder="Phone Number"
             groupSeparators={[")", "-"]}
             formatType="phone-number"
             parent={state.phoneNumber}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="email"
           placeholder="Email"
           formatType="email"
           parent={state.email}
-          emit={handleInputTypeStr}
+          emit={handleInputStr}
         />
         {/* Provide address? */}
         <TwoBtnRow<typeof state>
@@ -269,56 +269,56 @@ export default function PrivateOwnerForm({
             version="beta"
             libraries={["places", "marker"]}
           >
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="lg"
               fieldName="streetAddress"
               ref={streetAddressRef}
               placeholder="Street Number"
               formatType="name"
               parent={state.streetAddress}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="md"
               fieldName="unitNumber"
               placeholder="Unit Number*"
               formatType="name"
               parent={state.unitNumber}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="lg"
               fieldName="city"
               placeholder="City"
               formatType="name"
               parent={state.city}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
             <div className="listing-form__flex-row">
-              <InputTypeStr<typeof state>
+              <InputStr<typeof state>
                 size="md"
                 fieldName="adminAreaLevel1"
                 placeholder="State/Province"
                 formatType="name"
                 parent={state.adminAreaLevel1}
-                emit={handleInputTypeStr}
+                emit={handleInputStr}
               />
-              <InputTypeStr<typeof state>
+              <InputStr<typeof state>
                 size="md"
                 fieldName="zipCode"
                 placeholder="Postal Code"
                 formatType="name"
                 parent={state.zipCode}
-                emit={handleInputTypeStr}
+                emit={handleInputStr}
               />
             </div>
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="lg"
               fieldName="country"
               placeholder="Country"
               formatType="name"
               parent={state.country}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
           </Wrapper>
         ) : null}

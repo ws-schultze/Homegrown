@@ -195,13 +195,6 @@ button {
   }
 }
 
-.map-page-wrap {
-  display: flex;
-  gap: 5px;
-  height: calc(100vh - var(--height-navbar));
-  margin-top: var(--height-navbar);
-}
-
 .map-page {
   display: flex;
   flex-direction: column;
@@ -420,6 +413,16 @@ input:-internal-autofill-selected {
 
 .gm-style .gm-style-iw-d {
   overflow: hidden;
+}
+
+.gm-svpc {
+  background: var(--color-bg-primary) !important;
+  border: var(--border) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--box-shadow) !important;
+  &:hover {
+    border-color: var(--color-primary) !important;
+  }
 }
 
 .listing-form__input-file__btn__icon {

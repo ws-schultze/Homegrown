@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import Spinner from "../../shared/loaders/Spinner";
 import styles from "./contactLandlord.module.scss";
 import ListingCard from "../../shared/listingCard/ListingCard";
-import { TypeFetchedListing, TypeFetchedListingData } from "../../..";
+import { FetchedListing, TypeFetchedListingData } from "../../../types/index";
 
 export default function ContactLandlord() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [landlord, setLandlord] = useState<DocumentData | null>(null);
-  const [listing, setListing] = useState<TypeFetchedListing | null>(null);
+  const [listing, setListing] = useState<FetchedListing | null>(null);
   const params = useParams();
 
   // Fetch landlord

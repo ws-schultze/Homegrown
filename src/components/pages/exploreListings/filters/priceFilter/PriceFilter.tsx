@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import InputTypeStr from "../../../../shared/inputs/inputTypeStr/InputTypeStr";
+import InputStr from "../../../../shared/inputs/inputStr/InputStr";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setPriceRange, setShowMenu } from "./priceFilterSlice";
@@ -11,17 +11,17 @@ import {
   ContainerIconWrap,
   Menu,
 } from "./styledComponents";
-import { initTypeStrOpt } from "../../../../../initialValues";
-import { TypeStr } from "../../../../..";
+import { initStrOpt } from "../../../../../initialValues";
+import { Str } from "../../../../../types/index";
 
 interface LocalState {
-  lowPrice: TypeStr;
-  highPrice: TypeStr;
+  lowPrice: Str;
+  highPrice: Str;
 }
 
 const initialLocalState: LocalState = {
-  lowPrice: initTypeStrOpt,
-  highPrice: initTypeStrOpt,
+  lowPrice: initStrOpt,
+  highPrice: initStrOpt,
 };
 
 export default function PriceFilter(): JSX.Element {
@@ -71,7 +71,7 @@ export default function PriceFilter(): JSX.Element {
     };
   });
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof state) {
     setLocalState((s) => ({
       ...s,
       [fieldName]: object,
@@ -104,7 +104,7 @@ export default function PriceFilter(): JSX.Element {
       {state.showMenu ? (
         <>
           <Menu ref={menuRef} onClick={(e) => e.stopPropagation()}>
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="lg"
               fieldName="lowPrice"
               groupSeparators={[","]}
@@ -114,10 +114,10 @@ export default function PriceFilter(): JSX.Element {
               isPriceChange={false}
               placeholder={"Low Price"}
               parent={state.lowPrice}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
 
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="lg"
               fieldName="highPrice"
               groupSeparators={[","]}
@@ -126,8 +126,8 @@ export default function PriceFilter(): JSX.Element {
               min={1}
               isPriceChange={false}
               placeholder={"High Price"}
-              parent={state.highPrice || initTypeStrOpt}
-              emit={handleInputTypeStr}
+              parent={state.highPrice || initStrOpt}
+              emit={handleInputStr}
             />
 
             <ApplyFilterBtn

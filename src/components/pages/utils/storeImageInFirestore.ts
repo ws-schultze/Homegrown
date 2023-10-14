@@ -5,7 +5,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import makeFileNameForUpload from "./makeFileNameForUpload";
-import { TypeImage } from "../../../index";
+import { Image } from "../../../types/index";
 
 interface Props {
   file: File;
@@ -15,12 +15,12 @@ interface Props {
 /**
  * Store an image in firestore
  * @param file File
- * @returns TypeImage {fileName: string, url: string}
+ * @returns Image {fileName: string, url: string}
  */
 export default async function storeImageInFirestore({
   file,
   userUID,
-}: Props): Promise<TypeImage> {
+}: Props): Promise<Image> {
   return new Promise((resolve, reject) => {
     const storage = getStorage();
     const fileName = makeFileNameForUpload(userUID, file.name);

@@ -1,4 +1,4 @@
-import { TypeAddress, TypeAddressOptional } from "../../../../../../index";
+import { Address, AddressOptional } from "../../../../../../types/index";
 
 interface Props<T> {
   /**
@@ -15,7 +15,7 @@ interface Props<T> {
  * Given a state object, set beingVerified.value to "true" or "false" and return the state object.
  */
 export default function setBeingVerifiedToState<
-  T extends TypeAddress | TypeAddressOptional
+  T extends Address | AddressOptional
 >({ state, beingVerified }: Props<T>): T {
   let s: T;
 

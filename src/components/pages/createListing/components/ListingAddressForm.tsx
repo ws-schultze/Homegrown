@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
-  TypeAddress,
-  TypeAddressValidationApi_Response,
-  TypeStr,
-  TypeListingData,
-  TypeVerifyActionName,
-} from "../../../../index";
+  Address,
+  AddressValidationApi_Response,
+  Str,
+  ListingData,
+  VerifyActionName,
+} from "../../../../types/index";
 import { initAddress } from "../../../../initialValues";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import AddressMap from "../../../shared/addressMap/AddressMap";
@@ -15,7 +15,7 @@ import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
-import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
+import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { Header } from "./styledComponents";
@@ -25,7 +25,7 @@ interface Props {
   /**
    * Shows a map with a marker for the given address.
    */
-  parent: TypeListingData;
+  parent: ListingData;
   showMap: boolean;
   prevPage?: () => void;
   nextPage: () => void;
@@ -33,7 +33,7 @@ interface Props {
   toPageNumber?: (number: number) => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
 }
 
 function ListingAddressForm({
@@ -47,11 +47,11 @@ function ListingAddressForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<TypeAddress>(parent.address);
+  const [state, setState] = useState<Address>(parent.address);
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<TypeAddressValidationApi_Response | null>(null);
+    useState<AddressValidationApi_Response | null>(null);
 
   // const streetAddressRef = useRef<HTMLInputElement | null>(null);
   const streetAddressRef = React.createRef<HTMLInputElement>();
@@ -107,7 +107,7 @@ function ListingAddressForm({
   //  * @param key keyof typeof state
   //  */
   // function handleAddress(e: React.ChangeEvent<HTMLInputElement>, key: keyof typeof state): void {
-  //   const field = state[key] as TypeStr | TypeBool;
+  //   const field = state[key] as Str | TypeBool;
   //   if (key === "streetAddress") {
   //     handleAutocompleteWidget();
   //   }
@@ -116,7 +116,7 @@ function ListingAddressForm({
   // }
 
   // function handleBlur(key: keyof typeof state): void {
-  //   const field = state[key] as TypeStr | TypeBool;
+  //   const field = state[key] as Str | TypeBool;
   //   if (field.required === true && field.valid === false && field.value === "") {
   //     const field = setErrorMsg<typeof state>(state, key, "Required");
   //     setState((s) => ({
@@ -127,9 +127,9 @@ function ListingAddressForm({
   // }
 
   function handleVerify(
-    actionName: TypeVerifyActionName,
-    obj: TypeAddress,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    actionName: VerifyActionName,
+    obj: Address,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (addressValidationApiResponse) {
       setAddressValidationApiResponse(addressValidationApiResponse);
@@ -158,7 +158,7 @@ function ListingAddressForm({
     }
   }
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof state) {
     if (fieldName === "streetAddress") {
       handleAutocompleteWidget();
     } else if (fieldName === "unitNumber") {
@@ -211,56 +211,56 @@ function ListingAddressForm({
           version="beta"
           libraries={["places", "marker"]}
         >
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="lg"
             fieldName="streetAddress"
             ref={streetAddressRef}
             placeholder="Street Number"
             formatType="name"
             parent={state.streetAddress}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="unitNumber"
             placeholder="Unit Number*"
             formatType="name"
             parent={state.unitNumber}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="lg"
             fieldName="city"
             placeholder="City"
             formatType="name"
             parent={state.city}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
           <div className="listing-form__flex-row">
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="md"
               fieldName="adminAreaLevel1"
               placeholder="State/Province"
               formatType="name"
               parent={state.adminAreaLevel1}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
-            <InputTypeStr<typeof state>
+            <InputStr<typeof state>
               size="md"
               fieldName="zipCode"
               placeholder="Postal Code"
               formatType="name"
               parent={state.zipCode}
-              emit={handleInputTypeStr}
+              emit={handleInputStr}
             />
           </div>
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="lg"
             fieldName="country"
             placeholder="Country"
             formatType="name"
             parent={state.country}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
           {showMap === true ? (
             <div ref={mapRef} className="listing-form__map-container">

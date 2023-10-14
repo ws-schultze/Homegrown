@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ListingTypeValue } from "../../../../..";
+import { ListingKindValue } from "../../../../../types/index";
 import { allListingTypeValues } from "../../../../../initialValues";
 
 export interface ListingTypeFilterState {
   showMenu: boolean;
-  menuItems: ListingTypeValue[];
-  selectedItems: ListingTypeValue[];
+  menuItems: ListingKindValue[];
+  selectedItems: ListingKindValue[];
 }
 
 export const initialListingTypeFilterState: ListingTypeFilterState = {

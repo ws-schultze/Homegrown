@@ -5,12 +5,12 @@ import ErrorComponent from "../../../shared/error/Error";
 import Spinner from "../../../shared/loaders/Spinner";
 import {
   TypePlacesRegion,
-  TypeFetchedListing,
+  FetchedListing,
   TypeCoord,
-  TypeBoundaries,
-} from "../../../..";
+  Boundaries,
+} from "../../../../types/index";
 import ListingPopup from "../../listingOverlay/ListingPopup";
-import { ExploreListingsFilters } from "../ExploreListings";
+import { ExploreListingsFilters } from "../ExploreListingsDesktop";
 
 import css from "./styles.module.css";
 import { MapBoundaryBtn } from "./styledComponents";
@@ -69,8 +69,8 @@ export function getPlaceFromPlaceId(
 
 export function getCurrentListings(
   map: google.maps.Map,
-  listings: TypeFetchedListing[]
-): TypeFetchedListing[] {
+  listings: FetchedListing[]
+): FetchedListing[] {
   return listings.filter((listing) =>
     map.getBounds()?.contains(listing.data.address.geolocation.value)
   );
@@ -78,11 +78,11 @@ export function getCurrentListings(
 
 /**
  * Get the coordinates of all listings that are within current map bounds (non-filtered listings)
- * @param currentListings TypeFetchedListing[]
+ * @param currentListings FetchedListing[]
  * @returns TypeCoord[]
  */
 export function getCurrentListingsCoords(
-  currentListings: TypeFetchedListing[]
+  currentListings: FetchedListing[]
 ): TypeCoord[] {
   let coords: TypeCoord[] = [];
   currentListings.forEach((listing) => {
@@ -185,10 +185,10 @@ export function hideMarkers(markers: google.maps.marker.AdvancedMarkerView[]) {
 
 /**
  * Get the coordinates of all the filtered listings that a currently within map bounds
- * @param filteredListings TypeFetchedListing[]
+ * @param filteredListings FetchedListing[]
  */
 export function getCurrentFilteredListingsCoords(
-  filteredListings: TypeFetchedListing[]
+  filteredListings: FetchedListing[]
 ): TypeCoord[] {
   let coords: TypeCoord[] = [];
   filteredListings.forEach((listing) => {
@@ -259,9 +259,9 @@ export function makeElement({
 
 /**
  * Creates a popup card for a listing when marker is clicked in mobile size window
- * @param listing TypeFetchedListing
+ * @param listing FetchedListing
  */
-export function makeListingPopup(listing: TypeFetchedListing) {
+export function makeListingPopup(listing: FetchedListing) {
   const listingPopup = makeElement({
     component: <ListingPopup listing={listing} />,
     className: css["listing-popup"],
@@ -283,7 +283,7 @@ export function makeListingPopup(listing: TypeFetchedListing) {
  */
 export function toggleMarkerHighlight(
   marker: google.maps.marker.AdvancedMarkerView,
-  listing: TypeFetchedListing
+  listing: FetchedListing
 ) {
   removeAllPopups();
 
@@ -587,7 +587,7 @@ export function defineBoundaries(map: google.maps.Map): {
  */
 export function stylePlaceBoundary(
   placeId: string,
-  boundaries: TypeBoundaries,
+  boundaries: Boundaries,
   style: google.maps.FeatureStyleOptions
 ) {
   // console.log("styling boundaries...");
@@ -709,12 +709,12 @@ export function handleLocationError() {
  * Apply filters to the given listings and return an array of
  * filtered listings.
  * @param filter TypeListingFilter
- * @returns TypeFetchedListing[]
+ * @returns FetchedListing[]
  */
 export function filterListings(
-  listings: TypeFetchedListing[],
+  listings: FetchedListing[],
   filters: ExploreListingsFilters
-): TypeFetchedListing[] {
+): FetchedListing[] {
   // console.log("filterListings: starting");
 
   if (!listings) {
@@ -732,7 +732,7 @@ export function filterListings(
   } = filters;
 
   // Define array of filtered listings to be returned
-  let filtered: TypeFetchedListing[] = listings;
+  let filtered: FetchedListing[] = listings;
 
   if (listings.length > 0) {
     // Filter by place if it is defined
@@ -769,7 +769,7 @@ export function filterListings(
           if (place.types.includes("administrative_area_level_1")) {
             // console.log("filterListings: filtering by state");
 
-            let _filtered: TypeFetchedListing[] = [];
+            let _filtered: FetchedListing[] = [];
 
             listings.forEach((listing) => {
               for (const key in listing.data.address.address_components) {
@@ -849,7 +849,7 @@ export function filterListings(
     // Filter by listing kinds
     if (filtered.length > 0 && listingTypes && listingTypes.length > 0) {
       // console.log("filterListings: filtering by listing kinds");
-      let newFiltered: TypeFetchedListing[] = [];
+      let newFiltered: FetchedListing[] = [];
 
       // Check each listing's kind against each filter kind
       // If listing kind matches a filter kind, add it to the new array
@@ -867,9 +867,9 @@ export function filterListings(
     // Filter by beds
     if (filtered.length > 0 && beds) {
       // console.log("filterListings: filtering by beds");
-      let newFiltered: TypeFetchedListing[] = [];
+      let newFiltered: FetchedListing[] = [];
       filtered.forEach((listing) => {
-        // Maybe refactor TypeListingData so that is has a .features prop that contains all possible
+        // Maybe refactor ListingData so that is has a .features prop that contains all possible
         // listing features for all types of listings. This would simplify filtering.
         if (
           listing.data.apartment?.bedrooms.number! >= beds! ||
@@ -887,9 +887,9 @@ export function filterListings(
     // Filter by baths
     if (filtered.length > 0 && baths !== null) {
       // console.log("filterListings: filtering by baths");
-      let newFiltered: TypeFetchedListing[] = [];
+      let newFiltered: FetchedListing[] = [];
       filtered.forEach((listing) => {
-        // Maybe refactor TypeListingData so that is has a .features prop that contains all possible
+        // Maybe refactor ListingData so that is has a .features prop that contains all possible
         // listing features for all types of listings. This would simplify filtering.
         if (
           listing.data.apartment?.fullBathrooms.number! +
@@ -925,10 +925,10 @@ export function filterListings(
 }
 
 export function getCurrentFilteredListings(
-  allFilteredListings: TypeFetchedListing[],
-  currentListings: TypeFetchedListing[]
-): TypeFetchedListing[] {
-  const currentFilteredListings: TypeFetchedListing[] = [];
+  allFilteredListings: FetchedListing[],
+  currentListings: FetchedListing[]
+): FetchedListing[] {
+  const currentFilteredListings: FetchedListing[] = [];
 
   allFilteredListings.forEach((fl) => {
     const flCoords = {
@@ -951,7 +951,7 @@ export function getCurrentFilteredListings(
 
 export function getNonCurrentFilteredMarkers(
   markers: google.maps.marker.AdvancedMarkerView[],
-  currentFilteredListings: TypeFetchedListing[]
+  currentFilteredListings: FetchedListing[]
 ): google.maps.marker.AdvancedMarkerView[] {
   /**
    * Check if a marker is current. This is used in the filter below.
@@ -989,7 +989,7 @@ export function getNonCurrentFilteredMarkers(
 
 export function getCurrentFilteredMarkers(
   markers: google.maps.marker.AdvancedMarkerView[],
-  currentFilteredListings: TypeFetchedListing[]
+  currentFilteredListings: FetchedListing[]
 ): google.maps.marker.AdvancedMarkerView[] {
   /**
    * Check if a marker is current. This is used in the filter below.
@@ -1031,14 +1031,14 @@ export function getCurrentFilteredMarkers(
  * @param smallMarkers google.maps.marker.AdvancedMarkerView[]
  * @param largeMarkers google.maps.marker.AdvancedMarkerView[]
  * @param minZoomForLargeMarkers number
- * @param currentFilteredListings TypeFetchedListing[]
+ * @param currentFilteredListings FetchedListing[]
  */
 export function updateMarkers(
   map: google.maps.Map,
   smallMarkers: google.maps.marker.AdvancedMarkerView[],
   largeMarkers: google.maps.marker.AdvancedMarkerView[],
   minZoomForLargeMarkers: number,
-  currentFilteredListings: TypeFetchedListing[]
+  currentFilteredListings: FetchedListing[]
 ) {
   if (map && smallMarkers && largeMarkers) {
     const markerSize = getMarkerSize(map, minZoomForLargeMarkers);
@@ -1099,7 +1099,7 @@ export function updateMarkers(
 export function setupBoundaryForPlace(
   map: google.maps.Map,
   place: google.maps.places.PlaceResult,
-  boundaries: TypeBoundaries,
+  boundaries: Boundaries,
   boundaryStyle: google.maps.FeatureStyleOptions
 ) {
   if (place && place.geometry && place.geometry.location && place.place_id) {
@@ -1147,7 +1147,7 @@ export function setupBoundaryForPlace(
 //   function setupBoundaryForPlace(
 //     map: google.maps.Map,
 //     place: google.maps.places.PlaceResult,
-//     boundaries: TypeBoundaries,
+//     boundaries: Boundaries,
 //     boundaryStyle: google.maps.FeatureStyleOptions
 //   ) {
 //     if (place && place.geometry && place.geometry.location && place.place_id) {
@@ -1175,7 +1175,7 @@ export function setupBoundaryForPlace(
 //  * @param smallMarkers google.maps.marker.AdvancedMarkerView[]
 //  * @param largeMarkers google.maps.marker.AdvancedMarkerView[]
 //  * @param minZoomForLargeMarkers number
-//  * @param currentFilteredListings TypeFetchedListing[]
+//  * @param currentFilteredListings FetchedListing[]
 //  */
 // function updateMarkers(
 //   map: google.maps.Map,

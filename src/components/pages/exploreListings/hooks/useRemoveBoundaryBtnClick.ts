@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { TypeBoundaries } from "../../../..";
+import { Boundaries } from "../../../../types/index";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { setPlace } from "../filters/placeFilter/placeFilterSlice";
 import { useNavigate } from "react-router";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 function useRemoveBoundaryBtnClick(
   map: google.maps.Map,
   hideBoundaryBtn: HTMLButtonElement,
-  boundaries: TypeBoundaries,
+  boundaries: Boundaries,
   dispatch: Dispatch<AnyAction>
 ): null {
   const navigate = useNavigate();

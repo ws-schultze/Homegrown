@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { TypeFetchedListing } from "../../../..";
+import { FetchedListing } from "../../../../types/index";
 import { MapMarkerSize } from "../exploreListingsSlice";
 import clearMarkerContentClassList, {
   highlightMarker,
@@ -12,18 +12,18 @@ function useHoveredListing(
   smallMarkers: google.maps.marker.AdvancedMarkerView[],
   largeMarkers: google.maps.marker.AdvancedMarkerView[],
   mapMarkerSize: MapMarkerSize,
-  hoveredListing: TypeFetchedListing | undefined
+  hoveredListing: FetchedListing | undefined
 ) {
   useEffect(() => {
     /**
      * Given a hovered listing (which comes from a hovered listing card), change the bg color
      * of that listing's map marker. Color change will happen to either a small marker or large,
      * depending on which current map markers are provided
-     * @param hoveredListing TypeFetchedListing | null
+     * @param hoveredListing FetchedListing | null
      * @param markers google.maps.marker.AdvancedMarkerView[]
      */
     function handleHoveredListing(
-      hoveredListing: TypeFetchedListing | undefined,
+      hoveredListing: FetchedListing | undefined,
       markerSize: MapMarkerSize
     ) {
       // Change small marker bg on hover

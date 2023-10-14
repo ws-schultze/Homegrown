@@ -13,7 +13,7 @@ import {
 import { db } from "../../../firebase.config";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { TypeFetchedListing, TypeListingData } from "../../..";
+import { FetchedListing, ListingData } from "../../../types/index";
 import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
 import { ReactComponent as EditUserSVG } from "../../../assets/svg/user-pen-solid.svg";
 import { ReactComponent as MoneySVG } from "../../../assets/svg/circle-dollar-to-slot-solid.svg";
@@ -30,8 +30,8 @@ import { ReactComponent as LockSVG } from "./assets/lockIcon.svg";
 export interface TypeProfile {
   username: Username;
   email: Email;
-  listings: TypeFetchedListing[] | [];
-  unfinishedListing: TypeListingData | null;
+  listings: FetchedListing[] | [];
+  unfinishedListing: ListingData | null;
   loading: boolean;
   editable: boolean;
 }
@@ -75,7 +75,7 @@ export default function Profile() {
             );
             const querySnap = await getDocs(q);
 
-            let listings: TypeFetchedListing[] = [];
+            let listings: FetchedListing[] = [];
             querySnap.forEach((doc) => {
               return listings.push({
                 id: doc.id,

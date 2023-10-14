@@ -1,10 +1,10 @@
 import {
-  TypeVerify,
+  Verify,
   TypeBool,
-  TypeStr,
-  TypeAddressValidationApi_Response,
-  TypeVerifyActionName,
-} from "../../../../index";
+  Str,
+  AddressValidationApi_Response,
+  VerifyActionName,
+} from "../../../../types/index";
 import setAddressValidationApiResponseToState from "./utils/address/setAddressValidationApiResponseToState";
 import { ReactComponent as AlertSVG } from "../../../../assets/svg/circle-exclamation-solid.svg";
 import { Notice } from "./styledComponents";
@@ -13,12 +13,12 @@ interface Props<T> {
   /** The name that shows in the toast for a successful save (e.g. Agent, Owner, Company, House etc..) */
   parentName: string;
   parent: T;
-  addressValidationApiResponse?: TypeAddressValidationApi_Response;
+  addressValidationApiResponse?: AddressValidationApi_Response;
   children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
-  emit: (actionName: TypeVerifyActionName, obj: T) => void;
+  emit: (actionName: VerifyActionName, obj: T) => void;
 }
 
-export default function VerifySection<T extends TypeVerify>({
+export default function VerifySection<T extends Verify>({
   parentName,
   parent,
   addressValidationApiResponse,
@@ -43,7 +43,7 @@ export default function VerifySection<T extends TypeVerify>({
       keys.forEach((k) => {
         // Loop through all fields of parent state and set valid=true, saved=true, and readOnly=true.
 
-        const field = parent[k] as TypeStr | TypeBool;
+        const field = parent[k] as Str | TypeBool;
         console.log("field: ", field);
 
         if (field && typeof field !== "string" && typeof field !== "boolean") {

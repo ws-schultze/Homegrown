@@ -1,8 +1,8 @@
 import {
   TypeGeocoderApi_Response_AddressTypes,
-  TypeAddress,
-  TypeAddressOptional,
-} from "../../../../../../index";
+  Address,
+  AddressOptional,
+} from "../../../../../../types/index";
 
 interface Props<T> {
   state: T;
@@ -14,7 +14,7 @@ interface Props<T> {
  * that appears below street address input field.
  */
 export default function setAutocompletePlaceValuesToState<
-  T extends TypeAddress | TypeAddressOptional
+  T extends Address | AddressOptional
 >({ state, autocomplete }: Props<T>) {
   if (autocomplete) {
     const place = autocomplete.getPlace();

@@ -1,14 +1,23 @@
 import React from "react";
-import { TypeFetchedListing } from "../../..";
+import { FetchedListing } from "../../../types/index";
 
-export default function ListingPopup({ listing }: { listing: TypeFetchedListing }) {
-  const { basicInfo, address, singleFamilyHome, multiFamilyHome, multiFamilyHomeUnit, apartment, apartmentBuilding } =
-    listing.data;
+export default function ListingPopup({ listing }: { listing: FetchedListing }) {
+  const {
+    basicInfo,
+    address,
+    singleFamilyHome,
+    multiFamilyHome,
+    multiFamilyHomeUnit,
+    apartment,
+    apartmentBuilding,
+  } = listing.data;
 
   let bathNum = 0;
 
   if (singleFamilyHome) {
-    bathNum = singleFamilyHome.fullBathrooms.number + singleFamilyHome.halfBathrooms.number;
+    bathNum =
+      singleFamilyHome.fullBathrooms.number +
+      singleFamilyHome.halfBathrooms.number;
   }
 
   return (
@@ -19,7 +28,8 @@ export default function ListingPopup({ listing }: { listing: TypeFetchedListing 
         <div className="price"> {basicInfo.price.shortFormatted} </div>
 
         <div>
-          {basicInfo.listingKind.value?.label} {basicInfo.forSaleOrRent.value?.label}
+          {basicInfo.listingKind.value?.label}{" "}
+          {basicInfo.forSaleOrRent.value?.label}
         </div>
 
         <div className="features">

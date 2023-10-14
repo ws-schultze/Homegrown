@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TypeStr } from "../../../../..";
-import { initTypeStrOpt } from "../../../../../initialValues";
+import { Str } from "../../../../../types/index";
+import { initStrOpt } from "../../../../../initialValues";
 
 export interface PriceFilterState {
   showMenu: boolean;
-  lowPrice: TypeStr;
-  highPrice: TypeStr;
+  lowPrice: Str;
+  highPrice: Str;
 }
 
 export const initialPriceFilterState: PriceFilterState = {
   showMenu: false,
-  lowPrice: initTypeStrOpt,
-  highPrice: initTypeStrOpt,
+  lowPrice: initStrOpt,
+  highPrice: initStrOpt,
 };
 
 export const priceFilterSlice = createSlice({
@@ -33,7 +33,7 @@ export const priceFilterSlice = createSlice({
     setPriceRange: (
       state,
       action: {
-        payload: { lowPrice: TypeStr; highPrice: TypeStr };
+        payload: { lowPrice: Str; highPrice: Str };
         type: string;
       }
     ) => ({

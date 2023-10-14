@@ -3,13 +3,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { ReactComponent as DeleteIcon } from "../../../assets/svg/deleteIcon.svg";
 import { ReactComponent as EditIcon } from "../../../assets/svg/editIcon.svg";
-import { TypeFetchedListing } from "../../..";
+import * as T from "../../../types/index";
 import { ReactComponent as ImageSVG } from "../../../assets/svg/image-regular.svg";
-import styles from "./listingCard.module.css";
+import styles from "./listingCard.module.scss";
 import Spinner from "../loaders/Spinner";
 
 interface Props {
-  listing: TypeFetchedListing;
+  listing: T.FetchedListing;
   handleEdit?: (listingId: string) => void;
   handleDelete?: (listingId: string) => Promise<void>;
 }

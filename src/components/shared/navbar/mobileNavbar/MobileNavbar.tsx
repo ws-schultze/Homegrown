@@ -1,14 +1,13 @@
 import { useThemeContext } from "../../../../ThemeProvider";
 import { Link, useLocation } from "react-router-dom";
-import { ReactComponent as MobileLogo } from "./assets/mobile-logo.svg";
+import { ReactComponent as LogoSVG } from "./assets/desktop-logo.svg";
 import { ReactComponent as Hamburger } from "./assets/bars-solid.svg";
 import ProfileBtn from "../../profileBtn/ProfileBtn";
 import pathMatchRoute from "../../../utils/pathMatchRoute";
 import styles from "./mobileNavbar.module.scss";
 import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
-import { useEffect, useRef, useState } from "react";
-import { ref } from "firebase/storage";
+import { useRef } from "react";
 import useCloseMenu from "./hooks/useCloseMenu";
 
 export default function MobileNavbar() {
@@ -67,11 +66,11 @@ export default function MobileNavbar() {
           </div>
         ) : null}
 
-        <Link to={"/"}>
-          <MobileLogo className={styles.logo} />
-        </Link>
-
-        <div className={styles["nav-right"]}></div>
+        <div className={styles["nav-right"]}>
+          <Link to={"/"}>
+            <LogoSVG className={styles.logo} />
+          </Link>
+        </div>
       </div>
     </nav>
   );

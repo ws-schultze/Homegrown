@@ -6,12 +6,12 @@ import Spinner from "../../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 import PageBtns from "./PageBtns";
 import {
-  TypeAddressValidationApi_Response,
-  TypeImage,
-  TypeListingData,
-  TypeUploads,
-  TypeVerifyActionName,
-} from "../../../..";
+  AddressValidationApi_Response,
+  Image,
+  ListingData,
+  Uploads,
+  VerifyActionName,
+} from "../../../../types/index";
 import { initUploads } from "../../../../initialValues";
 import SaveSection from "./SaveSection";
 import { ReactComponent as PlusIcon } from "../../../../assets/svg/plusIcon.svg";
@@ -32,7 +32,7 @@ import { db } from "../../../../firebase.config";
 import { Header } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   listingId: string;
   prevPage: () => void;
   nextPage: () => void;
@@ -40,7 +40,7 @@ interface Props {
   deleteListing: () => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
 }
 
 export default function UploadsEditForm({
@@ -54,7 +54,7 @@ export default function UploadsEditForm({
   currentPage,
   emit,
 }: Props): JSX.Element {
-  const [state, setState] = useState<TypeUploads>(parent.uploads);
+  const [state, setState] = useState<Uploads>(parent.uploads);
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false); // used for conditional styling
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -79,7 +79,7 @@ export default function UploadsEditForm({
     // Create an array of images that are to be uploaded
 
     if (files.length > 0) {
-      let images: TypeImage[] = [];
+      let images: Image[] = [];
       let toBig: string[] = [];
 
       files.forEach((file) => {
@@ -112,7 +112,7 @@ export default function UploadsEditForm({
       )
         .then((uploaded) => {
           // Upload success
-          const s: TypeListingData = {
+          const s: ListingData = {
             ...parent,
             uploads: {
               ...parent.uploads,
@@ -201,20 +201,20 @@ export default function UploadsEditForm({
   /**
    * Remove the selected preview from local state
    */
-  async function onDelete(e: React.MouseEvent, image: TypeImage) {
+  async function onDelete(e: React.MouseEvent, image: Image) {
     e.preventDefault();
     e.stopPropagation();
     if (window.confirm("Delete this file from uploads?")) {
       const index = state.images.value.map((img) => img.url).indexOf(image.url);
 
-      let uploads: TypeImage[] = [...state.images.value];
+      let uploads: Image[] = [...state.images.value];
 
       // Delete image from listings
       uploads.splice(index, 1);
 
       setLoading(true);
 
-      const s: TypeListingData = {
+      const s: ListingData = {
         ...parent,
         uploads: {
           ...parent.uploads,
@@ -249,9 +249,9 @@ export default function UploadsEditForm({
    * Update uploads and emit to parent.
    */
   function handleVerify(
-    actionName: TypeVerifyActionName,
+    actionName: VerifyActionName,
     obj: typeof state,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (actionName === "save" || actionName === "edit") {
       emit({

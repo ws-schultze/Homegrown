@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TypeForSaleOrRentValue } from "../../../../..";
+import { ForSaleOrRentValue } from "../../../../../types/index";
 import { allForSaleOrRentValues } from "../../../../../initialValues";
 
 export interface ForSaleOrRentFilterState {
   showMenu: boolean;
-  menuItems: TypeForSaleOrRentValue[];
-  selectedItem: TypeForSaleOrRentValue;
+  menuItems: ForSaleOrRentValue[];
+  selectedItem: ForSaleOrRentValue;
 }
 
 export const initialForSaleOrRentFilterState: ForSaleOrRentFilterState = {
@@ -24,7 +24,7 @@ export const forSaleOrRentFilterSlice = createSlice({
     }),
     setForSaleOrRent: (
       state,
-      action: { payload: TypeForSaleOrRentValue; type: string }
+      action: { payload: ForSaleOrRentValue; type: string }
     ) => ({
       ...state,
       selectedItem: action.payload,

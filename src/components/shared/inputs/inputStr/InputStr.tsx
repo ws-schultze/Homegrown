@@ -5,7 +5,7 @@
  *
  * Similarly Object.is(["-"], ["-"]) is false.
  *
- * This makes <InputTypeStr /> re-render even if
+ * This makes <InputStr /> re-render even if
  * it is wrapped in memo and the groupSeparators prop doesn't change.
  *
  */
@@ -19,7 +19,7 @@ import React, {
 } from "react";
 import { repositionCursor, validatePassword } from "./utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
-import { TypeStr } from "../../../../index";
+import * as Types from "../../../../types/index";
 import {
   removeNonNumericChars,
   formatPhoneNumber,
@@ -98,9 +98,9 @@ interface Props<T> {
   /**
    * State from the parent that this component emits
    */
-  parent: TypeStr;
+  parent: Types.Str;
 
-  emit: (object: TypeStr, key: keyof T) => void;
+  emit: (object: Types.Str, key: keyof T) => void;
 }
 
 // Redeclare forwardRef for this specific use case: being able to keep this this module generic but also use forwardRef
@@ -113,9 +113,9 @@ declare module "react" {
 }
 
 /**
- * Notice that this component only formats objects of TypeStr
+ * Notice that this component only formats objects of Str
  */
-function InputTypeStrInner<T>(
+function InputStrInner<T>(
   props: Props<T>,
   ref?: React.ForwardedRef<HTMLInputElement>
 ) {
@@ -135,7 +135,7 @@ function InputTypeStrInner<T>(
     emit,
   } = props;
 
-  const [state, setState] = useState<TypeStr>(parent);
+  const [state, setState] = useState<Types.Str>(parent);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [lastKeyDown, setLastKeyDown] = useState("");
   const [priceChangePercent, setPriceChangePercent] = useState(0);
@@ -425,7 +425,7 @@ function InputTypeStrInner<T>(
       setCursorPosition(newCursor);
     }
 
-    const s: TypeStr = {
+    const s: Types.Str = {
       value: _value,
       numberStr: _numStrNoLeadingZeros,
       number: _number,
@@ -447,7 +447,7 @@ function InputTypeStrInner<T>(
    */
   function handleBlur(): void {
     console.log("state: ", state);
-    // const s: TypeListingData = {
+    // const s: ListingData = {
     //   ...listingFormState,
     //   [fieldName]: state,
     // };
@@ -575,8 +575,8 @@ function InputTypeStrInner<T>(
   );
 }
 
-const InputTypeStr = forwardRef(InputTypeStrInner);
-export default InputTypeStr;
+const InputStr = forwardRef(InputStrInner);
+export default InputStr;
 
 /**
  * ==========================================================================
@@ -588,8 +588,8 @@ export default InputTypeStr;
  * that is the motivation for this function.
  *
  * Check if the old props are the same as the new props.
- * If true --> InputTypeStr will not re-render.
- * If false --> InputTypeStr will re-render.
+ * If true --> InputStr will not re-render.
+ * If false --> InputStr will re-render.
  * @returns true/false
  */
 function arePropsEqual<T>(oldProps: Props<T>, newProps: Props<T>): boolean {

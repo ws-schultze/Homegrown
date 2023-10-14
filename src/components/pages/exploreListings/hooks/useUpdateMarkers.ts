@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { TypeFetchedListing } from "../../../..";
+import { FetchedListing } from "../../../../types/index";
 import {
   getCurrentFilteredMarkers,
   getCurrentMarkers,
@@ -14,7 +14,7 @@ export default function useUpdateMarkers(
   smallMarkers: google.maps.marker.AdvancedMarkerView[],
   largeMarkers: google.maps.marker.AdvancedMarkerView[],
   minZoomForLargeMarkers: number,
-  currentFilteredListings: TypeFetchedListing[]
+  currentFilteredListings: FetchedListing[]
 ) {
   useEffect(() => {
     console.log("useUpdateMarkers working...");

@@ -1,4 +1,4 @@
-import { TypeAddress, TypeAddressOptional } from "../../../../../../index";
+import { Address, AddressOptional } from "../../../../../../types/index";
 
 /**
  * Set state for a given address field
@@ -6,7 +6,7 @@ import { TypeAddress, TypeAddressOptional } from "../../../../../../index";
  * @param key keyof typeof state (TypeAgent)
  */
 export default function setAddressFieldToState<
-  T extends TypeAddress | TypeAddressOptional
+  T extends Address | AddressOptional
 >(state: T, value: string, key: keyof T, required: boolean): T {
   // Because unitNumber input must update the formattedAddress, unitNumber must be treated different
   // that the other address inputs

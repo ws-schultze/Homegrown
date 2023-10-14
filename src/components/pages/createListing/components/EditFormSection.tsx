@@ -1,4 +1,4 @@
-import { TypeBool, TypeStr, TypeVerifyActionName } from "../../../..";
+import { TypeBool, Str, VerifyActionName } from "../../../../types/index";
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
 import { Notice } from "./styledComponents";
 
@@ -6,7 +6,7 @@ interface Props<T> {
   // /** Whether or not a field remains disabled in edit mode -- set to false by parent when user confirms a prompt */
   parent: T;
   // children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
-  emit: (actionName: TypeVerifyActionName, obj: T) => void;
+  emit: (actionName: VerifyActionName, obj: T) => void;
 }
 
 /**
@@ -28,7 +28,7 @@ export default function EditFormSection<T>({
 
     keys.forEach((k) => {
       // un-save and make editable each field in parent state
-      const field = parent[k] as TypeStr | TypeBool;
+      const field = parent[k] as Str | TypeBool;
       if (field) {
         state = {
           ...state,

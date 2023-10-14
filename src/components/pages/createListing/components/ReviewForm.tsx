@@ -1,19 +1,19 @@
 import React from "react";
-import { TypeListingData } from "../../../..";
+import { ListingData } from "../../../../types/index";
 import PageBtns from "./PageBtns";
 
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
 import { Notice } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   editListing: boolean;
   prevPage: () => void;
   toPageNumber?: (number: number) => void;
   deleteListing: () => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
   submit: () => void;
 }
 
@@ -29,7 +29,7 @@ export default function ReviewForm({
   submit,
 }: Props) {
   function goToPage(pageNumber: number) {
-    const s: TypeListingData = {
+    const s: ListingData = {
       ...parent,
       page: pageNumber,
     };

@@ -1,11 +1,11 @@
 import { Dispatch, useEffect } from "react";
 import {
-  ListingTypeValue,
-  TypeBoundaries,
-  TypeFetchedListing,
-  TypeForSaleOrRentValue,
-  TypeStr,
-} from "../../../..";
+  ListingKindValue,
+  Boundaries,
+  FetchedListing,
+  ForSaleOrRentValue,
+  Str,
+} from "../../../../types/index";
 import { AnyAction } from "@reduxjs/toolkit";
 import {
   filterListings,
@@ -22,16 +22,16 @@ interface PropTypes {
   smallMarkers: google.maps.marker.AdvancedMarkerView[];
   largeMarkers: google.maps.marker.AdvancedMarkerView[];
   place: string | undefined;
-  boundaries: TypeBoundaries;
-  forSaleOrRent: TypeForSaleOrRentValue;
-  lowPrice: TypeStr;
-  highPrice: TypeStr;
-  listingTypes: ListingTypeValue[];
+  boundaries: Boundaries;
+  forSaleOrRent: ForSaleOrRentValue;
+  lowPrice: Str;
+  highPrice: Str;
+  listingTypes: ListingKindValue[];
   baths: number | null;
   beds: number | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   mapMinZoomForLargeMarkers: number;
-  listings: TypeFetchedListing[];
+  listings: FetchedListing[];
   currentMapId: string;
   dispatch: Dispatch<AnyAction>;
 }
@@ -41,14 +41,14 @@ interface PropTypes {
 function useFilterChange(
   map: google.maps.Map | undefined,
   place: string | undefined,
-  forSaleOrRent: TypeForSaleOrRentValue,
-  lowPrice: TypeStr,
-  highPrice: TypeStr,
-  listingTypes: ListingTypeValue[],
+  forSaleOrRent: ForSaleOrRentValue,
+  lowPrice: Str,
+  highPrice: Str,
+  listingTypes: ListingKindValue[],
   baths: number | null,
   beds: number | null,
   status: "idle" | "loading" | "succeeded" | "failed",
-  listings: TypeFetchedListing[],
+  listings: FetchedListing[],
   dispatch: Dispatch<AnyAction>
 ) {
   useEffect(() => {

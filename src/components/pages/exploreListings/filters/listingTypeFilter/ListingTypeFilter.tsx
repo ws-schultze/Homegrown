@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ListingTypeValue } from "../../../../..";
+import { ListingKindValue } from "../../../../../types/index";
 import {
   ApplyFilterBtn,
   Container,
@@ -59,8 +59,8 @@ export default function ListingsTypeFilter() {
   /**
    * Set selected items to state and pass them to parent (Multi-select Menu)
    */
-  function handleItemClick(item: ListingTypeValue): void {
-    let items: ListingTypeValue[] = [];
+  function handleItemClick(item: ListingKindValue): void {
+    let items: ListingKindValue[] = [];
 
     if (
       state.selectedItems.findIndex((i) =>
@@ -82,7 +82,7 @@ export default function ListingsTypeFilter() {
    * Remove item from selected item
    * @returns remaining selected items
    */
-  function removeSelectedItem(item: ListingTypeValue): ListingTypeValue[] {
+  function removeSelectedItem(item: ListingKindValue): ListingKindValue[] {
     if (state.selectedItems.length >= 1) {
       const copy = { ...state };
       return copy.selectedItems.filter((itm) => {
@@ -99,7 +99,7 @@ export default function ListingsTypeFilter() {
     }
   }
 
-  function isSelected(item: ListingTypeValue): boolean {
+  function isSelected(item: ListingKindValue): boolean {
     if (state.selectedItems.length >= 1) {
       const copy = { ...state };
       return (

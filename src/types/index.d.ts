@@ -1,11 +1,11 @@
 import { DocumentData, FieldValue } from "firebase/firestore";
 
-declare module "*.scss";
+declare module "*.module.scss";
 
 /**
  * Used on all form sections and fields that are savable/editable
  */
-export interface TypeVerify {
+export interface Verify {
   beingVerified: boolean;
   errorMsg: string;
   valid: boolean;
@@ -14,9 +14,9 @@ export interface TypeVerify {
   required: boolean;
 }
 
-export type TypeVerifyActionName = "save" | "verify" | "edit";
+export type VerifyActionName = "save" | "verify" | "edit";
 
-export interface TypeInputBase extends TypeVerify {
+export interface TypeInputBase extends Verify {
   /** String with only numeric characters */
   numberStr: string;
   number: number;
@@ -24,7 +24,7 @@ export interface TypeInputBase extends TypeVerify {
   shortFormatted: string;
 }
 
-export interface TypeStr extends TypeInputBase {
+export interface Str extends TypeInputBase {
   value: string;
 }
 
@@ -48,44 +48,44 @@ export interface TypeLatLng {
   lng: number;
 }
 
-export interface TypeGeolocation extends TypeStr {
+export interface TypeGeolocation extends Str {
   value: TypeLatLng;
 }
 
 /**
  * All form fields must fit this type
  */
-export interface TypeFormField extends TypeInputBase {
+export interface FormField extends TypeInputBase {
   value: string | number | boolean | TypeDropdownOption[] | TypeLatLng | null;
 }
 
-export interface TypeAddress extends TypeVerify {
-  streetAddress: TypeStr;
-  unitNumber: TypeStr;
-  city: TypeStr;
-  zipCode: TypeStr;
-  adminAreaLevel2: TypeStr;
-  adminAreaLevel1: TypeStr;
-  country: TypeStr;
-  formattedAddress: TypeStr;
+export interface Address extends Verify {
+  streetAddress: Str;
+  unitNumber: Str;
+  city: Str;
+  zipCode: Str;
+  adminAreaLevel2: Str;
+  adminAreaLevel1: Str;
+  country: Str;
+  formattedAddress: Str;
   geolocation: TypeGeolocation;
   address_components: TypePlacesApi_Response_AddressComponent[];
 }
 
-export interface TypeAddressOptional extends TypeVerify {
-  streetAddress?: TypeStr;
-  unitNumber?: TypeStr;
-  city?: TypeStr;
-  adminAreaLevel1?: TypeStr;
-  adminAreaLevel2?: TypeStr;
-  zipCode?: TypeStr;
-  country?: TypeStr;
-  formattedAddress?: TypeStr;
+export interface AddressOptional extends Verify {
+  streetAddress?: Str;
+  unitNumber?: Str;
+  city?: Str;
+  adminAreaLevel1?: Str;
+  adminAreaLevel2?: Str;
+  zipCode?: Str;
+  country?: Str;
+  formattedAddress?: Str;
   geolocation?: TypeGeolocation;
-  address_components?: TypeAddressValidationApi_Response_AddressComponent;
+  address_components?: AddressValidationApi_Response_AddressComponent;
 }
 
-export interface TypeAddressValidationApi_Response {
+export interface AddressValidationApi_Response {
   result?: {
     verdict: object;
     address: TypeAddressValidationApi_Response_Address;
@@ -250,7 +250,7 @@ export type TypeGeocoderApi_ResponseStatus =
   | "UNKNOWN_ERROR";
 
 // https://developers.google.com/maps/documentation/geocoding/requests-geocoding#GeocodingResponses
-export interface TypeGeocoderApi_Response {
+export interface GeocoderApi_Response {
   results: [
     {
       address_components: TypeGeocoderApi_Response_AddressComponent[];
@@ -325,7 +325,7 @@ export interface TypeAddressValidationApiGeocode {
   placeTypes: [string];
 }
 
-export interface TypeAddressValidationApi_Response_AddressComponent {
+export interface AddressValidationApi_Response_AddressComponent {
   componentName: {
     text: string;
     languageCode: string;
@@ -348,34 +348,34 @@ export interface TypeFormattedNumber {
   required: boolean;
 }
 
-// export type TypeForSaleOrRentFilter = TypeForSaleOrRentValue[];
+// export type ForSaleOrRentFilter = ForSaleOrRentValue[];
 
-export type TypeForSaleOrRentValue =
+export type ForSaleOrRentValue =
   | { id: "for-rent"; label: "For Rent" }
   | { id: "for-sale"; label: "For Sale" }
   | { id: "for-sale-or-rent"; label: "For Sale or Rent" }
   | null;
 
-export interface TypeForSaleOrRent extends TypeStr {
-  value: TypeForSaleOrRentValue;
+export interface ForSaleOrRent extends Str {
+  value: ForSaleOrRentValue;
 }
 
-export type TypeForSaleByValue =
+export type ForSaleByValue =
   | { id: "agent"; label: "Agent" }
   | { id: "owner"; label: "Owner" }
   | null;
 
-export interface TypeForSaleBy extends TypeStr {
-  value: TypeForSaleByValue;
+export interface ForSaleBy extends Str {
+  value: ForSaleByValue;
 }
 
-export type TypeForRentByValue =
+export type ForRentByValue =
   | { id: "company"; label: "Company" }
   | { id: "private-owner"; label: "Private Owner" }
   | null;
 
-export interface TypeForRentBy extends TypeStr {
-  value: TypeForRentByValue;
+export interface ForRentBy extends Str {
+  value: ForRentByValue;
 }
 
 export type TypeListedBy =
@@ -415,7 +415,7 @@ export type ListingTypeValueForSale =
   | { id: "condo"; name: "condo"; label: "Condo" }
   | { id: "townhouse"; name: "townhouse"; label: "Townhouse" };
 
-export type ListingTypeValue =
+export type ListingKindValue =
   | { id: "single-family-home"; name: "singleFamilyHome"; label: "House" }
   | {
       id: "multi-family-home";
@@ -443,66 +443,60 @@ export type ListingTypeValue =
   | { id: "land"; name: "land"; label: "Land" }
   | null;
 
-export interface TypeListingKind extends TypeStr {
-  value: ListingTypeValue;
+export interface ListingKind extends Str {
+  value: ListingKindValue;
 }
 
-export interface TypeName {
-  firstName: TypeStr;
-  middleName: TypeStr;
-  lastName: TypeStr;
+export interface Name {
+  firstName: Str;
+  middleName: Str;
+  lastName: Str;
 }
 
-export interface TypeContactInfo {
-  phoneNumber: TypeStr;
-  email: TypeStr;
+export interface ContactInfo {
+  phoneNumber: Str;
+  email: Str;
 }
 
-export interface TypeAgent extends TypeName, TypeContactInfo, TypeAddress {
-  licenseId: TypeStr;
-  companyName: TypeStr;
+export interface TypeAgent extends Name, ContactInfo, Address {
+  licenseId: Str;
+  companyName: Str;
 }
 
-export interface TypeOwner
-  extends TypeName,
-    TypeContactInfo,
-    TypeAddressOptional {
+export interface Owner extends Name, ContactInfo, AddressOptional {
   provideAddress: TypeBool;
 }
 
-export interface TypeCompany extends TypeContactInfo, TypeAddress {
-  name: TypeStr;
+export interface Company extends ContactInfo, Address {
+  name: Str;
 }
 
-export interface TypePrivateOwner
-  extends TypeName,
-    TypeContactInfo,
-    TypeAddressOptional {
+export interface PrivateOwner extends Name, ContactInfo, AddressOptional {
   provideAddress: TypeBool;
 }
 
-export type TypeHeatingOption =
+export type HeatingOption =
   | { id: "firePlace"; label: "Fire Place" }
   | { id: "propaneWallHeater"; label: "Propane Wall Heater" }
   | { id: "propaneFurnace"; label: "Propane Furnace" }
   | { id: "other"; label: "Other" }
   | null;
 
-export interface TypeHeating extends TypeVerify {
-  value: TypeHeatingOption[];
+export interface Heating extends Verify {
+  value: HeatingOption[];
 }
 
-export type TypeCoolingOption =
+export type CoolingOption =
   | { id: "centralAirConditioning"; label: "Central AC" }
   | { id: "windMaker500"; label: "Wind Maker 500" }
   | { id: "other"; label: "Other" }
   | null;
 
-export interface TypeCooling extends TypeVerify {
-  value: TypeCoolingOption[];
+export interface Cooling extends Verify {
+  value: CoolingOption[];
 }
 
-export type TypeWaterOption =
+export type WaterOption =
   | { id: "cityWater"; label: "City Water" }
   | { id: "well"; label: "Well" }
   | { id: "catchment"; label: "Catchment" }
@@ -510,11 +504,11 @@ export type TypeWaterOption =
   | { id: "other"; label: "Other" }
   | null;
 
-export interface TypeWater extends TypeVerify {
-  value: TypeWaterOption[];
+export interface Water extends Verify {
+  value: WaterOption[];
 }
 
-export type TypePowerOption =
+export type PowerOption =
   | { id: "onGrid"; label: "On-Grid" }
   | { id: "offGrid"; label: "Off-Grid" }
   | { id: "gridTie"; label: "Grid-Tie" }
@@ -525,109 +519,109 @@ export type TypePowerOption =
   | { id: "other"; label: "Other" }
   | null;
 
-export interface TypePower extends TypeVerify {
-  value: TypePowerOption[];
+export interface Power extends Verify {
+  value: PowerOption[];
 }
 
-export interface TypeSingleFamilyHome extends TypeVerify {
-  yearBuilt: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
-  stories: TypeStr;
-  acres: TypeStr;
-  heating: TypeHeating;
-  cooling: TypeCooling;
+export interface SingleFamilyHome extends Verify {
+  yearBuilt: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
+  stories: Str;
+  acres: Str;
+  heating: Heating;
+  cooling: Cooling;
   garage: TypeBool;
-  garageSqFt?: TypeStr;
-  garageNumCars?: TypeStr;
+  garageSqFt?: Str;
+  garageNumCars?: Str;
   garageAttached?: TypeBool;
   furnished: TypeBool;
   fencedYard: TypeBool;
   streetParking: TypeBool;
-  water: TypeWater;
-  power: TypePower;
+  water: Water;
+  power: Power;
 }
 
-export interface TypeMultiFamilyHomeUnit extends TypeVerify {
-  yearBuilt: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
-  stories: TypeStr;
-  unitsInBuilding: TypeStr;
+export interface MultiFamilyHomeUnit extends Verify {
+  yearBuilt: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
+  stories: Str;
+  unitsInBuilding: Str;
 
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
 
   garage: TypeBool;
-  garageSqFt?: TypeStr;
-  garageNumCars?: TypeStr;
+  garageSqFt?: Str;
+  garageNumCars?: Str;
   garageAttached?: TypeBool;
 
-  parkingSpaces: TypeStr;
+  parkingSpaces: Str;
   furnished: TypeBool;
   fencedYard: TypeBool;
   sharedYard: TypeBool;
   streetParking: TypeBool;
 }
 
-export interface TypeMultiFamilyHome extends TypeVerify {
-  totalUnits: TypeStr;
-  yearBuilt: TypeStr;
-  stories: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
+export interface MultiFamilyHome extends Verify {
+  totalUnits: Str;
+  yearBuilt: Str;
+  stories: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
 
-  unitsWithGarageSpace: TypeStr;
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+  unitsWithGarageSpace: Str;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
   fencedYard: TypeBool;
   streetParking: TypeBool;
 }
 
-export interface TypeApartmentBuilding extends TypeVerify {
-  totalUnits: TypeStr;
-  yearBuilt: TypeStr;
-  stories: TypeStr;
-  squareFeet: TypeStr;
-  acres: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+export interface ApartmentBuilding extends Verify {
+  totalUnits: Str;
+  yearBuilt: Str;
+  stories: Str;
+  squareFeet: Str;
+  acres: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
 }
 
-export interface TypeApartment extends TypeVerify {
-  yearBuilt: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
-  floorNumber: TypeStr;
+export interface Apartment extends Verify {
+  yearBuilt: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
+  floorNumber: Str;
 
   stairAccess: TypeBool;
   elevatorAccess: TypeBool;
 
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
 
   assignedParking: TypeBool;
-  numAssignedSpaces?: TypeStr;
-  numAssignedSpacesWithCover?: TypeStr;
+  numAssignedSpaces?: Str;
+  numAssignedSpacesWithCover?: Str;
 
   unassignedParkingAvailable: TypeBool;
   streetParking: TypeBool;
@@ -637,25 +631,25 @@ export interface TypeApartment extends TypeVerify {
   sharedYard: TypeBool;
 }
 
-export interface TypeCondo extends TypeVerify {
-  yearBuilt: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
-  floorNumber: TypeStr;
+export interface Condo extends Verify {
+  yearBuilt: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
+  floorNumber: Str;
 
   stairAccess: TypeBool;
   elevatorAccess: TypeBool;
 
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
 
   assignedParking: TypeBool;
-  numAssignedSpaces?: TypeStr;
-  numAssignedSpacesWithCover?: TypeStr;
+  numAssignedSpaces?: Str;
+  numAssignedSpacesWithCover?: Str;
 
   unassignedParkingAvailable: TypeBool;
   streetParking: TypeBool;
@@ -665,21 +659,21 @@ export interface TypeCondo extends TypeVerify {
   sharedYard: TypeBool;
 }
 
-export interface TypeTownhouse extends TypeVerify {
-  yearBuilt: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
+export interface Townhouse extends Verify {
+  yearBuilt: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
 
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
 
   assignedParking: TypeBool;
-  numAssignedSpaces?: TypeStr;
-  numAssignedSpacesWithCover?: TypeStr;
+  numAssignedSpaces?: Str;
+  numAssignedSpacesWithCover?: Str;
 
   unassignedParkingAvailable: TypeBool;
   streetParking: TypeBool;
@@ -689,17 +683,17 @@ export interface TypeTownhouse extends TypeVerify {
   sharedYard: TypeBool;
 }
 
-export interface TypeManufacturedHome extends TypeVerify {
-  yearBuilt: TypeStr;
-  squareFeet: TypeStr;
-  bedrooms: TypeStr;
-  fullBathrooms: TypeStr;
-  halfBathrooms: TypeStr;
+export interface ManufacturedHome extends Verify {
+  yearBuilt: Str;
+  squareFeet: Str;
+  bedrooms: Str;
+  fullBathrooms: Str;
+  halfBathrooms: Str;
 
-  heating: TypeHeating;
-  cooling: TypeCooling;
-  water: TypeWater;
-  power: TypePower;
+  heating: Heating;
+  cooling: Cooling;
+  water: Water;
+  power: Power;
 
   streetParking: TypeBool;
 
@@ -708,7 +702,7 @@ export interface TypeManufacturedHome extends TypeVerify {
   sharedYard: TypeBool;
 }
 
-export interface TypeLand extends TypeVerify {
+export interface Land extends Verify {
   acres: number | null;
   cityWater: boolean | null;
   onGrid: boolean | null;
@@ -717,35 +711,35 @@ export interface TypeLand extends TypeVerify {
   priceChangeActive: boolean | null;
 }
 
-export type TypeTimeStamp = FieldValue | null;
+export type TimeStamp = FieldValue | null;
 
-export interface TypeUserRef {
+export interface UserRef {
   uid: string;
 }
 
-/** All objects extend TypeStr */
-export interface TypeBasicInfo extends TypeVerify {
-  listingKind: TypeListingKind;
-  description: TypeStr;
-  price: TypeStr;
-  priceChange: TypeStr;
-  forSaleOrRent: TypeForSaleOrRent;
-  forSaleBy?: TypeForSaleBy;
-  forRentBy?: TypeForRentBy;
+/** All objects extend Str */
+export interface BasicInfo extends Verify {
+  listingKind: ListingKind;
+  description: Str;
+  price: Str;
+  priceChange: Str;
+  forSaleOrRent: ForSaleOrRent;
+  forSaleBy?: ForSaleBy;
+  forRentBy?: ForRentBy;
 }
 
-export interface TypeReview extends TypeVerify {}
+export interface TypeReview extends Verify {}
 
-export interface TypeImage {
+export interface Image {
   file?: File;
   name: string;
   url: string;
 }
 
-export interface TypeImages {
-  value: TypeImage[] | [];
+export interface Images {
+  value: Image[] | [];
   /** Used when a listing is updated and new images are added */
-  valueFromEdit: TypeImage[] | [];
+  valueFromEdit: Image[] | [];
   beingVerified: boolean;
   errorMsg: string;
   valid: boolean;
@@ -754,70 +748,70 @@ export interface TypeImages {
   required: boolean;
 }
 
-export interface TypeUploads extends TypeVerify {
-  images: TypeImages;
+export interface Uploads extends Verify {
+  images: Images;
 }
 
-export interface TypeListingData {
+export interface ListingData {
   page: number;
   savedPages: number[];
   userAcknowledged: boolean;
-  address: TypeAddress;
-  basicInfo: TypeBasicInfo;
+  address: Address;
+  basicInfo: BasicInfo;
   agent?: TypeAgent;
-  owner?: TypeOwner;
-  company?: TypeCompany;
-  privateOwner?: TypePrivateOwner;
-  singleFamilyHome?: TypeSingleFamilyHome;
-  multiFamilyHome?: TypeMultiFamilyHome;
-  multiFamilyHomeUnit?: TypeMultiFamilyHomeUnit;
-  apartment?: TypeApartment;
-  apartmentBuilding?: TypeApartmentBuilding;
-  condo?: TypeCondo;
-  townhouse?: TypeTownhouse;
-  manufacturedHome?: TypeManufacturedHome;
-  land?: TypeLand;
-  uploads: TypeUploads;
+  owner?: Owner;
+  company?: Company;
+  privateOwner?: PrivateOwner;
+  singleFamilyHome?: SingleFamilyHome;
+  multiFamilyHome?: MultiFamilyHome;
+  multiFamilyHomeUnit?: MultiFamilyHomeUnit;
+  apartment?: Apartment;
+  apartmentBuilding?: ApartmentBuilding;
+  condo?: Condo;
+  townhouse?: Townhouse;
+  manufacturedHome?: ManufacturedHome;
+  land?: Land;
+  uploads: Uploads;
   review: TypeReview;
-  timestamp: TypeTimeStamp;
-  userRef: TypeUserRef;
+  timestamp: TimeStamp;
+  userRef: UserRef;
 }
 
-export type TypeFetchedListingData = TypeListingData & DocumentData;
+export type TypeFetchedListingData = ListingData & DocumentData;
 
-export type TypeFetchedListing = {
+export type FetchedListing = {
   id: string;
   data: TypeFetchedListingData;
 };
 
-export interface TypeListingFilters {
+export interface ListingFilters {
   place?: google.maps.places.PlaceResult;
-  forSaleOrRent: TypeForSaleOrRentValue;
-  lowPrice: TypeStr;
-  highPrice: TypeStr;
-  listingKinds: ListingTypeValue[];
+  forSaleOrRent: ForSaleOrRentValue;
+  lowPrice: Str;
+  highPrice: Str;
+  listingKinds: ListingKindValue[];
   listedBy: TypeListedBy[];
   beds: number | null;
   baths: number | null;
 
-  // price: TypeStr;
-  // priceChange: TypeStr;
-  // forSaleBy?: TypeForSaleBy;
-  // forRentBy?: TypeForRentBy;
+  // price: Str;
+  // priceChange: Str;
+  // forSaleBy?: ForSaleBy;
+  // forRentBy?: ForRentBy;
   // listedBy:
   // agent?: TypeAgent;
-  // owner?: TypeOwner;
-  // company?: TypeCompany;
-  // privateOwner?: TypePrivateOwner;
-  // singleFamilyHome?: TypeSingleFamilyHome;
-  // multiFamilyHome?: TypeMultiFamilyHome;
-  // multiFamilyHomeUnit?: TypeMultiFamilyHomeUnit;
-  // apartment?: TypeApartment;
-  // apartmentBuilding?: TypeApartmentBuilding;
-  // condo?: TypeCondo;
+  // owner?: Owner;
+  // company?: Company;
+  // privateOwner?: PrivateOwner;
+  // singleFamilyHome?: SingleFamilyHome;
+  // multiFamilyHome?: MultiFamilyHome;
+  // multiFamilyHomeUnit?: MultiFamilyHomeUnit;
+  // apartment?: Apartment;
+  // apartmentBuilding?: ApartmentBuilding;
+  // condo?: Condo;
   // townhouse?: TypeTownHouse;
-  // manufacturedHome?: TypeManufacturedHome;
-  // land?: TypeLand;
+  // manufacturedHome?: ManufacturedHome;
+  // land?: Land;
 }
 
 // https://developers.google.com/maps/documentation/places/web-service/supported_types
@@ -835,7 +829,7 @@ export type TypeCoord = {
   lng: number | (() => number) | undefined;
 };
 
-export type TypeBoundaries = {
+export type Boundaries = {
   cityBoundaries: google.maps.FeatureLayer;
   postalCodeBoundaries: google.maps.FeatureLayer;
   countyBoundaries: google.maps.FeatureLayer;

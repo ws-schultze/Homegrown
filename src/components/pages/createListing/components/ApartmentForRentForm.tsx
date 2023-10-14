@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
-  TypeStr,
-  TypeHeatingOption,
-  TypeAddressValidationApi_Response,
-  TypeVerifyActionName,
-  TypeListingData,
-  TypeApartment,
-} from "../../../../index";
-import { initTypeStrReq, initApartment } from "../../../../initialValues";
+  Str,
+  HeatingOption,
+  AddressValidationApi_Response,
+  VerifyActionName,
+  ListingData,
+  Apartment,
+  CoolingOption,
+  WaterOption,
+  PowerOption,
+} from "../../../../types/index";
 import Dropdown from "../../../shared/dropdown/Dropdown";
 import {
   heatingOptions,
   coolingOptions,
   waterOptions,
   powerOptions,
+  initStrReq,
+  initApartment,
 } from "../../../../initialValues";
-import {
-  TypeCoolingOption,
-  TypeWaterOption,
-  TypePowerOption,
-} from "../../../../index";
-import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
+import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import TwoBtnRow, { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
@@ -29,14 +28,14 @@ import PageBtns from "./PageBtns";
 import { Header } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   prevPage: () => void;
   nextPage: () => void;
   toPageNumber?: (number: number) => void;
   deleteListing: () => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
 }
 
 export default function ApartmentForRentForm({
@@ -49,7 +48,7 @@ export default function ApartmentForRentForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<TypeApartment>(initApartment);
+  const [state, setState] = useState<Apartment>(initApartment);
 
   /**
    * Keeps inputs showing values in parent state on page change
@@ -115,8 +114,8 @@ export default function ApartmentForRentForm({
         setState((s) => ({
           ...s,
           assignedParking: obj,
-          numAssignedSpaces: initTypeStrReq,
-          numAssignedSpacesWithCover: initTypeStrReq,
+          numAssignedSpaces: initStrReq,
+          numAssignedSpacesWithCover: initStrReq,
         }));
       } else if (value === false) {
         // No assigned parking --> remove assigned parking props from state
@@ -136,7 +135,7 @@ export default function ApartmentForRentForm({
     }
   }
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof state) {
     setState((s) => ({
       ...s,
       [fieldName]: object,
@@ -144,9 +143,9 @@ export default function ApartmentForRentForm({
   }
 
   function handleVerify(
-    actionName: TypeVerifyActionName,
+    actionName: VerifyActionName,
     obj: typeof state,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (actionName === "save" || actionName === "edit") {
       emit({
@@ -182,7 +181,7 @@ export default function ApartmentForRentForm({
       <div className="listing-form__section">
         <Header>Apartment Features</Header>
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="yearBuilt"
             placeholder="Year Built"
@@ -190,9 +189,9 @@ export default function ApartmentForRentForm({
             min={1}
             max={new Date().getFullYear()}
             parent={state.yearBuilt}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="squareFeet"
             placeholder="Square Feet"
@@ -200,12 +199,12 @@ export default function ApartmentForRentForm({
             formatType="comma-separated-no-decimal"
             min={100}
             parent={state.squareFeet}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="floorNumber"
             placeholder="Floor"
@@ -213,9 +212,9 @@ export default function ApartmentForRentForm({
             min={1}
             max={100}
             parent={state.floorNumber}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="bedrooms"
             placeholder="Bedrooms"
@@ -223,12 +222,12 @@ export default function ApartmentForRentForm({
             min={1}
             max={50}
             parent={state.bedrooms}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="fullBathrooms"
             placeholder="Full Baths"
@@ -236,9 +235,9 @@ export default function ApartmentForRentForm({
             min={1}
             max={100}
             parent={state.fullBathrooms}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="halfBathrooms"
             placeholder="Half Baths"
@@ -246,11 +245,11 @@ export default function ApartmentForRentForm({
             min={0}
             max={100}
             parent={state.halfBathrooms}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
-        <Dropdown<TypeHeatingOption>
+        <Dropdown<HeatingOption>
           placeHolder={"Select Heating Option(s)"}
           parent={state.heating.value}
           menuItems={heatingOptions}
@@ -259,12 +258,10 @@ export default function ApartmentForRentForm({
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label="Heating"
-          emit={(options) =>
-            handleOptions<TypeHeatingOption>(options, "heating")
-          }
+          emit={(options) => handleOptions<HeatingOption>(options, "heating")}
         />
 
-        <Dropdown<TypeCoolingOption>
+        <Dropdown<CoolingOption>
           placeHolder={"Select Cooling Option(s)"}
           menuItems={coolingOptions}
           isMulti={true}
@@ -273,12 +270,10 @@ export default function ApartmentForRentForm({
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label="Cooling"
-          emit={(options) =>
-            handleOptions<TypeCoolingOption>(options, "cooling")
-          }
+          emit={(options) => handleOptions<CoolingOption>(options, "cooling")}
         />
 
-        <Dropdown<TypeWaterOption>
+        <Dropdown<WaterOption>
           placeHolder={"Select Water Option(s)"}
           parent={state.water.value}
           menuItems={waterOptions}
@@ -287,10 +282,10 @@ export default function ApartmentForRentForm({
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label="Water"
-          emit={(options) => handleOptions<TypeWaterOption>(options, "water")}
+          emit={(options) => handleOptions<WaterOption>(options, "water")}
         />
 
-        <Dropdown<TypePowerOption>
+        <Dropdown<PowerOption>
           placeHolder={"Select Power Option(s)"}
           parent={state.power.value}
           menuItems={powerOptions}
@@ -299,7 +294,7 @@ export default function ApartmentForRentForm({
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label="Power"
-          emit={(options) => handleOptions<TypePowerOption>(options, "power")}
+          emit={(options) => handleOptions<PowerOption>(options, "power")}
         />
 
         <TwoBtnRow<typeof state>
@@ -351,7 +346,7 @@ export default function ApartmentForRentForm({
         state.numAssignedSpacesWithCover ? (
           <>
             <div className="listing-form__flex-row">
-              <InputTypeStr<typeof state>
+              <InputStr<typeof state>
                 size="md"
                 fieldName="numAssignedSpaces"
                 placeholder="Spaces"
@@ -359,9 +354,9 @@ export default function ApartmentForRentForm({
                 formatType="comma-separated-no-decimal"
                 min={1}
                 parent={state.numAssignedSpaces}
-                emit={handleInputTypeStr}
+                emit={handleInputStr}
               />
-              <InputTypeStr<typeof state>
+              <InputStr<typeof state>
                 size="md"
                 fieldName="numAssignedSpacesWithCover"
                 placeholder="Covered Spaces"
@@ -369,7 +364,7 @@ export default function ApartmentForRentForm({
                 formatType="comma-separated-no-decimal"
                 min={0}
                 parent={state.numAssignedSpacesWithCover}
-                emit={handleInputTypeStr}
+                emit={handleInputStr}
               />
             </div>
           </>

@@ -1,66 +1,66 @@
-import {
-  TypeApartment,
-  TypeBasicInfo,
-  TypeForSaleOrRentValue,
-  TypeImages,
-  TypeListingData,
-  TypeListingFilters,
-  TypeMultiFamilyHomeUnit,
-  TypePlacesApi_Response_AddressComponent,
-  TypeUploads,
-  TypeUserRef,
-  TypeVerify,
-} from ".";
-import {
-  TypeWaterOption,
-  TypePowerOption,
-  TypePower,
-  TypeBool,
-  TypeForSaleOrRent,
-  TypeForSaleBy,
-  TypeForRentBy,
-} from "./index";
-import {
-  TypeMultiFamilyHome,
-  TypeCondo,
-  TypeTownhouse,
-  TypeManufacturedHome,
-  TypeWater,
-  TypeTimeStamp,
-} from "./index";
-import {
-  TypeAddress,
-  TypeAgent,
-  TypeSingleFamilyHome,
-  ListingTypeValue,
-} from "./index";
-import {
-  TypeApartmentBuilding,
-  TypeImage,
-  TypeLand,
-  TypeHeating,
-  TypeCooling,
-  TypeListingKind,
-  TypeCoolingOption,
-  TypeHeatingOption,
-} from "./index";
-import {
-  TypeOwner,
-  TypeCompany,
-  TypePrivateOwner,
-  TypeName,
-  TypeStr,
-  TypeGeolocation,
-} from "./index";
+import * as T from "./types/index";
+// import {
+//   BasicInfo,
+//   ForSaleOrRentValue,
+//   Images,
+//   ListingData,
+//   ListingFilters,
+//   MultiFamilyHomeUnit,
+//   TypePlacesApi_Response_AddressComponent,
+//   Uploads,
+//   UserRef,
+//   Verify,
+// } from ".";
+// import {
+//   WaterOption,
+//   PowerOption,
+//   Power,
+//   TypeBool,
+//   ForSaleOrRent,
+//   ForSaleBy,
+//   ForRentBy,
+// } from "./index";
+// import {
+//   MultiFamilyHome,
+//   Condo,
+//   Townhouse,
+//   ManufacturedHome,
+//   Water,
+//   TimeStamp,
+// } from "./index";
+// import {
+//   Address,
+//   TypeAgent,
+//   SingleFamilyHome,
+//   ListingKindValue,
+// } from "./index";
+// import {
+//   ApartmentBuilding,
+//   Image,
+//   Land,
+//   Heating,
+//   Cooling,
+//   ListingKind,
+//   CoolingOption,
+//   HeatingOption,
+// } from "./index";
+// import {
+//   Owner,
+//   Company,
+//   PrivateOwner,
+//   Name,
+//   Str,
+//   TypeGeolocation,
+// } from "./index";
 
-export const allForSaleOrRentValues: TypeForSaleOrRentValue[] = [
+export const allForSaleOrRentValues: T.ForSaleOrRentValue[] = [
   { id: "for-sale", label: "For Sale" },
   { id: "for-rent", label: "For Rent" },
   { id: "for-sale-or-rent", label: "For Sale or Rent" },
   null,
 ];
 
-export const listingKindValuesForSale: ListingTypeValue[] = [
+export const listingKindValuesForSale: T.ListingKindValue[] = [
   { id: "single-family-home", name: "singleFamilyHome", label: "House" },
   {
     id: "multi-family-home",
@@ -78,7 +78,7 @@ export const listingKindValuesForSale: ListingTypeValue[] = [
   // { id: "land", name: "land", label: "Land" },
 ];
 
-export const listingKindValuesForRent: ListingTypeValue[] = [
+export const listingKindValuesForRent: T.ListingKindValue[] = [
   { id: "single-family-home", name: "singleFamilyHome", label: "House" },
   {
     id: "multi-family-home-unit",
@@ -94,7 +94,7 @@ export const listingKindValuesForRent: ListingTypeValue[] = [
   // { id: "land", name: "land", label: "Land" },
 ];
 
-export const initTypeBoolReqNull: TypeBool = {
+export const initTypeBoolReqNull: T.TypeBool = {
   value: null,
   numberStr: "",
   number: 0,
@@ -108,7 +108,7 @@ export const initTypeBoolReqNull: TypeBool = {
   readOnly: false,
 };
 
-export const initTypeBoolReqTrue: TypeBool = {
+export const initTypeBoolReqTrue: T.TypeBool = {
   value: true,
   numberStr: "",
   number: 0,
@@ -122,7 +122,7 @@ export const initTypeBoolReqTrue: TypeBool = {
   readOnly: false,
 };
 
-export const initTypeBoolReqFalse: TypeBool = {
+export const initTypeBoolReqFalse: T.TypeBool = {
   value: false,
   numberStr: "",
   number: 0,
@@ -136,7 +136,7 @@ export const initTypeBoolReqFalse: TypeBool = {
   readOnly: false,
 };
 
-export const initTypeBoolOptNull: TypeBool = {
+export const initTypeBoolOptNull: T.TypeBool = {
   value: null,
   numberStr: "",
   number: 0,
@@ -150,7 +150,7 @@ export const initTypeBoolOptNull: TypeBool = {
   readOnly: false,
 };
 
-export const initTypeBoolOptTrue: TypeBool = {
+export const initTypeBoolOptTrue: T.TypeBool = {
   value: true,
   numberStr: "",
   number: 0,
@@ -164,7 +164,7 @@ export const initTypeBoolOptTrue: TypeBool = {
   readOnly: false,
 };
 
-export const initTypeBoolOptFalse: TypeBool = {
+export const initTypeBoolOptFalse: T.TypeBool = {
   value: false,
   numberStr: "",
   number: 0,
@@ -178,7 +178,7 @@ export const initTypeBoolOptFalse: TypeBool = {
   readOnly: false,
 };
 
-export const initTypeStrReq: TypeStr = {
+export const initStrReq: T.Str = {
   value: "",
   numberStr: "",
   number: 0,
@@ -192,7 +192,7 @@ export const initTypeStrReq: TypeStr = {
   readOnly: false,
 };
 
-export const initTypeStrOpt: TypeStr = {
+export const initStrOpt: T.Str = {
   value: "",
   numberStr: "",
   number: 0,
@@ -206,7 +206,7 @@ export const initTypeStrOpt: TypeStr = {
   readOnly: false,
 };
 
-export const initGeolocationOpt: TypeGeolocation = {
+export const initGeolocationOpt: T.TypeGeolocation = {
   value: { lat: 0, lng: 0 },
   numberStr: "",
   number: 0,
@@ -220,21 +220,21 @@ export const initGeolocationOpt: TypeGeolocation = {
   readOnly: false,
 };
 
-export const initAddressComponent: TypePlacesApi_Response_AddressComponent = {
+export const initAddressComponent: T.TypePlacesApi_Response_AddressComponent = {
   long_name: "",
   short_name: "",
   types: [],
 };
 
-export const initAddress: TypeAddress = {
-  streetAddress: initTypeStrReq,
-  unitNumber: initTypeStrOpt,
-  city: initTypeStrReq,
-  adminAreaLevel1: initTypeStrReq,
-  zipCode: initTypeStrReq,
-  adminAreaLevel2: initTypeStrOpt,
-  country: initTypeStrReq,
-  formattedAddress: initTypeStrOpt,
+export const initAddress: T.Address = {
+  streetAddress: initStrReq,
+  unitNumber: initStrOpt,
+  city: initStrReq,
+  adminAreaLevel1: initStrReq,
+  zipCode: initStrReq,
+  adminAreaLevel2: initStrOpt,
+  country: initStrReq,
+  formattedAddress: initStrOpt,
   geolocation: initGeolocationOpt,
   address_components: [],
   beingVerified: false,
@@ -245,29 +245,29 @@ export const initAddress: TypeAddress = {
   required: true,
 };
 
-export const initName: TypeName = {
-  firstName: initTypeStrReq,
-  middleName: initTypeStrOpt,
-  lastName: initTypeStrReq,
+export const initName: T.Name = {
+  firstName: initStrReq,
+  middleName: initStrOpt,
+  lastName: initStrReq,
 };
 
-export const initAgent: TypeAgent = {
-  firstName: initTypeStrReq,
-  middleName: initTypeStrOpt,
-  lastName: initTypeStrReq,
-  licenseId: initTypeStrReq,
-  companyName: initTypeStrReq,
-  phoneNumber: initTypeStrReq,
-  email: initTypeStrReq,
-  streetAddress: initTypeStrReq,
-  unitNumber: initTypeStrOpt,
-  city: initTypeStrReq,
-  adminAreaLevel1: initTypeStrReq,
-  zipCode: initTypeStrReq,
-  adminAreaLevel2: initTypeStrOpt,
-  country: initTypeStrReq,
+export const initAgent: T.TypeAgent = {
+  firstName: initStrReq,
+  middleName: initStrOpt,
+  lastName: initStrReq,
+  licenseId: initStrReq,
+  companyName: initStrReq,
+  phoneNumber: initStrReq,
+  email: initStrReq,
+  streetAddress: initStrReq,
+  unitNumber: initStrOpt,
+  city: initStrReq,
+  adminAreaLevel1: initStrReq,
+  zipCode: initStrReq,
+  adminAreaLevel2: initStrOpt,
+  country: initStrReq,
   // addressValidationApiResponse: null,
-  formattedAddress: initTypeStrOpt,
+  formattedAddress: initStrOpt,
   geolocation: initGeolocationOpt,
   address_components: [],
   beingVerified: false,
@@ -278,12 +278,12 @@ export const initAgent: TypeAgent = {
   required: false,
 };
 
-export const initOwner: TypeOwner = {
-  firstName: initTypeStrReq,
-  middleName: initTypeStrOpt,
-  lastName: initTypeStrReq,
-  phoneNumber: initTypeStrReq,
-  email: initTypeStrReq,
+export const initOwner: T.Owner = {
+  firstName: initStrReq,
+  middleName: initStrOpt,
+  lastName: initStrReq,
+  phoneNumber: initStrReq,
+  email: initStrReq,
   provideAddress: initTypeBoolReqNull,
   beingVerified: false,
   valid: false,
@@ -293,19 +293,19 @@ export const initOwner: TypeOwner = {
   required: false,
 };
 
-export const initCompany: TypeCompany = {
-  name: initTypeStrReq,
-  phoneNumber: initTypeStrReq,
-  email: initTypeStrReq,
-  streetAddress: initTypeStrReq,
-  unitNumber: initTypeStrOpt,
-  city: initTypeStrReq,
-  adminAreaLevel1: initTypeStrReq,
-  zipCode: initTypeStrReq,
-  adminAreaLevel2: initTypeStrOpt,
-  country: initTypeStrReq,
+export const initCompany: T.Company = {
+  name: initStrReq,
+  phoneNumber: initStrReq,
+  email: initStrReq,
+  streetAddress: initStrReq,
+  unitNumber: initStrOpt,
+  city: initStrReq,
+  adminAreaLevel1: initStrReq,
+  zipCode: initStrReq,
+  adminAreaLevel2: initStrOpt,
+  country: initStrReq,
   // addressValidationApiResponse: null,
-  formattedAddress: initTypeStrOpt,
+  formattedAddress: initStrOpt,
   geolocation: initGeolocationOpt,
   address_components: [],
   beingVerified: false,
@@ -316,12 +316,12 @@ export const initCompany: TypeCompany = {
   required: false,
 };
 
-export const initPrivateOwner: TypePrivateOwner = {
-  firstName: initTypeStrReq,
-  middleName: initTypeStrOpt,
-  lastName: initTypeStrReq,
-  phoneNumber: initTypeStrReq,
-  email: initTypeStrReq,
+export const initPrivateOwner: T.PrivateOwner = {
+  firstName: initStrReq,
+  middleName: initStrOpt,
+  lastName: initStrReq,
+  phoneNumber: initStrReq,
+  email: initStrReq,
   provideAddress: initTypeBoolReqNull,
   beingVerified: false,
   valid: false,
@@ -331,7 +331,7 @@ export const initPrivateOwner: TypePrivateOwner = {
   required: false,
 };
 
-export const initPriceFeatures: TypeStr = {
+export const initPriceFeatures: T.Str = {
   value: "",
   numberStr: "",
   number: 0,
@@ -345,7 +345,7 @@ export const initPriceFeatures: TypeStr = {
   readOnly: false,
 };
 
-export const initDiscountFeatures: TypeStr = {
+export const initDiscountFeatures: T.Str = {
   value: "",
   numberStr: "",
   number: 0,
@@ -359,7 +359,7 @@ export const initDiscountFeatures: TypeStr = {
   readOnly: false,
 };
 
-export const heatingOptions: TypeHeatingOption[] = [
+export const heatingOptions: T.HeatingOption[] = [
   { id: "firePlace", label: "Fire Place" },
   { id: "propaneWallHeater", label: "Propane Wall Heater" },
   { id: "propaneFurnace", label: "Propane Furnace" },
@@ -367,14 +367,14 @@ export const heatingOptions: TypeHeatingOption[] = [
   null,
 ];
 
-export const coolingOptions: TypeCoolingOption[] = [
+export const coolingOptions: T.CoolingOption[] = [
   { id: "centralAirConditioning", label: "Central AC" },
   { id: "windMaker500", label: "Wind Maker 500" },
   { id: "other", label: "Other" },
   null,
 ];
 
-export const waterOptions: TypeWaterOption[] = [
+export const waterOptions: T.WaterOption[] = [
   { id: "cityWater", label: "City Water" },
   { id: "well", label: "Well" },
   { id: "catchment", label: "Catchment" },
@@ -383,7 +383,7 @@ export const waterOptions: TypeWaterOption[] = [
   null,
 ];
 
-export const powerOptions: TypePowerOption[] = [
+export const powerOptions: T.PowerOption[] = [
   { id: "onGrid", label: "On-Grid" },
   { id: "offGrid", label: "Off-Grid" },
   { id: "gridTie", label: "Grid-Tie" },
@@ -395,7 +395,7 @@ export const powerOptions: TypePowerOption[] = [
   null,
 ];
 
-export const initHeatingReq: TypeHeating = {
+export const initHeatingReq: T.Heating = {
   value: [],
   valid: false,
   errorMsg: "",
@@ -405,7 +405,7 @@ export const initHeatingReq: TypeHeating = {
   readOnly: false,
 };
 
-export const initCoolingReq: TypeCooling = {
+export const initCoolingReq: T.Cooling = {
   value: [],
   valid: false,
   errorMsg: "",
@@ -415,7 +415,7 @@ export const initCoolingReq: TypeCooling = {
   readOnly: false,
 };
 
-export const initWaterReq: TypeWater = {
+export const initWaterReq: T.Water = {
   value: [],
   valid: false,
   errorMsg: "",
@@ -425,7 +425,7 @@ export const initWaterReq: TypeWater = {
   readOnly: false,
 };
 
-export const initPowerReq: TypePower = {
+export const initPowerReq: T.Power = {
   value: [],
   valid: false,
   errorMsg: "",
@@ -435,14 +435,14 @@ export const initPowerReq: TypePower = {
   readOnly: false,
 };
 
-export const initSingleFamilyHome: TypeSingleFamilyHome = {
-  yearBuilt: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
-  stories: initTypeStrReq,
-  acres: initTypeStrReq,
+export const initSingleFamilyHome: T.SingleFamilyHome = {
+  yearBuilt: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
+  stories: initStrReq,
+  acres: initStrReq,
   heating: initHeatingReq,
   cooling: initCoolingReq,
   water: initWaterReq,
@@ -459,14 +459,14 @@ export const initSingleFamilyHome: TypeSingleFamilyHome = {
   required: false,
 };
 
-export const initMultiFamilyHomeUnit: TypeMultiFamilyHomeUnit = {
-  yearBuilt: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
-  stories: initTypeStrReq,
-  unitsInBuilding: initTypeStrReq,
+export const initMultiFamilyHomeUnit: T.MultiFamilyHomeUnit = {
+  yearBuilt: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
+  stories: initStrReq,
+  unitsInBuilding: initStrReq,
   heating: initHeatingReq,
   cooling: initCoolingReq,
   water: initWaterReq,
@@ -476,7 +476,7 @@ export const initMultiFamilyHomeUnit: TypeMultiFamilyHomeUnit = {
   streetParking: initTypeBoolReqNull,
   fencedYard: initTypeBoolReqNull,
   sharedYard: initTypeBoolReqNull,
-  parkingSpaces: initTypeStrReq,
+  parkingSpaces: initStrReq,
   beingVerified: false,
   valid: false,
   saved: false,
@@ -485,19 +485,19 @@ export const initMultiFamilyHomeUnit: TypeMultiFamilyHomeUnit = {
   required: false,
 };
 
-export const initMultiFamilyHome: TypeMultiFamilyHome = {
-  totalUnits: initTypeStrReq,
-  yearBuilt: initTypeStrReq,
-  stories: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
+export const initMultiFamilyHome: T.MultiFamilyHome = {
+  totalUnits: initStrReq,
+  yearBuilt: initStrReq,
+  stories: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
   heating: initHeatingReq,
   cooling: initCoolingReq,
   water: initWaterReq,
   power: initPowerReq,
-  unitsWithGarageSpace: initTypeStrReq,
+  unitsWithGarageSpace: initStrReq,
   fencedYard: initTypeBoolReqNull,
   streetParking: initTypeBoolReqNull,
   beingVerified: false,
@@ -508,15 +508,15 @@ export const initMultiFamilyHome: TypeMultiFamilyHome = {
   required: false,
 };
 
-export const initApartmentBuilding: TypeApartmentBuilding = {
-  totalUnits: initTypeStrReq,
-  yearBuilt: initTypeStrReq,
-  stories: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  acres: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
+export const initApartmentBuilding: T.ApartmentBuilding = {
+  totalUnits: initStrReq,
+  yearBuilt: initStrReq,
+  stories: initStrReq,
+  squareFeet: initStrReq,
+  acres: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
 
   heating: initHeatingReq,
   cooling: initCoolingReq,
@@ -531,13 +531,13 @@ export const initApartmentBuilding: TypeApartmentBuilding = {
   required: false,
 };
 
-export const initApartment: TypeApartment = {
-  yearBuilt: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
-  floorNumber: initTypeStrReq,
+export const initApartment: T.Apartment = {
+  yearBuilt: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
+  floorNumber: initStrReq,
 
   stairAccess: initTypeBoolReqNull,
   elevatorAccess: initTypeBoolReqNull,
@@ -548,8 +548,8 @@ export const initApartment: TypeApartment = {
   power: initPowerReq,
 
   assignedParking: initTypeBoolReqNull,
-  numAssignedSpaces: initTypeStrReq,
-  numAssignedSpacesWithCover: initTypeStrReq,
+  numAssignedSpaces: initStrReq,
+  numAssignedSpacesWithCover: initStrReq,
 
   unassignedParkingAvailable: initTypeBoolReqNull,
   streetParking: initTypeBoolReqNull,
@@ -566,13 +566,13 @@ export const initApartment: TypeApartment = {
   required: false,
 };
 
-export const initCondo: TypeCondo = {
-  yearBuilt: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
-  floorNumber: initTypeStrReq,
+export const initCondo: T.Condo = {
+  yearBuilt: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
+  floorNumber: initStrReq,
 
   stairAccess: initTypeBoolReqNull,
   elevatorAccess: initTypeBoolReqNull,
@@ -583,8 +583,8 @@ export const initCondo: TypeCondo = {
   power: initPowerReq,
 
   assignedParking: initTypeBoolReqNull,
-  numAssignedSpaces: initTypeStrReq,
-  numAssignedSpacesWithCover: initTypeStrReq,
+  numAssignedSpaces: initStrReq,
+  numAssignedSpacesWithCover: initStrReq,
 
   unassignedParkingAvailable: initTypeBoolReqNull,
   streetParking: initTypeBoolReqNull,
@@ -601,12 +601,12 @@ export const initCondo: TypeCondo = {
   required: false,
 };
 
-export const initTownhouse: TypeTownhouse = {
-  yearBuilt: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
+export const initTownhouse: T.Townhouse = {
+  yearBuilt: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
 
   heating: initHeatingReq,
   cooling: initCoolingReq,
@@ -614,8 +614,8 @@ export const initTownhouse: TypeTownhouse = {
   power: initPowerReq,
 
   assignedParking: initTypeBoolReqNull,
-  numAssignedSpaces: initTypeStrReq,
-  numAssignedSpacesWithCover: initTypeStrReq,
+  numAssignedSpaces: initStrReq,
+  numAssignedSpacesWithCover: initStrReq,
 
   unassignedParkingAvailable: initTypeBoolReqNull,
   streetParking: initTypeBoolReqNull,
@@ -632,12 +632,12 @@ export const initTownhouse: TypeTownhouse = {
   required: false,
 };
 
-export const initManufacturedHome: TypeManufacturedHome = {
-  yearBuilt: initTypeStrReq,
-  squareFeet: initTypeStrReq,
-  bedrooms: initTypeStrReq,
-  fullBathrooms: initTypeStrReq,
-  halfBathrooms: initTypeStrReq,
+export const initManufacturedHome: T.ManufacturedHome = {
+  yearBuilt: initStrReq,
+  squareFeet: initStrReq,
+  bedrooms: initStrReq,
+  fullBathrooms: initStrReq,
+  halfBathrooms: initStrReq,
 
   heating: initHeatingReq,
   cooling: initCoolingReq,
@@ -658,7 +658,7 @@ export const initManufacturedHome: TypeManufacturedHome = {
   required: false,
 };
 
-export const initLand: TypeLand = {
+export const initLand: T.Land = {
   acres: null,
   cityWater: null,
   onGrid: null,
@@ -673,7 +673,7 @@ export const initLand: TypeLand = {
   required: false,
 };
 
-export const initListingKind: TypeListingKind = {
+export const initListingKind: T.ListingKind = {
   value: null,
   numberStr: "",
   number: 0,
@@ -687,7 +687,7 @@ export const initListingKind: TypeListingKind = {
   required: true,
 };
 
-export const allListingTypeValues: ListingTypeValue[] = [
+export const allListingTypeValues: T.ListingKindValue[] = [
   { id: "single-family-home", name: "singleFamilyHome", label: "House" },
   {
     id: "multi-family-home",
@@ -716,7 +716,7 @@ export const allListingTypeValues: ListingTypeValue[] = [
   null,
 ];
 
-export const initForSaleOrRent: TypeForSaleOrRent = {
+export const initForSaleOrRent: T.ForSaleOrRent = {
   value: null,
   numberStr: "",
   number: 0,
@@ -730,7 +730,7 @@ export const initForSaleOrRent: TypeForSaleOrRent = {
   readOnly: false,
 };
 
-export const initForSaleBy: TypeForSaleBy = {
+export const initForSaleBy: T.ForSaleBy = {
   value: null,
   numberStr: "",
   number: 0,
@@ -744,7 +744,7 @@ export const initForSaleBy: TypeForSaleBy = {
   readOnly: false,
 };
 
-export const initForRentBy: TypeForRentBy = {
+export const initForRentBy: T.ForRentBy = {
   value: null,
   numberStr: "",
   number: 0,
@@ -758,18 +758,18 @@ export const initForRentBy: TypeForRentBy = {
   readOnly: false,
 };
 
-export const initTimeStamp: TypeTimeStamp = null;
+export const initTimeStamp: T.TimeStamp = null;
 
-export const initUserRef: TypeUserRef = {
+export const initUserRef: T.UserRef = {
   uid: "",
 };
 
-export const initBasicInfo: TypeBasicInfo = {
+export const initBasicInfo: T.BasicInfo = {
   listingKind: initListingKind,
-  description: initTypeStrReq,
+  description: initStrReq,
   forSaleOrRent: initForSaleOrRent,
-  price: initTypeStrReq,
-  priceChange: initTypeStrOpt,
+  price: initStrReq,
+  priceChange: initStrOpt,
   valid: false,
   errorMsg: "",
   required: true,
@@ -778,7 +778,7 @@ export const initBasicInfo: TypeBasicInfo = {
   readOnly: false,
 };
 
-export const initReview: TypeVerify = {
+export const initReview: T.Verify = {
   valid: false,
   errorMsg: "",
   required: true,
@@ -787,13 +787,13 @@ export const initReview: TypeVerify = {
   readOnly: false,
 };
 
-export const initImage: TypeImage = {
+export const initImage: T.Image = {
   file: undefined,
   name: "",
   url: "",
 };
 
-export const initImages: TypeImages = {
+export const initImages: T.Images = {
   value: [],
   valueFromEdit: [],
   valid: false,
@@ -804,7 +804,7 @@ export const initImages: TypeImages = {
   readOnly: false,
 };
 
-export const initUploads: TypeUploads = {
+export const initUploads: T.Uploads = {
   images: initImages,
   valid: false,
   errorMsg: "",
@@ -818,7 +818,7 @@ export const initUploads: TypeUploads = {
  * Listing form before a user has entered or saved any info.
  * Contains only the required props.
  */
-export const initListingData: TypeListingData = {
+export const initListingData: T.ListingData = {
   page: 1,
   savedPages: [],
   userAcknowledged: false,
@@ -830,11 +830,11 @@ export const initListingData: TypeListingData = {
   userRef: initUserRef,
 };
 
-export const initListingFilters: TypeListingFilters = {
+export const initListingFilters: T.ListingFilters = {
   place: undefined,
   forSaleOrRent: null,
-  lowPrice: initTypeStrOpt,
-  highPrice: initTypeStrOpt,
+  lowPrice: initStrOpt,
+  highPrice: initStrOpt,
   listingKinds: [],
   listedBy: [],
   beds: null,

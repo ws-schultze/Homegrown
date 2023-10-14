@@ -8,6 +8,7 @@ import styles from "./root.module.scss";
 import { useMemo } from "react";
 import useScreenSize from "../../../hooks/useScreenSize";
 import DesktopNavbar from "../../shared/navbar/desktopNavbar/DesktopNavbar";
+import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 
 export default function Root({
   children,
@@ -15,19 +16,20 @@ export default function Root({
   children?: JSX.Element;
 }): JSX.Element {
   const { theme } = useThemeContext();
+  const screenSize = useScreenSizeContext();
   const navigation = useNavigation();
-  const { width } = useScreenSize();
-  const mode = useMemo(
-    () =>
-      width <= 480
-        ? "mobile"
-        : width > 480 && width <= 1023
-        ? "tablet"
-        : width > 1023
-        ? "desktop"
-        : undefined,
-    [width]
-  );
+  // const { width } = useScreenSize();
+  // const mode = useMemo(
+  //   () =>
+  //     width <= 480
+  //       ? "mobile"
+  //       : width > 480 && width <= 1023
+  //       ? "tablet"
+  //       : width > 1023
+  //       ? "desktop"
+  //       : undefined,
+  //   [width]
+  // );
 
   if (navigation.state === "loading") {
     return <Spinner size="large" />;
@@ -35,7 +37,7 @@ export default function Root({
 
   return (
     <div className={`${styles.container}`}>
-      {mode === "desktop" ? <DesktopNavbar /> : <MobileNavbar />}
+      {screenSize === "desktop" ? <DesktopNavbar /> : <MobileNavbar />}
 
       <main id="root-main-outlet">{children ?? <Outlet />}</main>
 

@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import TwoBtnRow from "./TwoBtnRow";
 import {
-  TypeAddressValidationApi_Response,
+  AddressValidationApi_Response,
   TypeBool,
-  TypeCondo,
-  TypeForRentBy,
-  TypeForSaleBy,
-  TypeForSaleOrRent,
-  TypeLand,
-  TypeManufacturedHome,
-  TypeMultiFamilyHome,
-  TypeSingleFamilyHome,
-  TypeTownhouse,
-  ListingTypeValue,
-  TypeListingData,
-  TypeBasicInfo,
-  TypeVerifyActionName,
-  TypeStr,
-  TypeApartmentBuilding,
-  TypeApartment,
-} from "../../../..";
+  Condo,
+  ForRentBy,
+  ForSaleBy,
+  ForSaleOrRent,
+  Land,
+  ManufacturedHome,
+  MultiFamilyHome,
+  SingleFamilyHome,
+  Townhouse,
+  ListingKindValue,
+  ListingData,
+  BasicInfo,
+  VerifyActionName,
+  Str,
+  ApartmentBuilding,
+  Apartment,
+} from "../../../../types/index";
 import {
   initAgent,
   initApartment,
@@ -37,7 +37,7 @@ import {
   initPrivateOwner,
   initSingleFamilyHome,
   initTownhouse,
-  initTypeStrOpt,
+  initStrOpt,
   listingKindValuesForRent,
   listingKindValuesForSale,
 } from "../../../../initialValues";
@@ -47,11 +47,11 @@ import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import PageBtns from "./PageBtns";
-import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
+import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import { Header } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   nextPage: () => void;
   prevPage?: () => void;
   toPageNumber?: (number: number) => void;
@@ -59,8 +59,8 @@ interface Props {
   pageNumbers?: number[];
   currentPage?: number;
   emit: (
-    obj: TypeListingData,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    obj: ListingData,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) => void;
 }
 
@@ -74,7 +74,7 @@ export default function BasicInfoForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<TypeBasicInfo>(parent.basicInfo);
+  const [state, setState] = useState<BasicInfo>(parent.basicInfo);
 
   useEffect(() => {
     setState(parent.basicInfo);
@@ -82,9 +82,9 @@ export default function BasicInfoForm({
 
   function handleTwoBtnRow(
     fieldName: keyof typeof state,
-    obj: TypeBool | TypeForSaleOrRent | TypeForRentBy | TypeForSaleBy
+    obj: TypeBool | ForSaleOrRent | ForRentBy | ForSaleBy
   ) {
-    const object = obj as TypeForSaleOrRent | TypeForRentBy | TypeForSaleBy;
+    const object = obj as ForSaleOrRent | ForRentBy | ForSaleBy;
     switch (object.value?.id) {
       case "for-sale":
         console.log("SALE");
@@ -116,7 +116,7 @@ export default function BasicInfoForm({
     const { forRentBy, ...rest } = state;
 
     // Create new form state object
-    const s: TypeListingData = {
+    const s: ListingData = {
       ...p,
       basicInfo: {
         ...rest,
@@ -171,7 +171,7 @@ export default function BasicInfoForm({
     const { agent, owner, ...p } = parent;
     const { forSaleBy, ...rest } = state;
 
-    const s: TypeListingData = {
+    const s: ListingData = {
       ...p,
       basicInfo: {
         ...rest,
@@ -229,7 +229,7 @@ export default function BasicInfoForm({
     if (state.forSaleBy !== undefined) {
       const { owner, company, privateOwner, ...o } = parent;
 
-      const s: TypeListingData = {
+      const s: ListingData = {
         ...o,
         basicInfo: {
           ...state,
@@ -274,7 +274,7 @@ export default function BasicInfoForm({
 
     if (state.forSaleBy !== undefined) {
       const { agent, company, privateOwner, ...o } = parent;
-      const s: TypeListingData = {
+      const s: ListingData = {
         ...o,
         basicInfo: {
           ...state,
@@ -320,7 +320,7 @@ export default function BasicInfoForm({
       // Remove other seller kinds from state
       const { agent, owner, privateOwner, ...o } = parent;
 
-      const s: TypeListingData = {
+      const s: ListingData = {
         ...o,
         basicInfo: {
           ...state,
@@ -369,7 +369,7 @@ export default function BasicInfoForm({
       // Remove other seller kinds from state
       const { agent, owner, company, ...o } = parent;
 
-      const s: TypeListingData = {
+      const s: ListingData = {
         ...o,
         basicInfo: {
           ...state,
@@ -407,17 +407,17 @@ export default function BasicInfoForm({
    * Set the home type to state
    * @param options List of home type items: [{id: multi-family-home, label: Multi-Family Home}, ...]
    */
-  function handleListingKind(options: ListingTypeValue[]): void {
+  function handleListingKind(options: ListingKindValue[]): void {
     if (options && options.length === 1 && options[0] !== null) {
       let init:
-        | TypeSingleFamilyHome
-        | TypeMultiFamilyHome
-        | TypeCondo
-        | TypeTownhouse
-        | TypeApartmentBuilding
-        | TypeApartment
-        | TypeManufacturedHome
-        | TypeLand = initLand;
+        | SingleFamilyHome
+        | MultiFamilyHome
+        | Condo
+        | Townhouse
+        | ApartmentBuilding
+        | Apartment
+        | ManufacturedHome
+        | Land = initLand;
 
       const id = options[0].id;
 
@@ -472,7 +472,7 @@ export default function BasicInfoForm({
         ...o
       } = parent;
 
-      const s: TypeListingData = {
+      const s: ListingData = {
         ...o,
         basicInfo: {
           ...state,
@@ -497,7 +497,7 @@ export default function BasicInfoForm({
     }
   }
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof state) {
     setState((s) => ({
       ...s,
       [fieldName]: object,
@@ -505,9 +505,9 @@ export default function BasicInfoForm({
   }
 
   function handleVerify(
-    actionName: TypeVerifyActionName,
-    obj: TypeBasicInfo,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    actionName: VerifyActionName,
+    obj: BasicInfo,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (actionName === "save" || actionName === "edit") {
       emit({
@@ -552,7 +552,7 @@ export default function BasicInfoForm({
 
       <div className="listing-form__section">
         <Header>Basic Information</Header>
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="description"
           placeholder="Listing Description"
@@ -560,7 +560,7 @@ export default function BasicInfoForm({
           min={20}
           max={120}
           parent={state.description}
-          emit={handleInputTypeStr}
+          emit={handleInputStr}
         />
         <TwoBtnRow<typeof state>
           leftBtnText="For Sale"
@@ -603,7 +603,7 @@ export default function BasicInfoForm({
         ) : null}
 
         {state.forSaleOrRent.value?.id === "for-sale" ? (
-          <Dropdown<ListingTypeValue>
+          <Dropdown<ListingKindValue>
             placeHolder={"What are you selling?"}
             menuItems={listingKindValuesForSale}
             isMulti={false}
@@ -617,7 +617,7 @@ export default function BasicInfoForm({
         ) : null}
 
         {state.forSaleOrRent.value?.id === "for-rent" ? (
-          <Dropdown<ListingTypeValue>
+          <Dropdown<ListingKindValue>
             placeHolder={"What are you renting?"}
             menuItems={listingKindValuesForRent}
             isMulti={false}
@@ -630,7 +630,7 @@ export default function BasicInfoForm({
           />
         ) : null}
 
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="price"
           placeholder={
@@ -646,9 +646,9 @@ export default function BasicInfoForm({
           formatType="USD-no-decimal"
           min={1}
           parent={state.price}
-          emit={handleInputTypeStr}
+          emit={handleInputStr}
         />
-        <InputTypeStr<typeof state>
+        <InputStr<typeof state>
           size="lg"
           fieldName="priceChange"
           groupSeparators={[","]}
@@ -665,8 +665,8 @@ export default function BasicInfoForm({
               : "New Price*"
           }
           originalPrice={state.price.number || 0}
-          parent={state.priceChange || initTypeStrOpt}
-          emit={handleInputTypeStr}
+          parent={state.priceChange || initStrOpt}
+          emit={handleInputStr}
         />
 
         {/* End Basic Info */}

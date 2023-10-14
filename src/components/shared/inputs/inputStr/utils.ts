@@ -1,5 +1,5 @@
 import React from "react";
-import { TypeFormField } from "../../../..";
+import * as T from "../../../../types/index";
 import isEmail from "validator/lib/isEmail";
 
 /**
@@ -350,7 +350,7 @@ export function getKeyDown(e: React.KeyboardEvent): string {
  * @returns true/false
  */
 export function invalidRequiredFieldWithoutErrorMsg(
-  field: TypeFormField
+  field: T.FormField
 ): boolean {
   if (
     field.required === true &&

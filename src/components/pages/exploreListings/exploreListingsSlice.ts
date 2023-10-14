@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { TypeFetchedListing, TypeLatLng } from "../../..";
+import type { FetchedListing, TypeLatLng } from "../../../types/index";
 
 export type MapMarkerSize = "small" | "large";
 
 export interface ExploreListingsState {
-  allFilteredListings: TypeFetchedListing[];
-  currentListings: TypeFetchedListing[];
-  currentFilteredListings: TypeFetchedListing[];
-  listingToOverlay: TypeFetchedListing | undefined;
-  hoveredListing: TypeFetchedListing | undefined;
+  allFilteredListings: FetchedListing[];
+  currentListings: FetchedListing[];
+  currentFilteredListings: FetchedListing[];
+  listingToOverlay: FetchedListing | undefined;
+  hoveredListing: FetchedListing | undefined;
   mapIsLoading: boolean;
   mapZoom: number;
   mapIsFullScreen: boolean;
@@ -43,7 +43,7 @@ export const exploreListingsSlice = createSlice({
     }),
     setAllFilteredListings: (
       state,
-      action: { payload: TypeFetchedListing[]; type: string }
+      action: { payload: FetchedListing[]; type: string }
     ) => ({
       ...state,
       allFilteredListings: action.payload,
@@ -54,7 +54,7 @@ export const exploreListingsSlice = createSlice({
     }),
     setCurrentFilteredListings: (
       state,
-      action: { payload: TypeFetchedListing[]; type: string }
+      action: { payload: FetchedListing[]; type: string }
     ) => ({
       ...state,
       currentFilteredListings: action.payload,
@@ -69,7 +69,7 @@ export const exploreListingsSlice = createSlice({
     }),
     setHoveredListing: (
       state,
-      action: { payload: TypeFetchedListing | undefined; type: string }
+      action: { payload: FetchedListing | undefined; type: string }
     ) => ({
       ...state,
       hoveredListing: action.payload,

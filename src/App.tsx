@@ -20,7 +20,7 @@ import ContactLandlord from "./components/pages/contactLandlord/ContactLandlord"
 import EditListing from "./components/pages/editListing/EditListing";
 import CreateListing from "./components/pages/createListing/CreateListing";
 import Profile from "./components/pages/profile/Profile";
-import ExploreListings from "./components/pages/exploreListings/ExploreListings";
+import ExploreListings from "./components/pages/exploreListings/ExploreListingsDesktop";
 import Home from "./components/pages/home/Home";
 import SignInPage from "./components/pages/signInPage/SignInPage";
 import SignUpPage from "./components/pages/signUpPage/SignUpPage";

@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import fetchAddressValidation from "./fetchAddressValidation";
-import { TypeAddressValidationApi_Response } from "../../../../../../index";
+import { AddressValidationApi_Response } from "../../../../../../types/index";
 
 interface Props {
   streetAddress: string;
@@ -17,14 +17,13 @@ export default async function getAddressValidationApiResponse({
   state,
   zipCode,
 }: Props) {
-  const response: TypeAddressValidationApi_Response =
-    await fetchAddressValidation({
-      streetAddress: streetAddress,
-      unitNumber: unitNumber,
-      city: city,
-      state: state,
-      zipCode: zipCode,
-    });
+  const response: AddressValidationApi_Response = await fetchAddressValidation({
+    streetAddress: streetAddress,
+    unitNumber: unitNumber,
+    city: city,
+    state: state,
+    zipCode: zipCode,
+  });
 
   if (response) {
     // request failed

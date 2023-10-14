@@ -12,11 +12,15 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../../UserProvider";
-import { TypeAddressValidationApi_Response, TypeImage } from "../../../index";
+import {
+  AddressValidationApi_Response,
+  Image,
+  ListingData,
+} from "../../../types/index";
 import { initListingData } from "../../../initialValues";
 import UserAcknowledgementForm from "./components/UserAcknowledgementForm";
 import PageBtns from "./components/PageBtns";
-import { TypeListingData } from "../../../index";
+
 // import Review from "./components/ReviewForm";
 // import Uploads from "./components/UploadsForm";
 import SingleFamilyHomeForm from "./components/SingleFamilyHomeForm";
@@ -38,7 +42,7 @@ import Footer from "../../shared/footer/Footer";
 export default function CreateListing(): JSX.Element {
   const { userId, isAuthenticated, isLoading } = useUserContext();
   const [loading, setLoading] = useState(false);
-  const [state, setState] = useState<TypeListingData>(initListingData);
+  const [state, setState] = useState<ListingData>(initListingData);
   const formRef = useRef<HTMLFormElement | null>(null);
   const navigate = useNavigate();
 
@@ -100,9 +104,9 @@ export default function CreateListing(): JSX.Element {
     /**
      * Store an image in firestore
      * @param file File
-     * @returns {file: undefined, url: string} of TypeImage
+     * @returns {file: undefined, url: string} of Image
      */
-    async function storeImage(file: File): Promise<TypeImage> {
+    async function storeImage(file: File): Promise<Image> {
       return new Promise((resolve, reject) => {
         const storage = getStorage();
         const fileName = makeFileNameForUpload(state.userRef.uid, file.name);
@@ -161,7 +165,7 @@ export default function CreateListing(): JSX.Element {
       return;
     });
 
-    let formDataCopy: TypeListingData = { ...state };
+    let formDataCopy: ListingData = { ...state };
 
     if (_images && _images.length > 0) {
       formDataCopy = {
@@ -230,8 +234,8 @@ export default function CreateListing(): JSX.Element {
   }
 
   function handleEmit(
-    obj: TypeListingData,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    obj: ListingData,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     setState(obj);
 

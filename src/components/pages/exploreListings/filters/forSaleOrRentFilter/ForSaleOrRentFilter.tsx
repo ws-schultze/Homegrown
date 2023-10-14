@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 import assertIsNode from "../../../../utils/assertIsNode";
-import { TypeForSaleOrRentValue } from "../../../../..";
+import { ForSaleOrRentValue } from "../../../../../types/index";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { setForSaleOrRent, setShowMenu } from "./forSaleOrRentSlice";
 import { useDispatch } from "react-redux";
@@ -44,7 +44,7 @@ export default function ForSaleOrRentFilter() {
 
   function handleSelectedItem(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    item: TypeForSaleOrRentValue
+    item: ForSaleOrRentValue
   ) {
     // Keep menu from closing when an item is clicked
     e.stopPropagation();

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TypeFetchedListing, TypeListingData } from "..";
+import * as T from "../types/index";
+
 import { toast } from "react-toastify";
 import { db } from "../firebase.config";
 import {
@@ -19,19 +20,19 @@ export default function useFetchListings(
   collectionRef: CollectionReference,
   queryConstraints: QueryConstraint[]
 ): {
-  fetchedListings: TypeFetchedListing[] | null;
+  fetchedListings: T.FetchedListing[] | null;
   isFetchingListings: boolean;
 } {
   const [isFetchingListings, setIsFetchingListings] = useState<boolean>(false);
   const [fetchedListings, setFetchedListings] =
-    useState<TypeFetchedListing[] | null>(null);
+    useState<T.FetchedListing[] | null>(null);
 
   // console.log("Fetching listings data");
 
   useEffect(() => {
     async function fetchListings() {
       setIsFetchingListings(true);
-      const listings: TypeFetchedListing[] = [];
+      const listings: T.FetchedListing[] = [];
       const q = query(collectionRef, ...queryConstraints);
       // https://firebase.google.com/docs/firestore/query-data/order-limit-data
 
@@ -39,7 +40,7 @@ export default function useFetchListings(
         .then((res: DocumentData) =>
           res.forEach((r: DocumentData) => {
             const _id: string = r.id;
-            const _data: TypeListingData = r.data();
+            const _data: T.ListingData = r.data();
             listings.push({
               id: _id,
               data: _data,

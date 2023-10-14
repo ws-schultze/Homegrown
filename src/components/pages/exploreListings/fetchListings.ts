@@ -5,11 +5,11 @@ import {
   limit,
   query,
 } from "firebase/firestore";
-import { TypeFetchedListing } from "../../..";
+import { FetchedListing } from "../../../types/index";
 import { db } from "../../../firebase.config";
 
 export default async function fetchListings() {
-  let listings: TypeFetchedListing[] = [];
+  let listings: FetchedListing[] = [];
   const q = query(collection(db, "listings"), ...[limit(500)]);
 
   await getDocs(q)

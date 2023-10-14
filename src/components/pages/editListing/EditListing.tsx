@@ -13,7 +13,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../../UserProvider";
-import { TypeAddressValidationApi_Response, TypeListingData } from "../../..";
+import {
+  AddressValidationApi_Response,
+  ListingData,
+} from "../../../types/index";
 import { initListingData } from "../../../initialValues";
 import Review from "../createListing/components/ReviewForm";
 import PageBtns from "../createListing/components/PageBtns";
@@ -34,7 +37,7 @@ import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
 
 export default function EditListing() {
   const [loading, setLoading] = useState(false);
-  const [state, setState] = useState<TypeListingData>(initListingData);
+  const [state, setState] = useState<ListingData>(initListingData);
   const { userId, isAuthenticated, isLoading } = useUserContext();
   const navigate = useNavigate();
   const params = useParams();
@@ -66,7 +69,7 @@ export default function EditListing() {
         const docRef = doc(db, "listings", params.listingId);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          const listing = docSnap.data() as TypeListingData;
+          const listing = docSnap.data() as ListingData;
           setState({ ...listing });
           setLoading(false);
         } else {
@@ -275,8 +278,8 @@ export default function EditListing() {
   }
 
   function handleEmit(
-    obj: TypeListingData,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    obj: ListingData,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     setState(obj);
   }

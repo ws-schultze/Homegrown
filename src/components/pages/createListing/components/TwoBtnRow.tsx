@@ -3,24 +3,24 @@ import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import {
   TypeBool,
   TypeBoolValue,
-  TypeForRentBy,
-  TypeForRentByValue,
-  TypeForSaleBy,
-  TypeForSaleByValue,
-  TypeForSaleOrRent,
-  TypeForSaleOrRentValue,
-} from "../../../../index";
+  ForRentBy,
+  ForRentByValue,
+  ForSaleBy,
+  ForSaleByValue,
+  ForSaleOrRent,
+  ForSaleOrRentValue,
+} from "../../../../types/index";
 
 export type TypeTwoBtnRowState =
   | TypeBool
-  | TypeForSaleOrRent
-  | TypeForRentBy
-  | TypeForSaleBy;
+  | ForSaleOrRent
+  | ForRentBy
+  | ForSaleBy;
 export type BtnValue =
   | TypeBoolValue
-  | TypeForSaleOrRentValue
-  | TypeForRentByValue
-  | TypeForSaleByValue;
+  | ForSaleOrRentValue
+  | ForRentByValue
+  | ForSaleByValue;
 
 interface Props<T> {
   /** Default value is "Yes" */

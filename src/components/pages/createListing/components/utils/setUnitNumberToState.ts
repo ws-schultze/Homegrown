@@ -1,15 +1,11 @@
-import {
-  TypeAddress,
-  TypeAddressOptional,
-  TypeStr,
-} from "../../../../../index";
+import { Address, AddressOptional, Str } from "../../../../../types/index";
 /**
  * Set unit number to state and update formatted address to include unit number state.
  * @returns state object of type T
  */
 export default function setUnitNumberToState<
-  T extends TypeAddress | TypeAddressOptional
->(state: T, unitNumberObj: TypeStr): T {
+  T extends Address | AddressOptional
+>(state: T, unitNumberObj: Str): T {
   // Create formatted unit number
   const formattedAddress =
     unitNumberObj.value === ""

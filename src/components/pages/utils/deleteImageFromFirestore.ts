@@ -1,8 +1,8 @@
 import { deleteObject, getStorage, ref } from "firebase/storage";
-import { TypeImage } from "../../..";
+import { Image } from "../../../types/index";
 
 // Delete the file
-export default async function deleteImageFromFirestore(image: TypeImage) {
+export default async function deleteImageFromFirestore(image: Image) {
   const storage = getStorage();
   const imageRef = ref(storage, "images/" + image.name);
 

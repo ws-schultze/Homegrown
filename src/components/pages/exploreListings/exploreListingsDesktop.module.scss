@@ -1,0 +1,126 @@
+.fade {
+  opacity: 0;
+  animation-name: fadeIn;
+  animation-duration: 500ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.container {
+  display: flex;
+  gap: 5px;
+  height: calc(100vh - var(--height-navbar));
+  margin-top: var(--height-navbar);
+}
+
+.page-wrap {
+  display: flex;
+  gap: 5px;
+  height: calc(100vh - var(--height-navbar));
+  margin-top: var(--height-navbar);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - var(--height-navbar));
+
+  .page-content {
+    position: relative;
+    display: flex;
+    height: calc(100vh - var(--height-navbar));
+    overflow: hidden;
+  }
+}
+
+.filters {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  padding: 5px;
+  gap: 5px;
+  height: 64px;
+}
+
+.search-box {
+  width: 500px;
+  height: 100%;
+  border-radius: var(--border-radius);
+  padding: 0 10px;
+  color: var(--color-text);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  font-size: 1.2rem;
+
+  &:focus {
+    outline: 1px solid var(--color-primary) !important;
+  }
+}
+
+.search-results-header {
+  color: var(--color-text);
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  margin: 5px 5px 0;
+
+  p {
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.listing-cards-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 755px;
+  gap: 5px;
+  overflow: hidden scroll;
+  color: var(--color-text);
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  width: 755px;
+  gap: 5px;
+  overflow: hidden scroll;
+  color: var(--color-text);
+  padding: 0px;
+}
+
+.listing-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--color-text);
+  height: 100%;
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 0px;
+    padding: 0px;
+    justify-content: center;
+    flex-grow: 1;
+
+    li {
+      list-style-type: none;
+    }
+  }
+}
+
+.map-container {
+  height: 100%;
+  width: calc(100vw - var(--width-map-page__listing-cards));
+  background: var(--color-bg-primary);
+}

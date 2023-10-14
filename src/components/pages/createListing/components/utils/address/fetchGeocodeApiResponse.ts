@@ -1,4 +1,4 @@
-import { TypeGeocoderApi_Response } from "../../../../../../index";
+import { GeocoderApi_Response } from "../../../../../../types/index";
 // Use a formatted address string to get geolocation and set it to formData
 // https://developers.google.com/maps/documentation/geocoding/start#geocoding-request-and-response-latitudelongitude-lookup
 
@@ -9,7 +9,7 @@ import { TypeGeocoderApi_Response } from "../../../../../../index";
 export default async function fetchGeocodeApiResponse(
   formattedAddress: string
 ): // Promise<google.maps.LatLngLiteral>
-Promise<TypeGeocoderApi_Response> {
+Promise<GeocoderApi_Response> {
   const response = await fetch(
     `https://maps.googleapis.com/maps/api/geocode/json?address=${formattedAddress}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
   );

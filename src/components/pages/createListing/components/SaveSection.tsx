@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
-  TypeAddressValidationApi_Response,
-  TypeAddress,
-  TypeVerifyActionName,
-  TypeImages,
-} from "../../../../index";
+  AddressValidationApi_Response,
+  Address,
+  VerifyActionName,
+  Images,
+  AddressOptional,
+  Str,
+  TypeBool,
+} from "../../../../types/index";
 import setErrorMsg from "./utils/setErrorMsg";
 import setBeingVerifiedToState from "./utils/address/setBeingVerifiedToState";
 import { toast } from "react-toastify";
 import getAddressValidationApiResponse from "./utils/address/getAddressValidationApiResponse";
-import { TypeAddressOptional, TypeStr, TypeBool } from "../../../../index";
+
 import Spinner from "../../../shared/loaders/Spinner";
 
 interface Props<T> {
@@ -19,15 +22,13 @@ interface Props<T> {
   needsAddressValidation: boolean;
   children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
   emit: (
-    actionName: TypeVerifyActionName,
+    actionName: VerifyActionName,
     obj: T,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) => void;
 }
 
-export default function SaveSection<
-  T extends TypeAddress | TypeAddressOptional
->({
+export default function SaveSection<T extends Address | AddressOptional>({
   parentInitialState,
   parent,
   needsAddressValidation,
@@ -35,9 +36,7 @@ export default function SaveSection<
   emit,
 }: Props<T>): JSX.Element {
   const [loading, setLoading] = useState(false);
-  let addressValidationApiResponse:
-    | TypeAddressValidationApi_Response
-    | undefined;
+  let addressValidationApiResponse: AddressValidationApi_Response | undefined;
 
   function handleClear() {
     emit("save", parentInitialState);
@@ -54,7 +53,7 @@ export default function SaveSection<
     }
 
     parentKeys.forEach((k) => {
-      const field = parent[k] as TypeStr | TypeBool | TypeImages;
+      const field = parent[k] as Str | TypeBool | Images;
 
       if (field && field.required === true && field.valid === false) {
         // Only provide an error message if it doesn't already exist

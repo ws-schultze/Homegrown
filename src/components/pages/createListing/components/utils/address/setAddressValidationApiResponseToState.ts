@@ -1,13 +1,13 @@
 import {
-  TypeAddressValidationApi_Response,
-  TypeAddressValidationApi_Response_AddressComponent,
-} from "../../../../../../index";
-
-import { TypeAddress, TypeAddressOptional } from "../../../../../../index";
+  Address,
+  AddressOptional,
+  AddressValidationApi_Response,
+  AddressValidationApi_Response_AddressComponent,
+} from "../../../../../../types/index";
 
 interface Props<T> {
   state: T;
-  response: TypeAddressValidationApi_Response | null;
+  response: AddressValidationApi_Response | null;
 }
 
 /**
@@ -16,7 +16,7 @@ interface Props<T> {
  * proper formatting.
  */
 export default function setAddressValidationApiResponseToState<
-  T extends TypeAddress | TypeAddressOptional
+  T extends Address | AddressOptional
 >({ state, response }: Props<T>): T {
   if (!response || !response.result) {
     throw new Error("result must be defined and non-null");
@@ -38,7 +38,7 @@ export default function setAddressValidationApiResponseToState<
 
   // Get streetAddress, city, state, zipCode and country from response
   for (const component of response!.result?.address
-    .addressComponents as TypeAddressValidationApi_Response_AddressComponent[]) {
+    .addressComponents as AddressValidationApi_Response_AddressComponent[]) {
     const componentType = component.componentType;
 
     switch (componentType) {

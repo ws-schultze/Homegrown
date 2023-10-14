@@ -3,12 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import PageBtns from "./PageBtns";
 import {
-  TypeAddressValidationApi_Response,
-  TypeImage,
-  TypeListingData,
-  TypeUploads,
-  TypeVerifyActionName,
-} from "../../../..";
+  AddressValidationApi_Response,
+  Image,
+  ListingData,
+  Uploads,
+  VerifyActionName,
+} from "../../../../types/index";
 import { initUploads } from "../../../../initialValues";
 import SaveSection from "./SaveSection";
 import { ReactComponent as PlusIcon } from "../../../../assets/svg/plusIcon.svg";
@@ -20,14 +20,14 @@ import makeFileNameForUpload from "../../utils/makeFileNameForUpload";
 import { Header } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   prevPage: () => void;
   nextPage: () => void;
   toPageNumber?: (number: number) => void;
   deleteListing: () => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
 }
 
 export default function UploadsForm({
@@ -40,7 +40,7 @@ export default function UploadsForm({
   currentPage,
   emit,
 }: Props): JSX.Element {
-  const [state, setState] = useState<TypeUploads>(parent.uploads);
+  const [state, setState] = useState<Uploads>(parent.uploads);
   // const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false); // used for conditional styling
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -51,7 +51,7 @@ export default function UploadsForm({
   }, [parent]);
 
   function handleUploads(files: File[]) {
-    let images: TypeImage[] = [];
+    let images: Image[] = [];
     let toBig: string[] = [];
 
     if (files.length > 0) {
@@ -137,14 +137,14 @@ export default function UploadsForm({
   /**
    * Remove the selected preview from local state
    */
-  const onDelete = (e: React.MouseEvent, image: TypeImage) => {
+  const onDelete = (e: React.MouseEvent, image: Image) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (window.confirm("Delete this file from uploads?")) {
       const index = state.images.value.map((img) => img.url).indexOf(image.url);
 
-      let newValue: TypeImage[] = [...state.images.value];
+      let newValue: Image[] = [...state.images.value];
       newValue.splice(index, 1);
 
       if (newValue.length > 0) {
@@ -170,9 +170,9 @@ export default function UploadsForm({
   };
 
   function handleVerify(
-    actionName: TypeVerifyActionName,
+    actionName: VerifyActionName,
     obj: typeof state,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (actionName === "save" || actionName === "edit") {
       console.log("saving");

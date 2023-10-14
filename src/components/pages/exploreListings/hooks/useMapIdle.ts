@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CommonStateStatus } from "../../../../common/commonSlice";
-import { TypeFetchedListing } from "../../../..";
+import { FetchedListing } from "../../../../types/index";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { getCurrentListings, getMarkerSize } from "../map/mapHelpers";
 import {
@@ -23,8 +23,8 @@ function useMapIdle(
   map: google.maps.Map | undefined,
   mapId: string,
   status: CommonStateStatus,
-  listings: TypeFetchedListing[],
-  filteredListings: TypeFetchedListing[],
+  listings: FetchedListing[],
+  filteredListings: FetchedListing[],
   minZoomForLargeMarkers: number,
   dispatch: Dispatch<AnyAction>
 ) {

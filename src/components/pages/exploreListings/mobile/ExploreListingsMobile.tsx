@@ -1,42 +1,24 @@
-import { useEffect, useRef } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-
-import BedAndBathFilter from "./filters/bedAndBathFilter/BedAndBathFilter";
-import {
-  FiltersBar,
-  ListingCards,
-  ListingCardsWrap,
-  MapContainer,
-  Page,
-  PageWrap,
-  SearchBox,
-  SearchResultsHeader,
-} from "./styledComponents";
-import Footer from "../../shared/footer/Footer";
-import { Wrapper } from "@googlemaps/react-wrapper";
-import { renderMap } from "./map/mapHelpers";
-import { useParams } from "react-router";
+import React, { useEffect, useRef } from "react";
+import styles from "./exploreListingsMobile.module.scss";
 import { useDispatch } from "react-redux";
-import { setHoveredListing, setListingToOverlay } from "./exploreListingsSlice";
-import ExploreListingsMap from "./map/ExploreListingsMap";
-import ListingOverlay from "../listingOverlay/ListingOverlay";
-import ForSaleOrRentFilter from "./filters/forSaleOrRentFilter/ForSaleOrRentFilter";
-import PriceFilter from "./filters/priceFilter/PriceFilter";
-import ListingsTypeFilter from "./filters/listingTypeFilter/ListingTypeFilter";
-import ListingCard from "../../shared/listingCard/ListingCard";
-import { ListingTypeValue, TypeForSaleOrRentValue, TypeStr } from "../../..";
+import { useAppSelector } from "../../../../redux/hooks";
+import { useParams } from "react-router";
+import {
+  setHoveredListing,
+  setListingToOverlay,
+} from "../exploreListingsSlice";
+import ForSaleOrRentFilter from "../filters/forSaleOrRentFilter/ForSaleOrRentFilter";
+import PriceFilter from "../filters/priceFilter/PriceFilter";
+import ListingsTypeFilter from "../filters/listingTypeFilter/ListingTypeFilter";
+import BedAndBathFilter from "../filters/bedAndBathFilter/BedAndBathFilter";
+import ListingCard from "../../../shared/listingCard/ListingCard";
+import Footer from "../../../shared/footer/Footer";
+import { Wrapper } from "@googlemaps/react-wrapper";
+import { renderMap } from "../map/mapHelpers";
+import ExploreListingsMap from "../map/ExploreListingsMap";
+import ListingOverlayPage from "../../listingOverlay/ListingOverlayPage";
 
-export interface ExploreListingsFilters {
-  place: google.maps.places.PlaceResult | undefined;
-  forSaleOrRent: TypeForSaleOrRentValue;
-  lowPrice: TypeStr;
-  highPrice: TypeStr;
-  listingTypes: ListingTypeValue[];
-  beds: number | null;
-  baths: number | null;
-}
-
-export default function ExploreListings(): JSX.Element {
+export default function ExploreListingsMobile(): JSX.Element {
   console.log("ExploreListings: rendering");
   const dispatch = useDispatch();
   const commonState = useAppSelector((state) => state.common);
@@ -58,7 +40,7 @@ export default function ExploreListings(): JSX.Element {
     /**
      * Find a listing that has the same formatted address as the one provided
      * in the params
-     * @returns TypeFetchedListing | undefined
+     * @returns FetchedListing | undefined
      */
     function handleListingToOverlay() {
       if (!params.listingAddress) {
@@ -107,10 +89,11 @@ export default function ExploreListings(): JSX.Element {
   // }, [mapRef.current]);
 
   return (
-    <PageWrap id="map-page-wrap">
-      <Page>
-        <FiltersBar id="map-page-filters-bar">
-          <SearchBox
+    <div className={styles.container}>
+      <div className={styles.page}>
+        <div className={styles.filters}>
+          <input
+            className={styles["search-box"]}
             type="search"
             id="place-filter-searchbox"
             placeholder="City, PostalCode, County, or State"
@@ -122,30 +105,31 @@ export default function ExploreListings(): JSX.Element {
           <PriceFilter />
           <ListingsTypeFilter />
           <BedAndBathFilter />
-        </FiltersBar>
+        </div>
 
-        <main>
-          <ListingCardsWrap>
-            <ListingCards>
+        <div className={styles["page-content"]}>
+          <div className={styles["listing-cards-container"]}>
+            <div className={styles["listing-cards"]}>
               {!place && !params.placeFormattedAddress ? (
-                <SearchResultsHeader
+                <div
+                  className={styles["search-results-header"]}
                   style={{ border: " 2px solid orange" }}
-                >{`Enter a location 👆 to search for listings`}</SearchResultsHeader>
+                >{`Enter a location 👆 to search for listings`}</div>
               ) : null}
 
               {place ? (
-                <SearchResultsHeader>
+                <div className={styles["search-results-header"]}>
                   {`Search results for ${
                     place ? place.formatted_address : null
                   }`}
                   <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                </SearchResultsHeader>
+                </div>
               ) : null}
 
               {!place ? (
-                <SearchResultsHeader>
+                <div className={styles["search-results-header"]}>
                   <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                </SearchResultsHeader>
+                </div>
               ) : null}
 
               <ul>
@@ -167,8 +151,8 @@ export default function ExploreListings(): JSX.Element {
                   : null}
               </ul>
               <Footer />
-            </ListingCards>
-          </ListingCardsWrap>
+            </div>
+          </div>
 
           <Wrapper
             apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
@@ -176,13 +160,13 @@ export default function ExploreListings(): JSX.Element {
             version="beta"
             libraries={["places", "marker"]}
           >
-            <MapContainer>
+            <div className={styles["map-container"]}>
               <ExploreListingsMap />
-            </MapContainer>
+            </div>
           </Wrapper>
-        </main>
-      </Page>
-      {pageState.listingToOverlay ? <ListingOverlay /> : null}
-    </PageWrap>
+        </div>
+      </div>
+      {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
+    </div>
   );
 }

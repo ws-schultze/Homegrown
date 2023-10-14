@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
-import { TypeFetchedListing } from "..";
+import { FetchedListing } from "../types/index";
 import fetchListings from "./commonAPI";
 
 export type CommonStateStatus = "idle" | "loading" | "succeeded" | "failed";
@@ -11,7 +11,7 @@ export type CommonStateStatus = "idle" | "loading" | "succeeded" | "failed";
 export interface CommonState {
   status: CommonStateStatus;
   error: string | null;
-  listings: TypeFetchedListing[];
+  listings: FetchedListing[];
 }
 
 export const initialCommonState: CommonState = {
@@ -37,7 +37,7 @@ export const commonSlice = createSlice({
   reducers: {
     setCommonListings: (
       state,
-      action: { payload: TypeFetchedListing[]; type: string }
+      action: { payload: FetchedListing[]; type: string }
     ) => ({
       ...state,
       listings: action.payload,

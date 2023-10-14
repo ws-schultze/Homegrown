@@ -2,7 +2,7 @@ import { useRef, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom/client";
 import { ReactComponent as ImageSVG } from "../../../../assets/svg/image-regular.svg";
 
-import { TypeBoundaries, TypeFetchedListing } from "../../../..";
+import { Boundaries, FetchedListing } from "../../../../types/index";
 import { useNavigate } from "react-router-dom";
 import { MapBoundaryBtn } from "./styledComponents";
 import clearMarkerContentClassList, {
@@ -76,7 +76,7 @@ export default function ExploreListingsMap(): JSX.Element {
     useRef<google.maps.places.SearchBox | undefined>(undefined);
   const smallMarkersRef = useRef<google.maps.marker.AdvancedMarkerView[]>([]);
   const largeMarkersRef = useRef<google.maps.marker.AdvancedMarkerView[]>([]);
-  const boundariesRef = useRef<TypeBoundaries>(null);
+  const boundariesRef = useRef<Boundaries>(null);
   const mapTypeIdRef = useRef<MapType>("roadmap");
   const commonState = useAppSelector((state) => state.common);
   const pageState = useAppSelector((state) => state.exploreListings);
@@ -104,7 +104,7 @@ export default function ExploreListingsMap(): JSX.Element {
       markerSize,
     }: {
       map: google.maps.Map;
-      listings: TypeFetchedListing[];
+      listings: FetchedListing[];
       markerSize: "large" | "small";
     }): google.maps.marker.AdvancedMarkerView[] => {
       let markers: google.maps.marker.AdvancedMarkerView[] = [];
@@ -319,7 +319,7 @@ export default function ExploreListingsMap(): JSX.Element {
    * @param smallMarkers google.maps.marker.AdvancedMarkerView[]
    * @param largeMarkers google.maps.marker.AdvancedMarkerView[]
    * @param minZoomForLargeMarkers number
-   * @param currentFilteredListings TypeFetchedListing[]
+   * @param currentFilteredListings FetchedListing[]
    */
   function updateMarkers(
     map: google.maps.Map,
@@ -385,7 +385,7 @@ export default function ExploreListingsMap(): JSX.Element {
   }
 
   const setupHideBoundaryBtn = useCallback(
-    (map: google.maps.Map, boundaries: TypeBoundaries) => {
+    (map: google.maps.Map, boundaries: Boundaries) => {
       const hideBoundaryBtn = makeElement({
         component: (
           <MapBoundaryBtn type="button">Remove Boundary</MapBoundaryBtn>
@@ -443,7 +443,7 @@ export default function ExploreListingsMap(): JSX.Element {
   function setupBoundaryForPlace(
     map: google.maps.Map,
     place: google.maps.places.PlaceResult,
-    boundaries: TypeBoundaries,
+    boundaries: Boundaries,
     boundaryStyle: google.maps.FeatureStyleOptions
   ) {
     if (place && place.geometry && place.geometry.location && place.place_id) {
@@ -794,11 +794,11 @@ export default function ExploreListingsMap(): JSX.Element {
      * Given a hovered listing (which comes from a hovered listing card), change the bg color
      * of that listing's map marker. Color change will happen to either a small marker or large,
      * depending on which current map markers are provided
-     * @param hoveredListing TypeFetchedListing | null
+     * @param hoveredListing FetchedListing | null
      * @param markers google.maps.marker.AdvancedMarkerView[]
      */
     function handleHoveredListing(
-      hoveredListing: TypeFetchedListing | undefined,
+      hoveredListing: FetchedListing | undefined,
       markerSize: MapMarkerSize
     ) {
       // Change small marker bg on hover

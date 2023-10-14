@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {
-  TypeStr,
-  TypeHeatingOption,
-  TypeAddressValidationApi_Response,
-  TypeVerifyActionName,
-  TypeListingData,
-  TypeApartmentBuilding,
-} from "../../../../index";
-import { initApartmentBuilding } from "../../../../initialValues";
+  Str,
+  HeatingOption,
+  AddressValidationApi_Response,
+  VerifyActionName,
+  ListingData,
+  ApartmentBuilding,
+  CoolingOption,
+  WaterOption,
+  PowerOption,
+} from "../../../../types/index";
+import {} from "../../../../initialValues";
 import Dropdown from "../../../shared/dropdown/Dropdown";
 import {
   heatingOptions,
   coolingOptions,
   waterOptions,
   powerOptions,
+  initApartmentBuilding,
 } from "../../../../initialValues";
-import {
-  TypeCoolingOption,
-  TypeWaterOption,
-  TypePowerOption,
-} from "../../../../index";
-import InputTypeStr from "../../../shared/inputs/inputTypeStr/InputTypeStr";
+import InputStr from "../../../shared/inputs/inputStr/InputStr";
 // import { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
@@ -29,14 +28,14 @@ import PageBtns from "./PageBtns";
 import { Header } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   prevPage: () => void;
   nextPage: () => void;
   toPageNumber?: (number: number) => void;
   deleteListing: () => void;
   pageNumbers?: number[];
   currentPage?: number;
-  emit: (obj: TypeListingData) => void;
+  emit: (obj: ListingData) => void;
 }
 
 export default function ApartmentBuildingForSaleForm({
@@ -49,9 +48,7 @@ export default function ApartmentBuildingForSaleForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<TypeApartmentBuilding>(
-    initApartmentBuilding
-  );
+  const [state, setState] = useState<ApartmentBuilding>(initApartmentBuilding);
 
   /**
    * Keeps inputs showing values in parent state on page change
@@ -109,7 +106,7 @@ export default function ApartmentBuildingForSaleForm({
   //   }));
   // }
 
-  function handleInputTypeStr(object: TypeStr, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof state) {
     setState((s) => ({
       ...s,
       [fieldName]: object,
@@ -117,9 +114,9 @@ export default function ApartmentBuildingForSaleForm({
   }
 
   function handleVerify(
-    actionName: TypeVerifyActionName,
+    actionName: VerifyActionName,
     obj: typeof state,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (actionName === "save" || actionName === "edit") {
       emit({
@@ -156,7 +153,7 @@ export default function ApartmentBuildingForSaleForm({
         <Header>Apartment Building Features</Header>
 
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="totalUnits"
             placeholder="Units"
@@ -164,9 +161,9 @@ export default function ApartmentBuildingForSaleForm({
             min={1}
             max={20}
             parent={state.totalUnits}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="yearBuilt"
             placeholder="Year Built"
@@ -174,12 +171,12 @@ export default function ApartmentBuildingForSaleForm({
             min={1}
             max={new Date().getFullYear()}
             parent={state.yearBuilt}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="stories"
             placeholder="Stories"
@@ -187,10 +184,10 @@ export default function ApartmentBuildingForSaleForm({
             min={1}
             max={10}
             parent={state.stories}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
 
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="acres"
             placeholder="Lot Size (Acres)"
@@ -198,12 +195,12 @@ export default function ApartmentBuildingForSaleForm({
             formatType="comma-separated-with-decimal"
             min={0.01}
             parent={state.acres}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="squareFeet"
             placeholder="Square Feet"
@@ -211,9 +208,9 @@ export default function ApartmentBuildingForSaleForm({
             formatType="comma-separated-no-decimal"
             min={100}
             parent={state.squareFeet}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="bedrooms"
             placeholder="Bedrooms"
@@ -221,12 +218,12 @@ export default function ApartmentBuildingForSaleForm({
             min={1}
             max={50}
             parent={state.bedrooms}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
         <div className="listing-form__flex-row">
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="fullBathrooms"
             placeholder="Full Baths"
@@ -234,9 +231,9 @@ export default function ApartmentBuildingForSaleForm({
             min={0}
             max={100}
             parent={state.fullBathrooms}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
-          <InputTypeStr<typeof state>
+          <InputStr<typeof state>
             size="md"
             fieldName="halfBathrooms"
             placeholder="Half Baths"
@@ -244,11 +241,11 @@ export default function ApartmentBuildingForSaleForm({
             min={0}
             max={100}
             parent={state.halfBathrooms}
-            emit={handleInputTypeStr}
+            emit={handleInputStr}
           />
         </div>
 
-        <Dropdown<TypeHeatingOption>
+        <Dropdown<HeatingOption>
           placeHolder={"Select Heating Option(s)"}
           parent={state.heating.value}
           menuItems={heatingOptions}
@@ -257,11 +254,9 @@ export default function ApartmentBuildingForSaleForm({
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label="Heating"
-          emit={(options) =>
-            handleOptions<TypeHeatingOption>(options, "heating")
-          }
+          emit={(options) => handleOptions<HeatingOption>(options, "heating")}
         />
-        <Dropdown<TypeCoolingOption>
+        <Dropdown<CoolingOption>
           placeHolder={"Select Cooling Option(s)"}
           menuItems={coolingOptions}
           isMulti={true}
@@ -270,11 +265,9 @@ export default function ApartmentBuildingForSaleForm({
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label="Cooling"
-          emit={(options) =>
-            handleOptions<TypeCoolingOption>(options, "cooling")
-          }
+          emit={(options) => handleOptions<CoolingOption>(options, "cooling")}
         />
-        <Dropdown<TypeWaterOption>
+        <Dropdown<WaterOption>
           placeHolder={"Select Water Option(s)"}
           parent={state.water.value}
           menuItems={waterOptions}
@@ -283,9 +276,9 @@ export default function ApartmentBuildingForSaleForm({
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label="Water"
-          emit={(options) => handleOptions<TypeWaterOption>(options, "water")}
+          emit={(options) => handleOptions<WaterOption>(options, "water")}
         />
-        <Dropdown<TypePowerOption>
+        <Dropdown<PowerOption>
           placeHolder={"Select Power Option(s)"}
           parent={state.power.value}
           menuItems={powerOptions}
@@ -294,7 +287,7 @@ export default function ApartmentBuildingForSaleForm({
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label="Power"
-          emit={(options) => handleOptions<TypePowerOption>(options, "power")}
+          emit={(options) => handleOptions<PowerOption>(options, "power")}
         />
 
         {/* End features */}

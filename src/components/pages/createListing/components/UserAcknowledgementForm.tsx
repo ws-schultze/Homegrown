@@ -1,19 +1,19 @@
 import React from "react";
 import PageBtns from "./PageBtns";
 import {
-  TypeAddressValidationApi_Response,
-  TypeListingData,
-} from "../../../..";
+  AddressValidationApi_Response,
+  ListingData,
+} from "../../../../types/index";
 import { Header } from "./styledComponents";
 
 interface Props {
-  parent: TypeListingData;
+  parent: ListingData;
   nextPage: () => void;
   toPageNumber?: (number: number) => void;
   deleteListing: () => void;
   emit: (
-    obj: TypeListingData,
-    addressValidationApiResponse?: TypeAddressValidationApi_Response
+    obj: ListingData,
+    addressValidationApiResponse?: AddressValidationApi_Response
   ) => void;
   pageNumbers: number[];
   currentPage: number;

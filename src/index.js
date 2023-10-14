@@ -19,6 +19,7 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "./ThemeProvider";
 import { UserProvider } from "./UserProvider";
 import { MapContextProvider } from "./MapProvider";
+import { ScreenSizeProvider } from "./ScreenSizeProvider";
 
 // Load all listings before app renders
 store.dispatch(fetchListingsAsync());
@@ -30,7 +31,9 @@ root.render(
       <ThemeProvider>
         <UserProvider>
           <MapContextProvider>
-            <App />
+            <ScreenSizeProvider>
+              <App />
+            </ScreenSizeProvider>
           </MapContextProvider>
         </UserProvider>
       </ThemeProvider>
