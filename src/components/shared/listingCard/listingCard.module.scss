@@ -17,11 +17,12 @@
   display: flex;
   flex-direction: column;
   height: 380px;
-  width: 360px;
+  width: 320px;
   margin: auto;
   border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: var(--box-shadow);
+  // Messes up the swiper if shadow is here
+  // box-shadow: var(--box-shadow);
   background: var(--color-bg-primary);
   border: var(--border);
   &:hover {

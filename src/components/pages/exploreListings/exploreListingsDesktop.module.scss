@@ -84,14 +84,14 @@
 .listing-cards-container {
   display: flex;
   flex-direction: column;
-  min-width: 755px;
+  // min-width: 755px;
   gap: 5px;
   overflow: hidden scroll;
   color: var(--color-text);
   padding: 0px;
   display: flex;
   flex-direction: column;
-  width: 755px;
+  width: 670px;
   gap: 5px;
   overflow: hidden scroll;
   color: var(--color-text);
@@ -121,6 +121,7 @@
 
 .map-container {
   height: 100%;
-  width: calc(100vw - var(--width-map-page__listing-cards));
+  // Use width of the listing-card-container
+  width: calc(100vw - 670px);
   background: var(--color-bg-primary);
 }

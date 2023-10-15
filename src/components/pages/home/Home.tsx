@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import styles from "./styles.module.scss";
+import { useRef } from "react";
+import styles from "./homePage.module.scss";
 import Spinner from "../../shared/loaders/Spinner";
 import { useUserContext } from "../../../UserProvider";
 import { Wrapper } from "@googlemaps/react-wrapper";
@@ -14,9 +14,10 @@ import PlaceFilter from "../../pages/exploreListings/filters/placeFilter/PlaceFi
 import { setForSaleOrRent } from "../../pages/exploreListings/filters/forSaleOrRentFilter/forSaleOrRentSlice";
 import { renderMap } from "../exploreListings/map/mapHelpers";
 import ListingCard from "../../shared/listingCard/ListingCard";
-import "./swiper.css";
+import "./swiper.scss";
 import { register } from "swiper/element/bundle";
 import { Link } from "react-router-dom";
+import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 
 register();
 
@@ -25,6 +26,8 @@ export default function Home() {
   const commonState = useAppSelector((state) => state.common);
   const searchRef = useRef<HTMLInputElement | null>(null);
   const swiperElRef = useRef<HTMLDivElement>(null);
+  const screenSize = useScreenSizeContext();
+
   // const swiperProgressBarRef = useRef<HTMLSpanElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -65,8 +68,7 @@ export default function Home() {
       commonState.listings &&
       commonState.listings.length >= 1 ? (
         <div
-          // className="page-wrap"
-          className={`page-wrap ${styles["fade"]}`}
+          className={`page-wrap ${styles.fade}`}
           style={{ animationDelay: `${0}ms` }}
         >
           <main>
@@ -76,12 +78,24 @@ export default function Home() {
               {userContext.isAuthenticated ? (
                 <p>Welcome Back</p>
               ) : (
-                <p className="page__header">Explore The Market</p>
+                <p
+                  className={`${styles["page-header"]} ${
+                    screenSize !== "desktop" ? styles.mobile : ""
+                  }`}
+                >
+                  Explore The Market
+                </p>
               )}
 
-              <div className={styles["searchbox-container"]}>
+              <div
+                className={`${styles["searchbox-container"]} ${
+                  screenSize !== "desktop" ? styles.mobile : ""
+                }`}
+              >
                 <input
-                  className={styles.searchbox}
+                  className={`${styles.searchbox} ${
+                    screenSize !== "desktop" ? styles.mobile : ""
+                  }`}
                   id="place-filter-searchbox"
                   type="search"
                   ref={searchRef}
@@ -99,12 +113,15 @@ export default function Home() {
               </Wrapper>
             </div>
 
-            <div className={styles["most-recent-listings"]}>
+            <div className={`${styles["most-recent-listings"]} `}>
               <h2>Most recent listings</h2>
+
               {/* @ts-ignore */}
               <swiper-container
                 ref={swiperElRef}
-                class="swiper-container"
+                class={`swiper-container ${
+                  screenSize !== "desktop" ? "mobile" : ""
+                }`}
                 slides-per-view="auto"
                 space-between="10"
                 pagination="true"

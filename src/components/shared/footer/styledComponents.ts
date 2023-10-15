@@ -8,7 +8,7 @@ export const FooterDiv = styled.footer`
   -webkit-box-pack: center;
   justify-content: center;
   width: 100%;
-  height: 100px;
+  height: 140px;
   color: var(--color-text);
   padding: 20px;
   align-items: center;
