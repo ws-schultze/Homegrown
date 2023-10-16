@@ -3,6 +3,7 @@ import { ReactComponent as Icon } from "../../../../../assets/svg/dropdownIcon.s
 
 interface ContainerProps {
   $inUse: boolean;
+  $styles: { btnWidth: string; menuWidth: string };
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -15,7 +16,7 @@ export const Container = styled.div<ContainerProps>`
   user-select: none;
   gap: 1rem;
   cursor: pointer;
-  width: 230px;
+  width: ${(props) => props.$styles.btnWidth};
   font-size: 1.2rem;
   border-radius: 5px;
   color: var(--color-text);
@@ -45,14 +46,20 @@ export const ContainerIcon = styled(Icon)<IconProps>`
   }
 `;
 
-export const Menu = styled.div`
+interface MenuProps {
+  width: string;
+}
+
+export const Menu = styled.div<MenuProps>`
   position: absolute;
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
   top: 100%;
-  left: 0;
+  right: 0;
+  width: ${(props) => props.width};
+
   transform: translateY(4px);
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
@@ -70,6 +77,7 @@ export const Menu = styled.div`
 export const MenuSectionWrap = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
   header {
     padding: 5px;

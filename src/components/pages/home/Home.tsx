@@ -99,7 +99,12 @@ export default function Home() {
                   id="place-filter-searchbox"
                   type="search"
                   ref={searchRef}
-                  placeholder="Search by City, Postal Code, County, State or Country"
+                  placeholder={
+                    screenSize !== "desktop"
+                      ? // ? "1600 Amphitheatre Parkway Moun....."
+                        "26C Woodland Ave, San Francisco..."
+                      : "Search by city, postal code, county, state or country"
+                  }
                 />
               </div>
 

@@ -1,17 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
-
 import BedAndBathFilter from "./filters/bedAndBathFilter/BedAndBathFilter";
-import {
-  FiltersBar,
-  ListingCards,
-  ListingCardsWrap,
-  MapContainer,
-  Page,
-  PageWrap,
-  SearchBox,
-  SearchResultsHeader,
-} from "./styledComponents";
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
@@ -19,7 +8,6 @@ import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { setHoveredListing, setListingToOverlay } from "./exploreListingsSlice";
 import ExploreListingsMap from "./map/ExploreListingsMap";
-import ListingOverlay from "../listingOverlay/ListingOverlayPage";
 import ForSaleOrRentFilter from "./filters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import PriceFilter from "./filters/priceFilter/PriceFilter";
 import ListingsTypeFilter from "./filters/listingTypeFilter/ListingTypeFilter";
@@ -31,6 +19,8 @@ import {
 } from "../../../types/index";
 import styles from "./exploreListingsDesktop.module.scss";
 import ListingOverlayPage from "../listingOverlay/ListingOverlayPage";
+import { useScreenSizeContext } from "../../../ScreenSizeProvider";
+import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 
 export interface ExploreListingsFilters {
   place: google.maps.places.PlaceResult | undefined;
@@ -43,7 +33,6 @@ export interface ExploreListingsFilters {
 }
 
 export default function ExploreListingsDesktop(): JSX.Element {
-  console.log("ExploreListings: rendering");
   const dispatch = useDispatch();
   const commonState = useAppSelector((state) => state.common);
   const pageState = useAppSelector((state) => state.exploreListings);
@@ -56,6 +45,9 @@ export default function ExploreListingsDesktop(): JSX.Element {
   const listingCardRefs = useRef([]);
   const searchRef = useRef<HTMLInputElement | null>(null);
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const screenSize = useScreenSizeContext();
+  const [showFiltersMenu, setShowFiltersMenu] = useState(false);
+  const filtersMenuRef = useRef<HTMLDivElement | null>(null);
 
   /**
    * Set the listing to overlay
@@ -108,85 +100,195 @@ export default function ExploreListingsDesktop(): JSX.Element {
     }
   }, [place]);
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.page}>
-        <div className={styles.filters}>
-          <input
-            className={styles["search-box"]}
-            type="search"
-            id="place-filter-searchbox"
-            placeholder="City, PostalCode, County, or State"
-            ref={searchRef}
-            defaultValue={place ? place.formatted_address : ""}
-          />
+  function toggleFiltersMenu() {
+    setShowFiltersMenu(!showFiltersMenu);
+  }
 
-          <ForSaleOrRentFilter />
-          <PriceFilter />
-          <ListingsTypeFilter />
-          <BedAndBathFilter />
-        </div>
+  if (screenSize === "desktop") {
+    return (
+      <div className={styles.container}>
+        <div className={styles.page}>
+          <div className={styles.filters}>
+            <input
+              className={styles["search-box"]}
+              type="search"
+              id="place-filter-searchbox"
+              placeholder="City, PostalCode, County, or State"
+              ref={searchRef}
+              defaultValue={place ? place.formatted_address : ""}
+            />
 
-        <div className={styles["page-content"]}>
-          <div className={styles["listing-cards-container"]}>
-            <div className={styles["listing-cards"]}>
-              {!place && !params.placeFormattedAddress ? (
-                <div
-                  className={styles["search-results-header"]}
-                  style={{ border: " 2px solid orange" }}
-                >{`Enter a location 👆 to search for listings`}</div>
-              ) : null}
-
-              {place ? (
-                <div className={styles["search-results-header"]}>
-                  {`Search results for ${
-                    place ? place.formatted_address : null
-                  }`}
-                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                </div>
-              ) : null}
-
-              {!place ? (
-                <div className={styles["search-results-header"]}>
-                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                </div>
-              ) : null}
-
-              <ul>
-                {pageState.currentFilteredListings.length > 0
-                  ? pageState.currentFilteredListings.map((listing, i) => (
-                      <li
-                        key={i}
-                        ref={listingCardRefs.current[i]}
-                        onMouseEnter={() => {
-                          dispatch(setHoveredListing(listing));
-                        }}
-                        onMouseLeave={() => {
-                          dispatch(setHoveredListing(undefined));
-                        }}
-                      >
-                        <ListingCard key={listing.id} listing={listing} />
-                      </li>
-                    ))
-                  : null}
-              </ul>
-              <Footer />
-            </div>
+            <ForSaleOrRentFilter styles={{ width: "230px" }} />
+            <PriceFilter
+              styles={{ btnWidth: "230px", menuWidth: "fit-content" }}
+            />
+            <ListingsTypeFilter
+              styles={{ btnWidth: "230px", menuWidth: "fit-content" }}
+            />
+            <BedAndBathFilter
+              styles={{ btnWidth: "230px", menuWidth: "fit-content" }}
+            />
           </div>
 
-          <Wrapper
-            apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-            render={renderMap}
-            version="beta"
-            libraries={["places", "marker"]}
-          >
-            <div className={styles["map-container"]}>
-              <ExploreListingsMap />
+          <div className={styles["page-content"]}>
+            <div className={styles["listing-cards-container"]}>
+              <div className={styles["listing-cards"]}>
+                {!place && !params.placeFormattedAddress ? (
+                  <div
+                    className={styles["search-results-header"]}
+                    style={{ border: " 2px solid orange" }}
+                  >{`Enter a location 👆 to search for listings`}</div>
+                ) : null}
+
+                {place ? (
+                  <div className={styles["search-results-header"]}>
+                    {`Search results for ${
+                      place ? place.formatted_address : null
+                    }`}
+                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                  </div>
+                ) : null}
+
+                {!place ? (
+                  <div className={styles["search-results-header"]}>
+                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                  </div>
+                ) : null}
+
+                <ul>
+                  {pageState.currentFilteredListings.length > 0
+                    ? pageState.currentFilteredListings.map((listing, i) => (
+                        <li
+                          key={i}
+                          ref={listingCardRefs.current[i]}
+                          onMouseEnter={() => {
+                            dispatch(setHoveredListing(listing));
+                          }}
+                          onMouseLeave={() => {
+                            dispatch(setHoveredListing(undefined));
+                          }}
+                        >
+                          <ListingCard key={listing.id} listing={listing} />
+                        </li>
+                      ))
+                    : null}
+                </ul>
+                <Footer />
+              </div>
             </div>
-          </Wrapper>
+
+            <Wrapper
+              apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+              render={renderMap}
+              version="beta"
+              libraries={["places", "marker"]}
+            >
+              <div className={styles["map-container"]}>
+                <ExploreListingsMap />
+              </div>
+            </Wrapper>
+          </div>
         </div>
+        {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
       </div>
-      {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
-    </div>
-  );
+    );
+  } else {
+    // MOBILE
+    return (
+      <div className={styles.container}>
+        <div className={styles.page}>
+          <button
+            type="button"
+            id="filters-menu-btn"
+            className={styles["m-filters-btn"]}
+            onClick={toggleFiltersMenu}
+          >
+            <label htmlFor="filters-menu-btn">Filters</label>
+            <SlidersSVG />
+          </button>
+          {showFiltersMenu ? (
+            <div className={styles["m-filters"]} ref={filtersMenuRef}>
+              <input
+                className={styles["m-search-box"]}
+                type="search"
+                id="place-filter-searchbox"
+                placeholder="City, PostalCode, County, or State"
+                ref={searchRef}
+                defaultValue={place ? place.formatted_address : ""}
+              />
+
+              <ForSaleOrRentFilter styles={{ width: "100%" }} />
+              <PriceFilter styles={{ btnWidth: "100%", menuWidth: "100%" }} />
+              <ListingsTypeFilter
+                styles={{ btnWidth: "100%", menuWidth: "100%" }}
+              />
+              <BedAndBathFilter
+                styles={{ btnWidth: "100%", menuWidth: "100%" }}
+              />
+            </div>
+          ) : null}
+
+          <div className={styles["page-content"]}>
+            <div className={styles["listing-cards-container"]}>
+              <div className={styles["listing-cards"]}>
+                {!place && !params.placeFormattedAddress ? (
+                  <div
+                    className={styles["search-results-header"]}
+                    style={{ border: " 2px solid orange" }}
+                  >{`Enter a location 👆 to search for listings`}</div>
+                ) : null}
+
+                {place ? (
+                  <div className={styles["search-results-header"]}>
+                    {`Search results for ${
+                      place ? place.formatted_address : null
+                    }`}
+                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                  </div>
+                ) : null}
+
+                {!place ? (
+                  <div className={styles["search-results-header"]}>
+                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                  </div>
+                ) : null}
+
+                <ul>
+                  {pageState.currentFilteredListings.length > 0
+                    ? pageState.currentFilteredListings.map((listing, i) => (
+                        <li
+                          key={i}
+                          ref={listingCardRefs.current[i]}
+                          onMouseEnter={() => {
+                            dispatch(setHoveredListing(listing));
+                          }}
+                          onMouseLeave={() => {
+                            dispatch(setHoveredListing(undefined));
+                          }}
+                        >
+                          <ListingCard key={listing.id} listing={listing} />
+                        </li>
+                      ))
+                    : null}
+                </ul>
+                <Footer />
+              </div>
+            </div>
+
+            <Wrapper
+              apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+              render={renderMap}
+              version="beta"
+              libraries={["places", "marker"]}
+            >
+              <div className={styles["map-container"]}>
+                <ExploreListingsMap />
+              </div>
+            </Wrapper>
+          </div>
+        </div>
+        {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
+      </div>
+    );
+  }
 }

@@ -13,7 +13,13 @@ import {
   Radio,
 } from "./styledComponents";
 
-export default function ForSaleOrRentFilter() {
+interface Props {
+  styles: {
+    width: string;
+  };
+}
+
+export default function ForSaleOrRentFilter({ styles }: Props) {
   const state = useAppSelector((state) => state.forSaleOrRentFilter);
   const dispatch = useDispatch();
   const menuBtnRef = useRef<HTMLDivElement | null>(null);
@@ -56,6 +62,7 @@ export default function ForSaleOrRentFilter() {
       ref={menuBtnRef}
       onClick={() => dispatch(setShowMenu())}
       $inUse={state.selectedItem !== null ? true : false}
+      $styles={{ width: styles.width }}
     >
       {state.selectedItem?.label || "For Sale/Rent"}
       <ContainerIconWrap>

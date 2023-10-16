@@ -1,20 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { ListingKindValue } from "../../../../../types/index";
 import {
-  ApplyFilterBtn,
   Container,
   ContainerIcon,
   ContainerIconWrap,
   Menu,
   MenuItem,
 } from "./styledComponents";
-import { allListingTypeValues } from "../../../../../initialValues";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setSelectedItems, setShowMenu } from "./listingTypeFilterSlice";
-import { setForSaleOrRent } from "../forSaleOrRentFilter/forSaleOrRentSlice";
 
-export default function ListingsTypeFilter() {
+interface Props {
+  styles: {
+    btnWidth: string;
+    menuWidth: string;
+  };
+}
+
+export default function ListingsTypeFilter({ styles }: Props) {
   const state = useAppSelector((state) => state.listingTypeFilter);
   const dispatch = useDispatch();
 
@@ -119,13 +123,18 @@ export default function ListingsTypeFilter() {
       $inUse={
         state.selectedItems && state.selectedItems.length > 0 ? true : false
       }
+      width={styles.btnWidth}
     >
       Listing Type
       <ContainerIconWrap>
         <ContainerIcon $flipped={state.showMenu} />
       </ContainerIconWrap>
       {state.showMenu ? (
-        <Menu ref={menuRef} onClick={(e) => e.stopPropagation()}>
+        <Menu
+          width={styles.menuWidth}
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
           {state.menuItems.map((item, index) => {
             if (item !== null) {
               return (

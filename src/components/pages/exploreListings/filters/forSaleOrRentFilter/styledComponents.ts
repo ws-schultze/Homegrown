@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { ReactComponent as Icon } from "../../../../../assets/svg/dropdownIcon.svg";
+import * as s from "../../../../../styledComponentVariables";
 
 interface ContainerProps {
   $inUse: boolean;
+  $styles: { width: string };
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -15,7 +17,7 @@ export const Container = styled.div<ContainerProps>`
   user-select: none;
   gap: 1rem;
   cursor: pointer;
-  width: 230px;
+  width: ${(props) => props.$styles?.width};
   font-size: 1.2rem;
   border-radius: var(--border-radius);
   color: var(--color-text);
@@ -23,6 +25,9 @@ export const Container = styled.div<ContainerProps>`
   border: 1px solid
     ${(props) =>
       props.$inUse ? "var(--color-primary)" : "var(--color-border)"};
+  @media (max-width: ${s.maxWidthTablet}) {
+    width: ${(props) => props.$styles.width};
+  }
 `;
 
 export const ContainerIconWrap = styled.div`

@@ -24,7 +24,14 @@ const initialLocalState: LocalState = {
   highPrice: initStrOpt,
 };
 
-export default function PriceFilter(): JSX.Element {
+interface Props {
+  styles: {
+    btnWidth: string;
+    menuWidth: string;
+  };
+}
+
+export default function PriceFilter({ styles }: Props): JSX.Element {
   const state = useAppSelector((state) => state.priceFilter);
   const dispatch = useDispatch();
 
@@ -87,6 +94,7 @@ export default function PriceFilter(): JSX.Element {
           ? false
           : true
       }
+      width={styles.btnWidth}
     >
       {(state.lowPrice && state.lowPrice.number >= 1) ||
       (state.highPrice && state.highPrice.number >= 1) ? (
@@ -103,7 +111,11 @@ export default function PriceFilter(): JSX.Element {
       </ContainerIconWrap>
       {state.showMenu ? (
         <>
-          <Menu ref={menuRef} onClick={(e) => e.stopPropagation()}>
+          <Menu
+            width={styles.menuWidth}
+            ref={menuRef}
+            onClick={(e) => e.stopPropagation()}
+          >
             <InputStr<typeof state>
               size="lg"
               fieldName="lowPrice"

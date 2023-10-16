@@ -12,7 +12,14 @@ import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setBaths, setBeds, setShowMenu } from "./bedAndBathFilterSlice";
 
-export default function BedAndBathFilter() {
+interface Props {
+  styles: {
+    btnWidth: string;
+    menuWidth: string;
+  };
+}
+
+export default function BedAndBathFilter({ styles }: Props) {
   const state = useAppSelector((state) => state.bedAndBathFilter);
   const dispatch = useDispatch();
   const menuWrapRef = useRef<HTMLDivElement | null>(null);
@@ -86,13 +93,18 @@ export default function BedAndBathFilter() {
       ref={menuWrapRef}
       onClick={() => dispatch(setShowMenu())}
       $inUse={state.baths! > 0 || state.beds! > 0 ? true : false}
+      $styles={styles}
     >
       Beds & Baths
       <ContainerIconWrap>
         <ContainerIcon $flipped={state.showMenu} />
       </ContainerIconWrap>
       {state.showMenu ? (
-        <Menu ref={menuRef} onClick={(e) => e.stopPropagation()}>
+        <Menu
+          width={styles.menuWidth}
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
           <MenuSectionWrap>
             <header>Number of Bedrooms</header>
             <MenuSection>
