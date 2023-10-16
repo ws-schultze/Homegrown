@@ -113,32 +113,41 @@ export default function Home() {
               </Wrapper>
             </div>
 
-            <div className={`${styles["most-recent-listings"]} `}>
-              <h2>Most recent listings</h2>
+            {screenSize === "desktop" ? (
+              <div className={`${styles["most-recent-listings"]} `}>
+                <h2>Most recent listings</h2>
 
-              {/* @ts-ignore */}
-              <swiper-container
-                ref={swiperElRef}
-                class={`swiper-container ${
-                  screenSize !== "desktop" ? "mobile" : ""
-                }`}
-                slides-per-view="auto"
-                space-between="10"
-                pagination="true"
-                pagination-type="progressbar"
-                navigation="true"
-                loop="false"
-              >
-                {commonState.listings.map((listing, index) => (
-                  //@ts-ignore
-                  <swiper-slide class="swiper-slide" key={index}>
-                    <ListingCard listing={listing} />
-                    {/* @ts-ignore */}
-                  </swiper-slide>
-                ))}
                 {/* @ts-ignore */}
-              </swiper-container>
-            </div>
+                <swiper-container
+                  ref={swiperElRef}
+                  class={`swiper-container ${
+                    screenSize !== "desktop" ? "mobile" : ""
+                  }`}
+                  slides-per-view="auto"
+                  space-between="10"
+                  pagination="true"
+                  pagination-type="progressbar"
+                  navigation="true"
+                  loop="false"
+                >
+                  {commonState.listings.map((listing, index) => (
+                    //@ts-ignore
+                    <swiper-slide class="swiper-slide" key={index}>
+                      <ListingCard listing={listing} />
+                      {/* @ts-ignore */}
+                    </swiper-slide>
+                  ))}
+                  {/* @ts-ignore */}
+                </swiper-container>
+              </div>
+            ) : (
+              <div className={styles["most-recent-listings__mobile"]}>
+                <h2>Most Recent Listing</h2>
+                {commonState.listings.map((listing, index) => (
+                  <ListingCard listing={listing} isMobile={true} />
+                ))}
+              </div>
+            )}
 
             <div className={styles["bottom-btn-container"]}>
               <Link

@@ -10,34 +10,17 @@ import Spinner from "../loaders/Spinner";
 
 interface Props {
   listing: T.FetchedListing;
+  isMobile?: boolean;
   handleEdit?: (listingId: string) => void;
   handleDelete?: (listingId: string) => Promise<void>;
 }
 
 export default function ListingCard({
   listing,
+  isMobile,
   handleDelete,
   handleEdit,
 }: Props): JSX.Element {
-  console.log("ListingCard listing: ", listing);
-  // const [listing, setListing] = useState(listing)
-  // const {
-  //   basicInfo,
-  //   address,
-  //   agent,
-  //   owner,
-  //   company,
-  //   privateOwner,
-  //   singleFamilyHome,
-  //   multiFamilyHome,
-  //   multiFamilyHomeUnit,
-  //   apartment,
-  //   apartmentBuilding,
-  //   land,
-  //   uploads,
-  //   userRef,
-  // } = listing.data;
-
   const auth = getAuth();
   const params = useParams();
   const postal_code = getPostalCode();
@@ -71,12 +54,10 @@ export default function ListingCard({
     return <Spinner size="small" />;
   }
 
-  console.log("Listing to put on card: ", listing);
-
   return (
     <div className={styles.container}>
       {listing ? (
-        <div className={styles.card}>
+        <div className={` ${isMobile ? styles["mobile-card"] : styles.card}`}>
           <Link
             to={`/explore-listings/details/${listing.data.address.formattedAddress.value}/${listing.id}`}
             className={styles.link}

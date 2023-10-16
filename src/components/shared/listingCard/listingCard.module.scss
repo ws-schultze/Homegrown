@@ -30,6 +30,17 @@
   }
 }
 
+.mobile-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  width: 375px;
+  margin: auto;
+  overflow: hidden;
+  background: var(--color-bg-primary);
+}
+
 .details {
   display: flex;
   flex-direction: column;
