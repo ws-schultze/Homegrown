@@ -1,48 +1,19 @@
-.fade {
-  opacity: 0;
-  animation-name: fadeIn;
-  animation-duration: 500ms;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
 .container {
-  display: flex;
-  gap: 5px;
-  height: calc(100vh - var(--height-navbar));
-  margin-top: var(--height-navbar);
-}
-
-.page-wrap {
-  display: flex;
-  gap: 5px;
-  height: calc(100vh - var(--height-navbar));
-  margin-top: var(--height-navbar);
-}
-
-.page {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  gap: 5px;
+  width: 100vw;
   height: calc(100vh - var(--height-navbar));
-
-  .page-content {
-    position: relative;
-    display: flex;
-    height: calc(100vh - var(--height-navbar));
-    overflow: hidden;
+  margin-top: var(--height-navbar);
+  &.mobile {
   }
+}
+
+.content {
+  position: relative;
+  display: flex;
+  overflow: hidden;
 }
 
 .filters {
@@ -53,40 +24,58 @@
   height: 64px;
 }
 
+.m-filters-container {
+  position: fixed;
+  height: calc(100vh - var(--height-navbar));
+  width: 100%;
+  pointer-events: none;
+  &.is-open {
+    pointer-events: all;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .m-filters {
   position: absolute;
   top: 0;
-  right: 100%;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+  overflow-y: auto;
+  background: var(--color-bg-primary);
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-width: 100vw;
-  padding: 10px;
-  background-color: var(--color-bg-primary);
   gap: 10px;
-  // top: 100%;
   &.is-open {
-    animation: open-m-filters 0.2s forwards;
+    left: 0;
+    opacity: 1;
+    visibility: visible;
   }
   &.is-closed {
-    animation: close-m-filters 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
   }
 }
 
-@keyframes open-m-filters {
-  100% {
-    right: 0;
-  }
-}
+// @keyframes open-m-filters {
+//   100% {
+//     right: 0;
+//   }
+// }
 
-@keyframes close-m-filters {
-  0% {
-    right: 0;
-  }
-  100% {
-    left: 100%;
-  }
-}
+// @keyframes close-m-filters {
+//   // 0% {
+//   //   right: 0;
+//   // }
+//   100% {
+//     right: 100%;
+//   }
+// }
 
 .m-filters-btn {
   position: absolute;
@@ -235,6 +224,27 @@
   width: calc(100vw - 670px);
   background: var(--color-bg-primary);
   &.mobile {
-    width: 100%;
+    // position: absolute;
+    // top: 0;
+    // bottom: 0;
+    width: 100vw;
+  }
+}
+
+.fade {
+  opacity: 0;
+  animation-name: fadeIn;
+  animation-duration: 500ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

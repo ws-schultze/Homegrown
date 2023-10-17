@@ -138,82 +138,81 @@ export default function ExploreListingsDesktop(): JSX.Element {
   if (screenSize === "desktop") {
     return (
       <div className={styles.container}>
-        <div className={styles.page}>
-          <div className={styles.filters}>
-            <input
-              className={styles["search-box"]}
-              type="search"
-              id="place-filter-searchbox"
-              placeholder="City, PostalCode, County, or State"
-              ref={searchRef}
-              defaultValue={place ? place.formatted_address : ""}
-            />
+        <div className={styles.filters}>
+          <input
+            className={styles["search-box"]}
+            type="search"
+            id="place-filter-searchbox"
+            placeholder="City, PostalCode, County, or State"
+            ref={searchRef}
+            defaultValue={place ? place.formatted_address : ""}
+          />
 
-            <ForSaleOrRentFilter styles={desktopDropdownStyle} />
-            <PriceFilter styles={desktopDropdownStyle} />
-            <ListingsTypeFilter styles={desktopDropdownStyle} />
-            <BedAndBathFilter styles={desktopDropdownStyle} />
-          </div>
-
-          <div className={styles["page-content"]}>
-            <div className={styles["listing-cards-container"]}>
-              <div className={styles["listing-cards"]}>
-                {!place && !params.placeFormattedAddress ? (
-                  <div
-                    className={styles["search-results-header"]}
-                    style={{ border: " 2px solid orange" }}
-                  >{`Enter a location 👆 to search for listings`}</div>
-                ) : null}
-
-                {place ? (
-                  <div className={styles["search-results-header"]}>
-                    {`Search results for ${
-                      place ? place.formatted_address : null
-                    }`}
-                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                  </div>
-                ) : null}
-
-                {!place ? (
-                  <div className={styles["search-results-header"]}>
-                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                  </div>
-                ) : null}
-
-                <ul>
-                  {pageState.currentFilteredListings.length > 0
-                    ? pageState.currentFilteredListings.map((listing, i) => (
-                        <li
-                          key={i}
-                          ref={listingCardRefs.current[i]}
-                          onMouseEnter={() => {
-                            dispatch(setHoveredListing(listing));
-                          }}
-                          onMouseLeave={() => {
-                            dispatch(setHoveredListing(undefined));
-                          }}
-                        >
-                          <ListingCard key={listing.id} listing={listing} />
-                        </li>
-                      ))
-                    : null}
-                </ul>
-                <Footer />
-              </div>
-            </div>
-
-            <Wrapper
-              apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-              render={renderMap}
-              version="beta"
-              libraries={["places", "marker"]}
-            >
-              <div className={styles["map-container"]}>
-                <ExploreListingsMap isMobile={false} />
-              </div>
-            </Wrapper>
-          </div>
+          <ForSaleOrRentFilter styles={desktopDropdownStyle} />
+          <PriceFilter styles={desktopDropdownStyle} />
+          <ListingsTypeFilter styles={desktopDropdownStyle} />
+          <BedAndBathFilter styles={desktopDropdownStyle} />
         </div>
+
+        <div className={styles["content"]}>
+          <div className={styles["listing-cards-container"]}>
+            <div className={styles["listing-cards"]}>
+              {!place && !params.placeFormattedAddress ? (
+                <div
+                  className={styles["search-results-header"]}
+                  style={{ border: " 2px solid orange" }}
+                >{`Enter a location 👆 to search for listings`}</div>
+              ) : null}
+
+              {place ? (
+                <div className={styles["search-results-header"]}>
+                  {`Search results for ${
+                    place ? place.formatted_address : null
+                  }`}
+                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                </div>
+              ) : null}
+
+              {!place ? (
+                <div className={styles["search-results-header"]}>
+                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                </div>
+              ) : null}
+
+              <ul>
+                {pageState.currentFilteredListings.length > 0
+                  ? pageState.currentFilteredListings.map((listing, i) => (
+                      <li
+                        key={i}
+                        ref={listingCardRefs.current[i]}
+                        onMouseEnter={() => {
+                          dispatch(setHoveredListing(listing));
+                        }}
+                        onMouseLeave={() => {
+                          dispatch(setHoveredListing(undefined));
+                        }}
+                      >
+                        <ListingCard key={listing.id} listing={listing} />
+                      </li>
+                    ))
+                  : null}
+              </ul>
+              <Footer />
+            </div>
+          </div>
+
+          <Wrapper
+            apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+            render={renderMap}
+            version="beta"
+            libraries={["places", "marker"]}
+          >
+            <div className={styles["map-container"]}>
+              <ExploreListingsMap isMobile={false} />
+            </div>
+          </Wrapper>
+        </div>
+
         {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
       </div>
     );
@@ -224,28 +223,31 @@ export default function ExploreListingsDesktop(): JSX.Element {
    */
   return (
     <div className={styles.container}>
-      <div className={styles.page}>
-        <Wrapper
-          apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-          render={renderMap}
-          version="beta"
-          libraries={["places", "marker"]}
-        >
-          <div className={`${styles["map-container"]}  ${styles.mobile}`}>
-            <ExploreListingsMap isMobile={true} />
-          </div>
-        </Wrapper>
+      <Wrapper
+        apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+        render={renderMap}
+        version="beta"
+        libraries={["places", "marker"]}
+      >
+        <div className={`${styles["map-container"]}  ${styles.mobile}`}>
+          <ExploreListingsMap isMobile={true} />
+        </div>
+      </Wrapper>
 
-        <button
-          type="button"
-          id="filters-menu-btn"
-          className={styles["m-filters-btn"]}
-          onClick={toggleFiltersMenu}
-        >
-          {/* <label htmlFor="filters-menu-btn">Filters</label> */}
-          <SlidersSVG />
-        </button>
+      <button
+        type="button"
+        id="filters-menu-btn"
+        className={styles["m-filters-btn"]}
+        onClick={toggleFiltersMenu}
+      >
+        <SlidersSVG />
+      </button>
 
+      <div
+        className={`${styles["m-filters-container"]} ${
+          showFiltersMenu ? styles["is-open"] : styles["is-closed"]
+        }`}
+      >
         <div
           className={`${styles["m-filters"]} ${
             showFiltersMenu ? styles["is-open"] : styles["is-closed"]
@@ -260,7 +262,6 @@ export default function ExploreListingsDesktop(): JSX.Element {
           >
             <CloseSVG />
           </button>
-
           <div className={styles["search-box-container"]}>
             <input
               className={styles["m-search-box"]}
@@ -271,14 +272,16 @@ export default function ExploreListingsDesktop(): JSX.Element {
               defaultValue={place ? place.formatted_address : ""}
             />
           </div>
-
           <ForSaleOrRentFilter styles={mobileDropdownStyle} />
           <PriceFilter styles={mobileDropdownStyle} />
+
           <ListingsTypeFilter styles={mobileDropdownStyle} />
+
           <BedAndBathFilter styles={mobileDropdownStyle} />
         </div>
+      </div>
 
-        {/* <div className={styles["page-content"]}>
+      {/* <div className={styles["page-content"]}>
           <div className={styles["listing-cards-container"]}>
             <div className={styles["listing-cards"]}>
               {!place && !params.placeFormattedAddress ? (
@@ -327,7 +330,6 @@ export default function ExploreListingsDesktop(): JSX.Element {
 
 
         </div> */}
-      </div>
       {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
     </div>
   );
