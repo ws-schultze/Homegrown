@@ -103,10 +103,16 @@ export default function ExploreListingsDesktop(): JSX.Element {
     }
   }, [place]);
 
+  /**
+   * Hide and show the filters menu
+   */
   function toggleFiltersMenu() {
     setShowFiltersMenu(!showFiltersMenu);
   }
 
+  /**
+   * DESKTOP RENDER
+   */
   if (screenSize === "desktop") {
     return (
       <div className={styles.container}>
@@ -187,105 +193,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
               libraries={["places", "marker"]}
             >
               <div className={styles["map-container"]}>
-                <ExploreListingsMap />
-              </div>
-            </Wrapper>
-          </div>
-        </div>
-        {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
-      </div>
-    );
-  } else {
-    // MOBILE
-    return (
-      <div className={styles.container}>
-        <div className={styles.page}>
-          <button
-            type="button"
-            id="filters-menu-btn"
-            className={styles["m-filters-btn"]}
-            onClick={toggleFiltersMenu}
-          >
-            <label htmlFor="filters-menu-btn">Filters</label>
-            <SlidersSVG />
-          </button>
-          {showFiltersMenu ? (
-            <div className={styles["m-filters"]} ref={filtersMenuRef}>
-              <input
-                className={styles["m-search-box"]}
-                type="search"
-                id="place-filter-searchbox"
-                placeholder="City, PostalCode, County, or State"
-                ref={searchRef}
-                defaultValue={place ? place.formatted_address : ""}
-              />
-
-              <ForSaleOrRentFilter styles={{ width: "100%" }} />
-              <PriceFilter styles={{ btnWidth: "100%", menuWidth: "100%" }} />
-              <ListingsTypeFilter
-                styles={{ btnWidth: "100%", menuWidth: "100%" }}
-              />
-              <BedAndBathFilter
-                styles={{ btnWidth: "100%", menuWidth: "100%" }}
-              />
-            </div>
-          ) : null}
-
-          <div className={styles["page-content"]}>
-            <div className={styles["listing-cards-container"]}>
-              <div className={styles["listing-cards"]}>
-                {!place && !params.placeFormattedAddress ? (
-                  <div
-                    className={styles["search-results-header"]}
-                    style={{ border: " 2px solid orange" }}
-                  >{`Enter a location 👆 to search for listings`}</div>
-                ) : null}
-
-                {place ? (
-                  <div className={styles["search-results-header"]}>
-                    {`Search results for ${
-                      place ? place.formatted_address : null
-                    }`}
-                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                  </div>
-                ) : null}
-
-                {!place ? (
-                  <div className={styles["search-results-header"]}>
-                    <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
-                  </div>
-                ) : null}
-
-                <ul>
-                  {pageState.currentFilteredListings.length > 0
-                    ? pageState.currentFilteredListings.map((listing, i) => (
-                        <li
-                          key={i}
-                          ref={listingCardRefs.current[i]}
-                          onMouseEnter={() => {
-                            dispatch(setHoveredListing(listing));
-                          }}
-                          onMouseLeave={() => {
-                            dispatch(setHoveredListing(undefined));
-                          }}
-                        >
-                          <ListingCard key={listing.id} listing={listing} />
-                        </li>
-                      ))
-                    : null}
-                </ul>
-                <Footer />
-              </div>
-            </div>
-
-            <Wrapper
-              apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-              render={renderMap}
-              version="beta"
-              libraries={["places", "marker"]}
-            >
-              <div className={styles["map-container"]}>
-                <ExploreListingsMap />
+                <ExploreListingsMap isMobile={false} />
               </div>
             </Wrapper>
           </div>
@@ -294,4 +202,111 @@ export default function ExploreListingsDesktop(): JSX.Element {
       </div>
     );
   }
+
+  /**
+   * MOBILE RENDER
+   */
+  return (
+    <div className={styles.container}>
+      <div className={styles.page}>
+        <Wrapper
+          apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+          render={renderMap}
+          version="beta"
+          libraries={["places", "marker"]}
+        >
+          <div className={`${styles["map-container"]}  ${styles.mobile}`}>
+            <ExploreListingsMap isMobile={true} />
+          </div>
+        </Wrapper>
+
+        <button
+          type="button"
+          id="filters-menu-btn"
+          className={styles["m-filters-btn"]}
+          onClick={toggleFiltersMenu}
+        >
+          <label htmlFor="filters-menu-btn">Filters</label>
+          <SlidersSVG />
+        </button>
+        {/* {showFiltersMenu ? ( */}
+        <div
+          className={`${styles["m-filters"]} ${
+            showFiltersMenu ? styles.active : ""
+          }`}
+          ref={filtersMenuRef}
+        >
+          <div className={styles["search-box-container"]}>
+            <input
+              className={styles["m-search-box"]}
+              type="search"
+              id="place-filter-searchbox"
+              placeholder="City, PostalCode, County, or State"
+              ref={searchRef}
+              defaultValue={place ? place.formatted_address : ""}
+            />
+          </div>
+
+          <ForSaleOrRentFilter styles={{ width: "100%" }} />
+          <PriceFilter styles={{ btnWidth: "100%", menuWidth: "100%" }} />
+          <ListingsTypeFilter
+            styles={{ btnWidth: "100%", menuWidth: "100%" }}
+          />
+          <BedAndBathFilter styles={{ btnWidth: "100%", menuWidth: "100%" }} />
+        </div>
+        {/* ) : null} */}
+
+        {/* <div className={styles["page-content"]}>
+          <div className={styles["listing-cards-container"]}>
+            <div className={styles["listing-cards"]}>
+              {!place && !params.placeFormattedAddress ? (
+                <div
+                  className={styles["search-results-header"]}
+                  style={{ border: " 2px solid orange" }}
+                >{`Enter a location 👆 to search for listings`}</div>
+              ) : null}
+
+              {place ? (
+                <div className={styles["search-results-header"]}>
+                  {`Search results for ${
+                    place ? place.formatted_address : null
+                  }`}
+                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                </div>
+              ) : null}
+
+              {!place ? (
+                <div className={styles["search-results-header"]}>
+                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                </div>
+              ) : null}
+
+              <ul>
+                {pageState.currentFilteredListings.length > 0
+                  ? pageState.currentFilteredListings.map((listing, i) => (
+                      <li
+                        key={i}
+                        ref={listingCardRefs.current[i]}
+                        onMouseEnter={() => {
+                          dispatch(setHoveredListing(listing));
+                        }}
+                        onMouseLeave={() => {
+                          dispatch(setHoveredListing(undefined));
+                        }}
+                      >
+                        <ListingCard key={listing.id} listing={listing} />
+                      </li>
+                    ))
+                  : null}
+              </ul>
+              <Footer />
+            </div>
+          </div>
+
+
+        </div> */}
+      </div>
+      {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
+    </div>
+  );
 }

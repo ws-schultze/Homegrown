@@ -1,7 +1,6 @@
 import { useRef, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom/client";
 import { ReactComponent as ImageSVG } from "../../../../assets/svg/image-regular.svg";
-
 import { Boundaries, FetchedListing } from "../../../../types/index";
 import { useNavigate } from "react-router-dom";
 import { MapBoundaryBtn } from "./styledComponents";
@@ -24,7 +23,7 @@ import clearMarkerContentClassList, {
 } from "./mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 
-import css from "./styles.module.css";
+import styles from "./exploreListingsMap.module.scss";
 // import "./index.scss"; // styles that override default google styles
 
 import {
@@ -42,7 +41,7 @@ import { useDispatch } from "react-redux";
 import { useMapContext } from "../../../../MapProvider";
 import useSetupMapZoomControls from "../../../../hooks/useSetupMapZoomControls";
 import useSetupMapFullScreenControls from "../../../../hooks/useSetupMapFullScreenControls";
-import useSetupMapTypeIdControls from "../../../../hooks/useSetupMapTypeIdControls";
+// import useSetupMapTypeIdControls from "../../../../hooks/useSetupMapTypeIdControls";
 import { roadmapBoundaryStyle } from "./mapStyles";
 
 declare global {
@@ -65,7 +64,11 @@ declare global {
   }
 }
 
-export default function ExploreListingsMap(): JSX.Element {
+interface Props {
+  isMobile: boolean;
+}
+
+export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
   // console.log("Map: rendering");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -126,11 +129,11 @@ export default function ExploreListingsMap(): JSX.Element {
           let div = document.createElement("div");
 
           if (listing.data.basicInfo.forSaleOrRent.value?.id === "for-rent") {
-            div.classList.add(css["map-marker-wrap"]);
+            div.classList.add(styles["map-marker-wrap"]);
           }
 
           if (listing.data.basicInfo.forSaleOrRent.value?.id === "for-sale") {
-            div.classList.add(css["map-marker-wrap"]);
+            div.classList.add(styles["map-marker-wrap"]);
           }
 
           const component = (
@@ -144,7 +147,7 @@ export default function ExploreListingsMap(): JSX.Element {
               {makeInfoWindow === true ? (
                 <div
                   id={`map-marker__info-window__${listing.id}`}
-                  className={css["info-window"]}
+                  className={styles["info-window"]}
                 >
                   {listing.data.uploads.images.value[0] !== undefined ? (
                     <img
@@ -154,9 +157,9 @@ export default function ExploreListingsMap(): JSX.Element {
                   ) : (
                     <ImageSVG />
                   )}
-                  <div className={css["info-window__body"]}>
+                  <div className={styles["info-window__body"]}>
                     <>
-                      <div className={css["info-window__body__header"]}>
+                      <div className={styles["info-window__body__header"]}>
                         {/* Header */}
                         <div>
                           <b>{listing.data.basicInfo.price.shortFormatted}</b>
@@ -169,7 +172,7 @@ export default function ExploreListingsMap(): JSX.Element {
                       {listing.data.singleFamilyHome ||
                       listing.data.multiFamilyHomeUnit ||
                       listing.data.apartment ? (
-                        <div className={css["info-window__body__features"]}>
+                        <div className={styles["info-window__body__features"]}>
                           {/* Bedrooms */}
                           <div>
                             <b>
@@ -223,7 +226,7 @@ export default function ExploreListingsMap(): JSX.Element {
                     </>
 
                     {/* Address */}
-                    <div className={css["info-window__body__address"]}>
+                    <div className={styles["info-window__body__address"]}>
                       {listing.data.address.formattedAddress.value}
                     </div>
                   </div>
@@ -234,13 +237,13 @@ export default function ExploreListingsMap(): JSX.Element {
 
               {markerSize === "large" ? (
                 <div
-                  className={`${css["map-marker"]} ${css["large"]} ${
+                  className={`${styles["map-marker"]} ${styles["large"]} ${
                     listing.data.basicInfo.forSaleOrRent.value?.id ===
                     "for-rent"
-                      ? css["for-rent"]
+                      ? styles["for-rent"]
                       : listing.data.basicInfo.forSaleOrRent.value?.id ===
                         "for-sale"
-                      ? css["for-sale"]
+                      ? styles["for-sale"]
                       : ""
                   }`}
                 >
@@ -248,13 +251,13 @@ export default function ExploreListingsMap(): JSX.Element {
                 </div>
               ) : markerSize === "small" ? (
                 <div
-                  className={`${css["map-marker"]} ${css["small"]} ${
+                  className={`${styles["map-marker"]} ${styles["small"]} ${
                     listing.data.basicInfo.forSaleOrRent.value?.id ===
                     "for-rent"
-                      ? css["for-rent"]
+                      ? styles["for-rent"]
                       : listing.data.basicInfo.forSaleOrRent.value?.id ===
                         "for-sale"
-                      ? css["for-sale"]
+                      ? styles["for-sale"]
                       : ""
                   }`}
                 >
@@ -468,7 +471,7 @@ export default function ExploreListingsMap(): JSX.Element {
   /**
    * NOTICE: Data-driven styling for boundaries only works on roadmap
    */
-  useSetupMapTypeIdControls(mapRef.current);
+  // useSetupMapTypeIdControls(mapRef.current);
   useSetupMapZoomControls(mapRef.current);
   useSetupMapFullScreenControls(mapRef.current);
 
@@ -600,7 +603,7 @@ export default function ExploreListingsMap(): JSX.Element {
       if (mapRef.current) {
         const listener = mapRef.current.addListener("tilesloaded", () => {
           if (mapDivRef.current) {
-            mapDivRef.current.classList.add(css.fade);
+            mapDivRef.current.classList.add(styles.fade);
           }
         });
         return () => google.maps.event.removeListener(listener);
@@ -620,7 +623,7 @@ export default function ExploreListingsMap(): JSX.Element {
   useEffect(() => {
     if (mapDivRef.current) {
       mapDivRef.current.style.opacity = "0";
-      mapDivRef.current.classList.remove(css.fade);
+      mapDivRef.current.classList.remove(styles.fade);
     }
   }, [currentMapId]);
 
@@ -1040,5 +1043,5 @@ export default function ExploreListingsMap(): JSX.Element {
   //   ]
   // );
 
-  return <div className={css["map"]} ref={mapDivRef} id="map"></div>;
+  return <div className={styles["map"]} ref={mapDivRef} id="map"></div>;
 }

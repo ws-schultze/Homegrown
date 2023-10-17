@@ -12,7 +12,7 @@ import {
 import ListingPopup from "../../listingOverlay/ListingPopup";
 import { ExploreListingsFilters } from "../ExploreListingsPage";
 
-import css from "./styles.module.css";
+import styles from "./exploreListingsMap.module.scss";
 // import { MapBoundaryBtn } from "./styledComponents";
 // import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 // import { setPlace } from "../filters/placeFilter/placeFilterSlice";
@@ -264,10 +264,10 @@ export function makeElement({
 export function makeListingPopup(listing: FetchedListing) {
   const listingPopup = makeElement({
     component: <ListingPopup listing={listing} />,
-    className: css["listing-popup"],
+    className: styles["listing-popup"],
   });
 
-  listingPopup.id = `${css["listing-popup"]}-${listing.id}`;
+  listingPopup.id = `${styles["listing-popup"]}-${listing.id}`;
 
   const rootElement = document.getElementById("root");
 
@@ -288,14 +288,14 @@ export function toggleMarkerHighlight(
   removeAllPopups();
 
   if (marker.content && marker.element) {
-    if (marker.content.classList.contains(css["active"])) {
+    if (marker.content.classList.contains(styles["active"])) {
       // Un-Highlight
-      marker.content.classList.remove(css["active"]);
+      marker.content.classList.remove(styles["active"]);
       marker.element.style.zIndex = "";
     } else {
       // Highlight
       unhighlightAllMarkers(); // get rid of highlighting on another marker
-      marker.content.classList.add(css["active"]);
+      marker.content.classList.add(styles["active"]);
       marker.element.style.zIndex = "1";
       makeListingPopup(listing);
     }
@@ -310,7 +310,7 @@ export function removeAllPopups() {
   // console.log("Removing popups");
   const popups = Array.from(
     document.getElementsByClassName(
-      css["listing-popup"]
+      styles["listing-popup"]
     ) as HTMLCollectionOf<HTMLElement>
   );
   if (popups) {
@@ -331,7 +331,7 @@ export function unhighlightMarker(
   marker: google.maps.marker.AdvancedMarkerView
 ) {
   if (marker.content && marker.element) {
-    marker.content.classList.remove(css["active"]);
+    marker.content.classList.remove(styles["active"]);
     marker.element.style.zIndex = "";
   } else {
     throw new Error(
@@ -349,7 +349,7 @@ export function unhighlightAllMarkers() {
   );
   if (markersSmall) {
     markersSmall.forEach((marker: HTMLElement) =>
-      marker.classList.remove(css["active"])
+      marker.classList.remove(styles["active"])
     );
   } else {
     console.log(`marker(s) not found`);
@@ -362,7 +362,7 @@ export function unhighlightAllMarkers() {
  */
 export function highlightMarker(marker: google.maps.marker.AdvancedMarkerView) {
   if (marker.content && marker.element) {
-    marker.content.classList.add(css["active"]);
+    marker.content.classList.add(styles["active"]);
     marker.element.style.zIndex = "1";
   } else {
     throw new Error(
@@ -449,19 +449,19 @@ export function moveMarkerContent(
   const distanceToBottom = mapBottomY - markerY;
 
   const element = marker.content?.getElementsByClassName(
-    css["info-window"]
+    styles["info-window"]
   )[0] as HTMLElement;
 
   if (distanceToLeft < 200 && distanceToTop >= 200 && distanceToBottom >= 200) {
     // Move info window right
-    element.classList.add(css["move-right"]);
+    element.classList.add(styles["move-right"]);
   } else if (
     distanceToRight < 200 &&
     distanceToTop >= 200 &&
     distanceToBottom >= 200
   ) {
     // Move info window left
-    element.classList.add(css["move-left"]);
+    element.classList.add(styles["move-left"]);
   } else if (
     distanceToTop < 200 &&
     distanceToLeft >= 200 &&
@@ -469,22 +469,22 @@ export function moveMarkerContent(
   ) {
     // Move info window down
     console.log("top y boundary reached");
-    element.classList.add(css["move-down"]);
+    element.classList.add(styles["move-down"]);
   } else if (distanceToLeft < 200 && distanceToTop < 200) {
     // Move info window southeast
-    element.classList.add(css["move-southeast"]);
+    element.classList.add(styles["move-southeast"]);
   } else if (distanceToRight < 200 && distanceToTop < 200) {
     // Move info window southwest
-    element.classList.add(css["move-southwest"]);
+    element.classList.add(styles["move-southwest"]);
   } else if (distanceToRight < 200 && distanceToBottom < 200) {
     // Move info window north-west
-    element.classList.add(css["move-northwest"]);
+    element.classList.add(styles["move-northwest"]);
   } else if (distanceToLeft < 200 && distanceToBottom < 200) {
     // Move info window north-east
-    element.classList.add(css["move-northeast"]);
+    element.classList.add(styles["move-northeast"]);
   } else {
     // Default move is up
-    element.classList.add(css["move-up"]);
+    element.classList.add(styles["move-up"]);
   }
 }
 
@@ -538,17 +538,17 @@ export default function clearMarkerContentClassList(
   marker: google.maps.marker.AdvancedMarkerView
 ) {
   const element = marker.content?.getElementsByClassName(
-    css["info-window"]
+    styles["info-window"]
   )[0] as HTMLElement;
   element.classList.remove(
-    css["move-right"],
-    css["move-left"],
-    css["move-down"],
-    css["move-up"],
-    css["move-southeast"],
-    css["move-southwest"],
-    css["move-northeast"],
-    css["move-northwest"]
+    styles["move-right"],
+    styles["move-left"],
+    styles["move-down"],
+    styles["move-up"],
+    styles["move-southeast"],
+    styles["move-southwest"],
+    styles["move-northeast"],
+    styles["move-northwest"]
   );
 }
 

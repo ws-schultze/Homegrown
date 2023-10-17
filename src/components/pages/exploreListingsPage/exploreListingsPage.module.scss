@@ -53,12 +53,16 @@
 }
 
 .m-filters {
-  display: flex;
+  display: none;
   flex-direction: column;
   min-height: 100vh;
   min-width: 100vw;
   background-color: darkcyan;
   gap: 5px;
+  // top: 100%;
+  &.active {
+    display: flex;
+  }
 }
 
 .m-filters-btn {
@@ -84,6 +88,11 @@
     fill: var(--color-text);
     height: 40px;
   }
+}
+
+.search-box-container {
+  background-color: blue;
+  position: relative;
 }
 
 .search-box {
@@ -173,4 +182,7 @@
   // Use width of the listing-card-container
   width: calc(100vw - 670px);
   background: var(--color-bg-primary);
+  &.mobile {
+    width: 100%;
+  }
 }
