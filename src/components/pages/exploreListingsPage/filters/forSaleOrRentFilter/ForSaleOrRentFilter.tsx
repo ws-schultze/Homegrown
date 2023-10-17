@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 import assertIsNode from "../../../../utils/assertIsNode";
-import { ForSaleOrRentValue } from "../../../../../types/index";
+import { DropdownStyles, ForSaleOrRentValue } from "../../../../../types/index";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { setForSaleOrRent, setShowMenu } from "./forSaleOrRentSlice";
 import { useDispatch } from "react-redux";
@@ -13,10 +13,15 @@ import {
   Radio,
 } from "./styledComponents";
 
+// interface DropdownStyles {
+//   btnWidth: string;
+//   btnHeight: string;
+//   menuMinWidth: string;
+//   menuMaxWidth: string;
+// }
+
 interface Props {
-  styles: {
-    width: string;
-  };
+  styles: DropdownStyles;
 }
 
 export default function ForSaleOrRentFilter({ styles }: Props) {
@@ -62,7 +67,7 @@ export default function ForSaleOrRentFilter({ styles }: Props) {
       ref={menuBtnRef}
       onClick={() => dispatch(setShowMenu())}
       $inUse={state.selectedItem !== null ? true : false}
-      $styles={{ width: styles.width }}
+      styles={styles}
     >
       {state.selectedItem?.label || "For Sale/Rent"}
       <ContainerIconWrap>

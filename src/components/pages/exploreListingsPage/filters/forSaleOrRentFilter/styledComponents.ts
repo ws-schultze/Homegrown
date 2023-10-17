@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { ReactComponent as Icon } from "../../../../../assets/svg/dropdownIcon.svg";
 import * as s from "../../../../../styledComponentVariables";
+import { DropdownStyles } from "../../../../../types";
 
 interface ContainerProps {
   $inUse: boolean;
-  $styles: { width: string };
+  styles: DropdownStyles;
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -17,7 +18,8 @@ export const Container = styled.div<ContainerProps>`
   user-select: none;
   gap: 1rem;
   cursor: pointer;
-  width: ${(props) => props.$styles?.width};
+  width: ${(props) => props.styles.btnWidth};
+  height: ${(props) => props.styles.btnHeight};
   font-size: 1.2rem;
   border-radius: var(--border-radius);
   color: var(--color-text);
@@ -26,7 +28,7 @@ export const Container = styled.div<ContainerProps>`
     ${(props) =>
       props.$inUse ? "var(--color-primary)" : "var(--color-border)"};
   @media (max-width: ${s.maxWidthTablet}) {
-    width: ${(props) => props.$styles.width};
+    width: ${(props) => props.styles.btnWidth};
   }
 `;
 
@@ -60,7 +62,9 @@ export const Menu = styled.div`
   top: 100%;
   left: 0;
   transform: translateY(4px);
-  width: inherit;
+  /* width: inherit; */
+  min-width: 100%;
+  max-width: fit-content;
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);

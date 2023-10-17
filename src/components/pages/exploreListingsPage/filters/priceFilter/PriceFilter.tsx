@@ -12,7 +12,7 @@ import {
   Menu,
 } from "./styledComponents";
 import { initStrOpt } from "../../../../../initialValues";
-import { Str } from "../../../../../types/index";
+import { DropdownStyles, Str } from "../../../../../types/index";
 
 interface LocalState {
   lowPrice: Str;
@@ -25,10 +25,7 @@ const initialLocalState: LocalState = {
 };
 
 interface Props {
-  styles: {
-    btnWidth: string;
-    menuWidth: string;
-  };
+  styles: DropdownStyles;
 }
 
 export default function PriceFilter({ styles }: Props): JSX.Element {
@@ -94,7 +91,7 @@ export default function PriceFilter({ styles }: Props): JSX.Element {
           ? false
           : true
       }
-      width={styles.btnWidth}
+      styles={styles}
     >
       {(state.lowPrice && state.lowPrice.number >= 1) ||
       (state.highPrice && state.highPrice.number >= 1) ? (
@@ -112,7 +109,7 @@ export default function PriceFilter({ styles }: Props): JSX.Element {
       {state.showMenu ? (
         <>
           <Menu
-            width={styles.menuWidth}
+            styles={styles}
             ref={menuRef}
             onClick={(e) => e.stopPropagation()}
           >

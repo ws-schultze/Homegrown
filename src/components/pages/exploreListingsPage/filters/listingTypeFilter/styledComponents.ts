@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { ReactComponent as Icon } from "../../../../../assets/svg/dropdownIcon.svg";
+import { DropdownStyles } from "../../../../../types";
 
 interface ContainerProps {
   $inUse: boolean;
-  width: string;
+  styles: DropdownStyles;
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -16,7 +17,8 @@ export const Container = styled.div<ContainerProps>`
   user-select: none;
   gap: 1rem;
   cursor: pointer;
-  width: ${(p) => p.width};
+  width: ${(p) => p.styles.btnWidth};
+  height: ${(p) => p.styles.btnHeight};
   font-size: 1.2rem;
   border-radius: 5px;
   color: var(--color-text);
@@ -47,7 +49,7 @@ export const ContainerIcon = styled(Icon)<IconProps>`
 `;
 
 interface MenuProps {
-  width: string;
+  styles: DropdownStyles;
 }
 
 export const Menu = styled.div<MenuProps>`
@@ -59,7 +61,8 @@ export const Menu = styled.div<MenuProps>`
   top: 100%;
   left: 0;
   transform: translateY(4px);
-  width: ${(props) => props.width};
+  min-width: ${(props) => props.styles.menuMinWidth};
+  max-width: ${(props) => props.styles.menuMaxWidth};
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: 5px;

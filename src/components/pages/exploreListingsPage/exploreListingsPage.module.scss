@@ -31,6 +31,7 @@
 }
 
 .page {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -53,12 +54,16 @@
 }
 
 .m-filters {
+  position: absolute;
+  top: 0;
+  left: 0px;
   display: none;
   flex-direction: column;
   min-height: 100vh;
   min-width: 100vw;
-  background-color: darkcyan;
-  gap: 5px;
+  padding: 10px;
+  background-color: var(--color-bg-primary);
+  gap: 10px;
   // top: 100%;
   &.active {
     display: flex;
@@ -66,11 +71,14 @@
 }
 
 .m-filters-btn {
+  position: absolute;
+  top: 0px;
+  left: 10px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  min-height: 64px;
-  width: 100%;
+  min-height: 40px;
+  width: 40px;
   background-color: var(--color-bg-primary);
   border: var(--border);
   border-radius: var(--border-radius);
@@ -90,13 +98,37 @@
   }
 }
 
+.m-filters-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  background-color: var(--color-bg-primary);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  // margin: 0px 0 5px 0;
+  label {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    margin: 0 10px;
+    font-size: 18px;
+    color: var(--color-text);
+  }
+  svg {
+    fill: var(--color-text);
+    height: 40px;
+  }
+}
+
 .search-box-container {
-  background-color: blue;
   position: relative;
 }
 
 .search-box {
-  width: 500px;
+  width: 670px;
   height: 100%;
   border-radius: var(--border-radius);
   padding: 0 10px;

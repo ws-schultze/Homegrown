@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { ListingKindValue } from "../../../../../types/index";
+import { DropdownStyles, ListingKindValue } from "../../../../../types/index";
 import {
   Container,
   ContainerIcon,
@@ -12,10 +12,7 @@ import { useDispatch } from "react-redux";
 import { setSelectedItems, setShowMenu } from "./listingTypeFilterSlice";
 
 interface Props {
-  styles: {
-    btnWidth: string;
-    menuWidth: string;
-  };
+  styles: DropdownStyles;
 }
 
 export default function ListingsTypeFilter({ styles }: Props) {
@@ -123,7 +120,7 @@ export default function ListingsTypeFilter({ styles }: Props) {
       $inUse={
         state.selectedItems && state.selectedItems.length > 0 ? true : false
       }
-      width={styles.btnWidth}
+      styles={styles}
     >
       Listing Type
       <ContainerIconWrap>
@@ -131,7 +128,7 @@ export default function ListingsTypeFilter({ styles }: Props) {
       </ContainerIconWrap>
       {state.showMenu ? (
         <Menu
-          width={styles.menuWidth}
+          styles={styles}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >

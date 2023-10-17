@@ -11,12 +11,10 @@ import {
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setBaths, setBeds, setShowMenu } from "./bedAndBathFilterSlice";
+import { DropdownStyles } from "../../../../../types";
 
 interface Props {
-  styles: {
-    btnWidth: string;
-    menuWidth: string;
-  };
+  styles: DropdownStyles;
 }
 
 export default function BedAndBathFilter({ styles }: Props) {
@@ -93,7 +91,7 @@ export default function BedAndBathFilter({ styles }: Props) {
       ref={menuWrapRef}
       onClick={() => dispatch(setShowMenu())}
       $inUse={state.baths! > 0 || state.beds! > 0 ? true : false}
-      $styles={styles}
+      styles={styles}
     >
       Beds & Baths
       <ContainerIconWrap>
@@ -101,7 +99,7 @@ export default function BedAndBathFilter({ styles }: Props) {
       </ContainerIconWrap>
       {state.showMenu ? (
         <Menu
-          width={styles.menuWidth}
+          styles={styles}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >

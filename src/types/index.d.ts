@@ -5,6 +5,13 @@ declare module "*.scss" {
   export default content;
 }
 
+export interface DropdownStyles {
+  btnWidth: string;
+  btnHeight: string;
+  menuMinWidth: string;
+  menuMaxWidth: string;
+}
+
 /**
  * Used on all form sections and fields that are savable/editable
  */

@@ -19,11 +19,33 @@ import {
   ListingKindValue,
   ForSaleOrRentValue,
   Str,
+  DropdownStyles,
 } from "../../../types/index";
 import styles from "./exploreListingsPage.module.scss";
 import ListingOverlayPage from "../listingOverlay/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
+import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
+
+/**
+ * Passed to styled components for styling on desktop screen size
+ */
+const desktopDropdownStyle: DropdownStyles = {
+  btnWidth: "260px",
+  btnHeight: "50px",
+  menuMinWidth: "100%",
+  menuMaxWidth: "fit-content",
+};
+
+/**
+ * Passed to styled components for styling on mobile screen size
+ */
+const mobileDropdownStyle: DropdownStyles = {
+  btnWidth: "100%",
+  btnHeight: "55px",
+  menuMinWidth: "100%",
+  menuMaxWidth: "100%",
+};
 
 export interface ExploreListingsFilters {
   place: google.maps.places.PlaceResult | undefined;
@@ -127,16 +149,10 @@ export default function ExploreListingsDesktop(): JSX.Element {
               defaultValue={place ? place.formatted_address : ""}
             />
 
-            <ForSaleOrRentFilter styles={{ width: "230px" }} />
-            <PriceFilter
-              styles={{ btnWidth: "230px", menuWidth: "fit-content" }}
-            />
-            <ListingsTypeFilter
-              styles={{ btnWidth: "230px", menuWidth: "fit-content" }}
-            />
-            <BedAndBathFilter
-              styles={{ btnWidth: "230px", menuWidth: "fit-content" }}
-            />
+            <ForSaleOrRentFilter styles={desktopDropdownStyle} />
+            <PriceFilter styles={desktopDropdownStyle} />
+            <ListingsTypeFilter styles={desktopDropdownStyle} />
+            <BedAndBathFilter styles={desktopDropdownStyle} />
           </div>
 
           <div className={styles["page-content"]}>
@@ -226,16 +242,25 @@ export default function ExploreListingsDesktop(): JSX.Element {
           className={styles["m-filters-btn"]}
           onClick={toggleFiltersMenu}
         >
-          <label htmlFor="filters-menu-btn">Filters</label>
+          {/* <label htmlFor="filters-menu-btn">Filters</label> */}
           <SlidersSVG />
         </button>
-        {/* {showFiltersMenu ? ( */}
+
         <div
           className={`${styles["m-filters"]} ${
             showFiltersMenu ? styles.active : ""
           }`}
           ref={filtersMenuRef}
         >
+          <button
+            type="button"
+            id="filters-menu-btn"
+            className={styles["m-filters-close-btn"]}
+            onClick={toggleFiltersMenu}
+          >
+            <CloseSVG />
+          </button>
+
           <div className={styles["search-box-container"]}>
             <input
               className={styles["m-search-box"]}
@@ -247,14 +272,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
             />
           </div>
 
-          <ForSaleOrRentFilter styles={{ width: "100%" }} />
-          <PriceFilter styles={{ btnWidth: "100%", menuWidth: "100%" }} />
-          <ListingsTypeFilter
-            styles={{ btnWidth: "100%", menuWidth: "100%" }}
-          />
-          <BedAndBathFilter styles={{ btnWidth: "100%", menuWidth: "100%" }} />
+          <ForSaleOrRentFilter styles={mobileDropdownStyle} />
+          <PriceFilter styles={mobileDropdownStyle} />
+          <ListingsTypeFilter styles={mobileDropdownStyle} />
+          <BedAndBathFilter styles={mobileDropdownStyle} />
         </div>
-        {/* ) : null} */}
 
         {/* <div className={styles["page-content"]}>
           <div className={styles["listing-cards-container"]}>
