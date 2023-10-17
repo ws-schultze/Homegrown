@@ -25,7 +25,7 @@ import { ReactComponent as BathSVG } from "../../../assets/svg/bath-solid.svg";
 import { ReactComponent as ToiletSVG } from "../../../assets/svg/toilet-solid.svg";
 
 import { Wrapper } from "@googlemaps/react-wrapper";
-import { useThemeContext } from "../../../ThemeProvider";
+// import { useThemeContext } from "../../../ThemeProvider";
 import AddressMap from "../../shared/addressMap/AddressMap";
 import assertIsNode from "../../utils/assertIsNode";
 import logoPNG from "../../../assets/logo/logo.png";
@@ -66,7 +66,7 @@ export default function ListingOverlayPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-  const { theme } = useThemeContext();
+  // const { theme } = useThemeContext();
   const navigate = useNavigate();
 
   const {

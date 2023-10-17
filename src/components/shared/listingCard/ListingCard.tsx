@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { ReactComponent as DeleteIcon } from "../../../assets/svg/deleteIcon.svg";
 import { ReactComponent as EditIcon } from "../../../assets/svg/editIcon.svg";
@@ -22,33 +22,33 @@ export default function ListingCard({
   handleEdit,
 }: Props): JSX.Element {
   const auth = getAuth();
-  const params = useParams();
-  const postal_code = getPostalCode();
+  // const params = useParams();
+  // const postal_code = getPostalCode();
 
-  /**
-   * Get the simple postal_code (e.g. 95490) not the
-   * one including the postal_code_suffix (e.g. 95490-1234)
-   * @returns postal_code string without the postal_code_suffix
-   */
-  function getPostalCode(): string {
-    let postal_code = "";
-    console.log(
-      "Address components: ",
-      listing.data.address.address_components
-    );
-    for (const key in listing.data.address.address_components) {
-      let component = listing.data.address.address_components[key];
-      // console.log(component);
-      for (const key in component) {
-        //@ts-ignore
-        if (key === "types" && component[key].includes("postal_code")) {
-          postal_code = component["long_name"];
-        }
-      }
-    }
+  // /**
+  //  * Get the simple postal_code (e.g. 95490) not the
+  //  * one including the postal_code_suffix (e.g. 95490-1234)
+  //  * @returns postal_code string without the postal_code_suffix
+  //  */
+  // function getPostalCode(): string {
+  //   let postal_code = "";
+  //   console.log(
+  //     "Address components: ",
+  //     listing.data.address.address_components
+  //   );
+  //   for (const key in listing.data.address.address_components) {
+  //     let component = listing.data.address.address_components[key];
+  //     // console.log(component);
+  //     for (const key in component) {
+  //       //@ts-ignore
+  //       if (key === "types" && component[key].includes("postal_code")) {
+  //         postal_code = component["long_name"];
+  //       }
+  //     }
+  //   }
 
-    return postal_code;
-  }
+  //   return postal_code;
+  // }
 
   if (!listing) {
     return <Spinner size="small" />;

@@ -13,10 +13,10 @@ import ListingPopup from "../../listingOverlay/ListingPopup";
 import { ExploreListingsFilters } from "../ExploreListingsPage";
 
 import css from "./styles.module.css";
-import { MapBoundaryBtn } from "./styledComponents";
-import { AnyAction, Dispatch } from "@reduxjs/toolkit";
-import { setPlace } from "../filters/placeFilter/placeFilterSlice";
-import { NavigateFunction } from "react-router";
+// import { MapBoundaryBtn } from "./styledComponents";
+// import { AnyAction, Dispatch } from "@reduxjs/toolkit";
+// import { setPlace } from "../filters/placeFilter/placeFilterSlice";
+// import { NavigateFunction } from "react-router";
 
 export function isOfTypePlacesRegion(
   keyInput: string | undefined
@@ -650,7 +650,7 @@ export function isFullscreen(element: HTMLElement) {
     (document.fullscreenElement ||
       document.webkitFullscreenElement ||
       document.mozFullScreenElement ||
-      document.msFullscreenElement) == element
+      document.msFullscreenElement) === element
   );
 }
 
@@ -940,7 +940,7 @@ export function getCurrentFilteredListings(
         lat: cl.data.address.geolocation.value.lat,
         lng: cl.data.address.geolocation.value.lng,
       };
-      if (clCoords.lat === flCoords.lat && clCoords.lng === clCoords.lng) {
+      if (clCoords.lat === flCoords.lat && clCoords.lng === flCoords.lng) {
         currentFilteredListings.push(fl);
       }
     });

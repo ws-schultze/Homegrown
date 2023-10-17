@@ -47,7 +47,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
   const params = useParams();
   const listingCardRefs = useRef([]);
   const searchRef = useRef<HTMLInputElement | null>(null);
-  const mapRef = useRef<HTMLDivElement | null>(null);
+  // const mapRef = useRef<HTMLDivElement | null>(null);
   const screenSize = useScreenSizeContext();
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);

@@ -1,6 +1,9 @@
 import { DocumentData, FieldValue } from "firebase/firestore";
 
-declare module "*.module.scss";
+declare module "*.scss" {
+  const content: Record<string, string>;
+  export default content;
+}
 
 /**
  * Used on all form sections and fields that are savable/editable
