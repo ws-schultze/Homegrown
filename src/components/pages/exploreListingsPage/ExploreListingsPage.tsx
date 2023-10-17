@@ -248,7 +248,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
 
         <div
           className={`${styles["m-filters"]} ${
-            showFiltersMenu ? styles.active : ""
+            showFiltersMenu ? styles["is-open"] : styles["is-closed"]
           }`}
           ref={filtersMenuRef}
         >

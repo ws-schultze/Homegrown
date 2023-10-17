@@ -56,17 +56,35 @@
 .m-filters {
   position: absolute;
   top: 0;
-  left: 0px;
-  display: none;
+  right: 100%;
+  display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
   min-width: 100vw;
   padding: 10px;
   background-color: var(--color-bg-primary);
   gap: 10px;
   // top: 100%;
-  &.active {
-    display: flex;
+  &.is-open {
+    animation: open-m-filters 0.2s forwards;
+  }
+  &.is-closed {
+    animation: close-m-filters 0.2s ease;
+  }
+}
+
+@keyframes open-m-filters {
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes close-m-filters {
+  0% {
+    right: 0;
+  }
+  100% {
+    left: 100%;
   }
 }
 
@@ -82,6 +100,8 @@
   background-color: var(--color-bg-primary);
   border: var(--border);
   border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 7px;
   margin: 10px 0 10px 0;
   label {
     display: flex;
@@ -94,7 +114,6 @@
   }
   svg {
     fill: var(--color-text);
-    height: 40px;
   }
 }
 
@@ -119,7 +138,8 @@
   }
   svg {
     fill: var(--color-text);
-    height: 40px;
+    width: 35px;
+    height: 35px;
   }
 }
 
