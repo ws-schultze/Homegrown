@@ -31,7 +31,7 @@ export const initialExploreListingsState: ExploreListingsState = {
   mapCenter: undefined,
 };
 
-export const exploreListingsSlice = createSlice({
+export const exploreListingsPageSlice = createSlice({
   name: "exploreListings",
   initialState: initialExploreListingsState,
   reducers: {
@@ -109,6 +109,6 @@ export const {
   setMapMarkerSize,
   setMapCenter,
   setMapZoom,
-} = exploreListingsSlice.actions;
+} = exploreListingsPageSlice.actions;
 
-export default exploreListingsSlice.reducer;
+export default exploreListingsPageSlice.reducer;

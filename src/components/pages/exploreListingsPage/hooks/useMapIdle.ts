@@ -9,7 +9,7 @@ import {
   setMapCenter,
   setMapMarkerSize,
   setMapZoom,
-} from "../exploreListingsSlice";
+} from "../exploreListingsPageSlice";
 
 /**
  * Handle the map's idle event by setting the some state props in redux:

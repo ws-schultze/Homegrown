@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FetchedListing } from "../../../../types/index";
-import { MapMarkerSize } from "../exploreListingsSlice";
+import { MapMarkerSize } from "../exploreListingsPageSlice";
 import clearMarkerContentClassList, {
   highlightMarker,
   moveMarkerContent,

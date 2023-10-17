@@ -6,7 +6,10 @@ import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
 import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { setHoveredListing, setListingToOverlay } from "./exploreListingsSlice";
+import {
+  setHoveredListing,
+  setListingToOverlay,
+} from "./exploreListingsPageSlice";
 import ExploreListingsMap from "./map/ExploreListingsMap";
 import ForSaleOrRentFilter from "./filters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import PriceFilter from "./filters/priceFilter/PriceFilter";
@@ -17,7 +20,7 @@ import {
   ForSaleOrRentValue,
   Str,
 } from "../../../types/index";
-import styles from "./exploreListingsDesktop.module.scss";
+import styles from "./exploreListingsPage.module.scss";
 import ListingOverlayPage from "../listingOverlay/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";

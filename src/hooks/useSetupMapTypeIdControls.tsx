@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { makeElement } from "../components/pages/exploreListings/map/mapHelpers";
+import { makeElement } from "../components/pages/exploreListingsPage/map/mapHelpers";
 import MapTypeDropdown from "../components/shared/mapTypeMenu/MapTypeDropdown";
 
 /**

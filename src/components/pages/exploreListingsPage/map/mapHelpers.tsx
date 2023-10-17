@@ -10,7 +10,7 @@ import {
   Boundaries,
 } from "../../../../types/index";
 import ListingPopup from "../../listingOverlay/ListingPopup";
-import { ExploreListingsFilters } from "../ExploreListingsDesktop";
+import { ExploreListingsFilters } from "../ExploreListingsPage";
 
 import css from "./styles.module.css";
 import { MapBoundaryBtn } from "./styledComponents";

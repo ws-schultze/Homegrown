@@ -53,7 +53,7 @@ import {
   Specs,
 } from "./styledComponents";
 // import css from "./styles.module.css";
-import { renderMap } from "../exploreListings/map/mapHelpers";
+import { renderMap } from "../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../redux/hooks";
 
 export default function ListingOverlayPage() {

@@ -35,7 +35,7 @@ import {
   setMapCenter,
   setMapMarkerSize,
   setMapZoom,
-} from "../exploreListingsSlice";
+} from "../exploreListingsPageSlice";
 import { setPlace } from "../filters/placeFilter/placeFilterSlice";
 import { MapType } from "../../../shared/mapTypeMenu/mapTypeMenuSlice";
 import { useDispatch } from "react-redux";

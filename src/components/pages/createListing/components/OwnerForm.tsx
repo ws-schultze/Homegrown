@@ -19,7 +19,7 @@ import PageBtns from "./PageBtns";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { Header } from "./styledComponents";
-import { renderMap } from "../../exploreListings/map/mapHelpers";
+import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 
 interface Props {
   parent: ListingData;

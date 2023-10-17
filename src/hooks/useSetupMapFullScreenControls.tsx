@@ -3,18 +3,18 @@ import {
   exitFullscreen,
   makeElement,
   requestFullscreen,
-} from "../components/pages/exploreListings/map/mapHelpers";
+} from "../components/pages/exploreListingsPage/map/mapHelpers";
 import {
   MapFullScreenBtnContainer,
   MapFullScreenBtn,
-} from "../components/pages/exploreListings/map/styledComponents";
+} from "../components/pages/exploreListingsPage/map/styledComponents";
 import { useDispatch } from "react-redux";
-import { setMapIsFullScreen } from "../components/pages/exploreListings/exploreListingsSlice";
+import { setMapIsFullScreen } from "../components/pages/exploreListingsPage/exploreListingsPageSlice";
 
 import { ReactComponent as ExpandSVG } from "../assets/svg/expand-solid.svg";
 import { ReactComponent as CompressSVG } from "../assets/svg/compress-solid.svg";
 
-import { isFullscreen } from "../components/pages/exploreListings/map/mapHelpers";
+import { isFullscreen } from "../components/pages/exploreListingsPage/map/mapHelpers";
 
 /**
  * Create expand/compress buttons on the given map for entering/exiting

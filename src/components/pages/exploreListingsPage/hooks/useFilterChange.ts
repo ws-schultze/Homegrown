@@ -15,7 +15,7 @@ import {
 import {
   setAllFilteredListings,
   setCurrentFilteredListings,
-} from "../exploreListingsSlice";
+} from "../exploreListingsPageSlice";
 
 interface PropTypes {
   map: google.maps.Map;
