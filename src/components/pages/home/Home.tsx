@@ -18,12 +18,14 @@ import "./swiper.scss";
 import { register } from "swiper/element/bundle";
 import { Link } from "react-router-dom";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
+import Error from "../../shared/error/Error";
 
 register();
 
 export default function Home() {
   const userContext = useUserContext();
   const commonState = useAppSelector((state) => state.common);
+  const exploreState = useAppSelector((state) => state.exploreListings);
   const searchRef = useRef<HTMLInputElement | null>(null);
   const swiperElRef = useRef<HTMLDivElement>(null);
   const screenSize = useScreenSizeContext();
@@ -62,66 +64,95 @@ export default function Home() {
     return <Spinner size="large" />;
   }
 
-  return (
-    <>
-      {commonState.status === "idle" &&
-      commonState.listings &&
-      commonState.listings.length >= 1 ? (
+  if (
+    commonState.status === "idle" &&
+    commonState.listings &&
+    commonState.listings.length >= 1
+  ) {
+    return (
+      <>
+        <header
+          className={`${styles.header} ${
+            screenSize !== "desktop" ? styles.mobile : ""
+          }`}
+        >
+          <img src={TopImage} alt="" />
+          {userContext.isAuthenticated ? (
+            <p>Welcome Back</p>
+          ) : (
+            <p>Explore The Market</p>
+          )}
+          <div
+            className={`${styles["searchbox-container"]} ${
+              screenSize !== "desktop" ? styles.mobile : ""
+            }`}
+          >
+            <input
+              className={`${styles.searchbox} ${
+                screenSize !== "desktop" ? styles.mobile : ""
+              }`}
+              id="place-filter-searchbox"
+              type="search"
+              ref={searchRef}
+              placeholder={
+                screenSize !== "desktop"
+                  ? "26C Woodland Ave, San Francisco..."
+                  : "Search by city, postal code, county, state or country"
+              }
+            />
+          </div>
+          <Wrapper
+            apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+            render={renderMap}
+            version="beta"
+            libraries={["places", "marker"]}
+          >
+            <PlaceFilter emitPlace={handleSearchboxPlace} />
+          </Wrapper>
+        </header>
         <div
-          className={`page-wrap ${styles.fade}`}
+          className={`${styles.content} ${styles.fade}`}
           style={{ animationDelay: `${0}ms` }}
         >
-          <main>
-            <div className={styles["top-container"]}>
-              <img src={TopImage} alt="" />
-
+          <div className={styles.btns}>
+            <Link
+              to="explore-listings/"
+              className={styles.btn}
+              onClick={() => {
+                dispatch(
+                  setForSaleOrRent({ id: "for-sale", label: "For Sale" })
+                );
+              }}
+            >
+              Browse Sales
+            </Link>
+            <Link
+              to="explore-listings/"
+              className={styles.btn}
+              onClick={() => {
+                dispatch(
+                  setForSaleOrRent({ id: "for-rent", label: "For Rent" })
+                );
+              }}
+            >
+              Browse Rentals
+            </Link>
+            <>
               {userContext.isAuthenticated ? (
-                <p>Welcome Back</p>
+                <Link to="/create-listing" className={styles.btn}>
+                  Create a Listing
+                </Link>
               ) : (
-                <p
-                  className={`${styles["page-header"]} ${
-                    screenSize !== "desktop" ? styles.mobile : ""
-                  }`}
-                >
-                  Explore The Market
-                </p>
+                <Link to="/sign-in" className={styles.btn}>
+                  Create a Listing
+                </Link>
               )}
-
-              <div
-                className={`${styles["searchbox-container"]} ${
-                  screenSize !== "desktop" ? styles.mobile : ""
-                }`}
-              >
-                <input
-                  className={`${styles.searchbox} ${
-                    screenSize !== "desktop" ? styles.mobile : ""
-                  }`}
-                  id="place-filter-searchbox"
-                  type="search"
-                  ref={searchRef}
-                  placeholder={
-                    screenSize !== "desktop"
-                      ? // ? "1600 Amphitheatre Parkway Moun....."
-                        "26C Woodland Ave, San Francisco..."
-                      : "Search by city, postal code, county, state or country"
-                  }
-                />
-              </div>
-
-              <Wrapper
-                apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-                render={renderMap}
-                version="beta"
-                libraries={["places", "marker"]}
-              >
-                <PlaceFilter emitPlace={handleSearchboxPlace} />
-              </Wrapper>
-            </div>
-
-            {screenSize === "desktop" ? (
-              <div className={`${styles["most-recent-listings"]} `}>
-                <h2>Most recent listings</h2>
-
+            </>
+          </div>
+          {screenSize === "desktop" ? (
+            <>
+              <div className={styles["swiper-wrap"]}>
+                <h3>Most recent listings</h3>
                 {/* @ts-ignore */}
                 <swiper-container
                   ref={swiperElRef}
@@ -145,63 +176,90 @@ export default function Home() {
                   {/* @ts-ignore */}
                 </swiper-container>
               </div>
-            ) : (
-              <div className={styles["most-recent-listings__mobile"]}>
-                <h2>Most Recent Listing</h2>
-                {commonState.listings.map((listing, index) => (
-                  <ListingCard listing={listing} isMobile={true} />
-                ))}
-              </div>
-            )}
 
-            <div className={styles["bottom-btn-container"]}>
-              <Link
-                to="explore-listings/"
-                className={`${styles["link-btn"]} primary-btn`}
-                onClick={() => {
-                  dispatch(
-                    setForSaleOrRent({ id: "for-sale", label: "For Sale" })
-                  );
-                }}
-              >
-                Browse Sales
-              </Link>
-              <Link
-                to="explore-listings/"
-                className={`${styles["link-btn"]} primary-btn`}
-                onClick={() => {
-                  dispatch(
-                    setForSaleOrRent({ id: "for-rent", label: "For Rent" })
-                  );
-                }}
-              >
-                Browse Rentals
-              </Link>
-              <>
-                {userContext.isAuthenticated ? (
-                  <Link
-                    to="/create-listing"
-                    className={`${styles["link-btn"]} primary-btn`}
-                  >
-                    Create a Listing
-                  </Link>
+              <div className={styles["swiper-wrap"]}>
+                {exploreState.currentFilteredListings.length > 0 ? (
+                  <>
+                    <h3>Recently found by you</h3>
+                    {/* @ts-ignore */}
+                    <swiper-container
+                      ref={swiperElRef}
+                      class={`swiper-container ${
+                        screenSize !== "desktop" ? "mobile" : ""
+                      }`}
+                      slides-per-view="auto"
+                      space-between="10"
+                      pagination="true"
+                      pagination-type="progressbar"
+                      navigation="true"
+                      loop="false"
+                    >
+                      {exploreState.currentFilteredListings.map(
+                        (listing, index) => (
+                          //@ts-ignore
+                          <swiper-slide class="swiper-slide" key={index}>
+                            <ListingCard listing={listing} />
+                            {/* @ts-ignore */}
+                          </swiper-slide>
+                        )
+                      )}
+                      {/* @ts-ignore */}
+                    </swiper-container>
+                  </>
                 ) : (
-                  <Link
-                    to="/sign-in"
-                    className={`${styles["link-btn"]} primary-btn`}
-                  >
-                    Create a Listing
-                  </Link>
-                )}
-              </>
-            </div>
+                  <>
+                    <h3>Recent Mendocino County listings</h3>
+                    {/* @ts-ignore */}
+                    <swiper-container
+                      ref={swiperElRef}
+                      class={`swiper-container ${
+                        screenSize !== "desktop" ? "mobile" : ""
+                      }`}
+                      slides-per-view="auto"
+                      space-between="10"
+                      pagination="true"
+                      pagination-type="progressbar"
+                      navigation="true"
+                      loop="false"
+                    >
+                      {commonState.listings.map((listing, index) => {
+                        // TODO: Make a default set of listings to show here if the user has not recently searched for anything
+                        if (
+                          listing.data.address.adminAreaLevel2.value.includes(
+                            "Mendocino"
+                          )
+                        ) {
+                          return (
+                            //@ts-ignore
+                            <swiper-slide class="swiper-slide" key={index}>
+                              <ListingCard listing={listing} />
+                              {/* @ts-ignore */}
+                            </swiper-slide>
+                          );
+                        } else {
+                          return [];
+                        }
+                      })}
 
-            <Footer />
-          </main>
+                      {/* @ts-ignore */}
+                    </swiper-container>
+                  </>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className={styles["swiper-wrap__mobile"]}>
+              <h2>Most Recent Listing</h2>
+              {commonState.listings.map((listing, index) => (
+                <ListingCard listing={listing} isMobile={true} />
+              ))}
+            </div>
+          )}
         </div>
-      ) : (
-        <div>No listings found</div>
-      )}
-    </>
-  );
+        <Footer />
+      </>
+    );
+  }
+
+  return <Error />;
 }

@@ -152,8 +152,6 @@ export default function ExploreListingsDesktop(): JSX.Element {
           <ForSaleOrRentFilter styles={desktopDropdownStyle} />
           <PriceFilter styles={desktopDropdownStyle} />
           <ListingsTypeFilter styles={desktopDropdownStyle} />
-          {/* <DummyFilter styles={desktopDropdownStyle} /> */}
-
           <BedAndBathFilter styles={desktopDropdownStyle} />
         </div>
 

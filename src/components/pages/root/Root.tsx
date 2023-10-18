@@ -24,7 +24,7 @@ export default function Root({
     <div className={`${styles.container}`}>
       {screenSize === "desktop" ? <DesktopNavbar /> : <MobileNavbar />}
 
-      <main id="root-main-outlet">{children ?? <Outlet />}</main>
+      <main className={styles.main}>{children ?? <Outlet />}</main>
 
       <ToastContainer
         position="top-right"

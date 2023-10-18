@@ -5,6 +5,10 @@
   color: var(--color-primary);
   background: var(--color-bg-primary);
 
+  main {
+    margin-top: var(--height-navbar);
+  }
+
   main.loading div {
     opacity: 0.5;
   }
