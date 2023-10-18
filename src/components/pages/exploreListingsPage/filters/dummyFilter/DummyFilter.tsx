@@ -23,6 +23,7 @@ interface Props {
 export default function DummyFilter({ styles }: Props) {
   const state = useAppSelector((state) => state.listingTypeFilter);
   const dispatch = useDispatch();
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const menuItemRef = useRef<HTMLDivElement | null>(null);
@@ -34,11 +35,21 @@ export default function DummyFilter({ styles }: Props) {
     function handler({ target }: MouseEvent) {
       const t = target as Node;
 
+      // container exists
       if (containerRef.current) {
+        // the click is not inside the container
         if (containerRef.current.contains(t) === false) {
+          // the menu exists
           if (menuRef.current) {
+            // the click is not inside the menu
             if (menuRef.current.contains(t) === false) {
-              dispatch(setShowMenu());
+              // the menu must be open for it to be closed, otherwise clicking outside the container will just toggle the menu on any click!!
+              if (state.showMenu) {
+                dispatch(setShowMenu());
+              } else
+                console.log(
+                  "ignoring the urge to close an already closed menu!!"
+                );
             } else console.log("menuRef.current.contains(t) !== false");
           } else console.log("menuRef.current is undefined");
         } else console.log("containerRef.current.contains(t) !== false");

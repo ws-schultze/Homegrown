@@ -21,20 +21,18 @@ interface BtnProps {
 }
 
 export const Btn = styled.div<BtnProps>`
-  padding: 0.5rem;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   -webkit-user-select: none;
   user-select: none;
-  /* gap: 1rem; */
   cursor: pointer;
   width: ${(p) => p.styles.btnWidth};
-  height: ${(p) => p.styles.btnHeight};
+  min-height: ${(p) => p.styles.btnHeight};
+  max-height: ${(p) => p.styles.btnHeight};
   font-size: 1.2rem;
-  /* border-radius: 5px; */
   color: var(--color-text);
-  /* background: var(--color-bg-primary); */
 `;
 
 export const BtnIconWrap = styled.div`
@@ -57,50 +55,11 @@ export const BtnIcon = styled(Icon)<IconProps>`
   }
 `;
 
-const openMenu = keyframes`
-  0%{
-    height: 0px; 
-    padding: 0px;
-    visibility: hidden; 
-    opacity:0; 
-    margin-top:0; 
-  }
-  25%{
-    height: 50%; 
-    padding: 10px; 
-    visibility: 
-    hidden;opacity:0; 
-    margin-top:10px;
-  }
-  50%{
-    height: 100%; 
-    padding: 10px; 
-    visibility: visible; 
-    opacity:0; 
-    margin-top:10px;
-  }
-  75%{
-    height: 100%; 
-    padding: 10px; 
-    visibility: visible; 
-    opacity:0; 
-    margin-top:10px;
-  }
-  100%{
-    height: 100%; 
-    padding: 10px; 
-    visibility: visible; 
-    opacity:0; 
-    margin-top:10px;
-    }
-`;
-
 interface MenuProps {
   styles: DropdownStyles;
 }
 
 export const Menu = styled.div<MenuProps>`
-  /* width: 0; */
   height: 0;
   visibility: hidden;
   opacity: 0;
@@ -108,22 +67,14 @@ export const Menu = styled.div<MenuProps>`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* top: 100%; */
-  /* left: 0; */
-  /* transform: translateY(4px); */
   min-width: ${(props) => props.styles.menuMinWidth};
   max-width: ${(props) => props.styles.menuMaxWidth};
-  /* background: var(--color-bg-primary); */
-  /* border: 1px solid var(--color-border); */
-  /* border-radius: 5px; */
-  /* z-index: 1; */
   cursor: default;
-  /* box-shadow: var(--box-shadow); */
   &.open {
     visibility: visible;
     opacity: 1;
-    padding: 10px;
-    height: max-content;
+    padding: 0 10px 10px 10px;
+    height: 100%;
   }
   &.closed {
     visibility: hidden;
