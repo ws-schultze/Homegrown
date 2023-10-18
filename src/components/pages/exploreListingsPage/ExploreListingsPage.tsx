@@ -26,6 +26,7 @@ import ListingOverlayPage from "../listingOverlay/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
+import DummyFilter from "./filters/dummyFilter/DummyFilter";
 
 /**
  * Passed to styled components for styling on desktop screen size
@@ -150,7 +151,9 @@ export default function ExploreListingsDesktop(): JSX.Element {
 
           <ForSaleOrRentFilter styles={desktopDropdownStyle} />
           <PriceFilter styles={desktopDropdownStyle} />
-          <ListingsTypeFilter styles={desktopDropdownStyle} />
+          {/* <ListingsTypeFilter styles={desktopDropdownStyle} /> */}
+          {/* <DummyFilter styles={desktopDropdownStyle} /> */}
+
           <BedAndBathFilter styles={desktopDropdownStyle} />
         </div>
 
@@ -273,10 +276,12 @@ export default function ExploreListingsDesktop(): JSX.Element {
             />
           </div>
           <ForSaleOrRentFilter styles={mobileDropdownStyle} />
+          <DummyFilter styles={mobileDropdownStyle} />
           <PriceFilter styles={mobileDropdownStyle} />
-
-          <ListingsTypeFilter styles={mobileDropdownStyle} />
-
+          {/* 
+          Using DummyFilter to create a Dropdown without absolute positioning
+           */}
+          {/* <ListingsTypeFilter styles={mobileDropdownStyle} /> */}
           <BedAndBathFilter styles={mobileDropdownStyle} />
         </div>
       </div>
