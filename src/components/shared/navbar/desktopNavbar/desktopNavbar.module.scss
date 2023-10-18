@@ -22,7 +22,8 @@
   justify-content: space-between;
   padding: 0 10px;
   height: 100%;
-  width: 100%;
+  max-width: var(--max-width-content);
+  flex-grow: 1;
 }
 
 .nav-left {
