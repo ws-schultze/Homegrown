@@ -14,7 +14,7 @@ import { ref } from "firebase/storage";
 import {
   setSelectedItems,
   setShowMenu,
-} from "../listingTypeFilter/listingTypeFilterSlice";
+} from "../../../../pages/exploreListingsPage/filters/listingTypeFilter/listingTypeFilterSlice";
 
 interface Props {
   styles: DropdownStyles;

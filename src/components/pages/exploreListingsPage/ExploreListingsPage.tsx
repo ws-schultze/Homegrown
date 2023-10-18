@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
-import BedAndBathFilter from "./filters/bedAndBathFilter/BedAndBathFilter";
+import BedAndBathFilter from "../../shared/filterDropdownMenus/absoluteMenu/bedAndBathFilter/BedAndBathFilter";
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
@@ -26,7 +26,7 @@ import ListingOverlayPage from "../listingOverlay/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
-import DummyFilter from "./filters/dummyFilter/DummyFilter";
+import DummyFilter from "../../shared/filterDropdownMenus/flexMenu/dummyFilter/DummyFilter";
 
 /**
  * Passed to styled components for styling on desktop screen size
@@ -151,7 +151,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
 
           <ForSaleOrRentFilter styles={desktopDropdownStyle} />
           <PriceFilter styles={desktopDropdownStyle} />
-          {/* <ListingsTypeFilter styles={desktopDropdownStyle} /> */}
+          <ListingsTypeFilter styles={desktopDropdownStyle} />
           {/* <DummyFilter styles={desktopDropdownStyle} /> */}
 
           <BedAndBathFilter styles={desktopDropdownStyle} />
@@ -160,25 +160,43 @@ export default function ExploreListingsDesktop(): JSX.Element {
         <div className={styles["content"]}>
           <div className={styles["listing-cards-container"]}>
             <div className={styles["listing-cards"]}>
-              {!place && !params.placeFormattedAddress ? (
-                <div
-                  className={styles["search-results-header"]}
-                  style={{ border: " 2px solid orange" }}
-                >{`Enter a location 👆 to search for listings`}</div>
-              ) : null}
-
-              {place ? (
+              {pageState.currentFilteredListings.length === 0 && !place ? (
                 <div className={styles["search-results-header"]}>
-                  {`Search results for ${
-                    place ? place.formatted_address : null
-                  }`}
-                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                  <h3>No listings were found.</h3>
+                  <p>
+                    Try changing the filters and or adding a location to get
+                    better results.
+                  </p>
                 </div>
-              ) : null}
-
-              {!place ? (
+              ) : pageState.currentFilteredListings.length === 0 && place ? (
                 <div className={styles["search-results-header"]}>
-                  <p>{`Found ${pageState.currentFilteredListings.length} listings`}</p>
+                  <h3>No listings were found.</h3>
+                  <p>
+                    {`Either there are no listing in ${place.formatted_address} or there are none that match your filter criteria.`}{" "}
+                    <br />
+                    <br />
+                    To remove this location filter, click "Remove Boundary" on
+                    the map 👉
+                  </p>
+                </div>
+              ) : pageState.currentFilteredListings.length > 0 && !place ? (
+                <div className={styles["search-results-header"]}>
+                  <h3>{`Found ${pageState.currentFilteredListings.length} listings.`}</h3>
+                  <p>
+                    Try adding a location or some filters to refine your search.
+                  </p>
+                </div>
+              ) : pageState.currentFilteredListings.length > 0 && place ? (
+                <div className={styles["search-results-header"]}>
+                  <h3>
+                    {" "}
+                    {`Found ${pageState.currentFilteredListings.length} listings in ${place.formatted_address}.`}
+                  </h3>
+                  <p>
+                    Try applying some filters to refine your search. <br />
+                    <br /> To remove this location filter, click "Remove
+                    Boundary" on the map 👉
+                  </p>
                 </div>
               ) : null}
 

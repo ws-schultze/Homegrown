@@ -2,18 +2,18 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
   width: 100vw;
   height: calc(100vh - var(--height-navbar));
   margin-top: var(--height-navbar);
-  &.mobile {
-  }
 }
 
 .content {
   position: relative;
   display: flex;
   overflow: hidden;
+  // Force the map and listing cards container to fill the screen
+  // when no listings are found
+  flex-grow: 1;
 }
 
 .filters {
@@ -170,14 +170,13 @@
   color: var(--color-text);
   padding: 10px;
   font-size: 18px;
-  border-radius: 5px;
-  margin: 5px 5px 0;
-
-  p {
-    padding: 0;
-    margin: 0;
-    font-size: 16px;
-  }
+  border-bottom: 1px solid var(--color-border);
+  // h3 {
+  //   padding: 10px;
+  // }
+  // p {
+  //   padding: 10px;
+  // }
 }
 
 .listing-cards-container {

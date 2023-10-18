@@ -8,13 +8,13 @@ import priceFilterReducer, {
   initialPriceFilterState,
 } from "../components/pages/exploreListingsPage/filters/priceFilter/priceFilterSlice";
 import listingTypeFilterReducer from "../components/pages/exploreListingsPage/filters/listingTypeFilter/listingTypeFilterSlice";
-import bedAndBathFilterReducer from "../components/pages/exploreListingsPage/filters/bedAndBathFilter/bedAndBathFilterSlice";
+import bedAndBathFilterReducer from "../components/shared/filterDropdownMenus/absoluteMenu/bedAndBathFilter/bedAndBathFilterSlice";
 import placeFilterReducer, {
   initialPlaceFilterState,
 } from "../components/pages/exploreListingsPage/filters/placeFilter/placeFilterSlice";
 import { initialForSaleOrRentFilterState } from "../components/pages/exploreListingsPage/filters/forSaleOrRentFilter/forSaleOrRentSlice";
 import { initialListingTypeFilterState } from "../components/pages/exploreListingsPage/filters/listingTypeFilter/listingTypeFilterSlice";
-import { initialBedAndBathFilterState } from "../components/pages/exploreListingsPage/filters/bedAndBathFilter/bedAndBathFilterSlice";
+import { initialBedAndBathFilterState } from "../components/shared/filterDropdownMenus/absoluteMenu/bedAndBathFilter/bedAndBathFilterSlice";
 import mapTypeMenuReducer, {
   initialMapTypeMenuState,
 } from "../components/shared/mapTypeMenu/mapTypeMenuSlice";
