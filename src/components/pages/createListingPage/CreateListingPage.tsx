@@ -39,7 +39,7 @@ import ReviewForm from "./components/ReviewForm";
 import makeFileNameForUpload from "../utils/makeFileNameForUpload";
 import Footer from "../../shared/footer/Footer";
 
-export default function CreateListing(): JSX.Element {
+export default function CreateListingPage(): JSX.Element {
   const { userId, isAuthenticated, isLoading } = useUserContext();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<ListingData>(initListingData);

@@ -22,7 +22,7 @@ import Error from "../../shared/error/Error";
 
 register();
 
-export default function Home() {
+export default function HomePage() {
   const userContext = useUserContext();
   const commonState = useAppSelector((state) => state.common);
   const exploreState = useAppSelector((state) => state.exploreListings);

@@ -9,7 +9,7 @@ import {
   TypeCoord,
   Boundaries,
 } from "../../../../types/index";
-import ListingPopup from "../../listingOverlay/ListingPopup";
+import ListingPopup from "../../listingOverlayPage/ListingPopup";
 import { ExploreListingsFilters } from "../ExploreListingsPage";
 
 import styles from "./exploreListingsMap.module.scss";

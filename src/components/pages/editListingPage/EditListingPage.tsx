@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { getAuth } from "firebase/auth";
+import { useState, useEffect } from "react";
 import { db } from "../../../firebase.config";
 import {
   doc,
@@ -18,24 +17,24 @@ import {
   ListingData,
 } from "../../../types/index";
 import { initListingData } from "../../../initialValues";
-import Review from "../createListing/components/ReviewForm";
-import PageBtns from "../createListing/components/PageBtns";
-import SingleFamilyHome from "../createListing/components/SingleFamilyHomeForm";
-import UserAcknowledgementForm from "../createListing/components/UserAcknowledgementForm";
-import MultiFamilyHomeForSaleForm from "../createListing/components/MultiFamilyHomeForSaleForm";
-import MultiFamilyHomeUnitForRentForm from "../createListing/components/MultiFamilyHomeUnitForRentForm";
-import ApartmentBuildingForSaleForm from "../createListing/components/ApartmentBuildingForSaleForm";
-import ApartmentForRentForm from "../createListing/components/ApartmentForRentForm";
-import CompanyForm from "../createListing/components/CompanyForm";
-import PrivateOwnerForm from "../createListing/components/PrivateOwnerForm";
-import OwnerForm from "../createListing/components/OwnerForm";
-import AgentForm from "../createListing/components/AgentForm";
-import ListingAddressForm from "../createListing/components/ListingAddressForm";
-import BasicInfoForm from "../createListing/components/BasicInfoForm";
-import UploadsEditForm from "../createListing/components/UploadsEditForm";
+import Review from "../createListingPage/components/ReviewForm";
+import PageBtns from "../createListingPage/components/PageBtns";
+import SingleFamilyHome from "../createListingPage/components/SingleFamilyHomeForm";
+import UserAcknowledgementForm from "../createListingPage/components/UserAcknowledgementForm";
+import MultiFamilyHomeForSaleForm from "../createListingPage/components/MultiFamilyHomeForSaleForm";
+import MultiFamilyHomeUnitForRentForm from "../createListingPage/components/MultiFamilyHomeUnitForRentForm";
+import ApartmentBuildingForSaleForm from "../createListingPage/components/ApartmentBuildingForSaleForm";
+import ApartmentForRentForm from "../createListingPage/components/ApartmentForRentForm";
+import CompanyForm from "../createListingPage/components/CompanyForm";
+import PrivateOwnerForm from "../createListingPage/components/PrivateOwnerForm";
+import OwnerForm from "../createListingPage/components/OwnerForm";
+import AgentForm from "../createListingPage/components/AgentForm";
+import ListingAddressForm from "../createListingPage/components/ListingAddressForm";
+import BasicInfoForm from "../createListingPage/components/BasicInfoForm";
+import UploadsEditForm from "../createListingPage/components/UploadsEditForm";
 import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
 
-export default function EditListing() {
+export default function EditListingPage() {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<ListingData>(initListingData);
   const { userId, isAuthenticated, isLoading } = useUserContext();

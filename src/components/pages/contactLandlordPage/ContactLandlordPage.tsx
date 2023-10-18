@@ -4,11 +4,11 @@ import { DocumentData, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../../shared/loaders/Spinner";
-import styles from "./contactLandlord.module.scss";
+import styles from "./contactLandlordPage.module.scss";
 import ListingCard from "../../shared/listingCard/ListingCard";
 import { FetchedListing, TypeFetchedListingData } from "../../../types/index";
 
-export default function ContactLandlord() {
+export default function ContactLandlordPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [landlord, setLandlord] = useState<DocumentData | null>(null);

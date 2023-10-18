@@ -8,7 +8,14 @@ import styles from "./desktopNavbar.module.scss";
 import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
 
-export default function DesktopNavbar() {
+interface Props {
+  /**
+   * Sets max width for navbar nav, of the form <"123px">
+   */
+  maxWidth?: string;
+}
+
+export default function DesktopNavbar({ maxWidth }: Props) {
   const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const placeFilter = useAppSelector((state) => state.placeFilter);
@@ -23,8 +30,11 @@ export default function DesktopNavbar() {
   }
 
   return (
-    <nav className={`${styles.container} `}>
-      <div className={styles.nav}>
+    <nav className={`${styles.container}`}>
+      <div
+        className={styles.nav}
+        style={maxWidth ? { maxWidth: maxWidth } : undefined}
+      >
         <div className={styles["nav-left"]}>
           <Link
             to={navigateToMapPage()}

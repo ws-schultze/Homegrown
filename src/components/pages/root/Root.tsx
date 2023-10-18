@@ -1,4 +1,4 @@
-import { Outlet, useNavigation } from "react-router-dom";
+import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useThemeContext } from "../../../ThemeProvider";
 import Spinner from "../../shared/loaders/Spinner";
@@ -15,6 +15,7 @@ export default function Root({
   const { theme } = useThemeContext();
   const screenSize = useScreenSizeContext();
   const navigation = useNavigation();
+  const location = useLocation();
 
   if (navigation.state === "loading") {
     return <Spinner size="large" />;
@@ -22,7 +23,18 @@ export default function Root({
 
   return (
     <div className={`${styles.container}`}>
-      {screenSize === "desktop" ? <DesktopNavbar /> : <MobileNavbar />}
+      {screenSize === "desktop" ? (
+        location.pathname.includes("/explore-listings/") ? (
+          // Wider navbar nav
+          <DesktopNavbar maxWidth="100%" />
+        ) : (
+          // Narrower navbar nav
+          <DesktopNavbar />
+        )
+      ) : (
+        // Mobile navbar nav doesn't change width
+        <MobileNavbar />
+      )}
 
       <main className={styles.main}>{children ?? <Outlet />}</main>
 

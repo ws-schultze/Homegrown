@@ -25,7 +25,6 @@ import { ReactComponent as BathSVG } from "../../../assets/svg/bath-solid.svg";
 import { ReactComponent as ToiletSVG } from "../../../assets/svg/toilet-solid.svg";
 
 import { Wrapper } from "@googlemaps/react-wrapper";
-// import { useThemeContext } from "../../../ThemeProvider";
 import AddressMap from "../../shared/addressMap/AddressMap";
 import assertIsNode from "../../utils/assertIsNode";
 import logoPNG from "../../../assets/logo/logo.png";
@@ -52,7 +51,6 @@ import {
   SmallImg,
   Specs,
 } from "./styledComponents";
-// import css from "./styles.module.css";
 import { renderMap } from "../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../redux/hooks";
 

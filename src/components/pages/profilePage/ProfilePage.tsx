@@ -36,7 +36,7 @@ export interface TypeProfile {
   editable: boolean;
 }
 
-export default function Profile() {
+export default function ProfilePage() {
   const [state, setState] = useState<TypeProfile>({
     username: {
       value: "",

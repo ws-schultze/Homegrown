@@ -22,7 +22,7 @@ import {
   DropdownStyles,
 } from "../../../types/index";
 import styles from "./exploreListingsPage.module.scss";
-import ListingOverlayPage from "../listingOverlay/ListingOverlayPage";
+import ListingOverlayPage from "../listingOverlayPage/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";

@@ -1,6 +1,5 @@
 import "./css/addressAutoCompleteForm.css";
 import "./scss/index.scss";
-// import "./css/navbar.css";
 import "./css/dropdown.css";
 import "./css/listing-page.css";
 import "./css/listing-form.css";
@@ -16,12 +15,12 @@ import {
 import PrivateRoute from "./components/shared/privateRoute/PrivateRoute";
 import RootBoundary from "./components/pages/rootBoundary/RootBoundary";
 import Root from "./components/pages/root/Root";
-import ContactLandlord from "./components/pages/contactLandlord/ContactLandlord";
-import EditListing from "./components/pages/editListing/EditListing";
-import CreateListing from "./components/pages/createListing/CreateListing";
-import Profile from "./components/pages/profile/Profile";
-import ExploreListings from "./components/pages/exploreListingsPage/ExploreListingsPage";
-import Home from "./components/pages/home/Home";
+import ContactLandlordPage from "./components/pages/contactLandlordPage/ContactLandlordPage";
+import EditListingPage from "./components/pages/editListingPage/EditListingPage";
+import CreateListingPage from "./components/pages/createListingPage/CreateListingPage";
+import ProfilePage from "./components/pages/profilePage/ProfilePage";
+import ExploreListingsPage from "./components/pages/exploreListingsPage/ExploreListingsPage";
+import HomePage from "./components/pages/homePage/HomePage";
 import SignInPage from "./components/pages/signInPage/SignInPage";
 import SignUpPage from "./components/pages/signUpPage/SignUpPage";
 import ForgotPasswordPage from "./components/pages/forgotPasswordPage/ForgotPasswordPage";
@@ -38,25 +37,25 @@ export const appRouter = createBrowserRouter(
       }
     >
       \
-      <Route index element={<Home />} />
-      <Route path="/explore-listings" element={<ExploreListings />}>
-        <Route path=":place" element={<ExploreListings />} />
+      <Route index element={<HomePage />} />
+      <Route path="/explore-listings" element={<ExploreListingsPage />}>
+        <Route path=":place" element={<ExploreListingsPage />} />
         <Route
           path="details/:listingAddress/:listingId"
-          element={<ExploreListings />}
+          element={<ExploreListingsPage />}
         />
       </Route>
       <Route path={"forgot-password/"} element={<ForgotPasswordPage />} />
       <Route path="profile/" element={<PrivateRoute />}>
-        <Route path="" element={<Profile />} />
+        <Route path="" element={<ProfilePage />} />
       </Route>
       <Route path="sign-in/" element={<SignInPage />} />
       <Route path="sign-up/" element={<SignUpPage />} />
-      <Route path="create-listing/" element={<CreateListing />} />
-      <Route path="edit-listing/:listingId/" element={<EditListing />} />
+      <Route path="create-listing/" element={<CreateListingPage />} />
+      <Route path="edit-listing/:listingId/" element={<EditListingPage />} />
       <Route
         path="contact/:landlordId/:listingId/"
-        element={<ContactLandlord />}
+        element={<ContactLandlordPage />}
       />
       \
     </Route>
