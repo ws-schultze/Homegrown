@@ -283,92 +283,90 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="page-wrap">
-      <div className={styles.container}>
-        {state.loading === false ? (
-          <form id={styles["personal-details"]}>
-            <header>Personal Details</header>
-            <UsernameInput
-              value={state.username.value}
-              emit={handleUsername}
-              readonly={state.username.readOnly}
-            />
-            <EmailInput
-              value={state.email.value}
-              emit={handleEmail}
-              readonly={state.email.readOnly}
-            />
+    <div className={styles.container}>
+      {state.loading === false ? (
+        <form id={styles["personal-details"]}>
+          <header>Personal Details</header>
+          <UsernameInput
+            value={state.username.value}
+            emit={handleUsername}
+            readonly={state.username.readOnly}
+          />
+          <EmailInput
+            value={state.email.value}
+            emit={handleEmail}
+            readonly={state.email.readOnly}
+          />
 
-            <div className={styles["btns-container"]}>
-              {state.editable === false ? (
-                <button
-                  className={styles.btn}
-                  type="button"
-                  onClick={handleEditDetails}
-                >
-                  <EditUserSVG /> Edit Details
-                </button>
-              ) : (
-                <button
-                  className={styles.btn}
-                  type="button"
-                  onClick={handleSubmitDetailsUpdate}
-                >
-                  <SubmitChangesSVG /> Submit Updates
-                </button>
-              )}
-
+          <div className={styles["btns-container"]}>
+            {state.editable === false ? (
               <button
                 className={styles.btn}
                 type="button"
-                onClick={handlePasswordReset}
+                onClick={handleEditDetails}
               >
-                <LockSVG />
-                Reset password
+                <EditUserSVG /> Edit Details
               </button>
-              {state.unfinishedListing === null ? (
-                <Link to="/create-listing" className={styles.btn}>
-                  <MoneySVG />
-                  <p>List a Property</p>
-                </Link>
-              ) : (
-                <Link to="/create-listing" className={styles.btn}>
-                  <MoneySVG />
-                  <p>Continue Listing</p>
-                </Link>
-              )}
-              <button
-                className={styles.btn}
-                type="button"
-                onClick={handleSignOut}
-              >
-                <SignOutSVG />
-                Sign Out
-              </button>
-            </div>
-          </form>
-        ) : null}
-
-        <div className={styles["listings-container"]}>
-          <header className={styles.header}>My Listings</header>
-          <div className={styles.listings}>
-            {state.loading === false && state.listings?.length > 0 ? (
-              <>
-                {state.listings.map((listing, index) => (
-                  <ListingCard
-                    handleDelete={handleDelete}
-                    handleEdit={handleEdit}
-                    key={listing.id}
-                    listing={listing}
-                  />
-                ))}
-              </>
             ) : (
-              <>
-                <p>You have no listings.</p>
-              </>
+              <button
+                className={styles.btn}
+                type="button"
+                onClick={handleSubmitDetailsUpdate}
+              >
+                <SubmitChangesSVG /> Submit Updates
+              </button>
             )}
+
+            <button
+              className={styles.btn}
+              type="button"
+              onClick={handlePasswordReset}
+            >
+              <LockSVG />
+              Reset password
+            </button>
+            {state.unfinishedListing === null ? (
+              <Link to="/create-listing" className={styles.btn}>
+                <MoneySVG />
+                <p>List a Property</p>
+              </Link>
+            ) : (
+              <Link to="/create-listing" className={styles.btn}>
+                <MoneySVG />
+                <p>Continue Listing</p>
+              </Link>
+            )}
+            <button
+              className={styles.btn}
+              type="button"
+              onClick={handleSignOut}
+            >
+              <SignOutSVG />
+              Sign Out
+            </button>
           </div>
+        </form>
+      ) : null}
+
+      <div className={styles["listings-container"]}>
+        <header className={styles.header}>My Listings</header>
+        <div className={styles.listings}>
+          {state.loading === false && state.listings?.length > 0 ? (
+            <>
+              {state.listings.map((listing, index) => (
+                <ListingCard
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                  key={listing.id}
+                  listing={listing}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              <p>You have no listings.</p>
+            </>
+          )}
         </div>
       </div>
     </div>

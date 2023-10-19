@@ -1,61 +1,49 @@
 @import "../../../scss/functions.scss";
-// $breakpoints: (
-//   "small": (
-//     max-width: 767px,
-//   ),
-//   "medium": (
-//     max-width: 992px,
-//   ),
-//   "large": (
-//     min-width: 1024px,
-//   ),
-// ) !default;
-// $border: (1px solid var(--color-border));
-// $border-radius: 5px;
-// /// ---------------------------------------------
-// /// Mixin to manage responsive breakpoints
-// /// @author Kitty Giraudel
-// /// @param {String} $breakpoint - Breakpoint name
-// /// @require $breakpoints
-// @mixin respond-to($breakpoint) {
-//   // If the key exists in the map
-//   @if map-has-key($breakpoints, $breakpoint) {
-//     // Prints a media query based on the value
-//     @media #{inspect(map-get($breakpoints, $breakpoint))} {
-//       @content;
-//     }
-//   }
-//   // If the key doesn't exist in the map
-//   @else {
-//     @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
-//           + "Available breakpoints are: #{map-keys($breakpoints)}.";
-//   }
-// }
-// /// ---------------------------------------------
+@import "../../../scss/breakpoints.module.scss";
+
 .container {
   display: flex;
   flex-direction: row;
   gap: 10px;
   padding: 10px;
-  @include respond-to("medium") {
+  max-width: var(--max-width-content);
+  margin: auto;
+
+  @include sm-screen {
     flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    display: flex;
+    font-size: 24px;
+    gap: 5px;
+    width: 100%;
+    align-items: center;
+    padding: 10px;
+    justify-content: center;
+    color: var(--color-text);
+    background: transparent;
+    border-bottom: var(--border);
   }
 
   #personal-details {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 350px;
+    gap: 10px;
+    max-width: 498px;
+    height: -moz-fit-content;
     height: fit-content;
     border: 1px solid var(--color-border);
     border-radius: 5px;
-    padding: 20px;
+    padding: 10px;
   }
 
   .btns-container {
     display: flex;
-    flex-direction: column;
     gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .btn {
@@ -65,7 +53,7 @@
     gap: 0.5rem;
     height: 2.5rem;
     padding: 0.5rem;
-    width: 100%;
+    width: 233px;
     background-color: var(--color-bg-primary);
     color: var(--color-text);
     font-weight: 500;
@@ -90,33 +78,18 @@
   .listings-container {
     display: flex;
     flex-direction: column;
-
-    gap: 20px;
-    padding: 20px;
+    gap: 10px;
+    padding: 10px;
     border: 1px solid var(--color-border);
     border-radius: 5px;
-    min-width: 350px;
-    max-width: 1165px;
-  }
-
-  header {
-    display: flex;
-    font-size: 24px;
-    gap: 5px;
-    width: 100%;
-    align-items: center;
-    padding: 10px;
-    justify-content: center;
-    color: var(--color-text);
-    background: transparent;
-    border-bottom: var(--border);
+    min-width: 320px;
   }
 
   .listings {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    max-width: 650px;
     justify-content: center;
-    max-width: 1100px;
   }
 }

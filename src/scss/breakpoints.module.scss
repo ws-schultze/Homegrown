@@ -1,0 +1,45 @@
+// No page component shall be smaller than 320px wide
+$xs-screen-min-width: 320px;
+$xs-screen-max-width: 480px;
+
+$sm-screen-min-width: 481px;
+$sm-screen-max-width: 768px;
+
+$md-screen-min-width: 769px;
+$md-screen-max-width: 1024px;
+
+$lg-screen-min-width: 1025px;
+$lg-screen-max-width: 1200px;
+
+$xl-screen-min-width: 1201px;
+// Anything above 1201px will just be xl, for now.
+
+@mixin xs-screen {
+  @media only screen and (max-width: $xs-screen-max-width) {
+    @content;
+  }
+}
+
+@mixin sm-screen {
+  @media only screen and (min-width: $sm-screen-min-width) and (max-width: $sm-screen-max-width) {
+    @content;
+  }
+}
+
+@mixin md-screen {
+  @media only screen and (min-width: $md-screen-min-width) and (max-width: $md-screen-max-width) {
+    @content;
+  }
+}
+
+@mixin lg-screen {
+  @media only screen and (min-width: $lg-screen-min-width) and (max-width: $lg-screen-max-width) {
+    @content;
+  }
+}
+
+@mixin xl-screen {
+  @media only screen and (min-width: $xl-screen-min-width) {
+    @content;
+  }
+}
