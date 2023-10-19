@@ -1,3 +1,5 @@
+@use "../../../scss/breakpoints" as b;
+
 .container {
   position: relative;
   display: flex;
@@ -173,7 +175,6 @@
 .listing-cards-container {
   display: flex;
   flex-direction: column;
-  // min-width: 755px;
   gap: 5px;
   overflow: hidden scroll;
   color: var(--color-text);
@@ -185,6 +186,9 @@
   overflow: hidden scroll;
   color: var(--color-text);
   padding: 0px;
+  @include b.lg-screen {
+    width: 345px;
+  }
 }
 
 .listing-cards {
@@ -210,13 +214,11 @@
 
 .map-container {
   height: 100%;
+  flex-grow: 1;
   // Use width of the listing-card-container
-  width: calc(100vw - 670px);
+  // width: calc(100vw - 670px);
   background: var(--color-bg-primary);
   &.mobile {
-    // position: absolute;
-    // top: 0;
-    // bottom: 0;
     width: 100vw;
   }
 }

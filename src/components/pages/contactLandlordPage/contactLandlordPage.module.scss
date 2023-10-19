@@ -1,4 +1,4 @@
-@import "../../../scss/breakpoints.module.scss";
+@use "../../../scss/breakpoints" as b;
 
 .container {
   header {
@@ -48,7 +48,7 @@
     &:focus-within {
       border-color: var(--color-border-hover);
     }
-    @include xs-screen {
+    @include b.xs-screen {
       width: 100%;
     }
   }

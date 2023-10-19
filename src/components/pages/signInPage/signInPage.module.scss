@@ -1,4 +1,4 @@
-@import "../../../scss/breakpoints.module.scss";
+@use "../../../scss/breakpoints" as b;
 
 .container {
   display: flex;
@@ -9,7 +9,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   width: fit-content;
-  @include xs-screen {
+  @include b.xs-screen {
     padding: 5px;
     border: none;
   }
@@ -21,7 +21,7 @@
     max-width: 500px;
     min-width: 300px;
     margin: auto;
-    @include xs-screen {
+    @include b.xs-screen {
       width: 100%;
     }
   }

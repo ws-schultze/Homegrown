@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./css/addressAutoCompleteForm.css";
-import "./scss/index.scss";
+import "./scss/style.scss";
 
 import "./css/navbar.css";
 import "./css/dropdown.css";

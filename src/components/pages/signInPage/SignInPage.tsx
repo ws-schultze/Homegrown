@@ -14,7 +14,6 @@ import EmailInput, {
   Email,
   initEmail,
 } from "../../shared/inputs/emailInput/EmailInput";
-// import "../../../scss/index.scss";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,5 +1,5 @@
 import "./css/addressAutoCompleteForm.css";
-import "./scss/index.scss";
+import "./scss/style.scss";
 import "./css/dropdown.css";
 import "./css/listing-page.css";
 import "./css/listing-form.css";
