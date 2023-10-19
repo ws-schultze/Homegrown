@@ -45,7 +45,7 @@
   visibility: hidden;
   opacity: 0;
   transition: 0.3s;
-  overflow-y: auto;
+  overflow-y: scroll;
   background: var(--color-bg-primary);
   padding: 10px;
   display: flex;

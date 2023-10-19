@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Boundaries } from "../../../../types/index";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
-import { setPlace } from "../filters/placeFilter/placeFilterSlice";
+import { setPlace } from "../../../shared/listingFilters/absoluteDropdowns/placeFilter/placeFilterSlice";
 import { useNavigate } from "react-router";
 
 function useRemoveBoundaryBtnClick(

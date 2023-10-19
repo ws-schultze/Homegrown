@@ -148,12 +148,6 @@ export default function ListingsTypeFilter({ styles }: Props) {
               return null;
             }
           })}
-          {/* <ApplyFilterBtn
-            // onClick={() => emitSelectedItems(state.selectedItems)}
-            onClick={() => dispatch}
-          >
-            Apply
-          </ApplyFilterBtn> */}
         </Menu>
       ) : null}
     </Container>

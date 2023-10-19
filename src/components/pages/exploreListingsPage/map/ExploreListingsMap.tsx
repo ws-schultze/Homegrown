@@ -35,7 +35,7 @@ import {
   setMapMarkerSize,
   setMapZoom,
 } from "../exploreListingsPageSlice";
-import { setPlace } from "../filters/placeFilter/placeFilterSlice";
+import { setPlace } from "../../../shared/listingFilters/absoluteDropdowns/placeFilter/placeFilterSlice";
 import { MapType } from "../../../shared/mapTypeMenu/mapTypeMenuSlice";
 import { useDispatch } from "react-redux";
 import { useMapContext } from "../../../../MapProvider";

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
-import BedAndBathFilter from "../../shared/filterDropdownMenus/absoluteMenu/bedAndBathFilter/BedAndBathFilter";
+import BedAndBathFilter from "../../shared/listingFilters/absoluteDropdowns/bedAndBathFilter/BedAndBathFilter";
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
@@ -11,9 +11,9 @@ import {
   setListingToOverlay,
 } from "./exploreListingsPageSlice";
 import ExploreListingsMap from "./map/ExploreListingsMap";
-import ForSaleOrRentFilter from "./filters/forSaleOrRentFilter/ForSaleOrRentFilter";
-import PriceFilter from "./filters/priceFilter/PriceFilter";
-import ListingsTypeFilter from "./filters/listingTypeFilter/ListingTypeFilter";
+import ForSaleOrRentFilter from "../../shared/listingFilters/forSaleOrRentFilter/ForSaleOrRentFilter";
+import ListingTypeFilter from "../../shared/listingFilters/listingTypeFilter/ListingTypeFilter";
+import PriceFilter from "../../shared/listingFilters/absoluteDropdowns/priceFilter/PriceFilter";
 import ListingCard from "../../shared/listingCard/ListingCard";
 import {
   ListingKindValue,
@@ -26,7 +26,6 @@ import ListingOverlayPage from "../listingOverlayPage/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
-import DummyFilter from "../../shared/filterDropdownMenus/flexMenu/dummyFilter/DummyFilter";
 
 /**
  * Passed to styled components for styling on desktop screen size
@@ -149,9 +148,15 @@ export default function ExploreListingsDesktop(): JSX.Element {
             defaultValue={place ? place.formatted_address : ""}
           />
 
-          <ForSaleOrRentFilter styles={desktopDropdownStyle} />
+          <ForSaleOrRentFilter
+            menuKind="absolute"
+            styles={desktopDropdownStyle}
+          />
           <PriceFilter styles={desktopDropdownStyle} />
-          <ListingsTypeFilter styles={desktopDropdownStyle} />
+          <ListingTypeFilter
+            menuKind="absolute"
+            styles={desktopDropdownStyle}
+          />
           <BedAndBathFilter styles={desktopDropdownStyle} />
         </div>
 
@@ -291,13 +296,9 @@ export default function ExploreListingsDesktop(): JSX.Element {
               defaultValue={place ? place.formatted_address : ""}
             />
           </div>
-          <ForSaleOrRentFilter styles={mobileDropdownStyle} />
-          <DummyFilter styles={mobileDropdownStyle} />
+          <ForSaleOrRentFilter menuKind="flex" styles={mobileDropdownStyle} />
+          <ListingTypeFilter menuKind="flex" styles={mobileDropdownStyle} />
           <PriceFilter styles={mobileDropdownStyle} />
-          {/* 
-          Using DummyFilter to create a Dropdown without absolute positioning
-           */}
-          {/* <ListingsTypeFilter styles={mobileDropdownStyle} /> */}
           <BedAndBathFilter styles={mobileDropdownStyle} />
         </div>
       </div>

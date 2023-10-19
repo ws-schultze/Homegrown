@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { DropdownStyles, ListingKindValue } from "../../../../../types/index";
 import {
   Container,
@@ -10,17 +10,16 @@ import {
 } from "./styledComponents";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { ref } from "firebase/storage";
 import {
   setSelectedItems,
   setShowMenu,
-} from "../../../../pages/exploreListingsPage/filters/listingTypeFilter/listingTypeFilterSlice";
+} from "../../absoluteDropdowns/listingTypeFilterAbsDropdown/listingTypeFilterSlice";
 
 interface Props {
   styles: DropdownStyles;
 }
 
-export default function DummyFilter({ styles }: Props) {
+export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
   const state = useAppSelector((state) => state.listingTypeFilter);
   const dispatch = useDispatch();
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import InputStr from "../../../../shared/inputs/inputStr/InputStr";
+import InputStr from "../../../inputs/inputStr/InputStr";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setPriceRange, setShowMenu } from "./priceFilterSlice";
