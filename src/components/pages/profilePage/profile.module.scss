@@ -1,4 +1,4 @@
-@import "../../../scss/functions.scss";
+@import "../../../scss/breakpoints.module.scss";
 @import "../../../scss/breakpoints.module.scss";
 
 .container {
@@ -9,7 +9,7 @@
   max-width: var(--max-width-content);
   margin: auto;
 
-  @include sm-screen {
+  @include md-screen-breakpoint {
     flex-direction: column;
     align-items: center;
   }
@@ -37,6 +37,9 @@
     border: 1px solid var(--color-border);
     border-radius: 5px;
     padding: 10px;
+    @include sm-screen-breakpoint {
+      border: none;
+    }
   }
 
   .btns-container {
@@ -50,9 +53,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    height: 2.5rem;
-    padding: 0.5rem;
+    gap: 5px;
+    height: 50px;
+    padding: 10px;
     width: 233px;
     background-color: var(--color-bg-primary);
     color: var(--color-text);
@@ -60,6 +63,9 @@
     font-size: 18px;
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
+    @include xs-screen {
+      width: 100%;
+    }
 
     svg {
       height: 100%;
@@ -83,6 +89,9 @@
     border: 1px solid var(--color-border);
     border-radius: 5px;
     min-width: 320px;
+    @include sm-screen-breakpoint {
+      border: none;
+    }
   }
 
   .listings {

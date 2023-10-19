@@ -1,4 +1,4 @@
-@import "../../../scss/functions.scss";
+@import "../../../scss/breakpoints.module.scss";
 
 .header {
   position: relative;
@@ -145,7 +145,7 @@
   display: flex;
   gap: 10px;
   margin: 64px auto 0;
-  @include respond-to("tablet") {
+  @include md-screen {
     flex-direction: column;
   }
 }

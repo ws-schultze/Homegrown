@@ -1,5 +1,4 @@
-@import "../../../scss/variables.scss";
-@import "../../../scss/functions.scss";
+@import "../../../scss/breakpoints.module.scss";
 
 .container {
   display: flex;
@@ -10,7 +9,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   width: fit-content;
-  @include respond-to("mobile") {
+  @include xs-screen {
     padding: 5px;
     border: none;
   }
@@ -22,7 +21,7 @@
     max-width: 500px;
     min-width: 300px;
     margin: auto;
-    @include respond-to("mobile") {
+    @include xs-screen {
       width: 100%;
     }
   }

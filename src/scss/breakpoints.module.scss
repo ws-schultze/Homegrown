@@ -26,14 +26,32 @@ $xl-screen-min-width: 1201px;
   }
 }
 
+@mixin sm-screen-breakpoint {
+  @media only screen and (max-width: $sm-screen-max-width) {
+    @content;
+  }
+}
+
 @mixin md-screen {
   @media only screen and (min-width: $md-screen-min-width) and (max-width: $md-screen-max-width) {
     @content;
   }
 }
 
+@mixin md-screen-breakpoint {
+  @media only screen and (max-width: $md-screen-max-width) {
+    @content;
+  }
+}
+
 @mixin lg-screen {
   @media only screen and (min-width: $lg-screen-min-width) and (max-width: $lg-screen-max-width) {
+    @content;
+  }
+}
+
+@mixin lg-screen-breakpoint {
+  @media only screen and (max-width: $lg-screen-max-width) {
     @content;
   }
 }
