@@ -1,5 +1,7 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+
 import commonReducer, { initialCommonState } from "../common/commonSlice";
+
 import exploreListingsReducer, {
   initialExploreListingsState,
 } from "../components/pages/exploreListingsPage/exploreListingsPageSlice";
@@ -16,15 +18,18 @@ import listingTypeFilterReducer, {
   initialState as initialListingTypeFilterState,
 } from "../components/shared/listingFilters/listingTypeFilter/slice";
 
-import bedAndBathFilterReducer from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
 import placeFilterReducer, {
   initialPlaceFilterState,
 } from "../components/shared/listingFilters/absoluteDropdowns/placeFilter/placeFilterSlice";
 
-import { initialBedAndBathFilterState } from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
+import bedAndBathFilterReducer, {
+  initialState as initialBedAndBathFilterState,
+} from "../components/shared/listingFilters/bedAndBathFilter/slice";
+
 import mapTypeMenuReducer, {
   initialMapTypeMenuState,
 } from "../components/shared/mapTypeMenu/mapTypeMenuSlice";
+
 import genericDropdownReducer, {
   initialState as initialGenericDropdownState,
 } from "../components/shared/genericDropdown/slice";

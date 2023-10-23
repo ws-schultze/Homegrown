@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
-import BedAndBathFilter from "../../shared/listingFilters/absoluteDropdowns/bedAndBathFilter/BedAndBathFilter";
+import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAndBathFilter";
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
@@ -151,7 +151,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
 
           <ForSaleOrRentFilter
             menuKind="absolute"
-            label="For Sale / For Rent"
+            label="For Sale or Rent"
             styles={desktopDropdownStyle}
           />
           <PriceFilter
@@ -164,7 +164,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
             label="Listing Type"
             styles={desktopDropdownStyle}
           />
-          <BedAndBathFilter styles={desktopDropdownStyle} />
+          <BedAndBathFilter
+            menuKind="absolute"
+            label="Beds and Baths"
+            styles={desktopDropdownStyle}
+          />
           <GenericDropdown
             menuKind="absolute"
             styles={desktopDropdownStyle}
@@ -323,7 +327,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
             label="Price Range"
             styles={mobileDropdownStyle}
           />
-          <BedAndBathFilter styles={mobileDropdownStyle} />
+          <BedAndBathFilter
+            menuKind="flex"
+            label="Beds and Baths"
+            styles={mobileDropdownStyle}
+          />
         </div>
       </div>
 
