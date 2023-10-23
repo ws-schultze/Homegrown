@@ -26,26 +26,25 @@ export default function useCloseDropdown({
    */
   useEffect(() => {
     function handler({ target }: MouseEvent) {
+      console.log("handler called for: ", menuIsOpen);
       const t = target as Node;
 
-      if (menuKind === "flex") {
-        // container exists
-        if (containerRef.current) {
-          // the click is not inside the container
-          if (containerRef.current.contains(t) === false) {
-            // the menu exists
-            if (menuRef.current) {
-              // the click is not inside the menu
-              if (menuRef.current.contains(t) === false) {
-                // the menu must be open for it to be closed, otherwise clicking outside the container will just toggle the menu on any click!!
-                if (menuIsOpen) {
-                  dispatch(setShowMenu());
-                } else console.warn("menu is not open");
-              }
-            }
-          }
-        }
-      }
+      // container exists
+      if (containerRef.current) {
+        // the click is not inside the container
+        if (containerRef.current.contains(t) === false) {
+          // the menu exists
+          if (menuRef.current) {
+            // the click is not inside the menu
+            if (menuRef.current.contains(t) === false) {
+              // the menu must be open for it to be closed, otherwise clicking outside the container will just toggle the menu on any click!!
+              if (menuIsOpen) {
+                dispatch(setShowMenu());
+              } else console.warn("menu is not open");
+            } else console.log("menuRef.current.contains(t) !== false");
+          } else console.log("menuRef.current is undefined");
+        } else console.log("containerRef.current.contains(t) !== false");
+      } else console.log("containerRef.current is undefined");
     } // end handler
 
     window.addEventListener("click", handler);
