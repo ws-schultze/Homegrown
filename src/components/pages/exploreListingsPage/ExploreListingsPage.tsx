@@ -13,7 +13,7 @@ import {
 import ExploreListingsMap from "./map/ExploreListingsMap";
 import ForSaleOrRentFilter from "../../shared/listingFilters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import ListingTypeFilter from "../../shared/listingFilters/listingTypeFilter/ListingTypeFilter";
-import PriceFilter from "../../shared/listingFilters/absoluteDropdowns/priceFilter/PriceFilter";
+import PriceFilter from "../../shared/listingFilters/priceFilter/PriceFilter";
 import ListingCard from "../../shared/listingCard/ListingCard";
 import {
   ListingKindValue,
@@ -153,7 +153,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
             menuKind="absolute"
             styles={desktopDropdownStyle}
           />
-          <PriceFilter styles={desktopDropdownStyle} />
+          <PriceFilter
+            menuKind="absolute"
+            label="Price Range"
+            styles={desktopDropdownStyle}
+          />
           <ListingTypeFilter
             menuKind="absolute"
             styles={desktopDropdownStyle}
@@ -304,7 +308,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
           </div>
           <ForSaleOrRentFilter menuKind="flex" styles={mobileDropdownStyle} />
           <ListingTypeFilter menuKind="flex" styles={mobileDropdownStyle} />
-          <PriceFilter styles={mobileDropdownStyle} />
+          <PriceFilter
+            menuKind="flex"
+            label="Price Range"
+            styles={mobileDropdownStyle}
+          />
           <BedAndBathFilter styles={mobileDropdownStyle} />
         </div>
       </div>

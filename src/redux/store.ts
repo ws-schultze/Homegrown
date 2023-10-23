@@ -5,8 +5,8 @@ import exploreListingsReducer, {
 } from "../components/pages/exploreListingsPage/exploreListingsPageSlice";
 import forSaleOrRentReducer from "../components/shared/listingFilters/absoluteDropdowns/forSaleOrRentFilter/forSaleOrRentSlice";
 import priceFilterReducer, {
-  initialPriceFilterState,
-} from "../components/shared/listingFilters/absoluteDropdowns/priceFilter/priceFilterSlice";
+  initialState as initialPriceFilterState,
+} from "../components/shared/listingFilters/priceFilter/slice";
 import listingTypeFilterReducer from "../components/shared/listingFilters/listingTypeFilter/listingTypeFilterSlice";
 import bedAndBathFilterReducer from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
 import placeFilterReducer, {

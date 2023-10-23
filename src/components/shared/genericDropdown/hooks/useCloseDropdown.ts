@@ -1,15 +1,22 @@
+import { AnyAction } from "@reduxjs/toolkit";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+
+type Reducer = (noArgument: void) => {
+  payload: undefined;
+  type: string;
+};
 
 interface Props {
   menuKind: "absolute" | "flex";
   containerRef: React.MutableRefObject<HTMLDivElement | null>;
   menuRef: React.MutableRefObject<HTMLDivElement | null>;
   menuIsOpen: boolean;
-  setShowMenu: (noArgument: void) => {
-    payload: undefined;
-    type: string;
-  };
+  setShowMenu: Reducer;
+  /**
+   * Reducers for actions that should happen when the menu closes, such as setting a price range
+   */
+  reducers?: AnyAction[];
 }
 
 export default function useCloseDropdown({
@@ -18,6 +25,7 @@ export default function useCloseDropdown({
   setShowMenu,
   menuRef,
   containerRef,
+  reducers,
 }: Props) {
   const dispatch = useDispatch();
 
@@ -40,6 +48,9 @@ export default function useCloseDropdown({
               // the menu must be open for it to be closed, otherwise clicking outside the container will just toggle the menu on any click!!
               if (menuIsOpen) {
                 dispatch(setShowMenu());
+                if (reducers) {
+                  reducers.forEach((r) => dispatch(r));
+                }
               } else console.warn("menu is not open");
             } else console.log("menuRef.current.contains(t) !== false");
           } else console.log("menuRef.current is undefined");
@@ -51,5 +62,5 @@ export default function useCloseDropdown({
     return () => {
       window.removeEventListener("click", handler);
     };
-  }, [menuIsOpen]);
+  }, [menuIsOpen, reducers]);
 }
