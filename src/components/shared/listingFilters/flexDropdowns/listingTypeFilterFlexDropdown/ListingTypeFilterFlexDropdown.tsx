@@ -14,6 +14,7 @@ import {
   setSelectedItems,
   setShowMenu,
 } from "../../absoluteDropdowns/listingTypeFilterAbsDropdown/listingTypeFilterSlice";
+import { setSelectedTypes } from "../../listingTypeFilter/slice";
 
 interface Props {
   styles: DropdownStyles;
@@ -68,7 +69,7 @@ export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
     let items: ListingKindValue[] = [];
 
     if (
-      state.selectedItems.findIndex((i) =>
+      state.selectedTypes.findIndex((i) =>
         i && item ? i.id === item.id : undefined
       ) >= 0
     ) {
@@ -76,11 +77,11 @@ export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
       items = removeSelectedItem(item);
     } else {
       // Add inactive item to selected items
-      items = [...state.selectedItems, item];
+      items = [...state.selectedTypes, item];
     }
 
-    // setState((s) => ({ ...s, selectedItems: items }));
-    dispatch(setSelectedItems(items));
+    // setState((s) => ({ ...s, selectedTypes: items }));
+    dispatch(setSelectedTypes(items));
   }
 
   /**
@@ -88,9 +89,9 @@ export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
    * @returns remaining selected items
    */
   function removeSelectedItem(item: ListingKindValue): ListingKindValue[] {
-    if (state.selectedItems.length >= 1) {
+    if (state.selectedTypes.length >= 1) {
       const copy = { ...state };
-      return copy.selectedItems.filter((itm) => {
+      return copy.selectedTypes.filter((itm) => {
         if (itm !== null && item !== null) {
           return itm.id !== item.id;
         } else {
@@ -105,10 +106,10 @@ export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
   }
 
   function isSelected(item: ListingKindValue): boolean {
-    if (state.selectedItems.length >= 1) {
+    if (state.selectedTypes.length >= 1) {
       const copy = { ...state };
       return (
-        copy.selectedItems?.filter((i) =>
+        copy.selectedTypes?.filter((i) =>
           i && item ? i.id === item.id : undefined
         ).length > 0
       );
@@ -121,7 +122,7 @@ export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
     <Container
       ref={containerRef}
       inUse={
-        state.selectedItems && state.selectedItems.length > 0 ? true : false
+        state.selectedTypes && state.selectedTypes.length > 0 ? true : false
       }
     >
       <Btn onClick={() => dispatch(setShowMenu())} styles={styles}>
@@ -137,7 +138,7 @@ export default function ListingTypeFilterFlexDropdown({ styles }: Props) {
         ref={menuRef}
         onClick={(e) => e.stopPropagation()}
       >
-        {state.menuItems.map((item, index) => {
+        {state.types.map((item, index) => {
           if (item !== null) {
             return (
               <MenuItem

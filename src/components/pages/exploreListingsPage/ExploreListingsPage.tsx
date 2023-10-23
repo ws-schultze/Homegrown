@@ -161,6 +161,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
           />
           <ListingTypeFilter
             menuKind="absolute"
+            label="Listing Type"
             styles={desktopDropdownStyle}
           />
           <BedAndBathFilter styles={desktopDropdownStyle} />
@@ -312,7 +313,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
             label="For Sale or Rent"
             styles={mobileDropdownStyle}
           />
-          <ListingTypeFilter menuKind="flex" styles={mobileDropdownStyle} />
+          <ListingTypeFilter
+            menuKind="flex"
+            label="Listing Type"
+            styles={mobileDropdownStyle}
+          />
           <PriceFilter
             menuKind="flex"
             label="Price Range"

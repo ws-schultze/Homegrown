@@ -1,50 +1,35 @@
-import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../redux/hooks";
-import useCloseDropdown from "./hooks/useCloseDropdown";
+import { useEffect, useRef } from "react";
 import { DropdownStyles, ListingKindValue } from "../../../../types/index";
-
 import {
+  F_CONTAINER,
+  F_BTN,
+  F_BTN_ICON_WRAP,
+  F_BTN_ICON,
+  F_MENU,
+  A_MENU,
   A_CONTAINER,
   A_CONTAINER_ICON_WRAP,
+  A_MENU_ITEM,
+  F_MENU_ITEM,
   A_CONTAINER_ICON,
-  A_MENU,
-} from "./styledComponents/absolute";
-
-import {
-  F_BTN,
-  F_BTN_ICON,
-  F_BTN_ICON_WRAP,
-  F_CONTAINER,
-  F_MENU,
-} from "./styledComponents/flex";
-
-import { setSelectedTypes, setShowMenu } from "./slice";
-import { MENU_ITEM } from "./styledComponents/menuItem";
+} from "./listingTypeFilterStyledComponents";
+import { useAppSelector } from "../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { setSelectedItems, setShowMenu } from "./listingTypeFilterSlice";
+import useCloseDropdown from "../hooks/useCloseDropdown";
 
 interface Props {
-  /**
-   * absolute menus have absolute position an don't respect padding of the  *   parent and appear above siblings
-   *
-   * flex menus display a flex column that will respect parent padding and
-   will appear next to siblings
-   */
   menuKind: "absolute" | "flex";
   styles: DropdownStyles;
-  label: string;
 }
 
-export default function ListingTypeFilter({ menuKind, styles, label }: Props) {
+export default function ListingTypeFilter({ menuKind, styles }: Props) {
   const state = useAppSelector((state) => state.listingTypeFilter);
   const dispatch = useDispatch();
 
-  /**
-   Set an inUse condition, depending on the menu, such as if a max price is set on a price range menu
-   */
-  const inUse = state.selectedTypes && state.selectedTypes.length > 0;
-
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuItemRef = useRef<HTMLDivElement | null>(null);
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
@@ -72,7 +57,7 @@ export default function ListingTypeFilter({ menuKind, styles, label }: Props) {
       items = [...state.selectedTypes, item];
     }
 
-    dispatch(setSelectedTypes(items));
+    dispatch(setSelectedItems(items));
   }
 
   /**
@@ -109,34 +94,79 @@ export default function ListingTypeFilter({ menuKind, styles, label }: Props) {
     }
   }
 
+  if (menuKind === "flex") {
+    return (
+      <F_CONTAINER
+        ref={containerRef}
+        inUse={
+          state.selectedTypes && state.selectedTypes.length > 0 ? true : false
+        }
+      >
+        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
+          Listing Type
+          <F_BTN_ICON_WRAP>
+            <F_BTN_ICON $flipped={state.showMenu} />
+          </F_BTN_ICON_WRAP>
+        </F_BTN>
+
+        <F_MENU
+          className={state.showMenu ? "open" : "closed"}
+          styles={styles}
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {state.types.map((item, index) => {
+            if (item !== null) {
+              return (
+                <F_MENU_ITEM
+                  ref={menuItemRef}
+                  key={index}
+                  onClick={() => handleItemClick(item)}
+                  $isSelected={isSelected(item)}
+                >
+                  {item.label}
+                </F_MENU_ITEM>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </F_MENU>
+      </F_CONTAINER>
+    );
+  }
+
   if (menuKind === "absolute") {
     return (
       <A_CONTAINER
         ref={containerRef}
-        onClick={() =>
-          // Be sure to use the setShowMenu function that is defined
-          // in the slice being used
-          dispatch(setShowMenu())
+        onClick={() => dispatch(setShowMenu())}
+        $inUse={
+          state.selectedTypes && state.selectedTypes.length > 0 ? true : false
         }
-        inUse={inUse}
         styles={styles}
       >
-        {label || "Dropdown"}
+        Listing Type
         <A_CONTAINER_ICON_WRAP>
-          <A_CONTAINER_ICON flipped={state.showMenu} />
+          <A_CONTAINER_ICON $flipped={state.showMenu} />
         </A_CONTAINER_ICON_WRAP>
         {state.showMenu ? (
-          <A_MENU ref={menuRef} onClick={(e) => e.stopPropagation()}>
-            {state.types.map((type, index) => {
-              if (type !== null) {
+          <A_MENU
+            styles={styles}
+            ref={menuRef}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {state.types.map((item, index) => {
+              if (item !== null) {
                 return (
-                  <MENU_ITEM
+                  <A_MENU_ITEM
+                    ref={menuItemRef}
                     key={index}
-                    onClick={() => handleItemClick(type)}
-                    isSelected={isSelected(type)}
+                    onClick={() => handleItemClick(item)}
+                    $isSelected={isSelected(item)}
                   >
-                    {type.label}
-                  </MENU_ITEM>
+                    {item.label}
+                  </A_MENU_ITEM>
                 );
               } else {
                 return null;
@@ -148,34 +178,9 @@ export default function ListingTypeFilter({ menuKind, styles, label }: Props) {
     );
   }
 
-  if (menuKind === "flex") {
-    return (
-      <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN
-          onClick={() =>
-            // Be sure to use the setShowMenu function that is defined
-            // in the slice being used
-            dispatch(setShowMenu())
-          }
-          styles={styles}
-        >
-          {label || "Dropdown"}
-          <F_BTN_ICON_WRAP>
-            <F_BTN_ICON flipped={state.showMenu} />
-          </F_BTN_ICON_WRAP>
-        </F_BTN>
-
-        <F_MENU
-          className={state.showMenu ? "open" : "closed"}
-          styles={styles}
-          ref={menuRef}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Menu stuff goes here */}
-        </F_MENU>
-      </F_CONTAINER>
-    );
-  }
-
-  return <p>Please enter a value for menuKind</p>;
+  return (
+    <>
+      <p>Please specify menuKind</p>
+    </>
+  );
 }

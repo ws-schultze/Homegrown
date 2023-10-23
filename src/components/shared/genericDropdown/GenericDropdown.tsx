@@ -73,7 +73,9 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
           <A_CONTAINER_ICON flipped={state.showMenu} />
         </A_CONTAINER_ICON_WRAP>
         {state.showMenu ? (
-          <A_MENU ref={menuRef}>{/* Menu stuff goes here */}</A_MENU>
+          <A_MENU ref={menuRef} onClick={(e) => e.stopPropagation()}>
+            {/* Menu stuff goes here */}
+          </A_MENU>
         ) : null}
       </A_CONTAINER>
     );

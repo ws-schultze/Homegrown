@@ -12,12 +12,15 @@ import priceFilterReducer, {
   initialState as initialPriceFilterState,
 } from "../components/shared/listingFilters/priceFilter/slice";
 
-import listingTypeFilterReducer from "../components/shared/listingFilters/listingTypeFilter/listingTypeFilterSlice";
+import listingTypeFilterReducer, {
+  initialState as initialListingTypeFilterState,
+} from "../components/shared/listingFilters/listingTypeFilter/slice";
+
 import bedAndBathFilterReducer from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
 import placeFilterReducer, {
   initialPlaceFilterState,
 } from "../components/shared/listingFilters/absoluteDropdowns/placeFilter/placeFilterSlice";
-import { initialListingTypeFilterState } from "../components/shared/listingFilters/absoluteDropdowns/listingTypeFilterAbsDropdown/listingTypeFilterSlice";
+
 import { initialBedAndBathFilterState } from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
 import mapTypeMenuReducer, {
   initialMapTypeMenuState,

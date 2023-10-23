@@ -339,7 +339,7 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
         forSaleOrRent: forSaleOrRentFilter.selectedItem,
         lowPrice: priceFilter.lowPrice,
         highPrice: priceFilter.highPrice,
-        listingTypes: listingTypeFilter.selectedItems,
+        listingTypes: listingTypeFilter.selectedTypes,
         beds: bedAndBathFilter.beds,
         baths: bedAndBathFilter.baths,
       });
@@ -682,7 +682,7 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
       forSaleOrRentFilter.selectedItem,
       priceFilter.lowPrice,
       priceFilter.highPrice,
-      listingTypeFilter.selectedItems,
+      listingTypeFilter.selectedTypes,
       bedAndBathFilter.baths,
       bedAndBathFilter.beds,
       commonState.status,
