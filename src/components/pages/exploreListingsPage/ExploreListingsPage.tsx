@@ -169,11 +169,6 @@ export default function ExploreListingsDesktop(): JSX.Element {
             label="Beds and Baths"
             styles={desktopDropdownStyle}
           />
-          <GenericDropdown
-            menuKind="absolute"
-            styles={desktopDropdownStyle}
-            label="Generic"
-          />
         </div>
 
         <div className={styles["content"]}>

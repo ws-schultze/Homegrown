@@ -3,13 +3,16 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
 import useCloseDropdown from "../hooks/useCloseDropdown";
 import { DropdownStyles, ForSaleOrRentValue } from "../../../../types/index";
+import { setForSaleOrRent, setShowMenu } from "./slice";
+
+import { RADIO } from "./styledComponents/common";
 
 import {
   A_CONTAINER,
   A_CONTAINER_ICON_WRAP,
   A_CONTAINER_ICON,
   A_MENU,
-} from "./styledComponents/absolute";
+} from "../styledComponents/absolute";
 
 import {
   F_BTN,
@@ -17,9 +20,7 @@ import {
   F_BTN_ICON_WRAP,
   F_CONTAINER,
   F_MENU,
-} from "./styledComponents/flex";
-import { setForSaleOrRent, setShowMenu } from "./slice";
-import { RADIO } from "./styledComponents/radioBtn";
+} from "../styledComponents/flex";
 
 interface Props {
   /**

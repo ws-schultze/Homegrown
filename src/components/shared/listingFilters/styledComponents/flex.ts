@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { ReactComponent as Icon } from "../assets/chevron-down.svg";
-import { DropdownStyles } from "../../../../../types";
+import { ReactComponent as Icon } from "./assets/chevron-down.svg";
+import { DropdownStyles } from "../../../../types";
 
 export const F_CONTAINER = styled.div<{ inUse?: boolean }>`
   display: flex;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ReactComponent as Icon } from "../assets/chevron-down.svg";
-import * as s from "../../../../../styledComponentVariables";
-import { DropdownStyles } from "../../../../../types";
+import { ReactComponent as Icon } from "./assets/chevron-down.svg";
+import * as s from "../../../../styledComponentVariables";
+import { DropdownStyles } from "../../../../types";
 
 interface A_CONTAINER_PROPS {
   inUse: boolean;

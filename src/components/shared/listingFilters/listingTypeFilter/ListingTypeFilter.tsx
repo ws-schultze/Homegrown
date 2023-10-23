@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
-import useCloseDropdown from "./hooks/useCloseDropdown";
+import useCloseDropdown from "../hooks/useCloseDropdown";
 import { DropdownStyles, ListingKindValue } from "../../../../types/index";
 
 import {
@@ -9,7 +9,7 @@ import {
   A_CONTAINER_ICON_WRAP,
   A_CONTAINER_ICON,
   A_MENU,
-} from "./styledComponents/absolute";
+} from "../styledComponents/absolute";
 
 import {
   F_BTN,
@@ -17,10 +17,10 @@ import {
   F_BTN_ICON_WRAP,
   F_CONTAINER,
   F_MENU,
-} from "./styledComponents/flex";
+} from "../styledComponents/flex";
 
 import { setSelectedTypes, setShowMenu } from "./slice";
-import { MENU_ITEM } from "./styledComponents/menuItem";
+import { MENU_ITEM } from "./styledComponents/common";
 
 interface Props {
   /**
@@ -171,7 +171,21 @@ export default function ListingTypeFilter({ menuKind, styles, label }: Props) {
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Menu stuff goes here */}
+          {state.types.map((type, index) => {
+            if (type !== null) {
+              return (
+                <MENU_ITEM
+                  key={index}
+                  onClick={() => handleItemClick(type)}
+                  isSelected={isSelected(type)}
+                >
+                  {type.label}
+                </MENU_ITEM>
+              );
+            } else {
+              return null;
+            }
+          })}
         </F_MENU>
       </F_CONTAINER>
     );

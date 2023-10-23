@@ -20,7 +20,7 @@ import listingTypeFilterReducer, {
 
 import placeFilterReducer, {
   initialPlaceFilterState,
-} from "../components/shared/listingFilters/absoluteDropdowns/placeFilter/placeFilterSlice";
+} from "../components/shared/listingFilters/placeFilter/placeFilterSlice";
 
 import bedAndBathFilterReducer, {
   initialState as initialBedAndBathFilterState,

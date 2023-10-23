@@ -9,7 +9,7 @@ import {
   A_CONTAINER_ICON_WRAP,
   A_CONTAINER_ICON,
   A_MENU,
-} from "./styledComponents/absolute";
+} from "../styledComponents/absolute";
 
 import {
   F_BTN,
@@ -17,11 +17,11 @@ import {
   F_BTN_ICON_WRAP,
   F_CONTAINER,
   F_MENU,
-} from "./styledComponents/flex";
+} from "../styledComponents/flex";
 import { setShowMenu, setPriceRange } from "./slice";
 import { initStrOpt } from "../../../../initialValues";
 import InputStr from "../../inputs/inputStr/InputStr";
-import { APPLY_FILTER_BTN } from "./styledComponents/applyFilterBtn";
+import { APPLY_FILTER_BTN } from "./styledComponents/common";
 
 interface Props {
   menuKind: "absolute" | "flex";
@@ -49,6 +49,11 @@ export default function PriceFilter({ menuKind, styles, label }: Props) {
   // local state gets dispatched when the filter is applied
   // this prevents excessive updates to redux store
   const [localState, setLocalState] = useState<LocalState>(initialLocalState);
+
+  const inUse =
+    state.highPrice?.value === "" && state.lowPrice?.value === ""
+      ? false
+      : true;
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
@@ -80,11 +85,7 @@ export default function PriceFilter({ menuKind, styles, label }: Props) {
           // in the slice being used
           dispatch(setShowMenu())
         }
-        inUse={
-          state.highPrice?.value === "" && state.lowPrice?.value === ""
-            ? false
-            : true
-        }
+        inUse={inUse}
         styles={styles}
       >
         {(state.lowPrice && state.lowPrice.number >= 1) ||
@@ -148,7 +149,7 @@ export default function PriceFilter({ menuKind, styles, label }: Props) {
 
   if (menuKind === "flex") {
     return (
-      <F_CONTAINER ref={containerRef} inUse={state.inUse}>
+      <F_CONTAINER ref={containerRef} inUse={inUse}>
         <F_BTN
           onClick={() =>
             // Be sure to use the setShowMenu function that is defined

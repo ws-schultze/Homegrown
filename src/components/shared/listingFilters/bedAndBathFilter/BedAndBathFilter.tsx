@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
-import useCloseDropdown from "./hooks/useCloseDropdown";
+import useCloseDropdown from "../hooks/useCloseDropdown";
 import { DropdownStyles } from "../../../../types/index";
 
 import {
@@ -9,7 +9,7 @@ import {
   A_CONTAINER_ICON_WRAP,
   A_CONTAINER_ICON,
   A_MENU,
-} from "./styledComponents/absolute";
+} from "../styledComponents/absolute";
 
 import {
   F_BTN,
@@ -17,7 +17,7 @@ import {
   F_BTN_ICON_WRAP,
   F_CONTAINER,
   F_MENU,
-} from "./styledComponents/flex";
+} from "../styledComponents/flex";
 
 import {
   MENU_SECTION_WRAP,
