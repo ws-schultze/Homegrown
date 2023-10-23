@@ -1,0 +1,23 @@
+import styled from "styled-components";
+
+export const RADIO = styled.div`
+  cursor: pointer;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  input[type="radio" i] {
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-primary);
+    cursor: pointer;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 0;
+    padding: initial;
+    border: initial;
+  }
+`;

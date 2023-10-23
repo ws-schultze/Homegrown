@@ -151,6 +151,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
 
           <ForSaleOrRentFilter
             menuKind="absolute"
+            label="For Sale / For Rent"
             styles={desktopDropdownStyle}
           />
           <PriceFilter
@@ -306,7 +307,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
               defaultValue={place ? place.formatted_address : ""}
             />
           </div>
-          <ForSaleOrRentFilter menuKind="flex" styles={mobileDropdownStyle} />
+          <ForSaleOrRentFilter
+            menuKind="flex"
+            label="For Sale or Rent"
+            styles={mobileDropdownStyle}
+          />
           <ListingTypeFilter menuKind="flex" styles={mobileDropdownStyle} />
           <PriceFilter
             menuKind="flex"

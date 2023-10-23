@@ -3,16 +3,20 @@ import commonReducer, { initialCommonState } from "../common/commonSlice";
 import exploreListingsReducer, {
   initialExploreListingsState,
 } from "../components/pages/exploreListingsPage/exploreListingsPageSlice";
-import forSaleOrRentReducer from "../components/shared/listingFilters/absoluteDropdowns/forSaleOrRentFilter/forSaleOrRentSlice";
+
+import forSaleOrRentReducer, {
+  initialState as initialForSaleOrRentFilterState,
+} from "../components/shared/listingFilters/forSaleOrRentFilter/slice";
+
 import priceFilterReducer, {
   initialState as initialPriceFilterState,
 } from "../components/shared/listingFilters/priceFilter/slice";
+
 import listingTypeFilterReducer from "../components/shared/listingFilters/listingTypeFilter/listingTypeFilterSlice";
 import bedAndBathFilterReducer from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
 import placeFilterReducer, {
   initialPlaceFilterState,
 } from "../components/shared/listingFilters/absoluteDropdowns/placeFilter/placeFilterSlice";
-import { initialForSaleOrRentFilterState } from "../components/shared/listingFilters/absoluteDropdowns/forSaleOrRentFilter/forSaleOrRentSlice";
 import { initialListingTypeFilterState } from "../components/shared/listingFilters/absoluteDropdowns/listingTypeFilterAbsDropdown/listingTypeFilterSlice";
 import { initialBedAndBathFilterState } from "../components/shared/listingFilters/absoluteDropdowns/bedAndBathFilter/bedAndBathFilterSlice";
 import mapTypeMenuReducer, {

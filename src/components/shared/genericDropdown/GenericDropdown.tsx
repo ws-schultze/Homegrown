@@ -36,6 +36,11 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
   const state = useAppSelector((state) => state.genericDropdown);
   const dispatch = useDispatch();
 
+  /**
+   Set an inUse condition, depending on the menu, such as if a max price is set on a price range menu
+   */
+  const inUse = state.showMenu;
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -60,7 +65,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
           // in the slice being used
           dispatch(setShowMenu())
         }
-        inUse={state.inUse}
+        inUse={inUse}
         styles={styles}
       >
         {label || "Dropdown"}
@@ -76,7 +81,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
 
   if (menuKind === "flex") {
     return (
-      <F_CONTAINER ref={containerRef} inUse={state.inUse}>
+      <F_CONTAINER ref={containerRef} inUse={inUse}>
         <F_BTN
           onClick={() =>
             // Be sure to use the setShowMenu function that is defined

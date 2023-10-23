@@ -19,16 +19,15 @@ export const initialState: State = {
 };
 
 export const genericDropdownSlice = createSlice({
+  /**
+   * Be sure to change the name to match the component being made
+   */
   name: "genericDropdown",
   initialState: initialState,
   reducers: {
     setShowMenu: (state) => ({
       ...state,
       showMenu: !state.showMenu,
-    }),
-    setInUse: (state, action: { payload: boolean; type: string }) => ({
-      ...state,
-      inUse: action.payload,
     }),
   },
 });

@@ -1,48 +1,36 @@
-import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../redux/hooks";
-import useCloseDropdown from "../hooks/useCloseDropdown";
-import { DropdownStyles, ForSaleOrRentValue } from "../../../../types/index";
+import React, { useRef } from "react";
 
+import { DropdownStyles, ForSaleOrRentValue } from "../../../../types/index";
+import { useAppSelector } from "../../../../redux/hooks";
+import { setForSaleOrRent, setShowMenu } from "./forSaleOrRentFilterSlice";
+import { useDispatch } from "react-redux";
+
+import useCloseDropdown from "../hooks/useCloseDropdown";
 import {
   A_CONTAINER,
   A_CONTAINER_ICON_WRAP,
-  A_CONTAINER_ICON,
   A_MENU,
-} from "./styledComponents/absolute";
-
-import {
   F_BTN,
   F_BTN_ICON,
   F_BTN_ICON_WRAP,
   F_CONTAINER,
   F_MENU,
-} from "./styledComponents/flex";
-import { setForSaleOrRent, setShowMenu } from "./slice";
-import { RADIO } from "./styledComponents/radioBtn";
+  RADIO,
+} from "./forSaleOrRentFilterStyledComponents";
+import { A_CONTAINER_ICON } from "../listingTypeFilter/listingTypeFilterStyledComponents";
 
 interface Props {
-  /**
-   * absolute menus have absolute position an don't respect padding of the  *   parent and appear above siblings
-   *
-   * flex menus display a flex column that will respect parent padding and
-   will appear next to siblings
-   */
   menuKind: "absolute" | "flex";
   styles: DropdownStyles;
-  label: string;
 }
 
-export default function GenericDropdown({ menuKind, styles, label }: Props) {
+export default function ForSaleOrRentFilter({ menuKind, styles }: Props) {
   const state = useAppSelector((state) => state.forSaleOrRentFilter);
   const dispatch = useDispatch();
-  const inUse =
-    state.selectedItem !== null && state.selectedItem.id !== "for-sale-or-rent"
-      ? true
-      : false;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuItemRef = useRef<HTMLInputElement | null>(null);
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
@@ -50,7 +38,6 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
     containerRef,
     menuRef,
     setShowMenu,
-    reducers: [setForSaleOrRent],
   });
 
   function handleSelectedItem(
@@ -59,7 +46,6 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
   ) {
     // Keep menu from closing when an item is clicked
     e.stopPropagation();
-    // Set state
     dispatch(setForSaleOrRent(item));
   }
 
@@ -67,21 +53,16 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
     return (
       <A_CONTAINER
         ref={containerRef}
-        onClick={() =>
-          // Be sure to use the setShowMenu function that is defined
-          // in the slice being used
-          dispatch(setShowMenu())
-        }
-        inUse={inUse}
+        onClick={() => dispatch(setShowMenu())}
+        $inUse={state.selectedItem !== null ? true : false}
         styles={styles}
       >
-        {state.selectedItem?.label || label}
+        {state.selectedItem?.label || "For Sale/Rent"}
         <A_CONTAINER_ICON_WRAP>
-          <A_CONTAINER_ICON flipped={state.showMenu} />
+          <A_CONTAINER_ICON $flipped={state.showMenu} />
         </A_CONTAINER_ICON_WRAP>
         {state.showMenu ? (
           <A_MENU ref={menuRef}>
-            {" "}
             {state.menuItems.map((item, i) => {
               if (item !== null) {
                 return (
@@ -92,6 +73,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
                   >
                     <label>
                       <input
+                        ref={menuItemRef}
                         type="radio"
                         checked={
                           state.selectedItem &&
@@ -118,18 +100,14 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
 
   if (menuKind === "flex") {
     return (
-      <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN
-          onClick={() =>
-            // Be sure to use the setShowMenu function that is defined
-            // in the slice being used
-            dispatch(setShowMenu())
-          }
-          styles={styles}
-        >
-          {label || "Dropdown"}
+      <F_CONTAINER
+        ref={containerRef}
+        inUse={state.selectedItem !== null ? true : false}
+      >
+        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
+          {state.selectedItem?.label || "For Sale/Rent"}
           <F_BTN_ICON_WRAP>
-            <F_BTN_ICON flipped={state.showMenu} />
+            <F_BTN_ICON $flipped={state.showMenu} />
           </F_BTN_ICON_WRAP>
         </F_BTN>
 
@@ -149,6 +127,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
                 >
                   <label>
                     <input
+                      ref={menuItemRef}
                       type="radio"
                       checked={
                         state.selectedItem && state.selectedItem?.id === item.id
@@ -171,5 +150,5 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
     );
   }
 
-  return <p>Please enter a value for menuKind</p>;
+  return <>Please enter a value for menuKind</>;
 }
