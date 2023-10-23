@@ -311,21 +311,25 @@ export default function ExploreListingsDesktop(): JSX.Element {
             menuKind="flex"
             label="For Sale or Rent"
             styles={mobileDropdownStyle}
+            closeOnOutsideClick={false}
           />
           <ListingTypeFilter
             menuKind="flex"
             label="Listing Type"
             styles={mobileDropdownStyle}
+            closeOnOutsideClick={false}
           />
           <PriceFilter
             menuKind="flex"
             label="Price Range"
             styles={mobileDropdownStyle}
+            closeOnOutsideClick={false}
           />
           <BedAndBathFilter
             menuKind="flex"
             label="Beds and Baths"
             styles={mobileDropdownStyle}
+            closeOnOutsideClick={false}
           />
         </div>
       </div>

@@ -8,10 +8,10 @@ type Reducer = (noArgument: void) => {
 };
 
 interface Props {
-  menuKind: "absolute" | "flex";
   containerRef: React.MutableRefObject<HTMLDivElement | null>;
   menuRef: React.MutableRefObject<HTMLDivElement | null>;
   menuIsOpen: boolean;
+  closeOnOutsideClick: boolean;
   setShowMenu: Reducer;
   /**
    * Reducers for actions that should happen when the menu closes, such as setting a price range to the global state
@@ -20,7 +20,7 @@ interface Props {
 }
 
 export default function useCloseDropdown({
-  menuKind,
+  closeOnOutsideClick,
   menuIsOpen,
   setShowMenu,
   menuRef,
@@ -33,6 +33,8 @@ export default function useCloseDropdown({
    * Close the menu when clicking outside of the container
    */
   useEffect(() => {
+    if (closeOnOutsideClick === false) return;
+
     function handler({ target }: MouseEvent) {
       console.log("handler called for: ", menuIsOpen);
       const t = target as Node;

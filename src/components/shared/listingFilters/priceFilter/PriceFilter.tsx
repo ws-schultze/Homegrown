@@ -27,6 +27,11 @@ interface Props {
   menuKind: "absolute" | "flex";
   styles: DropdownStyles;
   label: string;
+  /**
+   * Menu closes when user clicks outside of container.
+   * Default is true
+   */
+  closeOnOutsideClick?: boolean;
 }
 
 interface LocalState {
@@ -39,7 +44,12 @@ const initialLocalState: LocalState = {
   highPrice: initStrOpt,
 };
 
-export default function PriceFilter({ menuKind, styles, label }: Props) {
+export default function PriceFilter({
+  menuKind,
+  styles,
+  label,
+  closeOnOutsideClick = true,
+}: Props) {
   const state = useAppSelector((state) => state.priceFilter);
   const dispatch = useDispatch();
 
@@ -57,7 +67,7 @@ export default function PriceFilter({ menuKind, styles, label }: Props) {
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
-    menuKind: menuKind,
+    closeOnOutsideClick,
     containerRef,
     menuRef,
     setShowMenu,

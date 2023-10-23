@@ -32,9 +32,19 @@ interface Props {
   menuKind: "absolute" | "flex";
   styles: DropdownStyles;
   label: string;
+  /**
+   * Menu closes when user clicks outside of container.
+   * Default is true
+   */
+  closeOnOutsideClick?: boolean;
 }
 
-export default function GenericDropdown({ menuKind, styles, label }: Props) {
+export default function ForSaleOrRentFilter({
+  menuKind,
+  styles,
+  label,
+  closeOnOutsideClick = true,
+}: Props) {
   const state = useAppSelector((state) => state.forSaleOrRentFilter);
   const dispatch = useDispatch();
   const inUse =
@@ -47,7 +57,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
-    menuKind: menuKind,
+    closeOnOutsideClick,
     containerRef,
     menuRef,
     setShowMenu,
@@ -68,11 +78,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
     return (
       <A_CONTAINER
         ref={containerRef}
-        onClick={() =>
-          // Be sure to use the setShowMenu function that is defined
-          // in the slice being used
-          dispatch(setShowMenu())
-        }
+        onClick={() => dispatch(setShowMenu())}
         inUse={inUse}
         styles={styles}
       >
@@ -120,14 +126,7 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
   if (menuKind === "flex") {
     return (
       <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN
-          onClick={() =>
-            // Be sure to use the setShowMenu function that is defined
-            // in the slice being used
-            dispatch(setShowMenu())
-          }
-          styles={styles}
-        >
+        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
           {label || "Dropdown"}
           <F_BTN_ICON_WRAP>
             <F_BTN_ICON flipped={state.showMenu} />

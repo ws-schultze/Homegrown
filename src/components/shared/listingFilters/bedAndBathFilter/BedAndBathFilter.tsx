@@ -37,9 +37,18 @@ interface Props {
   menuKind: "absolute" | "flex";
   styles: DropdownStyles;
   label: string;
+  /**
+   * Menu closes when user clicks outside of container
+   */
+  closeOnOutsideClick?: boolean;
 }
 
-export default function BedAndBathFilter({ menuKind, styles, label }: Props) {
+export default function BedAndBathFilter({
+  menuKind,
+  styles,
+  label,
+  closeOnOutsideClick = true,
+}: Props) {
   const state = useAppSelector((state) => state.bedAndBathFilter);
   const dispatch = useDispatch();
 
@@ -47,13 +56,12 @@ export default function BedAndBathFilter({ menuKind, styles, label }: Props) {
    Set an inUse condition, depending on the menu, such as if a max price is set on a price range menu
    */
   const inUse = state.baths! > 0 || state.beds! > 0 ? true : false;
-
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
-    menuKind: menuKind,
+    closeOnOutsideClick,
     containerRef,
     menuRef,
     setShowMenu,
