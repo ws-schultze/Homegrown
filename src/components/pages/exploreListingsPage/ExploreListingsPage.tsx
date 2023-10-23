@@ -26,6 +26,7 @@ import ListingOverlayPage from "../listingOverlayPage/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
+import GenericDropdown from "../../shared/genericDropdown/GenericDropdown";
 
 /**
  * Passed to styled components for styling on desktop screen size
@@ -158,6 +159,11 @@ export default function ExploreListingsDesktop(): JSX.Element {
             styles={desktopDropdownStyle}
           />
           <BedAndBathFilter styles={desktopDropdownStyle} />
+          <GenericDropdown
+            menuKind="absolute"
+            styles={desktopDropdownStyle}
+            label="Generic"
+          />
         </div>
 
         <div className={styles["content"]}>

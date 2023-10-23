@@ -18,6 +18,9 @@ import { initialBedAndBathFilterState } from "../components/shared/listingFilter
 import mapTypeMenuReducer, {
   initialMapTypeMenuState,
 } from "../components/shared/mapTypeMenu/mapTypeMenuSlice";
+import genericDropdownReducer, {
+  initialState as initialGenericDropdownState,
+} from "../components/shared/genericDropdown/slice";
 
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage";
 
@@ -31,6 +34,7 @@ export const store = configureStore({
     listingTypeFilter: listingTypeFilterReducer,
     bedAndBathFilter: bedAndBathFilterReducer,
     mapTypeMenu: mapTypeMenuReducer,
+    genericDropdown: genericDropdownReducer,
   },
   // hydrate the state on page load
   preloadedState: loadFromLocalStorage(),
@@ -51,6 +55,7 @@ export const initialRootState: RootState = {
   listingTypeFilter: initialListingTypeFilterState,
   bedAndBathFilter: initialBedAndBathFilterState,
   mapTypeMenu: initialMapTypeMenuState,
+  genericDropdown: initialGenericDropdownState,
 };
 
 export type AppDispatch = typeof store.dispatch;

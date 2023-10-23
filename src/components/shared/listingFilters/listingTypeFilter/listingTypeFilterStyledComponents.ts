@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { ReactComponent as Icon } from "./dropdownIcon.svg";
 import { DropdownStyles } from "../../../../types/index";
 
-// ABSOLUTE MENU COMPS START HERE
-
 export const A_CONTAINER = styled.div<{
   $inUse: boolean;
   styles: DropdownStyles;

@@ -23,10 +23,7 @@ interface Props {
   styles: DropdownStyles;
 }
 
-export default function ListingTypeFilterFlexDropdown({
-  menuKind,
-  styles,
-}: Props) {
+export default function ListingTypeFilter({ menuKind, styles }: Props) {
   const state = useAppSelector((state) => state.listingTypeFilter);
   const dispatch = useDispatch();
 
