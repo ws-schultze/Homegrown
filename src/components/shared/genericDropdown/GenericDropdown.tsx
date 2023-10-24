@@ -46,7 +46,6 @@ export default function GenericDropdown({ menuKind, styles, label }: Props) {
 
   useCloseDropdown({
     menuIsOpen: state.showMenu,
-    menuKind: menuKind,
     containerRef,
     menuRef,
     setShowMenu,

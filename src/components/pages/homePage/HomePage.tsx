@@ -96,7 +96,7 @@ export default function HomePage() {
               ref={searchRef}
               placeholder={
                 screenSize !== "desktop"
-                  ? "26C Woodland Ave, San Francisco..."
+                  ? "Search listings by location"
                   : "Search by city, postal code, county, state or country"
               }
             />
@@ -114,45 +114,10 @@ export default function HomePage() {
           className={`${styles.content} ${styles.fade}`}
           style={{ animationDelay: `${0}ms` }}
         >
-          <div className={styles.btns}>
-            <Link
-              to="explore-listings/"
-              className={styles.btn}
-              onClick={() => {
-                dispatch(
-                  setForSaleOrRent({ id: "for-sale", label: "For Sale" })
-                );
-              }}
-            >
-              Browse Sales
-            </Link>
-            <Link
-              to="explore-listings/"
-              className={styles.btn}
-              onClick={() => {
-                dispatch(
-                  setForSaleOrRent({ id: "for-rent", label: "For Rent" })
-                );
-              }}
-            >
-              Browse Rentals
-            </Link>
-            <>
-              {userContext.isAuthenticated ? (
-                <Link to="/create-listing" className={styles.btn}>
-                  Create a Listing
-                </Link>
-              ) : (
-                <Link to="/sign-in" className={styles.btn}>
-                  Create a Listing
-                </Link>
-              )}
-            </>
-          </div>
           {screenSize === "desktop" ? (
             <>
               <div className={styles["swiper-wrap"]}>
-                <h3>Most recent listings</h3>
+                <h3>Most Recent Listings</h3>
                 {/* @ts-ignore */}
                 <swiper-container
                   ref={swiperElRef}
@@ -248,13 +213,80 @@ export default function HomePage() {
               </div>
             </>
           ) : (
-            <div className={styles["swiper-wrap__mobile"]}>
-              <h2>Most Recent Listing</h2>
-              {commonState.listings.map((listing, index) => (
-                <ListingCard listing={listing} isMobile={true} />
-              ))}
-            </div>
+            <>
+              <div className={styles["m-cards-container"]}>
+                <h2>Most Recent Listings</h2>
+                <div className={styles["m-cards"]}>
+                  {commonState.listings.map((listing, index) => (
+                    <ListingCard listing={listing} isMobile={true} />
+                  ))}
+                </div>
+              </div>
+
+              {exploreState.currentFilteredListings.length > 0 ? (
+                <div className={styles["m-cards-container"]}>
+                  <h3>Recently found by you</h3>
+
+                  <div className={styles["m-cards"]}>
+                    {exploreState.currentFilteredListings.map((listing) => (
+                      <ListingCard listing={listing} isMobile={true} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles["m-cards-container"]}>
+                  <h2>Recent Mendocino County listings</h2>
+                  <div className={styles["m-cards"]}>
+                    {commonState.listings.map((listing) => {
+                      // TODO: Make a default set of listings to show here if the user has not recently searched for anything
+                      if (
+                        listing.data.address.adminAreaLevel2.value.includes(
+                          "Mendocino"
+                        )
+                      ) {
+                        return (
+                          <ListingCard listing={listing} isMobile={true} />
+                        );
+                      } else {
+                        return [];
+                      }
+                    })}
+                  </div>
+                </div>
+              )}
+            </>
           )}
+        </div>
+        <div className={styles.btns}>
+          <Link
+            to="explore-listings/"
+            className={styles.btn}
+            onClick={() => {
+              dispatch(setForSaleOrRent({ id: "for-sale", label: "For Sale" }));
+            }}
+          >
+            Browse Sales
+          </Link>
+          <Link
+            to="explore-listings/"
+            className={styles.btn}
+            onClick={() => {
+              dispatch(setForSaleOrRent({ id: "for-rent", label: "For Rent" }));
+            }}
+          >
+            Browse Rentals
+          </Link>
+          <>
+            {userContext.isAuthenticated ? (
+              <Link to="/create-listing" className={styles.btn}>
+                Create a Listing
+              </Link>
+            ) : (
+              <Link to="/sign-in" className={styles.btn}>
+                Create a Listing
+              </Link>
+            )}
+          </>
         </div>
         <Footer />
       </>

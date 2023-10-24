@@ -8,7 +8,6 @@ type Reducer = (noArgument: void) => {
 };
 
 interface Props {
-  menuKind: "absolute" | "flex";
   containerRef: React.MutableRefObject<HTMLDivElement | null>;
   menuRef: React.MutableRefObject<HTMLDivElement | null>;
   menuIsOpen: boolean;
@@ -20,7 +19,6 @@ interface Props {
 }
 
 export default function useCloseDropdown({
-  menuKind,
   menuIsOpen,
   setShowMenu,
   menuRef,

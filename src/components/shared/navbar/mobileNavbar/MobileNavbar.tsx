@@ -9,15 +9,23 @@ import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useRef, useState } from "react";
 import useCloseMenu from "./hooks/useCloseMenu";
+import { ref } from "firebase/storage";
 
 export default function MobileNavbar() {
   const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const placeFilter = useAppSelector((state) => state.placeFilter);
   const showMenuBtnRef = useRef<HTMLButtonElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const menuContainerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef(null);
-  const { showMenu, setShowMenu } = useCloseMenu(menuRef, showMenuBtnRef);
   const [wobble, setWobble] = useState<0 | 1>(0);
+
+  const { showMenu, setShowMenu } = useCloseMenu({
+    closeOnOutsideClick: true,
+    containerRef: menuContainerRef,
+    menuRef,
+  });
 
   function navigateToMapPage(): string {
     if (placeFilter.place) {
@@ -34,48 +42,46 @@ export default function MobileNavbar() {
   }
 
   return (
-    <nav className={`${styles.container} `}>
+    <nav className={styles.container} ref={containerRef}>
       <div className={styles.nav}>
         <Link to={"/"}>
           <LogoSVG className={styles.logo} />
         </Link>
 
-        {showMenu ? (
-          <div ref={menuRef} className={styles.menu}>
-            <Link
-              to={navigateToMapPage()}
-              className={` 
-            ${styles["nav-link"]}
-            ${pathMatchRoute("/listings", location) ? "active" : ""}`}
-            >
-              Explore
-            </Link>
-
-            <Link
-              to={"/create-listing"}
-              className={` 
-            ${styles["nav-link"]}
-            ${pathMatchRoute("/listings", location) ? "active" : ""}`}
-            >
-              Create
-            </Link>
-
-            <ProfileBtn />
-
-            <ThemeBtn onChange={() => toggleTheme()} theme={theme} />
-          </div>
-        ) : null}
-
-        <button
-          ref={showMenuBtnRef}
-          className={styles["show-menu-btn"]}
-          onClick={handleClick}
-          onAnimationEnd={() => setWobble(0)}
-          //@ts-ignore
-          wobble={wobble}
-        >
-          <Hamburger className={styles.hamburger} />
-        </button>
+        <div ref={menuContainerRef}>
+          {showMenu ? (
+            <div ref={menuRef} className={styles.menu}>
+              <Link
+                to={navigateToMapPage()}
+                className={`
+              ${styles["nav-link"]}
+              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
+              >
+                Explore
+              </Link>
+              <Link
+                to={"/create-listing"}
+                className={`
+              ${styles["nav-link"]}
+              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
+              >
+                Create
+              </Link>
+              <ProfileBtn />
+              <ThemeBtn onChange={() => toggleTheme()} theme={theme} />
+            </div>
+          ) : null}
+          <button
+            ref={showMenuBtnRef}
+            className={styles["show-menu-btn"]}
+            onClick={handleClick}
+            onAnimationEnd={() => setWobble(0)}
+            //@ts-ignore
+            wobble={wobble}
+          >
+            <Hamburger className={styles.hamburger} />
+          </button>
+        </div>
       </div>
     </nav>
   );
