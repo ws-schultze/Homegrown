@@ -181,23 +181,21 @@ export default function ListingTypeFilter({
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >
-          {state.types
-            ? state.types.map((type, index) => {
-                if (type !== null) {
-                  return (
-                    <MENU_ITEM
-                      key={index}
-                      onClick={() => handleItemClick(type)}
-                      isSelected={isSelected(type)}
-                    >
-                      {type.label}
-                    </MENU_ITEM>
-                  );
-                } else {
-                  return null;
-                }
-              })
-            : null}
+          {state.types.map((type, index) => {
+            if (type !== null) {
+              return (
+                <MENU_ITEM
+                  key={index}
+                  onClick={() => handleItemClick(type)}
+                  isSelected={isSelected(type)}
+                >
+                  {type.label}
+                </MENU_ITEM>
+              );
+            } else {
+              return null;
+            }
+          })}
         </F_MENU>
       </F_CONTAINER>
     );
