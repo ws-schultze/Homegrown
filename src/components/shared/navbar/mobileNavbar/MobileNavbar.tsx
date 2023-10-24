@@ -9,7 +9,7 @@ import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useRef, useState } from "react";
 import useCloseMenu from "./hooks/useCloseMenu";
-import { ref } from "firebase/storage";
+import { ReactComponent as CloseSVG } from "./assets/close-icon.svg";
 
 export default function MobileNavbar() {
   const location = useLocation();
@@ -19,13 +19,9 @@ export default function MobileNavbar() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuContainerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef(null);
-  const [wobble, setWobble] = useState<0 | 1>(0);
+  const [wobble, setWobble] = useState<0 | 1 | 2>(0);
 
-  const { showMenu, setShowMenu } = useCloseMenu({
-    closeOnOutsideClick: true,
-    containerRef: menuContainerRef,
-    menuRef,
-  });
+  const { showMenu, setShowMenu } = useCloseMenu(menuRef, showMenuBtnRef);
 
   function navigateToMapPage(): string {
     if (placeFilter.place) {
@@ -36,9 +32,14 @@ export default function MobileNavbar() {
     }
   }
 
-  function handleClick() {
-    setShowMenu(!showMenu);
+  function openMenu() {
     setWobble(1);
+    setShowMenu(!showMenu);
+  }
+
+  function closeMenu() {
+    setWobble(2);
+    setShowMenu(!showMenu);
   }
 
   return (
@@ -48,39 +49,56 @@ export default function MobileNavbar() {
           <LogoSVG className={styles.logo} />
         </Link>
 
-        <div ref={menuContainerRef}>
-          {showMenu ? (
-            <div ref={menuRef} className={styles.menu}>
-              <Link
-                to={navigateToMapPage()}
-                className={`
-              ${styles["nav-link"]}
-              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
-              >
-                Explore
-              </Link>
-              <Link
-                to={"/create-listing"}
-                className={`
-              ${styles["nav-link"]}
-              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
-              >
-                Create
-              </Link>
-              <ProfileBtn />
-              <ThemeBtn onChange={() => toggleTheme()} theme={theme} />
-            </div>
-          ) : null}
-          <button
-            ref={showMenuBtnRef}
-            className={styles["show-menu-btn"]}
-            onClick={handleClick}
-            onAnimationEnd={() => setWobble(0)}
-            //@ts-ignore
-            wobble={wobble}
+        <button
+          ref={showMenuBtnRef}
+          className={styles["show-menu-btn"]}
+          onClick={openMenu}
+          onAnimationEnd={() => setWobble(0)}
+          //@ts-ignore
+          wobble={wobble}
+        >
+          <Hamburger className={styles.hamburger} />
+        </button>
+
+        <div
+          ref={menuContainerRef}
+          className={`${styles["m-menu-container"]} ${
+            showMenu ? styles["is-open"] : styles["is-closed"]
+          }`}
+        >
+          <div
+            ref={menuRef}
+            className={`${styles["m-menu"]} ${
+              showMenu ? styles["is-open"] : styles["is-closed"]
+            }`}
           >
-            <Hamburger className={styles.hamburger} />
-          </button>
+            <button
+              type="button"
+              id="m-menu-close-btn"
+              className={styles["m-menu-close-btn"]}
+              onClick={closeMenu}
+            >
+              <CloseSVG />
+            </button>
+            <Link
+              to={navigateToMapPage()}
+              className={`
+              ${styles["nav-link"]}
+              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
+            >
+              Explore
+            </Link>
+            <Link
+              to={"/create-listing"}
+              className={`
+              ${styles["nav-link"]}
+              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
+            >
+              Create
+            </Link>
+            <ProfileBtn />
+            <ThemeBtn onChange={() => toggleTheme()} theme={theme} />
+          </div>
         </div>
       </div>
     </nav>

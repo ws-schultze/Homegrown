@@ -55,14 +55,33 @@
   height: 50px !important;
 }
 
-.menu {
-  width: 250px;
-  border: var(--border);
-  border-radius: var(--border-radius);
-  padding: 10px;
+.m-menu-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: transparent;
+
+  &.is-open {
+    pointer-events: all;
+    background: #000000cc;
+  }
+}
+
+.m-menu {
   position: absolute;
-  right: 5px;
-  top: calc(var(--height-navbar) + 5px);
+  top: 0;
+  left: -100%;
+  width: 100%;
+
+  transition: 0.3s;
+  // border: var(--border);
+  // border-radius: var(--border-radius);
+  // padding: 10px;
+  position: fixed;
+  // top: calc(var(--height-navbar));
   background-color: var(--color-bg-primary);
   box-shadow: var(--box-shadow);
   a {
@@ -72,6 +91,34 @@
     // Theme btn
     margin: 20px auto 20px auto;
   }
+
+  &.is-open {
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+  &.is-closed {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.m-menu-close-btn {
+  display: flex;
+  margin-left: auto;
+  height: var(--height-navbar);
+  width: var(--height-navbar);
+  padding: 10px;
+  // background-color: var(--color-bg-secondary);
+  background-color: transparent;
+  svg {
+    fill: var(--color-text);
+    height: 100%;
+    width: 100%;
+  }
+  border-bottom-left-radius: var(--border-radius);
+  border-left: var(--border);
+  border-bottom: var(--border);
 }
 
 .show-menu-btn {
@@ -83,11 +130,30 @@
     fill: var(--color-primary);
   }
   &[wobble="1"] {
-    animation: wobble 1s 1;
+    animation: wobble-right 1s 1;
+  }
+
+  &[wobble="2"] {
+    animation: wobble-left 1s 1;
   }
 }
 
-@keyframes wobble {
+@keyframes wobble-right {
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes wobble-left {
   25% {
     transform: rotate(15deg);
   }
