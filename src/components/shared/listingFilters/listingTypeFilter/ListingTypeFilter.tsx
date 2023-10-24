@@ -135,7 +135,7 @@ export default function ListingTypeFilter({
         <A_CONTAINER_ICON_WRAP>
           <A_CONTAINER_ICON flipped={state.showMenu} />
         </A_CONTAINER_ICON_WRAP>
-        {state.showMenu ? (
+        {state.showMenu && state.types ? (
           <A_MENU ref={menuRef} onClick={(e) => e.stopPropagation()}>
             {state.types.map((type, index) => {
               if (type !== null) {
@@ -181,21 +181,23 @@ export default function ListingTypeFilter({
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >
-          {state.types.map((type, index) => {
-            if (type !== null) {
-              return (
-                <MENU_ITEM
-                  key={index}
-                  onClick={() => handleItemClick(type)}
-                  isSelected={isSelected(type)}
-                >
-                  {type.label}
-                </MENU_ITEM>
-              );
-            } else {
-              return null;
-            }
-          })}
+          {state.types
+            ? state.types.map((type, index) => {
+                if (type !== null) {
+                  return (
+                    <MENU_ITEM
+                      key={index}
+                      onClick={() => handleItemClick(type)}
+                      isSelected={isSelected(type)}
+                    >
+                      {type.label}
+                    </MENU_ITEM>
+                  );
+                } else {
+                  return null;
+                }
+              })
+            : null}
         </F_MENU>
       </F_CONTAINER>
     );
