@@ -24,7 +24,7 @@ export default function Root({
   return (
     <div className={`${styles.container}`}>
       {screenSize === "desktop" ? (
-        location.pathname.includes("/explore-listings/") ? (
+        location.pathname.includes("explore-listings") ? (
           // Wider navbar nav
           <DesktopNavbar maxWidth="100%" />
         ) : (
