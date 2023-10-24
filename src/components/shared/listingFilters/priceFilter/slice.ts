@@ -3,7 +3,6 @@ import { Str } from "../../../../types";
 import { initStrOpt } from "../../../../initialValues";
 
 export interface State {
-  inUse: boolean;
   showMenu: boolean;
   label: string;
   lowPrice: Str;
@@ -11,7 +10,6 @@ export interface State {
 }
 
 export const initialState: State = {
-  inUse: false,
   showMenu: false,
   label: "Price Range",
   lowPrice: initStrOpt,
@@ -25,10 +23,6 @@ export const slice = createSlice({
     setShowMenu: (state) => ({
       ...state,
       showMenu: !state.showMenu,
-    }),
-    setInUse: (state, action: { payload: boolean; type: string }) => ({
-      ...state,
-      inUse: action.payload,
     }),
     setLowPrice: (state, action) => ({
       ...state,

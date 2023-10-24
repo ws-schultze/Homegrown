@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../redux/hooks";
 import useCloseDropdown from "./hooks/useCloseDropdown";
@@ -18,7 +18,7 @@ import {
   F_CONTAINER,
   F_MENU,
 } from "./styledComponents/flex";
-import { setShowMenu } from "./slice";
+import { initialState, setShowMenu } from "./slice";
 
 interface Props {
   /**
@@ -33,7 +33,11 @@ interface Props {
 }
 
 export default function GenericDropdown({ menuKind, styles, label }: Props) {
-  const state = useAppSelector((state) => state.genericDropdown);
+  // const state = useAppSelector((state) => state.genericDropdown);
+
+  // Just using useState to keep errors from happening while not using this dropdown for anything but demo
+  const [state, setState] = useState(initialState);
+
   const dispatch = useDispatch();
 
   /**

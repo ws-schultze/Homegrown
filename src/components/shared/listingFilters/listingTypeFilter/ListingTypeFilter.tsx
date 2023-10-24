@@ -51,7 +51,8 @@ export default function ListingTypeFilter({
   /**
    Set an inUse condition, depending on the menu, such as if a max price is set on a price range menu
    */
-  const inUse = state.selectedTypes && state.selectedTypes.length > 0;
+  const inUse =
+    state.selectedTypes && state.selectedTypes.length > 0 ? true : false;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);

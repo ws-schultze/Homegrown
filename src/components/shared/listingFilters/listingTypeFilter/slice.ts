@@ -9,7 +9,6 @@ import { ListingKindValue } from "../../../../types";
 import { allListingTypeValues } from "../../../../initialValues";
 
 export interface State {
-  inUse: boolean;
   showMenu: boolean;
   label: string;
   types: ListingKindValue[];
@@ -17,7 +16,6 @@ export interface State {
 }
 
 export const initialState: State = {
-  inUse: false,
   showMenu: false,
   label: "Dropdown",
   types: allListingTypeValues,

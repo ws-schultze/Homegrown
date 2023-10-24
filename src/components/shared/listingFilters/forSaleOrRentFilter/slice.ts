@@ -3,7 +3,6 @@ import { ForSaleOrRentValue } from "../../../../types";
 import { allForSaleOrRentValues } from "../../../../initialValues";
 
 export interface State {
-  inUse: boolean;
   showMenu: boolean;
   label: string;
   menuItems: ForSaleOrRentValue[];
@@ -11,7 +10,6 @@ export interface State {
 }
 
 export const initialState: State = {
-  inUse: false,
   showMenu: false,
   label: "Dropdown",
   menuItems: allForSaleOrRentValues,

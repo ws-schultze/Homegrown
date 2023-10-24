@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface State {
-  inUse: boolean;
   showMenu: boolean;
   label: string;
   beds: number | null;
@@ -9,7 +8,6 @@ export interface State {
 }
 
 export const initialState: State = {
-  inUse: false,
   showMenu: false,
   label: "Dropdown",
   beds: null,

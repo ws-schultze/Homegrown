@@ -7,13 +7,11 @@ This slice is to be copied and expanded to fit the needs of whatever menu is bei
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface State {
-  inUse: boolean;
   showMenu: boolean;
   label: string;
 }
 
 export const initialState: State = {
-  inUse: false,
   showMenu: false,
   label: "Dropdown",
 };
