@@ -123,11 +123,7 @@ export default function ListingTypeFilter({
     return (
       <A_CONTAINER
         ref={containerRef}
-        onClick={() =>
-          // Be sure to use the setShowMenu function that is defined
-          // in the slice being used
-          dispatch(setShowMenu())
-        }
+        onClick={() => dispatch(setShowMenu())}
         inUse={inUse}
         styles={styles}
       >
@@ -161,14 +157,7 @@ export default function ListingTypeFilter({
   if (menuKind === "flex") {
     return (
       <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN
-          onClick={() =>
-            // Be sure to use the setShowMenu function that is defined
-            // in the slice being used
-            dispatch(setShowMenu())
-          }
-          styles={styles}
-        >
+        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
           {label || "Dropdown"}
           <F_BTN_ICON_WRAP>
             <F_BTN_ICON flipped={state.showMenu} />

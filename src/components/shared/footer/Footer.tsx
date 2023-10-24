@@ -1,14 +1,14 @@
+import { Link } from "react-router-dom";
 import logoIconPNG from "../../../assets/logo/IconOnly.png";
-import { FooterDiv, Logo } from "./styledComponents";
+import styles from "./footer.module.scss";
 
 export default function Footer() {
   return (
-    <FooterDiv>
-      {/* <BrandDiv></BrandDiv> */}
-      <Logo to={"/"}>
+    <div className={styles.container}>
+      <Link to={"/"} className={styles.link}>
         <img src={logoIconPNG} alt="" />
-      </Logo>
+      </Link>
       &copy; 2023 Home Grown Development
-    </FooterDiv>
+    </div>
   );
 }

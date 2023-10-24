@@ -116,7 +116,11 @@ export default function BedAndBathFilter({
           <A_CONTAINER_ICON flipped={state.showMenu} />
         </A_CONTAINER_ICON_WRAP>
         {state.showMenu ? (
-          <A_MENU ref={menuRef} onClick={(e) => e.stopPropagation()}>
+          <A_MENU
+            ref={menuRef}
+            onClick={(e) => e.stopPropagation()}
+            style={{ right: "0", left: "unset" }}
+          >
             <MENU_SECTION_WRAP>
               <header>Number of Bedrooms</header>
               <MENU_SECTION>

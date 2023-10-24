@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-// import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useState, useEffect, useRef } from "react";
 import {
   getStorage,
   ref,
@@ -38,6 +37,8 @@ import UploadsForm from "./components/UploadsForm";
 import ReviewForm from "./components/ReviewForm";
 import makeFileNameForUpload from "../utils/makeFileNameForUpload";
 import Footer from "../../shared/footer/Footer";
+
+import styles from "./createListingPage.module.scss";
 
 export default function CreateListingPage(): JSX.Element {
   const { userId, isAuthenticated, isLoading } = useUserContext();
@@ -262,10 +263,10 @@ export default function CreateListingPage(): JSX.Element {
     case 1:
       return (
         <>
-          <div className="page-wrap">
-            <header>
+          <div className={styles.container}>
+            {/* <header>
               <p className="page__header">Create a Listing</p>
-            </header>
+            </header> */}
             <form ref={formRef} className="listing-form">
               <UserAcknowledgementForm
                 parent={state}
@@ -285,10 +286,7 @@ export default function CreateListingPage(): JSX.Element {
     case 2:
       return (
         <>
-          <div className="page-wrap">
-            <header>
-              <p className="page__header">Create a Listing</p>
-            </header>
+          <div className={styles.container}>
             <form ref={formRef} className="listing-form">
               <BasicInfoForm
                 parent={state}
@@ -309,10 +307,7 @@ export default function CreateListingPage(): JSX.Element {
     case 3:
       return (
         <>
-          <div className="page-wrap">
-            <header>
-              <p className="page__header">Create a Listing</p>
-            </header>
+          <div className={styles.container}>
             <form ref={formRef} className="listing-form">
               <ListingAddressForm
                 parent={state}
@@ -334,10 +329,7 @@ export default function CreateListingPage(): JSX.Element {
     case 4:
       return (
         <>
-          <div className="page-wrap">
-            <header>
-              <p className="page__header">Create a Listing</p>
-            </header>
+          <div className={styles.container}>
             <form ref={formRef} className="listing-form">
               {state.basicInfo.forSaleBy !== undefined ? (
                 <>
@@ -413,10 +405,7 @@ export default function CreateListingPage(): JSX.Element {
     case 5:
       return (
         <>
-          <div className="page-wrap">
-            <header>
-              <p className="page__header">Create a Listing</p>
-            </header>
+          <div className={styles.container}>
             <form ref={formRef} className="listing-form">
               {state.basicInfo.listingKind.value?.id ===
               "single-family-home" ? (
@@ -540,10 +529,7 @@ export default function CreateListingPage(): JSX.Element {
 
     case 6:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Create a Listing</p>
-          </header>
+        <div className={styles.container}>
           <form ref={formRef} className="listing-form">
             <UploadsForm
               parent={state}
@@ -561,10 +547,7 @@ export default function CreateListingPage(): JSX.Element {
 
     case 7:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Create a Listing</p>
-          </header>
+        <div className={styles.container}>
           <form ref={formRef} className="listing-form">
             <ReviewForm
               editListing={false}
