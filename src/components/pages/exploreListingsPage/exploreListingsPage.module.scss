@@ -29,10 +29,13 @@
   height: calc(100vh - var(--height-navbar));
   width: 100%;
   pointer-events: none;
+  transition: 0.3s;
+
   &.is-open {
     pointer-events: all;
     opacity: 1;
     visibility: visible;
+    background: #0000005c;
   }
 }
 
@@ -40,7 +43,7 @@
   position: absolute;
   top: 0;
   left: -100%;
-  width: 100%;
+  width: 80%;
   height: 100%;
   visibility: hidden;
   opacity: 0;
@@ -61,21 +64,6 @@
     visibility: hidden;
   }
 }
-
-// @keyframes open-m-filters {
-//   100% {
-//     right: 0;
-//   }
-// }
-
-// @keyframes close-m-filters {
-//   // 0% {
-//   //   right: 0;
-//   // }
-//   100% {
-//     right: 100%;
-//   }
-// }
 
 .m-filters-btn {
   position: absolute;
@@ -110,9 +98,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   width: 40px;
-  background-color: var(--color-bg-primary);
+  margin-left: auto;
+  background-color: var(--color-primary);
   border: var(--border);
   border-radius: var(--border-radius);
   label {
@@ -125,7 +115,7 @@
     color: var(--color-text);
   }
   svg {
-    fill: var(--color-text);
+    fill: black;
     width: 35px;
     height: 35px;
   }

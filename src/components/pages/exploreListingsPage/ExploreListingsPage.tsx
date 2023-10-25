@@ -57,7 +57,7 @@ export interface ExploreListingsFilters {
   baths: number | null;
 }
 
-export default function ExploreListingsDesktop(): JSX.Element {
+export default function ExploreListingsPage(): JSX.Element {
   const dispatch = useDispatch();
   const commonState = useAppSelector((state) => state.common);
   const pageState = useAppSelector((state) => state.exploreListings);
@@ -73,6 +73,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
   const screenSize = useScreenSizeContext();
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);
+  const openFiltersMenuBtnRef = useRef<HTMLButtonElement | null>(null);
 
   /**
    * Set the listing to overlay
@@ -131,6 +132,36 @@ export default function ExploreListingsDesktop(): JSX.Element {
   function toggleFiltersMenu() {
     setShowFiltersMenu(!showFiltersMenu);
   }
+
+  /**
+   * Close filters menu when clicking outside of it
+   */
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      const t = e.target as Node;
+
+      // if menu is open and click outside it, close menu
+      if (showFiltersMenu) {
+        if (filtersMenuRef.current) {
+          if (!filtersMenuRef.current.contains(t)) {
+            // ignore clicks on the filter menu btn
+            if (openFiltersMenuBtnRef.current) {
+              if (!openFiltersMenuBtnRef.current.contains(t)) {
+                console.log("closing menu");
+                setShowFiltersMenu(false);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    window.addEventListener("click", handler);
+
+    return () => {
+      window.removeEventListener("click", handler);
+    };
+  }, [filtersMenuRef, showFiltersMenu, openFiltersMenuBtnRef]);
 
   /**
    * DESKTOP RENDER
@@ -269,6 +300,7 @@ export default function ExploreListingsDesktop(): JSX.Element {
       </Wrapper>
 
       <button
+        ref={openFiltersMenuBtnRef}
         type="button"
         id="filters-menu-btn"
         className={styles["m-filters-btn"]}

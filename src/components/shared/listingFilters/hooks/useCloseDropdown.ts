@@ -53,11 +53,11 @@ export default function useCloseDropdown({
                 if (reducers) {
                   reducers.forEach((r) => dispatch(r));
                 }
-              } else console.warn("menu is not open");
-            } else console.log("menuRef.current.contains(t) !== false");
-          } else console.log("menuRef.current is undefined");
-        } else console.log("containerRef.current.contains(t) !== false");
-      } else console.log("containerRef.current is undefined");
+              }
+            }
+          }
+        }
+      }
     } // end handler
 
     window.addEventListener("click", handler);
