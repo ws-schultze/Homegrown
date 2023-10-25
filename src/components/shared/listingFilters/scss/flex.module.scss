@@ -3,10 +3,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  // border: 1px solid
-  //   ${(p) => (p.inUse ? "var(--color-primary)" : "var(--color-border)")};
   box-shadow: var(--box-shadow);
   border-radius: var(--border-radius);
+  border: var(--border);
+
+  // overflow: hidden;
 
   .btn {
     padding: 10px;
@@ -16,9 +17,6 @@
     -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
-    //   width: ${(p) => p.styles.btnWidth};
-    //   min-height: ${(p) => p.styles.btnHeight};
-    //   max-height: ${(p) => p.styles.btnHeight};
     font-size: 1.2rem;
     color: var(--color-text);
   }
@@ -28,38 +26,69 @@
   }
 
   .icon {
-    // transform: ${(p) => (p.flipped ? "rotateX(180deg)" : "rotateX(0deg)")};
     height: 1.5rem;
     fill: var(--color-text);
     transition: 0.1s linear;
   }
 
-  &:hover .icon {
-    fill: var(--color-primary);
-  }
-
   .menu {
-    height: 0;
-    visibility: hidden;
-    opacity: 0;
-    transition: 0.1s;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    //   min-width: ${(props) => props.styles.menuMinWidth};
-    //   max-width: ${(props) => props.styles.menuMaxWidth};
     cursor: default;
-    &.open {
-      visibility: visible;
-      opacity: 1;
-      padding: 0 10px 10px 10px;
-      height: 100%;
+  }
+
+  &.open {
+    .icon {
+      transform: rotateX(180deg);
     }
-    &.closed {
-      visibility: hidden;
-      opacity: 0;
-      padding: 0;
-      height: 0;
+    .menu {
+      animation: expand 0.3s ease-in-out forwards 1;
     }
+  }
+
+  &.closed {
+    .icon {
+      transform: rotateX(0deg);
+    }
+    .menu {
+      animation: collapse 0.3s ease-in-out forwards 1;
+    }
+  }
+
+  &.used {
+    border: 1px solid var(--color-primary);
+  }
+
+  &:hover .icon {
+    fill: var(--color-primary);
+  }
+}
+
+@keyframes expand {
+  0% {
+    height: 0;
+    padding: 0;
+    opacity: 0;
+  }
+
+  100% {
+    height: 90px;
+    padding: 0 10px 10px 10px;
+    opacity: 1;
+  }
+}
+
+@keyframes collapse {
+  0% {
+    height: 90px;
+    padding: 0 10px 10px 10px;
+    opacity: 1;
+  }
+
+  100% {
+    height: 0;
+    padding: 0;
+    opacity: 0;
   }
 }

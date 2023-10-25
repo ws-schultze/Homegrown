@@ -9,23 +9,6 @@ import abs from "../scss/absolute.module.scss";
 import scss from "./forSaleOrRentFilter.module.scss";
 import { ReactComponent as Icon } from "../assets/chevron-down.svg";
 
-import { RADIO } from "./styledComponents/common";
-
-import {
-  A_CONTAINER,
-  A_CONTAINER_ICON_WRAP,
-  A_CONTAINER_ICON,
-  A_MENU,
-} from "../styledComponents/absolute";
-
-import {
-  F_BTN,
-  F_BTN_ICON,
-  F_BTN_ICON_WRAP,
-  F_CONTAINER,
-  F_MENU,
-} from "../styledComponents/flex";
-
 interface Props {
   /**
    * absolute menus have absolute position an don't respect padding of the  *   parent and appear above siblings
@@ -81,7 +64,7 @@ export default function ForSaleOrRentFilter({
   if (menuKind === "absolute") {
     return (
       <div
-        className={abs.container}
+        className={`${abs.container} ${state.showMenu ? abs.open : abs.closed}`}
         ref={containerRef}
         onClick={() => dispatch(setShowMenu())}
         style={{
@@ -94,72 +77,17 @@ export default function ForSaleOrRentFilter({
       >
         {state.selectedItem?.label || label}
         <div className={abs["icon-wrap"]}>
-          <Icon
-            className={abs.icon}
-            style={{
-              transform: state.showMenu ? "rotateX(180deg)" : "rotateX(0deg)",
-            }}
-          />
+          <Icon className={abs.icon} />
         </div>
-        {state.showMenu ? (
-          <div className={abs.menu} ref={menuRef}>
-            {state.menuItems.map((item, i) => {
-              if (item !== null) {
-                return (
-                  <div
-                    className={scss.radio}
-                    key={i}
-                    onClick={(e) => handleSelectedItem(e, item)}
-                  >
-                    <label>
-                      <input
-                        type="radio"
-                        checked={
-                          state.selectedItem &&
-                          state.selectedItem?.id === item.id
-                            ? true
-                            : false
-                        }
-                        readOnly
-                      />
 
-                      {item.label}
-                    </label>
-                  </div>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-
-  if (menuKind === "flex") {
-    return (
-      <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
-          {label || "Dropdown"}
-          <F_BTN_ICON_WRAP>
-            <F_BTN_ICON flipped={state.showMenu ? true : false} />
-          </F_BTN_ICON_WRAP>
-        </F_BTN>
-
-        <F_MENU
-          className={state.showMenu ? "open" : "closed"}
-          styles={styles}
-          ref={menuRef}
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className={abs.menu} ref={menuRef}>
           {state.menuItems.map((item, i) => {
             if (item !== null) {
               return (
-                <RADIO
+                <div
+                  className={scss.radio}
                   key={i}
                   onClick={(e) => handleSelectedItem(e, item)}
-                  className="listings-filter-btn"
                 >
                   <label>
                     <input
@@ -174,14 +102,74 @@ export default function ForSaleOrRentFilter({
 
                     {item.label}
                   </label>
-                </RADIO>
+                </div>
               );
             } else {
               return null;
             }
           })}
-        </F_MENU>
-      </F_CONTAINER>
+        </div>
+      </div>
+    );
+  }
+
+  if (menuKind === "flex") {
+    return (
+      <div
+        className={`${flx.container} ${
+          state.showMenu ? flx.open : flx.closed
+        } ${inUse ? flx.used : ""}`}
+        ref={containerRef}
+      >
+        <div
+          className={flx.btn}
+          onClick={() => dispatch(setShowMenu())}
+          style={{
+            width: styles.btnWidth,
+            minHeight: styles.btnHeight,
+            maxHeight: styles.btnHeight,
+          }}
+        >
+          {state.selectedItem?.label || label}
+          <div className={flx["icon-wrap"]}>
+            <Icon className={flx.icon} />
+          </div>
+        </div>
+
+        <div
+          className={flx.menu}
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {state.menuItems.map((item, i) => {
+            if (item !== null) {
+              return (
+                <div
+                  key={i}
+                  onClick={(e) => handleSelectedItem(e, item)}
+                  className={scss.radio}
+                >
+                  <label>
+                    <input
+                      type="radio"
+                      checked={
+                        state.selectedItem && state.selectedItem?.id === item.id
+                          ? true
+                          : false
+                      }
+                      readOnly
+                    />
+
+                    {item.label}
+                  </label>
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </div>
+      </div>
     );
   }
 
