@@ -4,8 +4,8 @@ import { useAppSelector } from "../../../../redux/hooks";
 import useCloseDropdown from "../hooks/useCloseDropdown";
 import { DropdownStyles, ForSaleOrRentValue } from "../../../../types/index";
 import { setForSaleOrRent, setShowMenu } from "./slice";
-import flx from "../scss/flex.module.scss";
-import abs from "../scss/absolute.module.scss";
+// import flx from "../scss/flex.module.scss";
+// import abs from "../scss/absolute.module.scss";
 import scss from "./forSaleOrRentFilter.module.scss";
 import { ReactComponent as Icon } from "../assets/chevron-down.svg";
 
@@ -64,23 +64,31 @@ export default function ForSaleOrRentFilter({
   if (menuKind === "absolute") {
     return (
       <div
-        className={`${abs.container} ${state.showMenu ? abs.open : abs.closed}`}
+        className={`${scss["abs-container"]} ${inUse ? scss.used : ""}`}
         ref={containerRef}
         onClick={() => dispatch(setShowMenu())}
         style={{
           width: styles.btnWidth,
-          height: styles.btnHeight,
-          border: inUse
-            ? "1px solid var(--color-primary)"
-            : "1px solid var(--color-border)",
+          minHeight: styles.btnHeight,
+          maxHeight: styles.btnHeight,
         }}
       >
         {state.selectedItem?.label || label}
-        <div className={abs["icon-wrap"]}>
-          <Icon className={abs.icon} />
+        <div className={scss["abs-icon-wrap"]}>
+          <Icon
+            className={`${scss["abs-icon"]} ${
+              state.showMenu ? scss["open"] : scss["closed"]
+            }`}
+          />
         </div>
 
-        <div className={abs.menu} ref={menuRef}>
+        <div
+          className={`${scss["abs-menu"]} ${
+            state.showMenu ? scss["open"] : scss["closed"]
+          }`}
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
           {state.menuItems.map((item, i) => {
             if (item !== null) {
               return (
@@ -116,13 +124,11 @@ export default function ForSaleOrRentFilter({
   if (menuKind === "flex") {
     return (
       <div
-        className={`${flx.container} ${
-          state.showMenu ? flx.open : flx.closed
-        } ${inUse ? flx.used : ""}`}
+        className={`${scss["flx-container"]} ${inUse ? scss.used : ""}`}
         ref={containerRef}
       >
         <div
-          className={flx.btn}
+          className={scss["flx-btn"]}
           onClick={() => dispatch(setShowMenu())}
           style={{
             width: styles.btnWidth,
@@ -131,13 +137,19 @@ export default function ForSaleOrRentFilter({
           }}
         >
           {state.selectedItem?.label || label}
-          <div className={flx["icon-wrap"]}>
-            <Icon className={flx.icon} />
+          <div className={scss["flx-icon-wrap"]}>
+            <Icon
+              className={`${scss["flx-icon"]} ${
+                state.showMenu ? scss.open : scss.closed
+              }`}
+            />
           </div>
         </div>
 
         <div
-          className={flx.menu}
+          className={`${scss["flx-menu"]} ${
+            state.showMenu ? scss.open : scss.closed
+          }`}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >
@@ -172,103 +184,6 @@ export default function ForSaleOrRentFilter({
       </div>
     );
   }
-
-  // if (menuKind === "absolute") {
-  //   return (
-  //     <A_CONTAINER
-  //       ref={containerRef}
-  //       onClick={() => dispatch(setShowMenu())}
-  //       inUse={inUse}
-  //       styles={styles}
-  //     >
-  //       {state.selectedItem?.label || label}
-  //       <A_CONTAINER_ICON_WRAP>
-  //         <A_CONTAINER_ICON flipped={state.showMenu} />
-  //       </A_CONTAINER_ICON_WRAP>
-  //       {state.showMenu ? (
-  //         <A_MENU ref={menuRef}>
-  //           {" "}
-  //           {state.menuItems.map((item, i) => {
-  //             if (item !== null) {
-  //               return (
-  //                 <RADIO
-  //                   key={i}
-  //                   onClick={(e) => handleSelectedItem(e, item)}
-  //                   className="listings-filter-btn"
-  //                 >
-  //                   <label>
-  //                     <input
-  //                       type="radio"
-  //                       checked={
-  //                         state.selectedItem &&
-  //                         state.selectedItem?.id === item.id
-  //                           ? true
-  //                           : false
-  //                       }
-  //                       readOnly
-  //                     />
-
-  //                     {item.label}
-  //                   </label>
-  //                 </RADIO>
-  //               );
-  //             } else {
-  //               return null;
-  //             }
-  //           })}
-  //         </A_MENU>
-  //       ) : null}
-  //     </A_CONTAINER>
-  //   );
-  // }
-
-  // if (menuKind === "flex") {
-  //   return (
-  //     <F_CONTAINER ref={containerRef} inUse={inUse}>
-  //       <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
-  //         {label || "Dropdown"}
-  //         <F_BTN_ICON_WRAP>
-  //           <F_BTN_ICON flipped={state.showMenu ? true : false} />
-  //         </F_BTN_ICON_WRAP>
-  //       </F_BTN>
-
-  //       <F_MENU
-  //         className={state.showMenu ? "open" : "closed"}
-  //         styles={styles}
-  //         ref={menuRef}
-  //         onClick={(e) => e.stopPropagation()}
-  //       >
-  //         {state.menuItems.map((item, i) => {
-  //           if (item !== null) {
-  //             return (
-  //               <RADIO
-  //                 key={i}
-  //                 onClick={(e) => handleSelectedItem(e, item)}
-  //                 className="listings-filter-btn"
-  //               >
-  //                 <label>
-  //                   <input
-  //                     type="radio"
-  //                     checked={
-  //                       state.selectedItem && state.selectedItem?.id === item.id
-  //                         ? true
-  //                         : false
-  //                     }
-  //                     readOnly
-  //                   />
-
-  //                   {item.label}
-  //                 </label>
-  //               </RADIO>
-  //             );
-  //           } else {
-  //             return null;
-  //           }
-  //         })}
-  //       </F_MENU>
-  //     </F_CONTAINER>
-  //   );
-  // }
 
   return <p>Please enter a value for menuKind</p>;
 }

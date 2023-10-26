@@ -1,0 +1,41 @@
+@use "../scss/fwd";
+
+// Absolute menu
+
+.abs-container {
+  @include fwd.abs-container;
+}
+
+.abs-icon-wrap {
+  @include fwd.abs-icon-wrap;
+}
+
+.abs-icon {
+  @include fwd.abs-icon;
+}
+
+.abs-menu {
+  @include fwd.abs-menu;
+}
+
+// Flex menu
+
+.flx-container {
+  @include fwd.flx-container;
+}
+
+.flx-btn {
+  @include fwd.flx-btn;
+}
+
+.flx-icon-wrap {
+  @include fwd.flx-icon-wrap;
+}
+
+.flx-icon {
+  @include fwd.flx-icon;
+}
+
+.flx-menu {
+  @include fwd.flx-menu;
+}

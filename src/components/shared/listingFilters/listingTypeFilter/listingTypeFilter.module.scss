@@ -1,0 +1,64 @@
+@use "../scss/absolute" as abs;
+@use "../scss/flex" as flx;
+
+// ABS
+
+.abs-container {
+  @include abs.container;
+}
+
+.abs-icon-wrap {
+  @include abs.icon-wrap;
+}
+
+.abs-icon {
+  @include abs.icon;
+}
+
+.abs-menu {
+  @include abs.menu;
+}
+
+// FLX
+
+.flx-container {
+  @include flx.container;
+}
+
+.flx-btn {
+  @include flx.btn;
+}
+
+.flx-icon-wrap {
+  @include flx.icon-wrap;
+}
+
+.flx-icon {
+  @include flx.icon;
+}
+
+.flx-menu {
+  @include flx.menu;
+}
+
+// Common
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 5px 10px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+
+  &.selected {
+    background: var(--color-primary);
+    color: black;
+  }
+
+  &:hover {
+    border: 1px solid var(--color-primary);
+  }
+}

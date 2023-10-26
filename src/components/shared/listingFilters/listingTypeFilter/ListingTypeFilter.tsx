@@ -4,23 +4,12 @@ import { useAppSelector } from "../../../../redux/hooks";
 import useCloseDropdown from "../hooks/useCloseDropdown";
 import { DropdownStyles, ListingKindValue } from "../../../../types/index";
 
-import {
-  A_CONTAINER,
-  A_CONTAINER_ICON_WRAP,
-  A_CONTAINER_ICON,
-  A_MENU,
-} from "../styledComponents/absolute";
-
-import {
-  F_BTN,
-  F_BTN_ICON,
-  F_BTN_ICON_WRAP,
-  F_CONTAINER,
-  F_MENU,
-} from "../styledComponents/flex";
+// import flx from "../scss/flex.module.scss";
+// import abs from "../scss/absolute.module.scss";
+import scss from "./listingTypeFilter.module.scss";
+import { ReactComponent as Icon } from "../assets/chevron-down.svg";
 
 import { setSelectedTypes, setShowMenu } from "./slice";
-import { MENU_ITEM } from "./styledComponents/common";
 
 interface Props {
   /**
@@ -63,6 +52,7 @@ export default function ListingTypeFilter({
     containerRef,
     menuRef,
     setShowMenu,
+    // reducers: [setSelectedTypes],
   });
 
   /**
@@ -122,72 +112,97 @@ export default function ListingTypeFilter({
 
   if (menuKind === "absolute") {
     return (
-      <A_CONTAINER
+      <div
+        className={`${scss["abs-container"]} ${
+          state.showMenu ? scss["abs-container"] : scss.closed
+        } ${inUse ? scss.used : ""}`}
         ref={containerRef}
         onClick={() => dispatch(setShowMenu())}
-        inUse={inUse}
-        styles={styles}
+        style={{
+          width: styles.btnWidth,
+          minHeight: styles.btnHeight,
+          maxHeight: styles.btnHeight,
+        }}
       >
         {label || "Dropdown"}
-        <A_CONTAINER_ICON_WRAP>
-          <A_CONTAINER_ICON flipped={state.showMenu} />
-        </A_CONTAINER_ICON_WRAP>
-        {state.showMenu && state.types ? (
-          <A_MENU ref={menuRef} onClick={(e) => e.stopPropagation()}>
-            {state.types.map((type, index) => {
-              if (type !== null) {
-                return (
-                  <MENU_ITEM
-                    key={index}
-                    onClick={() => handleItemClick(type)}
-                    isSelected={isSelected(type)}
-                  >
-                    {type.label}
-                  </MENU_ITEM>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </A_MENU>
-        ) : null}
-      </A_CONTAINER>
-    );
-  }
+        <div className={scss["abs-icon-wrap"]}>
+          <Icon className={scss["abs-icon"]} />
+        </div>
 
-  if (menuKind === "flex") {
-    return (
-      <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
-          {label || "Dropdown"}
-          <F_BTN_ICON_WRAP>
-            <F_BTN_ICON flipped={state.showMenu} />
-          </F_BTN_ICON_WRAP>
-        </F_BTN>
-
-        <F_MENU
-          className={state.showMenu ? "open" : "closed"}
-          styles={styles}
+        <div
+          className={scss["abs-menu"]}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >
           {state.types.map((type, index) => {
             if (type !== null) {
               return (
-                <MENU_ITEM
+                <div
+                  className={`${scss["menu-item"]} ${
+                    isSelected(type) ? scss.selected : ""
+                  } `}
                   key={index}
                   onClick={() => handleItemClick(type)}
-                  isSelected={isSelected(type)}
                 >
                   {type.label}
-                </MENU_ITEM>
+                </div>
               );
             } else {
               return null;
             }
           })}
-        </F_MENU>
-      </F_CONTAINER>
+        </div>
+      </div>
+    );
+  }
+
+  if (menuKind === "flex") {
+    return (
+      <div
+        className={`${scss["flx-container"]} ${
+          state.showMenu ? scss.open : scss.closed
+        } ${inUse ? scss.used : ""}`}
+        ref={containerRef}
+      >
+        <div
+          className={scss["flx-btn"]}
+          onClick={() => dispatch(setShowMenu())}
+          style={{
+            width: styles.btnWidth,
+            minHeight: styles.btnHeight,
+            maxHeight: styles.btnHeight,
+          }}
+        >
+          {label}
+          <div className={scss["flx-icon-wrap"]}>
+            <Icon className={scss["flx-icon"]} />
+          </div>
+        </div>
+
+        <div
+          className={scss["flx-menu"]}
+          ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {state.types.map((type, index) => {
+            if (type !== null) {
+              return (
+                <div
+                  className={`${scss["menu-item"]} ${
+                    isSelected(type) ? scss.selected : ""
+                  } `}
+                  key={index}
+                  onClick={() => handleItemClick(type)}
+                >
+                  {type.label}
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </div>
+      </div>
     );
   }
 
