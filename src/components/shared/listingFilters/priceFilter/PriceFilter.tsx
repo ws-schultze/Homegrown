@@ -1,34 +1,14 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
-import useCloseDropdown from "../hooks/useCloseDropdown";
-
 import mod from "./priceFilter.module.scss";
-
 import { setShowMenu, setPriceRange } from "./slice";
 import { initStrOpt } from "../../../../initialValues";
 import InputStr from "../../inputs/inputStr/InputStr";
-
 import AbsoluteDropdownWrapper from "../../dropdownWrappers/absoluteDropdownWrapper/AbsoluteDropdownWrapper";
-
-import FlexDropdownWrapper, {
-  FlexDropdownBtnStyles,
-  FlexDropdownMenuStyles,
-} from "../../dropdownWrappers/flexDropdownWrapper/FlexDropdownWrapper";
-
+import FlexDropdownWrapper from "../../dropdownWrappers/flexDropdownWrapper/FlexDropdownWrapper";
 import { Str } from "../../../../types";
-
-interface Props {
-  menuKind: "absolute" | "flex";
-  btnStyles: FlexDropdownBtnStyles;
-  menuStyles: FlexDropdownMenuStyles;
-  label: string;
-  /**
-   * Menu closes when user clicks outside of container.
-   * Default is true
-   */
-  closeOnOutsideClick?: boolean;
-}
+import { AbsDropdownMenu, FlxDropdownMenu } from "../../dropdownWrappers/types";
 
 interface LocalState {
   lowPrice: Str;
@@ -40,18 +20,11 @@ const initialLocalState: LocalState = {
   highPrice: initStrOpt,
 };
 
-export default function PriceFilter({
-  menuKind,
-  menuStyles,
-  btnStyles,
-  label,
-  closeOnOutsideClick = true,
-}: Props) {
+export default function PriceFilter<
+  T extends AbsDropdownMenu | FlxDropdownMenu
+>({ menuKind, menuStyles, btnStyles, label }: T) {
   const state = useAppSelector((state) => state.priceFilter);
   const dispatch = useDispatch();
-
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
 
   // local state gets dispatched when the filter is applied
   // this prevents excessive updates to redux store
@@ -61,20 +34,6 @@ export default function PriceFilter({
     state.highPrice?.formatted === "" && state.lowPrice?.formatted === ""
       ? false
       : true;
-
-  // useCloseDropdown({
-  //   menuIsOpen: state.showMenu,
-  //   closeOnOutsideClick,
-  //   containerRef,
-  //   menuRef,
-  //   setShowMenu,
-  //   reducers: [
-  //     setPriceRange({
-  //       lowPrice: localState.lowPrice,
-  //       highPrice: localState.highPrice,
-  //     }),
-  //   ],
-  // });
 
   function handleInputStr(object: Str, fieldName: keyof typeof state) {
     setLocalState((s) => ({
@@ -95,6 +54,17 @@ export default function PriceFilter({
       })
     );
   }
+
+  const dropdownLabel =
+    (state.lowPrice && state.lowPrice.number >= 1) ||
+    (state.highPrice && state.highPrice.number >= 1) ? (
+      <>
+        {state.lowPrice?.shortFormatted} {" - "}{" "}
+        {state.highPrice?.shortFormatted}
+      </>
+    ) : (
+      label
+    );
 
   const menuContent: JSX.Element = (
     <>
@@ -148,17 +118,8 @@ export default function PriceFilter({
         showMenu={state.showMenu}
         inUse={inUse}
         btnStyles={btnStyles}
-        label={
-          (state.lowPrice && state.lowPrice.number >= 1) ||
-          (state.highPrice && state.highPrice.number >= 1) ? (
-            <>
-              {state.lowPrice?.shortFormatted} {" - "}{" "}
-              {state.highPrice?.shortFormatted}
-            </>
-          ) : (
-            label
-          )
-        }
+        menuStyles={menuStyles}
+        label={dropdownLabel}
         handleShowMenu={handleShowMenu}
         handleStateOnMenuClose={handleStateOnMenuClose}
       />
@@ -173,17 +134,7 @@ export default function PriceFilter({
         inUse={inUse}
         btnStyles={btnStyles}
         menuStyles={menuStyles}
-        label={
-          (state.lowPrice && state.lowPrice.number >= 1) ||
-          (state.highPrice && state.highPrice.number >= 1) ? (
-            <>
-              {state.lowPrice?.shortFormatted} {" - "}{" "}
-              {state.highPrice?.shortFormatted}
-            </>
-          ) : (
-            label
-          )
-        }
+        label={dropdownLabel}
         handleShowMenu={handleShowMenu}
       />
     );

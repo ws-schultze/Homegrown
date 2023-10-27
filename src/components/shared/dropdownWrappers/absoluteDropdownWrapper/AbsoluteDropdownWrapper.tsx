@@ -1,18 +1,8 @@
 import { useRef } from "react";
 import styles from "./absoluteDropdownWrapper.module.scss";
 import { ReactComponent as Icon } from "./chevron-down.svg";
-import { FlexDropdownBtnStyles } from "../flexDropdownWrapper/FlexDropdownWrapper";
 import useCloseDropdown from "../hooks/useCloseDropdown";
-
-interface Props {
-  menuContent: JSX.Element;
-  showMenu: boolean;
-  inUse: boolean;
-  label: React.ReactNode;
-  btnStyles: FlexDropdownBtnStyles;
-  handleShowMenu: () => void;
-  handleStateOnMenuClose: () => void;
-}
+import { AbsDropdownMenuWrapper } from "../types";
 
 export default function AbsoluteDropdownWrapper({
   menuContent,
@@ -20,9 +10,10 @@ export default function AbsoluteDropdownWrapper({
   inUse,
   label,
   btnStyles,
+  menuStyles,
   handleShowMenu,
   handleStateOnMenuClose,
-}: Props): JSX.Element {
+}: AbsDropdownMenuWrapper): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,11 +31,7 @@ export default function AbsoluteDropdownWrapper({
       className={`${styles["abs-container"]} ${inUse ? styles.used : ""}`}
       ref={containerRef}
       onClick={handleShowMenu}
-      style={{
-        width: btnStyles.width,
-        minHeight: btnStyles.height,
-        maxHeight: btnStyles.height,
-      }}
+      style={btnStyles ? btnStyles : undefined}
     >
       {label || "Dropdown"}
       <div className={styles["abs-icon-wrap"]}>
@@ -59,10 +46,10 @@ export default function AbsoluteDropdownWrapper({
         className={`${styles["abs-menu"]} ${
           showMenu ? styles.open : styles.closed
         }`}
+        style={menuStyles ? menuStyles : undefined}
         ref={menuRef}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Menu contents goes here */}
         {menuContent}
       </div>
     </div>

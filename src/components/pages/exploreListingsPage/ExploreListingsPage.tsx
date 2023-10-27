@@ -26,6 +26,7 @@ import ListingOverlayPage from "../listingOverlayPage/ListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
+import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 
 /**
  * Passed to styled components for styling on desktop screen size
@@ -39,16 +40,19 @@ const desktopDropdownStyle: DropdownStyles = {
   menuHeight: "100%",
 };
 
-/**
- * Passed to styled components for styling on mobile screen size
- */
-const mobileDropdownStyle: DropdownStyles = {
-  btnWidth: "100%",
-  btnHeight: "55px",
-  menuMinWidth: "100%",
-  menuMaxWidth: "100%",
-  menuWidth: "100%",
-  menuHeight: "100%",
+const dDropdownBtnStyle = {
+  height: "50px",
+  width: "260px",
+};
+
+const mDropdownBtnStyle = {
+  height: "55px",
+  width: "100%",
+};
+
+const mDropdownMenuStyle = {
+  // height: "100%",
+  // width: "100%",
 };
 
 export interface ExploreListingsFilters {
@@ -183,32 +187,33 @@ export default function ExploreListingsPage(): JSX.Element {
             defaultValue={place ? place.formatted_address : ""}
           />
 
-          <ForSaleOrRentFilter
+          <ForSaleOrRentFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="For Sale or Rent"
-            styles={desktopDropdownStyle}
+            btnStyles={dDropdownBtnStyle}
           />
-          <PriceFilter
+
+          <PriceFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="Price Range"
-            btnStyles={{
-              height: desktopDropdownStyle.btnHeight,
-              width: desktopDropdownStyle.btnWidth,
-            }}
-            menuStyles={{
-              height: desktopDropdownStyle.menuHeight,
-              width: desktopDropdownStyle.menuWidth,
-            }}
+            btnStyles={dDropdownBtnStyle}
           />
-          <ListingTypeFilter
+
+          <ListingTypeFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="Listing Type"
-            styles={desktopDropdownStyle}
+            btnStyles={dDropdownBtnStyle}
           />
-          <BedAndBathFilter
+
+          <BedAndBathFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="Beds and Baths"
-            styles={desktopDropdownStyle}
+            btnStyles={dDropdownBtnStyle}
+            menuStyles={{
+              minWidth: "fit-content",
+              right: "0",
+              left: "unset",
+            }}
           />
         </div>
 
@@ -349,36 +354,33 @@ export default function ExploreListingsPage(): JSX.Element {
               defaultValue={place ? place.formatted_address : ""}
             />
           </div>
+
           <ForSaleOrRentFilter
             menuKind="flex"
             label="For Sale or Rent"
-            styles={mobileDropdownStyle}
-            closeOnOutsideClick={false}
+            btnStyles={mDropdownBtnStyle}
+            menuStyles={mDropdownMenuStyle}
           />
-          <ListingTypeFilter
-            menuKind="flex"
-            label="Listing Type"
-            styles={mobileDropdownStyle}
-            closeOnOutsideClick={false}
-          />
+
           <PriceFilter
             menuKind="flex"
             label="Price Range"
-            closeOnOutsideClick={false}
-            btnStyles={{
-              height: mobileDropdownStyle.btnHeight,
-              width: mobileDropdownStyle.btnWidth,
-            }}
-            menuStyles={{
-              height: mobileDropdownStyle.menuHeight,
-              width: mobileDropdownStyle.menuWidth,
-            }}
+            btnStyles={mDropdownBtnStyle}
+            menuStyles={mDropdownMenuStyle}
           />
+
+          <ListingTypeFilter
+            menuKind="flex"
+            label="Listing Type"
+            btnStyles={mDropdownBtnStyle}
+            menuStyles={mDropdownMenuStyle}
+          />
+
           <BedAndBathFilter
             menuKind="flex"
             label="Beds and Baths"
-            styles={mobileDropdownStyle}
-            closeOnOutsideClick={false}
+            btnStyles={mDropdownBtnStyle}
+            menuStyles={mDropdownMenuStyle}
           />
         </div>
       </div>

@@ -1,6 +1,11 @@
 import { useRef } from "react";
 import styles from "./flexDropdownWrapper.module.scss";
 import { ReactComponent as Icon } from "./chevron-down.svg";
+import {
+  AbsDropdownBtnStyles,
+  AbsDropdownMenuStyles,
+  FlxDropdownMenuWrapper,
+} from "../types";
 
 export interface FlexDropdownBtnStyles {
   height: string;
@@ -12,16 +17,6 @@ export interface FlexDropdownMenuStyles {
   width: string;
 }
 
-interface Props {
-  menuContent: JSX.Element;
-  showMenu: boolean;
-  inUse: boolean;
-  label: React.ReactNode;
-  btnStyles: FlexDropdownBtnStyles;
-  menuStyles: FlexDropdownMenuStyles;
-  handleShowMenu: () => void;
-}
-
 export default function FlexDropdownWrapper({
   menuContent,
   showMenu,
@@ -30,7 +25,7 @@ export default function FlexDropdownWrapper({
   btnStyles,
   menuStyles,
   handleShowMenu,
-}: Props): JSX.Element {
+}: FlxDropdownMenuWrapper): JSX.Element {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,11 +37,7 @@ export default function FlexDropdownWrapper({
       <div
         className={styles["flx-btn"]}
         onClick={handleShowMenu}
-        style={{
-          width: btnStyles.width,
-          minHeight: btnStyles.height,
-          maxHeight: btnStyles.height,
-        }}
+        style={btnStyles ? btnStyles : undefined}
       >
         {label}
         <div className={styles["flx-icon-wrap"]}>
@@ -64,8 +55,8 @@ export default function FlexDropdownWrapper({
         }`}
         ref={menuRef}
         onClick={(e) => e.stopPropagation()}
+        style={menuStyles ? menuStyles : undefined}
       >
-        {/* Menu content goes here */}
         {menuContent}
       </div>
     </div>

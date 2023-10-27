@@ -1,59 +1,25 @@
-import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
-import useCloseDropdown from "../hooks/useCloseDropdown";
-import { DropdownStyles, ListingKindValue } from "../../../../types/index";
-
-// import flx from "../scss/flex.module.scss";
-// import abs from "../scss/absolute.module.scss";
 import scss from "./listingTypeFilter.module.scss";
-import { ReactComponent as Icon } from "../assets/chevron-down.svg";
-
 import { setSelectedTypes, setShowMenu } from "./slice";
+import { AbsDropdownMenu, FlxDropdownMenu } from "../../dropdownWrappers/types";
+import AbsoluteDropdownWrapper from "../../dropdownWrappers/absoluteDropdownWrapper/AbsoluteDropdownWrapper";
+import FlexDropdownWrapper from "../../dropdownWrappers/flexDropdownWrapper/FlexDropdownWrapper";
+import { ListingKindValue } from "../../../../types";
 
-interface Props {
-  /**
-   * absolute menus have absolute position an don't respect padding of the  *   parent and appear above siblings
-   *
-   * flex menus display a flex column that will respect parent padding and
-   will appear next to siblings
-   */
-  menuKind: "absolute" | "flex";
-  styles: DropdownStyles;
-  label: string;
-  /**
-   * Menu closes when user clicks outside of container.
-   * Default is true
-   */
-  closeOnOutsideClick?: boolean;
-}
-
-export default function ListingTypeFilter({
-  menuKind,
-  styles,
-  label,
-  closeOnOutsideClick = true,
-}: Props) {
+export default function ListingTypeFilter<
+  T extends AbsDropdownMenu | FlxDropdownMenu
+>({ menuKind, menuStyles, btnStyles, label }: T) {
   const state = useAppSelector((state) => state.listingTypeFilter);
+
   const dispatch = useDispatch();
 
-  /**
-   Set an inUse condition, depending on the menu, such as if a max price is set on a price range menu
-   */
   const inUse =
     state.selectedTypes && state.selectedTypes.length > 0 ? true : false;
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  useCloseDropdown({
-    menuIsOpen: state.showMenu,
-    closeOnOutsideClick,
-    containerRef,
-    menuRef,
-    setShowMenu,
-    // reducers: [setSelectedTypes],
-  });
+  function handleShowMenu() {
+    dispatch(setShowMenu());
+  }
 
   /**
    * Set selected items to state and pass them to parent (Multi-select Menu)
@@ -110,107 +76,49 @@ export default function ListingTypeFilter({
     }
   }
 
+  const menuContent = state.types.map((type, index) => {
+    if (type !== null) {
+      return (
+        <div
+          className={`${scss["menu-item"]} ${
+            isSelected(type) ? scss.selected : ""
+          } `}
+          key={index}
+          onClick={() => handleItemClick(type)}
+        >
+          {type.label}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  });
+
   if (menuKind === "absolute") {
     return (
-      <div
-        className={`${scss["abs-container"]} ${inUse ? scss.used : ""}`}
-        ref={containerRef}
-        onClick={() => dispatch(setShowMenu())}
-        style={{
-          width: styles.btnWidth,
-          minHeight: styles.btnHeight,
-          maxHeight: styles.btnHeight,
-        }}
-      >
-        {label || "Dropdown"}
-        <div className={scss["abs-icon-wrap"]}>
-          <Icon
-            className={`${scss["abs-icon"]} ${
-              state.showMenu ? scss.open : scss.closed
-            }`}
-          />
-        </div>
-
-        <div
-          className={`${scss["abs-menu"]} ${
-            state.showMenu ? scss.open : scss.closed
-          }`}
-          ref={menuRef}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {state.types.map((type, index) => {
-            if (type !== null) {
-              return (
-                <div
-                  className={`${scss["menu-item"]} ${
-                    isSelected(type) ? scss.selected : ""
-                  } `}
-                  key={index}
-                  onClick={() => handleItemClick(type)}
-                >
-                  {type.label}
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </div>
-      </div>
+      <AbsoluteDropdownWrapper
+        menuContent={menuContent}
+        showMenu={state.showMenu}
+        inUse={inUse}
+        btnStyles={btnStyles}
+        menuStyles={menuStyles}
+        label={label}
+        handleShowMenu={handleShowMenu}
+      />
     );
   }
 
   if (menuKind === "flex") {
     return (
-      <div
-        className={`${scss["flx-container"]} ${inUse ? scss.used : ""}`}
-        ref={containerRef}
-      >
-        <div
-          className={scss["flx-btn"]}
-          onClick={() => dispatch(setShowMenu())}
-          style={{
-            width: styles.btnWidth,
-            minHeight: styles.btnHeight,
-            maxHeight: styles.btnHeight,
-          }}
-        >
-          {label}
-          <div className={scss["flx-icon-wrap"]}>
-            <Icon
-              className={`${scss["flx-icon"]} ${
-                state.showMenu ? scss.open : scss.closed
-              }`}
-            />
-          </div>
-        </div>
-
-        <div
-          className={`${scss["flx-menu"]} ${
-            state.showMenu ? scss.open : scss.closed
-          }`}
-          ref={menuRef}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {state.types.map((type, index) => {
-            if (type !== null) {
-              return (
-                <div
-                  className={`${scss["menu-item"]} ${
-                    isSelected(type) ? scss.selected : ""
-                  } `}
-                  key={index}
-                  onClick={() => handleItemClick(type)}
-                >
-                  {type.label}
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </div>
-      </div>
+      <FlexDropdownWrapper
+        menuContent={menuContent}
+        showMenu={state.showMenu}
+        inUse={inUse}
+        btnStyles={btnStyles}
+        menuStyles={menuStyles}
+        label={label}
+        handleShowMenu={handleShowMenu}
+      />
     );
   }
 

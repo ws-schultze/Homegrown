@@ -26,46 +26,26 @@ import {
 } from "./styledComponents/common";
 
 import { setShowMenu, setBeds, setBaths } from "./slice";
+import {
+  FilterProps,
+  AbsDropdownMenu,
+  FlxDropdownMenu,
+} from "../../dropdownWrappers/types";
 
-interface Props {
-  /**
-   * absolute menus have absolute position an don't respect padding of the  *   parent and appear above siblings
-   *
-   * flex menus display a flex column that will respect parent padding and
-   will appear next to siblings
-   */
-  menuKind: "absolute" | "flex";
-  styles: DropdownStyles;
-  label: string;
-  /**
-   * Menu closes when user clicks outside of container
-   */
-  closeOnOutsideClick?: boolean;
-}
+import scss from "./benAndBathFilter.module.scss";
+import AbsoluteDropdownWrapper from "../../dropdownWrappers/absoluteDropdownWrapper/AbsoluteDropdownWrapper";
+import FlexDropdownWrapper from "../../dropdownWrappers/flexDropdownWrapper/FlexDropdownWrapper";
 
-export default function BedAndBathFilter({
-  menuKind,
-  styles,
-  label,
-  closeOnOutsideClick = true,
-}: Props) {
+export default function BedAndBathFilter<
+  T extends AbsDropdownMenu | FlxDropdownMenu
+>({ menuKind, menuStyles, btnStyles, label }: T) {
   const state = useAppSelector((state) => state.bedAndBathFilter);
   const dispatch = useDispatch();
-
-  /**
-   Set an inUse condition, depending on the menu, such as if a max price is set on a price range menu
-   */
   const inUse = state.baths! > 0 || state.beds! > 0 ? true : false;
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
 
-  useCloseDropdown({
-    menuIsOpen: state.showMenu,
-    closeOnOutsideClick,
-    containerRef,
-    menuRef,
-    setShowMenu,
-  });
+  function handleShowMenu() {
+    dispatch(setShowMenu());
+  }
 
   /**
    * Set number of baths to state
@@ -99,216 +79,142 @@ export default function BedAndBathFilter({
     }
   }
 
+  const menuContent = (
+    <>
+      <div className={scss["menu-section-wrap"]}>
+        <header>Number of Bedrooms</header>
+        <div className={scss["menu-section"]}>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.beds === 1 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBeds(e, 1)}
+          >
+            1+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.beds === 2 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBeds(e, 2)}
+          >
+            2+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.beds === 3 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBeds(e, 3)}
+          >
+            3+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.beds === 4 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBeds(e, 4)}
+          >
+            4+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.beds === 5 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBeds(e, 5)}
+          >
+            5+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.beds === null ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBeds(e, null)}
+          >
+            Any
+          </button>
+        </div>
+      </div>
+      <div className={scss["menu-section-wrap"]}>
+        <header>Number of Bathrooms</header>
+        <div className={scss["menu-section"]}>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.baths === 1 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBaths(e, 1)}
+          >
+            1+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.baths === 1.5 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBaths(e, 1.5)}
+          >
+            1.5+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.baths === 2 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBaths(e, 2)}
+          >
+            2+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.baths === 2.5 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBaths(e, 2.5)}
+          >
+            2.5+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.baths === 3 ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBaths(e, 3)}
+          >
+            3+
+          </button>
+          <button
+            className={`${scss["num-btn"]} ${
+              state.baths === null ? scss.active : ""
+            }`}
+            onClick={(e) => handleNumBaths(e, null)}
+          >
+            Any
+          </button>
+        </div>
+      </div>
+    </>
+  );
+
   if (menuKind === "absolute") {
     return (
-      <A_CONTAINER
-        ref={containerRef}
-        onClick={() =>
-          // Be sure to use the setShowMenu function that is defined
-          // in the slice being used
-          dispatch(setShowMenu())
-        }
+      <AbsoluteDropdownWrapper
+        menuContent={menuContent}
+        showMenu={state.showMenu}
         inUse={inUse}
-        styles={styles}
-      >
-        {label || "Dropdown"}
-        <A_CONTAINER_ICON_WRAP>
-          <A_CONTAINER_ICON flipped={state.showMenu} />
-        </A_CONTAINER_ICON_WRAP>
-        {state.showMenu ? (
-          <A_MENU
-            ref={menuRef}
-            onClick={(e) => e.stopPropagation()}
-            style={{ right: "0", left: "unset" }}
-          >
-            <MENU_SECTION_WRAP>
-              <header>Number of Bedrooms</header>
-              <MENU_SECTION>
-                <BED_BATH_BTN
-                  $isSelected={state.beds === 1 ? true : false}
-                  onClick={(e) => handleNumBeds(e, 1)}
-                >
-                  1+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.beds === 2 ? true : false}
-                  onClick={(e) => handleNumBeds(e, 2)}
-                >
-                  2+
-                </BED_BATH_BTN>{" "}
-                <BED_BATH_BTN
-                  $isSelected={state.beds === 3 ? true : false}
-                  onClick={(e) => handleNumBeds(e, 3)}
-                >
-                  3+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.beds === 4 ? true : false}
-                  onClick={(e) => handleNumBeds(e, 4)}
-                >
-                  4+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.beds === 5 ? true : false}
-                  onClick={(e) => handleNumBeds(e, 5)}
-                >
-                  5+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.beds == null ? true : false}
-                  onClick={(e) => handleNumBeds(e, null)}
-                >
-                  Any
-                </BED_BATH_BTN>
-              </MENU_SECTION>
-            </MENU_SECTION_WRAP>
-            <MENU_SECTION_WRAP>
-              <header>Number of Bathrooms</header>
-              <MENU_SECTION>
-                <BED_BATH_BTN
-                  $isSelected={state.baths === 1 ? true : false}
-                  onClick={(e) => handleNumBaths(e, 1)}
-                >
-                  1+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.baths === 1.5 ? true : false}
-                  onClick={(e) => handleNumBaths(e, 1.5)}
-                >
-                  1.5+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.baths === 2 ? true : false}
-                  onClick={(e) => handleNumBaths(e, 2)}
-                >
-                  2+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.baths === 2.5 ? true : false}
-                  onClick={(e) => handleNumBaths(e, 2.5)}
-                >
-                  2.5+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.baths === 3 ? true : false}
-                  onClick={(e) => handleNumBaths(e, 3)}
-                >
-                  3+
-                </BED_BATH_BTN>
-                <BED_BATH_BTN
-                  $isSelected={state.baths == null ? true : false}
-                  onClick={(e) => handleNumBaths(e, null)}
-                >
-                  Any
-                </BED_BATH_BTN>
-              </MENU_SECTION>
-            </MENU_SECTION_WRAP>
-          </A_MENU>
-        ) : null}
-      </A_CONTAINER>
+        btnStyles={btnStyles}
+        menuStyles={menuStyles}
+        label={label}
+        handleShowMenu={handleShowMenu}
+      />
     );
   }
 
   if (menuKind === "flex") {
     return (
-      <F_CONTAINER ref={containerRef} inUse={inUse}>
-        <F_BTN onClick={() => dispatch(setShowMenu())} styles={styles}>
-          {label || "Dropdown"}
-          <F_BTN_ICON_WRAP>
-            <F_BTN_ICON flipped={state.showMenu} />
-          </F_BTN_ICON_WRAP>
-        </F_BTN>
-
-        <F_MENU
-          className={state.showMenu ? "open" : "closed"}
-          styles={styles}
-          ref={menuRef}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <MENU_SECTION_WRAP>
-            <header>Number of Bedrooms</header>
-            <MENU_SECTION>
-              <BED_BATH_BTN
-                $isSelected={state.beds === 1 ? true : false}
-                onClick={(e) => handleNumBeds(e, 1)}
-              >
-                1+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.beds === 2 ? true : false}
-                onClick={(e) => handleNumBeds(e, 2)}
-              >
-                2+
-              </BED_BATH_BTN>{" "}
-              <BED_BATH_BTN
-                $isSelected={state.beds === 3 ? true : false}
-                onClick={(e) => handleNumBeds(e, 3)}
-              >
-                3+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.beds === 4 ? true : false}
-                onClick={(e) => handleNumBeds(e, 4)}
-              >
-                4+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.beds === 5 ? true : false}
-                onClick={(e) => handleNumBeds(e, 5)}
-              >
-                5+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.beds == null ? true : false}
-                onClick={(e) => handleNumBeds(e, null)}
-              >
-                Any
-              </BED_BATH_BTN>
-            </MENU_SECTION>
-          </MENU_SECTION_WRAP>
-          <MENU_SECTION_WRAP>
-            <header>Number of Bathrooms</header>
-            <MENU_SECTION>
-              <BED_BATH_BTN
-                $isSelected={state.baths === 1 ? true : false}
-                onClick={(e) => handleNumBaths(e, 1)}
-              >
-                1+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.baths === 1.5 ? true : false}
-                onClick={(e) => handleNumBaths(e, 1.5)}
-              >
-                1.5+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.baths === 2 ? true : false}
-                onClick={(e) => handleNumBaths(e, 2)}
-              >
-                2+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.baths === 2.5 ? true : false}
-                onClick={(e) => handleNumBaths(e, 2.5)}
-              >
-                2.5+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.baths === 3 ? true : false}
-                onClick={(e) => handleNumBaths(e, 3)}
-              >
-                3+
-              </BED_BATH_BTN>
-              <BED_BATH_BTN
-                $isSelected={state.baths == null ? true : false}
-                onClick={(e) => handleNumBaths(e, null)}
-              >
-                Any
-              </BED_BATH_BTN>
-            </MENU_SECTION>
-          </MENU_SECTION_WRAP>
-        </F_MENU>
-      </F_CONTAINER>
+      <FlexDropdownWrapper
+        menuContent={menuContent}
+        showMenu={state.showMenu}
+        inUse={inUse}
+        btnStyles={btnStyles}
+        menuStyles={menuStyles}
+        label={label}
+        handleShowMenu={handleShowMenu}
+      />
     );
   }
 
