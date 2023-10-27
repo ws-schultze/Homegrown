@@ -58,23 +58,23 @@ export default function PriceFilter({
   const [localState, setLocalState] = useState<LocalState>(initialLocalState);
 
   const inUse =
-    state.highPrice?.value === "" && state.lowPrice?.value === ""
+    state.highPrice?.formatted === "" && state.lowPrice?.formatted === ""
       ? false
       : true;
 
-  useCloseDropdown({
-    menuIsOpen: state.showMenu,
-    closeOnOutsideClick,
-    containerRef,
-    menuRef,
-    setShowMenu,
-    reducers: [
-      setPriceRange({
-        lowPrice: localState.lowPrice,
-        highPrice: localState.highPrice,
-      }),
-    ],
-  });
+  // useCloseDropdown({
+  //   menuIsOpen: state.showMenu,
+  //   closeOnOutsideClick,
+  //   containerRef,
+  //   menuRef,
+  //   setShowMenu,
+  //   reducers: [
+  //     setPriceRange({
+  //       lowPrice: localState.lowPrice,
+  //       highPrice: localState.highPrice,
+  //     }),
+  //   ],
+  // });
 
   function handleInputStr(object: Str, fieldName: keyof typeof state) {
     setLocalState((s) => ({
@@ -142,91 +142,6 @@ export default function PriceFilter({
   );
 
   if (menuKind === "absolute") {
-    // return (
-    //   // <A_CONTAINER
-    //   //   ref={containerRef}
-    //   //   onClick={() =>
-    //   //     // Be sure to use the setShowMenu function that is defined
-    //   //     // in the slice being used
-    //   //     dispatch(setShowMenu())
-    //   //   }
-    //   //   inUse={inUse}
-    //   //   styles={styles}
-    //   // >
-    //   //   {(state.lowPrice && state.lowPrice.number >= 1) ||
-    //   //   (state.highPrice && state.highPrice.number >= 1) ? (
-    //   //     <>
-    //   //       {state.lowPrice?.shortFormatted} {" - "}{" "}
-    //   //       {state.highPrice?.shortFormatted}
-    //   //     </>
-    //   //   ) : (
-    //   //     label
-    //   //   )}
-    //   //   <A_CONTAINER_ICON_WRAP>
-    //   //     <A_CONTAINER_ICON flipped={state.showMenu} />
-    //   //   </A_CONTAINER_ICON_WRAP>
-    //   //   {state.showMenu ? (
-    //   //     <A_MENU ref={menuRef} onClick={(e) => e.stopPropagation()}>
-    //   //       <InputStr<typeof state>
-    //   //         size="lg"
-    //   //         fieldName="lowPrice"
-    //   //         groupSeparators={[","]}
-    //   //         formatType="USD-no-decimal-filter"
-    //   //         prefix="$"
-    //   //         min={1}
-    //   //         isPriceChange={false}
-    //   //         placeholder={"Low Price"}
-    //   //         parent={state.lowPrice}
-    //   //         emit={handleInputStr}
-    //   //       />
-
-    //   //       <InputStr<typeof state>
-    //   //         size="lg"
-    //   //         fieldName="highPrice"
-    //   //         groupSeparators={[","]}
-    //   //         formatType="USD-no-decimal-filter"
-    //   //         prefix="$"
-    //   //         min={1}
-    //   //         isPriceChange={false}
-    //   //         placeholder={"High Price"}
-    //   //         parent={state.highPrice || initStrOpt}
-    //   //         emit={handleInputStr}
-    //   //       />
-
-    //   //       <APPLY_FILTER_BTN
-    //   //         onClick={() => {
-    //   //           dispatch(
-    //   //             setPriceRange({
-    //   //               lowPrice: localState.lowPrice,
-    //   //               highPrice: localState.highPrice,
-    //   //             })
-    //   //           );
-    //   //           dispatch(setShowMenu());
-    //   //         }}
-    //   //       >
-    //   //         Apply
-    //   //       </APPLY_FILTER_BTN>
-    //   //     </A_MENU>
-    //   //   ) : null}
-    //   // </A_CONTAINER>
-    //   <AbsoluteDropdownWrapper
-    //     menuContent={menuContent}
-    //     showMenu={state.showMenu}
-    //     inUse={inUse}
-    //     label={
-    //       (state.lowPrice && state.lowPrice.number >= 1) ||
-    //       (state.highPrice && state.highPrice.number >= 1) ? (
-    //         <>
-    //           {state.lowPrice?.shortFormatted} {" - "}{" "}
-    //           {state.highPrice?.shortFormatted}
-    //         </>
-    //       ) : (
-    //         label
-    //       )
-    //     }
-    //     handleShowMenu={handleShowMenu}
-    //   />
-    // );
     return (
       <AbsoluteDropdownWrapper
         menuContent={menuContent}
