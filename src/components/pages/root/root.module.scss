@@ -5,7 +5,16 @@
   color: var(--color-primary);
   background: var(--color-bg-primary);
 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // fallback min
+  min-height: 100dvh;
+  max-height: 100vh; // fallback max
+  max-height: 100dvh;
+  overflow-x: hidden;
+
   main {
+    max-height: calc(100dvh - var(--height-navbar));
     margin-top: var(--height-navbar);
   }
 

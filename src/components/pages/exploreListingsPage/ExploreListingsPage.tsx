@@ -19,7 +19,6 @@ import {
   ListingKindValue,
   ForSaleOrRentValue,
   Str,
-  DropdownStyles,
 } from "../../../types/index";
 import styles from "./exploreListingsPage.module.scss";
 import ListingOverlayPage from "../listingOverlayPage/ListingOverlayPage";
@@ -27,18 +26,6 @@ import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
-
-/**
- * Passed to styled components for styling on desktop screen size
- */
-const desktopDropdownStyle: DropdownStyles = {
-  btnWidth: "260px",
-  btnHeight: "50px",
-  menuMinWidth: "100%",
-  menuMaxWidth: "fit-content",
-  menuWidth: "100%",
-  menuHeight: "100%",
-};
 
 const dDropdownBtnStyle = {
   height: "50px",
@@ -330,26 +317,28 @@ export default function ExploreListingsPage(): JSX.Element {
           showFiltersMenu ? styles["is-open"] : styles["is-closed"]
         }`}
       >
+        {/* <CloseSVG className={styles["m-filters-close-icon"]} /> */}
         <div
           className={`${styles["m-filters"]} ${
             showFiltersMenu ? styles["is-open"] : styles["is-closed"]
           }`}
           ref={filtersMenuRef}
         >
-          <button
+          {/* <button
             type="button"
             id="filters-menu-btn"
             className={styles["m-filters-close-btn"]}
             onClick={toggleFiltersMenu}
           >
             <CloseSVG />
-          </button>
+          </button> */}
+
           <div className={styles["search-box-container"]}>
             <input
               className={styles["m-search-box"]}
               type="search"
               id="place-filter-searchbox"
-              placeholder="City, PostalCode, County, or State"
+              placeholder="Search for a location"
               ref={searchRef}
               defaultValue={place ? place.formatted_address : ""}
             />

@@ -3,8 +3,8 @@ import css from "./styles.module.css";
 // import "./index.scss";
 import { useThemeContext } from "../../../ThemeProvider";
 import { useMapContext } from "../../../MapProvider";
-import useSetupMapZoomControls from "../../../hooks/useSetupMapZoomControls";
-import useSetupMapFullScreenControls from "../../../hooks/useSetupMapFullScreenControls";
+import useSetupMapZoomControls from "../../pages/exploreListingsPage/map/hooks/useSetupMapZoomControls";
+import useSetupMapFullScreenControls from "../../pages/exploreListingsPage/map/hooks/useSetupMapFullScreenControls";
 import useSetupMapTypeIdControls from "../../../hooks/useSetupMapTypeIdControls";
 
 interface Props {

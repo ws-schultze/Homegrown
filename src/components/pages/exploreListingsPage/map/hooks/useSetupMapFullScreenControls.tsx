@@ -1,20 +1,11 @@
-import React, { useEffect } from "react";
-import {
-  exitFullscreen,
-  makeElement,
-  requestFullscreen,
-} from "../components/pages/exploreListingsPage/map/mapHelpers";
-import {
-  MapFullScreenBtnContainer,
-  MapFullScreenBtn,
-} from "../components/pages/exploreListingsPage/map/styledComponents";
+import { useEffect } from "react";
+import { exitFullscreen, makeElement, requestFullscreen } from "../mapHelpers";
 import { useDispatch } from "react-redux";
-import { setMapIsFullScreen } from "../components/pages/exploreListingsPage/exploreListingsPageSlice";
-
-import { ReactComponent as ExpandSVG } from "../assets/svg/expand-solid.svg";
-import { ReactComponent as CompressSVG } from "../assets/svg/compress-solid.svg";
-
-import { isFullscreen } from "../components/pages/exploreListingsPage/map/mapHelpers";
+import { setMapIsFullScreen } from "../../exploreListingsPageSlice";
+import { ReactComponent as ExpandSVG } from "../assets/expand-solid.svg";
+import { ReactComponent as CompressSVG } from "../assets/compress-solid.svg";
+import { isFullscreen } from "../mapHelpers";
+import styles from "../exploreListingsMap.module.scss";
 
 /**
  * Create expand/compress buttons on the given map for entering/exiting
@@ -31,32 +22,34 @@ function useSetupMapFullScreenControls(map: google.maps.Map | undefined) {
 
         const enterFullScreenBtn = makeElement({
           component: (
-            <MapFullScreenBtnContainer>
-              <MapFullScreenBtn
+            <div className={styles["map-fullscreen-btn-container"]}>
+              <button
+                className={styles["map-fullscreen-btn"]}
                 type="button"
                 onClick={() => {
                   dispatch(setMapIsFullScreen());
                 }}
               >
                 <ExpandSVG />
-              </MapFullScreenBtn>
-            </MapFullScreenBtnContainer>
+              </button>
+            </div>
           ),
           id: "map-expand-btn",
         }) as HTMLElement;
 
         const exitFullScreenBtn = makeElement({
           component: (
-            <MapFullScreenBtnContainer>
-              <MapFullScreenBtn
+            <div className={styles["map-full-screen-btn-container"]}>
+              <button
+                className={styles["map-fullscreen-btn"]}
                 type="button"
                 onClick={() => {
                   dispatch(setMapIsFullScreen());
                 }}
               >
                 <CompressSVG />
-              </MapFullScreenBtn>
-            </MapFullScreenBtnContainer>
+              </button>
+            </div>
           ),
           id: "map-compress-btn",
         }) as HTMLElement;

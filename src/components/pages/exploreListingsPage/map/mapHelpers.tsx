@@ -18,6 +18,9 @@ import styles from "./exploreListingsMap.module.scss";
 // import { setPlace } from "../filters/placeFilter/placeFilterSlice";
 // import { NavigateFunction } from "react-router";
 
+import { ReactComponent as ExpandSVG } from "./assets/expand-solid.svg";
+import { ReactComponent as CompressSVG } from "./assets/compress-solid.svg";
+
 export function isOfTypePlacesRegion(
   keyInput: string | undefined
 ): keyInput is TypePlacesRegion {
@@ -1239,3 +1242,80 @@ export function setupBoundaryForPlace(
 //     console.warn("Escaped");
 //   }
 // }
+
+export function makeMapFullScreenControls(
+  map: google.maps.Map | undefined,
+  handleClick: () => void
+) {
+  if (map) {
+    const elementToSendFullscreen = map.getDiv().firstChild as HTMLElement;
+
+    const enterFullScreenBtn = makeElement({
+      component: (
+        <div className={styles["map-fullscreen-btn-container"]}>
+          <button
+            className={styles["map-fullscreen-btn"]}
+            type="button"
+            onClick={handleClick}
+          >
+            <ExpandSVG />
+          </button>
+        </div>
+      ),
+      id: "map-expand-btn",
+    }) as HTMLElement;
+
+    const exitFullScreenBtn = makeElement({
+      component: (
+        <div className={styles["map-full-screen-btn-container"]}>
+          <button
+            className={styles["map-fullscreen-btn"]}
+            type="button"
+            onClick={handleClick}
+          >
+            <CompressSVG />
+          </button>
+        </div>
+      ),
+      id: "map-compress-btn",
+    }) as HTMLElement;
+
+    if (isFullscreen(elementToSendFullscreen)) {
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].pop();
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+        exitFullScreenBtn
+      );
+    } else {
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].pop();
+      map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+        enterFullScreenBtn
+      );
+    }
+
+    enterFullScreenBtn.onclick = function () {
+      requestFullscreen(elementToSendFullscreen);
+    };
+
+    exitFullScreenBtn.onclick = function () {
+      exitFullscreen();
+    };
+
+    document.onwebkitfullscreenchange =
+      document.onmsfullscreenchange =
+      document.onmozfullscreenchange =
+      document.onfullscreenchange =
+        function () {
+          if (isFullscreen(elementToSendFullscreen)) {
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].pop();
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+              exitFullScreenBtn
+            );
+          } else {
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].pop();
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+              enterFullScreenBtn
+            );
+          }
+        };
+  }
+}

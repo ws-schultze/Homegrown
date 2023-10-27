@@ -1,0 +1,67 @@
+input[type="checkbox"] {
+  opacity: 0;
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.container {
+}
+
+.label {
+  background-color: var(--color-bg-secondary);
+  cursor: pointer;
+  width: 75px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 2px 4px;
+  height: 36px;
+  border-radius: 30px;
+  border: 1px solid var(--color-border);
+  position: relative;
+}
+
+.toggle {
+  background-color: var(--color-bg-primary);
+  width: 30px;
+  height: 30px;
+  z-index: 1;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  display: block;
+  position: absolute;
+  right: 40px;
+  transition: all 0.4s ease;
+}
+
+:global body.dark .toggle {
+  right: 3px;
+}
+
+body:global(.dark) :local(.toggle) {
+  right: 3px;
+}
+
+body:global(.dark) :local(.toggle):hover {
+  box-shadow: 0px 0px 10px 5px yellow;
+}
+
+body:global(.light) :local(.toggle):hover {
+  box-shadow: 0px 0px 10px 5px #4dceec;
+}
+
+.moon,
+.sun {
+  height: 100%;
+}
+
+.moon {
+  fill: var(--color-primary);
+}
+
+.sun {
+  fill: yellow;
+}

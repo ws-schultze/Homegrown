@@ -44,7 +44,7 @@
 
   --color-border: var(--color-border-dark);
   --color-border-hover: var(--color-border-hover-dark);
-  --border: var(--border-dark);
+  --border: 1px solid var(--color-border);
 
   --color-text: antiquewhite;
   --color-navbar-list-item-icon: #8f8f8f;
@@ -77,7 +77,7 @@
 
   --color-border: var(--color-border-light);
   --color-border-hover: var(--color-border-hover-light);
-  --border: var(--border-light);
+  --border: 1px solid var(--color-border);
 
   --color-text: #000000;
   --color-navbar-list-item-icon: #000000;
@@ -117,13 +117,6 @@ body {
   background-color: var(--color-bg-primary);
   margin: 0;
   box-sizing: border-box;
-}
-
-#root > div {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 
 a {

@@ -15,6 +15,7 @@ import clearMarkerContentClassList, {
   hideMarkers,
   highlightMarker,
   makeElement,
+  makeMapFullScreenControls,
   moveMarkerContent,
   showMarkers,
   stylePlaceBoundary,
@@ -32,6 +33,7 @@ import {
   setCurrentFilteredListings,
   setCurrentListings,
   setMapCenter,
+  setMapIsFullScreen,
   setMapMarkerSize,
   setMapZoom,
 } from "../exploreListingsPageSlice";
@@ -39,10 +41,11 @@ import { setPlace } from "../../../shared/listingFilters/placeFilter/placeFilter
 import { MapType } from "../../../shared/mapTypeMenu/mapTypeMenuSlice";
 import { useDispatch } from "react-redux";
 import { useMapContext } from "../../../../MapProvider";
-import useSetupMapZoomControls from "../../../../hooks/useSetupMapZoomControls";
-import useSetupMapFullScreenControls from "../../../../hooks/useSetupMapFullScreenControls";
+import useSetupMapZoomControls from "./hooks/useSetupMapZoomControls";
+import useSetupMapFullScreenControls from "./hooks/useSetupMapFullScreenControls";
 // import useSetupMapTypeIdControls from "../../../../hooks/useSetupMapTypeIdControls";
 import { roadmapBoundaryStyle } from "./mapStyles";
+import { useScreenSizeContext } from "../../../../ScreenSizeProvider";
 
 declare global {
   interface Document {
@@ -72,6 +75,7 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
   // console.log("Map: rendering");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const screenSize = useScreenSizeContext();
   const { currentMapId } = useMapContext();
   const mapDivRef = useRef<HTMLInputElement>(null);
   const mapRef = useRef<google.maps.Map | undefined>(undefined);
@@ -473,7 +477,14 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
    */
   // useSetupMapTypeIdControls(mapRef.current);
   useSetupMapZoomControls(mapRef.current);
-  useSetupMapFullScreenControls(mapRef.current);
+
+  useEffect(() => {
+    if (screenSize !== "desktop") return;
+    makeMapFullScreenControls(mapRef.current, () =>
+      dispatch(setMapIsFullScreen())
+    );
+  }, [mapRef.current, dispatch]);
+  // useSetupMapFullScreenControls(mapRef.current);
 
   /**
    * Initialize the map
