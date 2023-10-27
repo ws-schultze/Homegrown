@@ -35,6 +35,8 @@ const desktopDropdownStyle: DropdownStyles = {
   btnHeight: "50px",
   menuMinWidth: "100%",
   menuMaxWidth: "fit-content",
+  menuWidth: "100%",
+  menuHeight: "100%",
 };
 
 /**
@@ -45,6 +47,8 @@ const mobileDropdownStyle: DropdownStyles = {
   btnHeight: "55px",
   menuMinWidth: "100%",
   menuMaxWidth: "100%",
+  menuWidth: "100%",
+  menuHeight: "100%",
 };
 
 export interface ExploreListingsFilters {
@@ -187,7 +191,14 @@ export default function ExploreListingsPage(): JSX.Element {
           <PriceFilter
             menuKind="absolute"
             label="Price Range"
-            styles={desktopDropdownStyle}
+            btnStyles={{
+              height: desktopDropdownStyle.btnHeight,
+              width: desktopDropdownStyle.btnWidth,
+            }}
+            menuStyles={{
+              height: desktopDropdownStyle.menuHeight,
+              width: desktopDropdownStyle.menuWidth,
+            }}
           />
           <ListingTypeFilter
             menuKind="absolute"
@@ -353,8 +364,15 @@ export default function ExploreListingsPage(): JSX.Element {
           <PriceFilter
             menuKind="flex"
             label="Price Range"
-            styles={mobileDropdownStyle}
             closeOnOutsideClick={false}
+            btnStyles={{
+              height: mobileDropdownStyle.btnHeight,
+              width: mobileDropdownStyle.btnWidth,
+            }}
+            menuStyles={{
+              height: mobileDropdownStyle.menuHeight,
+              width: mobileDropdownStyle.menuWidth,
+            }}
           />
           <BedAndBathFilter
             menuKind="flex"

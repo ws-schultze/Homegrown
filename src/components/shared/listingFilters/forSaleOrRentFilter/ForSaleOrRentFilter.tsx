@@ -4,8 +4,6 @@ import { useAppSelector } from "../../../../redux/hooks";
 import useCloseDropdown from "../hooks/useCloseDropdown";
 import { DropdownStyles, ForSaleOrRentValue } from "../../../../types/index";
 import { setForSaleOrRent, setShowMenu } from "./slice";
-// import flx from "../scss/flex.module.scss";
-// import abs from "../scss/absolute.module.scss";
 import scss from "./forSaleOrRentFilter.module.scss";
 import { ReactComponent as Icon } from "../assets/chevron-down.svg";
 
@@ -77,14 +75,14 @@ export default function ForSaleOrRentFilter({
         <div className={scss["abs-icon-wrap"]}>
           <Icon
             className={`${scss["abs-icon"]} ${
-              state.showMenu ? scss["open"] : scss["closed"]
+              state.showMenu ? scss.open : scss.closed
             }`}
           />
         </div>
 
         <div
           className={`${scss["abs-menu"]} ${
-            state.showMenu ? scss["open"] : scss["closed"]
+            state.showMenu ? scss.open : scss.closed
           }`}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}

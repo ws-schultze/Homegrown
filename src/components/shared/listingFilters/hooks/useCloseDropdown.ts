@@ -36,7 +36,6 @@ export default function useCloseDropdown({
     if (closeOnOutsideClick === false) return;
 
     function handler({ target }: MouseEvent) {
-      console.log("handler called for: ", menuIsOpen);
       const t = target as Node;
 
       // container exists

@@ -1,4 +1,4 @@
-@use "../scss/fwd";
+@use "fwd";
 // This file combines all the classes from _absolute.scss and _flex.scss
 // By making this file, its contents don't have to be included/repeated
 // in every menu style module
@@ -41,6 +41,6 @@
   @include fwd.flx-icon;
 }
 
-// .flx-menu {
-//   @include fwd.flx-menu;
-// }
+.flx-menu {
+  @include fwd.flx-menu;
+}

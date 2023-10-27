@@ -1,47 +1,4 @@
-@use "../scss/absolute" as abs;
-@use "../scss/flex" as flx;
-
-// ABS
-
-.abs-container {
-  @include abs.container;
-}
-
-.abs-icon-wrap {
-  @include abs.icon-wrap;
-}
-
-.abs-icon {
-  @include abs.icon;
-}
-
-.abs-menu {
-  @include abs.menu;
-}
-
-// FLX
-
-.flx-container {
-  @include flx.container;
-}
-
-.flx-btn {
-  @include flx.btn;
-}
-
-.flx-icon-wrap {
-  @include flx.icon-wrap;
-}
-
-.flx-icon {
-  @include flx.icon;
-}
-
-.flx-menu {
-  @include flx.menu;
-}
-
-// Common
+@use "../scss/combiner";
 
 .menu-item {
   display: flex;

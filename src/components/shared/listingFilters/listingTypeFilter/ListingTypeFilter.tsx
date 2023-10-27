@@ -113,9 +113,7 @@ export default function ListingTypeFilter({
   if (menuKind === "absolute") {
     return (
       <div
-        className={`${scss["abs-container"]} ${
-          state.showMenu ? scss["abs-container"] : scss.closed
-        } ${inUse ? scss.used : ""}`}
+        className={`${scss["abs-container"]} ${inUse ? scss.used : ""}`}
         ref={containerRef}
         onClick={() => dispatch(setShowMenu())}
         style={{
@@ -126,11 +124,17 @@ export default function ListingTypeFilter({
       >
         {label || "Dropdown"}
         <div className={scss["abs-icon-wrap"]}>
-          <Icon className={scss["abs-icon"]} />
+          <Icon
+            className={`${scss["abs-icon"]} ${
+              state.showMenu ? scss.open : scss.closed
+            }`}
+          />
         </div>
 
         <div
-          className={scss["abs-menu"]}
+          className={`${scss["abs-menu"]} ${
+            state.showMenu ? scss.open : scss.closed
+          }`}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >
@@ -159,9 +163,7 @@ export default function ListingTypeFilter({
   if (menuKind === "flex") {
     return (
       <div
-        className={`${scss["flx-container"]} ${
-          state.showMenu ? scss.open : scss.closed
-        } ${inUse ? scss.used : ""}`}
+        className={`${scss["flx-container"]} ${inUse ? scss.used : ""}`}
         ref={containerRef}
       >
         <div
@@ -175,12 +177,18 @@ export default function ListingTypeFilter({
         >
           {label}
           <div className={scss["flx-icon-wrap"]}>
-            <Icon className={scss["flx-icon"]} />
+            <Icon
+              className={`${scss["flx-icon"]} ${
+                state.showMenu ? scss.open : scss.closed
+              }`}
+            />
           </div>
         </div>
 
         <div
-          className={scss["flx-menu"]}
+          className={`${scss["flx-menu"]} ${
+            state.showMenu ? scss.open : scss.closed
+          }`}
           ref={menuRef}
           onClick={(e) => e.stopPropagation()}
         >

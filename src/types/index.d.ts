@@ -8,8 +8,10 @@ declare module "*.scss" {
 export interface DropdownStyles {
   btnWidth: string;
   btnHeight: string;
-  menuMinWidth: string;
-  menuMaxWidth: string;
+  menuMinWidth?: string;
+  menuMaxWidth?: string;
+  menuWidth: string;
+  menuHeight: string;
 }
 
 /**
