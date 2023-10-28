@@ -138,7 +138,6 @@
 }
 
 .listing-form__map-container {
-  height: 30rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--color-border);
   overflow: hidden;

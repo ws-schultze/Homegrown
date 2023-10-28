@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import css from "./styles.module.css";
+import styles from "./addressMap.module.scss";
 // import "./index.scss";
 import { useThemeContext } from "../../../ThemeProvider";
 import { useMapContext } from "../../../MapProvider";
@@ -67,7 +67,7 @@ const AddressMap = memo(function AddressMap({
 
   useSetupMapZoomControls(map);
 
-  return <div ref={mapDivRef} className={css.map} />;
+  return <div ref={mapDivRef} className={styles.map} />;
 });
 
 export default AddressMap;

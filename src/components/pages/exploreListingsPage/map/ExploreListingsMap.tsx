@@ -478,13 +478,15 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
   // useSetupMapTypeIdControls(mapRef.current);
   useSetupMapZoomControls(mapRef.current);
 
+  /**
+   *Remove fullscreen btn on mobile
+   */
   useEffect(() => {
     if (screenSize !== "desktop") return;
     makeMapFullScreenControls(mapRef.current, () =>
       dispatch(setMapIsFullScreen())
     );
-  }, [mapRef.current, dispatch]);
-  // useSetupMapFullScreenControls(mapRef.current);
+  }, [mapRef.current, dispatch, screenSize]);
 
   /**
    * Initialize the map

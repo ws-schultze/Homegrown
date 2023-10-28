@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  // width: 100vw;
   height: calc(100vh - var(--height-navbar));
   height: calc(100dvh - var(--height-navbar));
 }
@@ -227,9 +227,9 @@
   // Use width of the listing-card-container
   // width: calc(100vw - 670px);
   background: var(--color-bg-primary);
-  &.mobile {
-    width: 100vw;
-  }
+  // &.mobile {
+  //   width: 100vw;
+  // }
 }
 
 .fade {

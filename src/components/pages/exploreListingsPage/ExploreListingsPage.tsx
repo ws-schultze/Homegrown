@@ -26,6 +26,7 @@ import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
+import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 
 const dDropdownBtnStyle = {
   height: "50px",
@@ -423,7 +424,7 @@ export default function ExploreListingsPage(): JSX.Element {
 
 
         </div> */}
-      {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
+      {pageState.listingToOverlay ? <MobileListingOverlayPage /> : null}
     </div>
   );
 }

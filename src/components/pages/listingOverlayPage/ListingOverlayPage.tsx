@@ -64,7 +64,6 @@ export default function ListingOverlayPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-  // const { theme } = useThemeContext();
   const navigate = useNavigate();
 
   const {

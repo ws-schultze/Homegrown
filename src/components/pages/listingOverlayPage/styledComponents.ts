@@ -8,7 +8,7 @@ export const Container = styled.div`
   background: #000000c7;
   height: 100vh;
   overflow: hidden;
-  top: 0;
+  top: calc(-1 * var(--height-navbar));
   z-index: 9999;
 `;
 
