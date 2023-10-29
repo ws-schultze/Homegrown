@@ -1,11 +1,7 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import styles from "./addressMap.module.scss";
-// import "./index.scss";
-import { useThemeContext } from "../../../ThemeProvider";
 import { useMapContext } from "../../../MapProvider";
 import useSetupMapZoomControls from "../../pages/exploreListingsPage/map/hooks/useSetupMapZoomControls";
-import useSetupMapFullScreenControls from "../../pages/exploreListingsPage/map/hooks/useSetupMapFullScreenControls";
-import useSetupMapTypeIdControls from "../../../hooks/useSetupMapTypeIdControls";
 
 interface Props {
   formattedAddress?: string;

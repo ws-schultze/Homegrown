@@ -307,9 +307,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
             });
           });
         } else {
-          marker.addListener("click", () => {
-            toggleMarkerHighlight(marker, listing);
-          });
+          // marker.addListener("click", () => {
+          //   toggleMarkerHighlight(marker, listing);
+          // });
         }
 
         markers.push(marker);
@@ -479,7 +479,7 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
   useSetupMapZoomControls(mapRef.current);
 
   /**
-   *Remove fullscreen btn on mobile
+   * Remove fullscreen btn on mobile
    */
   useEffect(() => {
     if (screenSize !== "desktop") return;

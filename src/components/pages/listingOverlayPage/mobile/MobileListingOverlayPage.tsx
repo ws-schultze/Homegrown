@@ -91,10 +91,12 @@ export default function MobileListingOverlayPage() {
    */
   function handleNavigate(): string {
     if (placeFilter.place) {
+      console.log("A");
       const place = JSON.parse(placeFilter.place);
       const path = `/explore-listings/${place.formatted_address}`;
       return path;
-    } else if (placeFilter.place) {
+    } else if (!placeFilter.place) {
+      console.log("B");
       const path = `/explore-listings/`;
       return path;
     } else {

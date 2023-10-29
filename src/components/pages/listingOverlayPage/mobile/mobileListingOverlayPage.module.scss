@@ -72,9 +72,10 @@
 }
 
 .contents {
-  height: 100dvh;
+  margin-top: var(--height-navbar);
+  height: calc(100dvh - var(--height-navbar));
   width: 100dvw;
-  overflow: scroll;
+  overflow-y: scroll;
   background: var(--color-bg-primary);
 }
 
