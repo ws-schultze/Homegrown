@@ -1,12 +1,11 @@
-import { TypeTheme, useThemeContext } from "../../../../ThemeProvider";
+import { useThemeContext } from "../../../../ThemeProvider";
 import { Link, useLocation } from "react-router-dom";
-// import { ReactComponent as MobileLogo } from "./assets/mobile-logo.svg";
-import { ReactComponent as DesktopLogo } from "./assets/desktop-logo.svg";
 import ProfileBtn from "../../profileBtn/ProfileBtn";
 import pathMatchRoute from "../../../utils/pathMatchRoute";
 import styles from "./desktopNavbar.module.scss";
 import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
+import DesktopLogo from "../../logo/desktop/DesktopLogo";
 
 interface Props {
   /**
@@ -56,7 +55,7 @@ export default function DesktopNavbar({ maxWidth }: Props) {
         </div>
 
         <Link to={"/"}>
-          <DesktopLogo className={styles.logo} />
+          <DesktopLogo />
         </Link>
 
         <div className={styles["nav-right"]}>

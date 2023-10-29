@@ -5,9 +5,9 @@ import styles from "./footer.module.scss";
 export default function Footer() {
   return (
     <div className={styles.container}>
-      <Link to={"/"} className={styles.link}>
+      {/* <Link to={"/"} className={styles.link}>
         <img src={logoIconPNG} alt="" />
-      </Link>
+      </Link> */}
       &copy; 2023 Home Grown Development
     </div>
   );

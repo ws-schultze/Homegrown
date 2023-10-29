@@ -19,7 +19,7 @@ import clearMarkerContentClassList, {
   moveMarkerContent,
   showMarkers,
   stylePlaceBoundary,
-  toggleMarkerHighlight,
+  // toggleMarkerHighlight,
   unhighlightMarker,
 } from "./mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";

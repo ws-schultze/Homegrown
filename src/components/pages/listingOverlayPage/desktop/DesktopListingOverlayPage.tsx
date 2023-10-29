@@ -1,42 +1,39 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-// import "swiper/swiper-bundle.css";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
-import { ReactComponent as ShareSVG } from "../../../../assets/svg/share-from-square-regular.svg";
-import { ReactComponent as CloseSVG } from "../../../../assets/svg/circle-xmark-regular.svg";
-import { ReactComponent as BuildingSVG } from "../../../../assets/svg/building-regular.svg";
-import { ReactComponent as CalendarSVG } from "../../../../assets/svg/calendar-days-solid.svg";
-import { ReactComponent as ThermometerSVG } from "../../../../assets/svg/temperature-full-solid.svg";
-import { ReactComponent as SnowflakeSVG } from "../../../../assets/svg/snowflake-regular.svg";
-import { ReactComponent as MapSVG } from "../../../../assets/svg/mapIcon.svg";
-import { ReactComponent as RulerSVG } from "../../../../assets/svg/ruler-combined-solid.svg";
-import { ReactComponent as MagnifyMoneySVG } from "../../../../assets/svg/magnifying-glass-dollar-solid.svg";
 
-import { ReactComponent as StairsSVG } from "../../../../assets/svg/stairs-solid.svg";
-import { ReactComponent as ElevatorSVG } from "../../../../assets/svg/elevator-solid.svg";
-
-// import { ReactComponent as ClockSVG } from "../assets/svg/clock-regular.svg";
-import { ReactComponent as FaucetSVG } from "../../../../assets/svg/faucet-drip-solid.svg";
-import { ReactComponent as PlugSVG } from "../../../../assets/svg/plug-solid.svg";
-import { ReactComponent as EnvelopeSVG } from "../../../../assets/svg/envelopeIcon.svg";
-import { ReactComponent as BedSVG } from "../../../../assets/svg/bed-solid.svg";
-
-import { ReactComponent as BathSVG } from "../../../../assets/svg/bath-solid.svg";
-import { ReactComponent as ToiletSVG } from "../../../../assets/svg/toilet-solid.svg";
-import { ReactComponent as LogoSVG } from "../assets/mobile-logo.svg";
+import { ReactComponent as ShareSVG } from "../assets/share-from-square-regular.svg";
+import { ReactComponent as CloseSVG } from "../assets/circle-xmark-regular.svg";
+import { ReactComponent as BuildingSVG } from "../assets/building-regular.svg";
+import { ReactComponent as CalendarSVG } from "../assets/calendar-days-solid.svg";
+import { ReactComponent as ThermometerSVG } from "../assets/temperature-full-solid.svg";
+import { ReactComponent as SnowflakeSVG } from "../assets/snowflake-regular.svg";
+import { ReactComponent as MapSVG } from "../assets/mapIcon.svg";
+import { ReactComponent as RulerSVG } from "../assets/ruler-combined-solid.svg";
+import { ReactComponent as MagnifyMoneySVG } from "../assets/magnifying-glass-dollar-solid.svg";
+import { ReactComponent as StairsSVG } from "../assets/stairs-solid.svg";
+import { ReactComponent as ElevatorSVG } from "../assets/elevator-solid.svg";
+import { ReactComponent as FaucetSVG } from "../assets/faucet-drip-solid.svg";
+import { ReactComponent as PlugSVG } from "../assets/plug-solid.svg";
+import { ReactComponent as EnvelopeSVG } from "../assets/envelopeIcon.svg";
+import { ReactComponent as BedSVG } from "../assets/bed-solid.svg";
+import { ReactComponent as BathSVG } from "../assets/bath-solid.svg";
+import { ReactComponent as ToiletSVG } from "../assets/toilet-solid.svg";
 
 import { Wrapper } from "@googlemaps/react-wrapper";
 import AddressMap from "../../../shared/addressMap/AddressMap";
+import assertIsNode from "../../../utils/assertIsNode";
+import DesktopLogo from "../../../shared/logo/desktop/DesktopLogo";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
-import styles from "./mobileListingOverlayPage.module.scss";
-import MobileLogo from "../../../shared/logo/mobile/MobileLogo";
+import styles from "./desktopListingOverlayPage.module.scss";
 
-export default function MobileListingOverlayPage() {
+export default function ListingOverlayPage() {
   const listing = useAppSelector(
     (state) => state.exploreListings.listingToOverlay
   );
   const placeFilter = useAppSelector((state) => state.placeFilter);
+  const params = useParams();
   const auth = getAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -63,12 +60,37 @@ export default function MobileListingOverlayPage() {
     userRef,
   } = listing!.data;
 
+  //@ts-ignore
+  // const dateLastUpdated = timestamp.toDate().toDateString();
+  // console.log(typeof dateLastUpdated);
+
+  /**
+   * Get the simple postal_code (e.g. 95490) not the
+   * one including the postal_code_suffix (e.g. 95490-1234)
+   * @returns postal_code string without the postal_code_suffix
+   */
+  // function getPostalCode(): string {
+  //   let postal_code = "";
+  //   for (const key in listing_.data.address.address_components) {
+  //     let component = listing_.data.address.address_components[key];
+  //     // console.log(component);
+  //     for (const key in component) {
+  //       //@ts-ignore
+  //       if (key === "types" && component[key].includes("postal_code")) {
+  //         postal_code = component["long_name"];
+  //       }
+  //     }
+  //   }
+
+  //   return postal_code;
+  // }
+
   /**
    * Close overlay when container transparent region is clicked
    */
   useEffect(() => {
-    function handler(e: MouseEvent) {
-      const target = e.target as Node;
+    function handler({ target }: MouseEvent) {
+      assertIsNode(target);
 
       if (containerRef.current && !overlayRef.current?.contains(target)) {
         navigate(handleNavigate());
@@ -78,7 +100,7 @@ export default function MobileListingOverlayPage() {
     return () => {
       window.removeEventListener("click", handler);
     };
-  }, []);
+  });
 
   /**
    * Get the mapPageState from local storage if it is defined.
@@ -89,12 +111,10 @@ export default function MobileListingOverlayPage() {
    */
   function handleNavigate(): string {
     if (placeFilter.place) {
-      console.log("A");
       const place = JSON.parse(placeFilter.place);
       const path = `/explore-listings/${place.formatted_address}`;
       return path;
-    } else if (!placeFilter.place) {
-      console.log("B");
+    } else if (placeFilter.place) {
       const path = `/explore-listings/`;
       return path;
     } else {
@@ -104,61 +124,93 @@ export default function MobileListingOverlayPage() {
     }
   }
 
+  // function getTimestamp() {
+  //   console.log(timestamp);
+  //   //@ts-ignore
+  //   const date = timestamp.toDate();
+
+  //   console.log(date);
+  //   return date;
+  // }
+
+  // function getDuration() {
+  //   //@ts-ignore
+  //   const dateListed = timestamp.toDate();
+  //   const dateNow = new Date();
+  //   const millisecondsElapsed = dateNow.getTime() - dateListed.getTime();
+
+  //   const minutes = Math.floor(millisecondsElapsed / 60000);
+  //   const hours = Math.round(minutes / 60);
+  //   const days = Math.round(hours / 24);
+
+  //   return (
+  //     (days && { value: days, unit: "days" }) ||
+  //     (hours && { value: hours, unit: "hours" }) || {
+  //       value: minutes,
+  //       unit: "minutes",
+  //     }
+  //   );
+  // }
+
   return (
     <div className={styles.container} ref={containerRef}>
-      <div className={styles.contents} ref={overlayRef}>
+      <div className={styles.overlay} ref={overlayRef} id="listing-overlay">
         {listing ? (
           <>
-            <header className={styles.header}>
-              <MobileLogo />
-              <div className={styles.btns}>
-                {auth.currentUser?.uid !== userRef.uid && (
-                  <button
-                    onClick={() =>
-                      navigate(`/contact/${userRef.uid}/${listing.id}`)
-                    }
-                  >
-                    <EnvelopeSVG />
-                    {agent ? (
-                      <span>Contact Agent</span>
-                    ) : owner ? (
-                      <span>Contact Owner</span>
-                    ) : company ? (
-                      <span>Contact Company</span>
-                    ) : privateOwner ? (
-                      <span>Contact Owner</span>
-                    ) : null}
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    setShareLinkCopied(true);
-                    setTimeout(() => {
-                      setShareLinkCopied(false);
-                    }, 2000);
-                  }}
-                >
-                  <ShareSVG />
-                  <label>Share</label>
-                  {shareLinkCopied ? (
-                    <div className="listing-share-link-copied">Link Copied</div>
-                  ) : null}
-                </button>
-                <button onClick={() => navigate(handleNavigate())}>
-                  <CloseSVG />
-                  <label>Close</label>
-                </button>
-              </div>
-            </header>
             <div className={styles.images}>
               {uploads.images.value.map((image, i) => (
-                <img className={styles.image} key={i} src={image.url} alt="" />
+                <img key={i} src={image.url} alt="" />
               ))}
             </div>
+
             <div className={styles.info}>
-              <div className={styles["info-card"]}>
-                <div className={styles["basic-info"]}>
+              <header>
+                <DesktopLogo />
+                <div className={styles.btns}>
+                  {auth.currentUser?.uid !== userRef.uid && (
+                    <button
+                      onClick={() =>
+                        navigate(`/contact/${userRef.uid}/${listing.id}`)
+                      }
+                    >
+                      <EnvelopeSVG />
+                      {agent ? (
+                        <span>Contact Agent</span>
+                      ) : owner ? (
+                        <span>Contact Owner</span>
+                      ) : company ? (
+                        <span>Contact Company</span>
+                      ) : privateOwner ? (
+                        <span>Contact Owner</span>
+                      ) : null}
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      setShareLinkCopied(true);
+                      setTimeout(() => {
+                        setShareLinkCopied(false);
+                      }, 2000);
+                    }}
+                  >
+                    <ShareSVG />
+                    <label>Share</label>
+                    {shareLinkCopied ? (
+                      <div className="listing-share-link-copied">
+                        Link Copied
+                      </div>
+                    ) : null}
+                  </button>
+                  <button onClick={() => navigate(handleNavigate())}>
+                    <CloseSVG />
+                    <label>Close</label>
+                  </button>
+                </div>
+              </header>
+
+              <div className={styles.card}>
+                <div className={styles.basic}>
                   <div className={styles.price}>
                     {basicInfo.price.shortFormatted}
                   </div>
@@ -202,10 +254,16 @@ export default function MobileListingOverlayPage() {
                     ) : null}
                   </div>
                 </div>
+
                 <div className={styles.address}>
+                  {/* <div>
+                      {basicInfo.listingKind.value?.label}{" "}
+                      {basicInfo.forSaleOrRent.value?.label}
+                    </div> */}
                   {address.formattedAddress.value}
                 </div>
               </div>
+
               <div className={styles.overview}>
                 <div className={styles.features}>
                   {basicInfo.listingKind.value?.id !== "land" ? (
@@ -529,6 +587,7 @@ export default function MobileListingOverlayPage() {
                           <div key={i}>{option?.label}</div>
                         ))}
                       </div>
+
                       <div className={styles.feature}>
                         <RulerSVG />
                         Square Feet:{" "}
@@ -554,6 +613,7 @@ export default function MobileListingOverlayPage() {
                           ? singleFamilyHome?.squareFeet.formatted
                           : null}
                       </div>
+
                       {singleFamilyHome && basicInfo.priceChange.number > 0 ? (
                         <div className={styles.feature}>
                           <MagnifyMoneySVG />
@@ -574,6 +634,7 @@ export default function MobileListingOverlayPage() {
                           ).toFixed(0)}
                         </div>
                       ) : null}
+
                       <div className={styles.feature}>
                         <BedSVG />
                         Bedrooms:{" "}
@@ -599,6 +660,7 @@ export default function MobileListingOverlayPage() {
                           ? singleFamilyHome?.bedrooms.number
                           : null}
                       </div>
+
                       <div className={styles.feature}>
                         <BathSVG />
                         Full Bathrooms:{" "}
@@ -624,6 +686,7 @@ export default function MobileListingOverlayPage() {
                           ? singleFamilyHome?.fullBathrooms.number
                           : null}
                       </div>
+
                       <div className={styles.feature}>
                         <ToiletSVG />
                         Half Bathrooms:{" "}
@@ -649,6 +712,7 @@ export default function MobileListingOverlayPage() {
                           ? singleFamilyHome?.halfBathrooms.number
                           : null}
                       </div>
+
                       {singleFamilyHome ||
                       multiFamilyHome ||
                       multiFamilyHomeUnit ||
@@ -661,6 +725,7 @@ export default function MobileListingOverlayPage() {
                           {apartmentBuilding?.stories.number}
                         </div>
                       ) : null}
+
                       {apartment || condo ? (
                         <div className={styles.feature}>
                           <ElevatorSVG />
@@ -670,6 +735,7 @@ export default function MobileListingOverlayPage() {
                       ) : null}
                     </>
                   ) : null}
+
                   {basicInfo.listingKind.value?.id === "land" ||
                   basicInfo.listingKind.value?.id === "single-family-home" ? (
                     <div className={styles.feature}>
@@ -679,11 +745,10 @@ export default function MobileListingOverlayPage() {
                     </div>
                   ) : null}
                 </div>
+                <header>Overview</header>
+                <p>{basicInfo.description.value}</p>
 
-                <p className={styles.description}>
-                  {basicInfo.description.value}
-                </p>
-                <div className={styles["listed-by"]}>
+                <div className={styles.lister}>
                   {agent ? (
                     <span>
                       Listed by: <br />
@@ -705,6 +770,13 @@ export default function MobileListingOverlayPage() {
                     <span>For Rent by Owner</span>
                   ) : null}
                 </div>
+
+                {/* <Feature onClick={() => getTimestamp()}>
+                    Listing Updated: {dateLastUpdated}
+                  </Feature> */}
+                {/* <Feature>
+                    {getDuration().value} {getDuration().unit} On HomeGrown
+                  </Feature> */}
                 <Wrapper
                   apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
                   render={renderMap}
@@ -724,7 +796,7 @@ export default function MobileListingOverlayPage() {
             </div>
           </>
         ) : (
-          <div className={styles.contents}>No listing found...</div>
+          <p>No listing found...</p>
         )}
       </div>
     </div>

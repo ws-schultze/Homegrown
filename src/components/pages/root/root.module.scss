@@ -16,6 +16,7 @@
   main {
     max-height: calc(100dvh - var(--height-navbar));
     margin-top: var(--height-navbar);
+    // overflow: scroll;
   }
 
   main.loading div {

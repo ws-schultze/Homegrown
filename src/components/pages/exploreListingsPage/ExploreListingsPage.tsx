@@ -21,7 +21,7 @@ import {
   Str,
 } from "../../../types/index";
 import styles from "./exploreListingsPage.module.scss";
-import ListingOverlayPage from "../listingOverlayPage/ListingOverlayPage";
+import DesktopListingOverlayPage from "../listingOverlayPage/desktop/DesktopListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
@@ -282,7 +282,7 @@ export default function ExploreListingsPage(): JSX.Element {
           </Wrapper>
         </div>
 
-        {pageState.listingToOverlay ? <ListingOverlayPage /> : null}
+        {pageState.listingToOverlay ? <DesktopListingOverlayPage /> : null}
       </div>
     );
   }

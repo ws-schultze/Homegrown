@@ -23,7 +23,7 @@
   --color-toggle-dark: rgb(0, 0, 0);
 
   --color-primary-dark: #33c1ff;
-  --color-primary-light: #33c1ff;
+  --color-primary-light: #3e56ff;
 
   --color-border-dark: #e3e3e345;
   --color-border-light: #0000003d;
@@ -33,6 +33,12 @@
 
   --border-dark: 1px solid var(--color-border-dark);
   --border-light: 1px solid var(--color-border-light);
+
+  --color-btn-solid__text--dark: black;
+  --color-btn-solid__text--light: white;
+
+  --color-btn-hollow__text--light: white;
+  --color-btn-hollow__text--dark: var(--color-text);
 }
 
 .dark {
@@ -49,8 +55,12 @@
   --color-text: antiquewhite;
   --color-navbar-list-item-icon: #8f8f8f;
   --color-navbar-list-item-name: #8f8f8f;
+
   --color-btn-text: #000000;
+  --color-btn-hollow__text: var(--color-btn-hollow__text--dark);
+  --color-btn-solid__text: var(--color-btn-solid__text--dark);
   --color-btn-hover-box-shadow: 0.063rem 0.063rem 1rem 0px #cecece;
+
   --color-remove-listing-icon: #fff;
   --color-edit-listing-icon: #fff;
   --color-price: #017a52;
@@ -82,8 +92,12 @@
   --color-text: #000000;
   --color-navbar-list-item-icon: #000000;
   --color-navbar-list-item-name: #000000;
+
   --color-btn-text: #000000;
+  --color-btn-hollow__text: var(--color-btn-hollow__text--light);
+  --color-btn-solid__text: var(--color-btn-solid__text--light);
   --color-btn-hover-box-shadow: 0.063rem 0.063rem 1rem 0px #cecece;
+
   --color-remove-listing-icon: #000000;
   --color-edit-listing-icon: #000000;
   --color-price: #a4ecc2;
@@ -91,7 +105,7 @@
   --color-bg-transparent-btn-div: #ffffffa1;
   --box-shadow: 0 0.2rem 0.6rem #0000003b;
   --color-warning: red;
-  --color-error: yellow;
+  --color-error: red;
   --color-valid-input-svg: lime;
   --color-outline: blue;
   --color-label: purple;

@@ -5,7 +5,14 @@ import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { NavbarLink } from "./styledComponents";
 
-export default function ProfileBtn() {
+interface Props {
+  /**
+   * Closes the mobile nav menu when the link is clicked
+   */
+  closeMenu?: () => void;
+}
+
+export default function ProfileBtn({ closeMenu }: Props) {
   const { isAuthenticated } = useUserContext();
   const location = useLocation();
   const pathMatchRoute = (route: string) => {
@@ -19,6 +26,7 @@ export default function ProfileBtn() {
       {!isAuthenticated ? (
         <NavbarLink
           to={"/sign-in"}
+          onClick={closeMenu}
           className={pathMatchRoute("/sign-in") ? "active" : ""}
         >
           Sign In
@@ -26,6 +34,7 @@ export default function ProfileBtn() {
       ) : (
         <NavbarLink
           to={"/profile"}
+          onClick={closeMenu}
           className={pathMatchRoute("/profile") ? "active" : ""}
         >
           Profile

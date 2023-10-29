@@ -59,12 +59,12 @@
       &:hover {
         background: var(--color-primary);
         border: 1px solid black;
-        color: black;
+        color: var(--color-btn-solid__text);
         svg {
-          fill: black;
+          fill: var(--color-btn-solid__text);
         }
         label {
-          color: black;
+          color: var(--color-btn-solid__text);
         }
       }
     }

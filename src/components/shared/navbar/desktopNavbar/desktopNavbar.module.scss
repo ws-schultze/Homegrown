@@ -64,4 +64,10 @@
 
 .logo {
   height: 50px !important;
+  :nth-child(1) {
+    fill: green;
+  }
+  :nth-child(n + 2) {
+    fill: var(--color-primary) !important;
+  }
 }

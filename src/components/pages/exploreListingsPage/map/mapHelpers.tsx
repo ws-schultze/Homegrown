@@ -9,7 +9,6 @@ import {
   TypeCoord,
   Boundaries,
 } from "../../../../types/index";
-import ListingPopup from "../../listingOverlayPage/ListingPopup";
 import { ExploreListingsFilters } from "../ExploreListingsPage";
 
 import styles from "./exploreListingsMap.module.scss";
@@ -264,50 +263,50 @@ export function makeElement({
  * Creates a popup card for a listing when marker is clicked in mobile size window
  * @param listing FetchedListing
  */
-export function makeListingPopup(listing: FetchedListing) {
-  const listingPopup = makeElement({
-    component: <ListingPopup listing={listing} />,
-    className: styles["listing-popup"],
-  });
+// export function makeListingPopup(listing: FetchedListing) {
+//   const listingPopup = makeElement({
+//     component: <ListingPopup listing={listing} />,
+//     className: styles["listing-popup"],
+//   });
 
-  listingPopup.id = `${styles["listing-popup"]}-${listing.id}`;
+//   listingPopup.id = `${styles["listing-popup"]}-${listing.id}`;
 
-  const rootElement = document.getElementById("root");
+//   const rootElement = document.getElementById("root");
 
-  if (rootElement) {
-    rootElement.appendChild(listingPopup);
-  } else {
-    console.log("No root element found ");
-  }
-}
+//   if (rootElement) {
+//     rootElement.appendChild(listingPopup);
+//   } else {
+//     console.log("No root element found ");
+//   }
+// }
 
 /**
  * Used on mobile size window to use popups rather than custom info windows for a selected listing
  */
-export function toggleMarkerHighlight(
-  marker: google.maps.marker.AdvancedMarkerView,
-  listing: FetchedListing
-) {
-  removeAllPopups();
+// export function toggleMarkerHighlight(
+//   marker: google.maps.marker.AdvancedMarkerView,
+//   listing: FetchedListing
+// ) {
+//   removeAllPopups();
 
-  if (marker.content && marker.element) {
-    if (marker.content.classList.contains(styles["active"])) {
-      // Un-Highlight
-      marker.content.classList.remove(styles["active"]);
-      marker.element.style.zIndex = "";
-    } else {
-      // Highlight
-      unhighlightAllMarkers(); // get rid of highlighting on another marker
-      marker.content.classList.add(styles["active"]);
-      marker.element.style.zIndex = "1";
-      makeListingPopup(listing);
-    }
-  } else {
-    throw new Error(
-      "Either marker.content and/or marker.element is/are null or undefined"
-    );
-  }
-}
+//   if (marker.content && marker.element) {
+//     if (marker.content.classList.contains(styles["active"])) {
+//       // Un-Highlight
+//       marker.content.classList.remove(styles["active"]);
+//       marker.element.style.zIndex = "";
+//     } else {
+//       // Highlight
+//       unhighlightAllMarkers(); // get rid of highlighting on another marker
+//       marker.content.classList.add(styles["active"]);
+//       marker.element.style.zIndex = "1";
+//       makeListingPopup(listing);
+//     }
+//   } else {
+//     throw new Error(
+//       "Either marker.content and/or marker.element is/are null or undefined"
+//     );
+//   }
+// }
 
 export function removeAllPopups() {
   // console.log("Removing popups");

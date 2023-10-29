@@ -1,6 +1,5 @@
 import { useThemeContext } from "../../../../ThemeProvider";
 import { Link, useLocation } from "react-router-dom";
-import { ReactComponent as LogoSVG } from "./assets/desktop-logo.svg";
 import { ReactComponent as Hamburger } from "./assets/bars-solid.svg";
 import ProfileBtn from "../../profileBtn/ProfileBtn";
 import pathMatchRoute from "../../../utils/pathMatchRoute";
@@ -10,6 +9,8 @@ import { useAppSelector } from "../../../../redux/hooks";
 import { useRef, useState } from "react";
 import useCloseMenu from "./hooks/useCloseMenu";
 import { ReactComponent as CloseSVG } from "./assets/close-icon.svg";
+import { useScreenSizeContext } from "../../../../ScreenSizeProvider";
+import MobileLogo from "../../logo/mobile/MobileLogo";
 
 export default function MobileNavbar() {
   const location = useLocation();
@@ -22,6 +23,7 @@ export default function MobileNavbar() {
   const [wobble, setWobble] = useState<0 | 1 | 2>(0);
 
   const { showMenu, setShowMenu } = useCloseMenu(menuRef, showMenuBtnRef);
+  const screenSize = useScreenSizeContext();
 
   function navigateToMapPage(): string {
     if (placeFilter.place) {
@@ -46,7 +48,7 @@ export default function MobileNavbar() {
     <nav className={styles.container} ref={containerRef}>
       <div className={styles.nav}>
         <Link to={"/"}>
-          <LogoSVG className={styles.logo} />
+          <MobileLogo />
         </Link>
 
         <button
@@ -82,6 +84,7 @@ export default function MobileNavbar() {
             </button>
             <Link
               to={navigateToMapPage()}
+              onClick={closeMenu}
               className={`
               ${styles["nav-link"]}
               ${pathMatchRoute("/listings", location) ? "active" : ""}`}
@@ -90,13 +93,17 @@ export default function MobileNavbar() {
             </Link>
             <Link
               to={"/create-listing"}
+              onClick={closeMenu}
               className={`
               ${styles["nav-link"]}
               ${pathMatchRoute("/listings", location) ? "active" : ""}`}
             >
               Create
             </Link>
-            <ProfileBtn />
+
+            <ProfileBtn
+              closeMenu={screenSize !== "desktop" ? closeMenu : undefined}
+            />
             <ThemeBtn onChange={() => toggleTheme()} theme={theme} />
           </div>
         </div>
