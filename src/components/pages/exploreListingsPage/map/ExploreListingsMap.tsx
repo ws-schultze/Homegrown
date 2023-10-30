@@ -32,10 +32,13 @@ import {
   setAllFilteredListings,
   setCurrentFilteredListings,
   setCurrentListings,
+  setHoveredListing,
+  setListingToOverlay,
   setMapCenter,
   setMapIsFullScreen,
   setMapMarkerSize,
   setMapZoom,
+  setShowFullOverlay,
 } from "../exploreListingsPageSlice";
 import { setPlace } from "../../../shared/listingFilters/placeFilter/placeFilterSlice";
 import { MapType } from "../../../shared/mapTypeMenu/mapTypeMenuSlice";
@@ -67,11 +70,7 @@ declare global {
   }
 }
 
-interface Props {
-  isMobile: boolean;
-}
-
-export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
+export default function ExploreListingsMap(): JSX.Element {
   // console.log("Map: rendering");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -117,18 +116,6 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
       let markers: google.maps.marker.AdvancedMarkerView[] = [];
 
       listings.forEach((listing, i) => {
-        /**
-         * Only make info windows on large screens
-         */
-        let makeInfoWindow = true;
-        // const w = window.innerWidth;
-
-        // if (w < 1000) {
-        //   makeInfoWindow = false;
-        // } else {
-        //   makeInfoWindow = true;
-        // }
-
         function makeMapMarkerContents(): Element {
           let div = document.createElement("div");
 
@@ -143,12 +130,15 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
           const component = (
             <div
               onClick={() => {
-                navigate(
-                  `/explore-listings/details/${listing.data.address.formattedAddress.value}/${listing.id}`
-                );
+                dispatch(setListingToOverlay(listing));
+                if (screenSize === "desktop") {
+                  dispatch(setShowFullOverlay(true));
+                }
               }}
+
+              // Clicking will show a mobile layover preview
             >
-              {makeInfoWindow === true ? (
+              {screenSize === "desktop" ? (
                 <div
                   id={`map-marker__info-window__${listing.id}`}
                   className={styles["info-window"]}
@@ -235,7 +225,7 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
                     </div>
                   </div>
                 </div>
-              ) : makeInfoWindow === false ? (
+              ) : screenSize === "mobile" ? (
                 <></>
               ) : null}
 
@@ -248,6 +238,10 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
                       : listing.data.basicInfo.forSaleOrRent.value?.id ===
                         "for-sale"
                       ? styles["for-sale"]
+                      : ""
+                  } ${
+                    pageState.listingToOverlay?.id === listing.id
+                      ? styles.highlight
                       : ""
                   }`}
                 >
@@ -264,6 +258,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
                       ? styles["for-sale"]
                       : ""
                   }`}
+                  onClick={() => {
+                    dispatch(setHoveredListing(listing));
+                  }}
                 >
                   {/* small markers don't show price */}
                 </div>
@@ -295,7 +292,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
             element.addEventListener(event, () => {
               highlightMarker(marker);
               if (map) {
-                moveMarkerContent(map, marker);
+                if (screenSize === "desktop") {
+                  moveMarkerContent(map, marker);
+                }
               }
             });
           });
@@ -303,7 +302,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
           ["blur", "pointerleave"].forEach((event) => {
             element.addEventListener(event, () => {
               unhighlightMarker(marker);
-              clearMarkerContentClassList(marker);
+              if (screenSize === "desktop") {
+                clearMarkerContentClassList(marker);
+              }
             });
           });
         } else {
@@ -517,6 +518,7 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
             zoom: mapZoom,
             disableDefaultUI: true,
             streetViewControl: true,
+            clickableIcons: false,
             streetViewControlOptions: {
               position: google.maps.ControlPosition.RIGHT_TOP,
             },
@@ -829,7 +831,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
             if (marker.position?.lat === lat && marker.position.lng === lng) {
               highlightMarker(marker);
               if (mapRef.current) {
-                moveMarkerContent(mapRef.current, marker);
+                if (screenSize === "desktop") {
+                  moveMarkerContent(mapRef.current, marker);
+                }
               }
             }
           });
@@ -838,7 +842,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
         } else if (!hoveredListing) {
           smallMarkersRef.current.forEach((marker) => {
             unhighlightMarker(marker);
-            clearMarkerContentClassList(marker);
+            if (screenSize === "desktop") {
+              clearMarkerContentClassList(marker);
+            }
           });
         }
 
@@ -854,7 +860,9 @@ export default function ExploreListingsMap({ isMobile }: Props): JSX.Element {
             if (marker.position?.lat === lat && marker.position.lng === lng) {
               highlightMarker(marker);
               if (mapRef.current) {
-                moveMarkerContent(mapRef.current, marker);
+                if (screenSize === "desktop") {
+                  moveMarkerContent(mapRef.current, marker);
+                }
               }
             }
           });

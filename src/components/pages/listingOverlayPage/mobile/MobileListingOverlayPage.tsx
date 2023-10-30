@@ -31,17 +31,18 @@ import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 import styles from "./mobileListingOverlayPage.module.scss";
 import MobileLogo from "../../../shared/logo/mobile/MobileLogo";
+import { setShowFullOverlay } from "../../exploreListingsPage/exploreListingsPageSlice";
+import { useDispatch } from "react-redux";
 
 export default function MobileListingOverlayPage() {
-  const listing = useAppSelector(
-    (state) => state.exploreListings.listingToOverlay
-  );
+  const state = useAppSelector((state) => state.exploreListings);
   const placeFilter = useAppSelector((state) => state.placeFilter);
   const auth = getAuth();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-  const navigate = useNavigate();
 
   const {
     basicInfo,
@@ -61,24 +62,30 @@ export default function MobileListingOverlayPage() {
     land,
     uploads,
     userRef,
-  } = listing!.data;
+  } = state!.listingToOverlay!.data;
 
-  /**
-   * Close overlay when container transparent region is clicked
-   */
-  useEffect(() => {
-    function handler(e: MouseEvent) {
-      const target = e.target as Node;
+  // /**
+  //  * Close overlay when container transparent region is clicked
+  //  */
+  // useEffect(() => {
+  //   function handler(e: MouseEvent) {
+  //     const target = e.target as Node;
 
-      if (containerRef.current && !overlayRef.current?.contains(target)) {
-        navigate(handleNavigate());
-      }
-    }
-    window.addEventListener("click", handler);
-    return () => {
-      window.removeEventListener("click", handler);
-    };
-  }, []);
+  //     if (
+  //       state.showFullListingOverlay &&
+  //       containerRef.current &&
+  //       !overlayRef.current?.contains(target)
+  //     ) {
+  //       // navigate(handleNavigate());
+  //       console.log("breaking");
+  //       // dispatch(setShowFullOverlay(false));
+  //     }
+  //   }
+  //   window.addEventListener("click", handler);
+  //   return () => {
+  //     window.removeEventListener("click", handler);
+  //   };
+  // }, []);
 
   /**
    * Get the mapPageState from local storage if it is defined.
@@ -89,12 +96,11 @@ export default function MobileListingOverlayPage() {
    */
   function handleNavigate(): string {
     if (placeFilter.place) {
-      console.log("A");
       const place = JSON.parse(placeFilter.place);
       const path = `/explore-listings/${place.formatted_address}`;
       return path;
     } else if (!placeFilter.place) {
-      console.log("B");
+      console.log("breaking things");
       const path = `/explore-listings/`;
       return path;
     } else {
@@ -107,7 +113,7 @@ export default function MobileListingOverlayPage() {
   return (
     <div className={styles.container} ref={containerRef}>
       <div className={styles.contents} ref={overlayRef}>
-        {listing ? (
+        {state.listingToOverlay ? (
           <>
             <header className={styles.header}>
               <MobileLogo />
@@ -115,7 +121,9 @@ export default function MobileListingOverlayPage() {
                 {auth.currentUser?.uid !== userRef.uid && (
                   <button
                     onClick={() =>
-                      navigate(`/contact/${userRef.uid}/${listing.id}`)
+                      navigate(
+                        `/contact/${userRef.uid}/${state.listingToOverlay!.id}`
+                      )
                     }
                   >
                     <EnvelopeSVG />
@@ -145,7 +153,7 @@ export default function MobileListingOverlayPage() {
                     <div className="listing-share-link-copied">Link Copied</div>
                   ) : null}
                 </button>
-                <button onClick={() => navigate(handleNavigate())}>
+                <button onClick={() => dispatch(setShowFullOverlay(false))}>
                   <CloseSVG />
                   <label>Close</label>
                 </button>

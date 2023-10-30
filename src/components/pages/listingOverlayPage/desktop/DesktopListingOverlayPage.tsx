@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 
 import { ReactComponent as ShareSVG } from "../assets/share-from-square-regular.svg";
@@ -27,18 +27,21 @@ import DesktopLogo from "../../../shared/logo/desktop/DesktopLogo";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 import styles from "./desktopListingOverlayPage.module.scss";
+import { useDispatch } from "react-redux";
+import { setShowFullOverlay } from "../../exploreListingsPage/exploreListingsPageSlice";
 
 export default function ListingOverlayPage() {
   const listing = useAppSelector(
     (state) => state.exploreListings.listingToOverlay
   );
   const placeFilter = useAppSelector((state) => state.placeFilter);
-  const params = useParams();
   const auth = getAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
 
   const {
     basicInfo,
@@ -60,97 +63,26 @@ export default function ListingOverlayPage() {
     userRef,
   } = listing!.data;
 
-  //@ts-ignore
-  // const dateLastUpdated = timestamp.toDate().toDateString();
-  // console.log(typeof dateLastUpdated);
-
-  /**
-   * Get the simple postal_code (e.g. 95490) not the
-   * one including the postal_code_suffix (e.g. 95490-1234)
-   * @returns postal_code string without the postal_code_suffix
-   */
-  // function getPostalCode(): string {
-  //   let postal_code = "";
-  //   for (const key in listing_.data.address.address_components) {
-  //     let component = listing_.data.address.address_components[key];
-  //     // console.log(component);
-  //     for (const key in component) {
-  //       //@ts-ignore
-  //       if (key === "types" && component[key].includes("postal_code")) {
-  //         postal_code = component["long_name"];
-  //       }
-  //     }
-  //   }
-
-  //   return postal_code;
-  // }
-
   /**
    * Close overlay when container transparent region is clicked
    */
   useEffect(() => {
-    function handler({ target }: MouseEvent) {
-      assertIsNode(target);
-
-      if (containerRef.current && !overlayRef.current?.contains(target)) {
-        navigate(handleNavigate());
+    function handler(e: MouseEvent) {
+      const target = e.target as Node;
+      if (
+        overlayRef.current !== null &&
+        overlayRef.current?.contains(target) === false &&
+        containerRef.current?.contains(target) === true
+      ) {
+        dispatch(setShowFullOverlay(false));
       }
     }
+
     window.addEventListener("click", handler);
     return () => {
       window.removeEventListener("click", handler);
     };
-  });
-
-  /**
-   * Get the mapPageState from local storage if it is defined.
-   * The mapPageState filers will be used to navigate to
-   * the map page by passing in the forSaleOrRentId and
-   * placeFilter
-   * @returns string
-   */
-  function handleNavigate(): string {
-    if (placeFilter.place) {
-      const place = JSON.parse(placeFilter.place);
-      const path = `/explore-listings/${place.formatted_address}`;
-      return path;
-    } else if (placeFilter.place) {
-      const path = `/explore-listings/`;
-      return path;
-    } else {
-      console.log("escaped...");
-      const path = ``;
-      return path;
-    }
-  }
-
-  // function getTimestamp() {
-  //   console.log(timestamp);
-  //   //@ts-ignore
-  //   const date = timestamp.toDate();
-
-  //   console.log(date);
-  //   return date;
-  // }
-
-  // function getDuration() {
-  //   //@ts-ignore
-  //   const dateListed = timestamp.toDate();
-  //   const dateNow = new Date();
-  //   const millisecondsElapsed = dateNow.getTime() - dateListed.getTime();
-
-  //   const minutes = Math.floor(millisecondsElapsed / 60000);
-  //   const hours = Math.round(minutes / 60);
-  //   const days = Math.round(hours / 24);
-
-  //   return (
-  //     (days && { value: days, unit: "days" }) ||
-  //     (hours && { value: hours, unit: "hours" }) || {
-  //       value: minutes,
-  //       unit: "minutes",
-  //     }
-  //   );
-  // }
+  }, [dispatch]);
 
   return (
     <div className={styles.container} ref={containerRef}>
@@ -202,7 +134,7 @@ export default function ListingOverlayPage() {
                       </div>
                     ) : null}
                   </button>
-                  <button onClick={() => navigate(handleNavigate())}>
+                  <button onClick={() => dispatch(setShowFullOverlay(false))}>
                     <CloseSVG />
                     <label>Close</label>
                   </button>

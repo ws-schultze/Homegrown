@@ -4,7 +4,7 @@ import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAn
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import {
   setHoveredListing,
@@ -27,6 +27,7 @@ import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
 import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
+import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
 
 const dDropdownBtnStyle = {
   height: "50px",
@@ -55,6 +56,7 @@ export interface ExploreListingsFilters {
 
 export default function ExploreListingsPage(): JSX.Element {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const commonState = useAppSelector((state) => state.common);
   const pageState = useAppSelector((state) => state.exploreListings);
   const placeFilter = useAppSelector((state) => state.placeFilter);
@@ -71,41 +73,73 @@ export default function ExploreListingsPage(): JSX.Element {
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);
   const openFiltersMenuBtnRef = useRef<HTMLButtonElement | null>(null);
 
-  /**
-   * Set the listing to overlay
-   */
+  // /**
+  //  * Set the listing to overlay
+  //  */
+  // useEffect(() => {
+  //   /**
+  //    * Find a listing that has the same formatted address as the one provided
+  //    * in the params
+  //    * @returns FetchedListing | undefined
+  //    */
+  //   function handleListingToOverlay() {
+  //     if (!params.listingAddress) {
+  //       dispatch(setListingToOverlay(undefined));
+  //     } else if (params.listingAddress) {
+  //       if (commonState.listings) {
+  //         commonState.listings.forEach((listing) => {
+  //           if (
+  //             listing.data.address.formattedAddress.value ===
+  //             params.listingAddress
+  //           ) {
+  //             dispatch(setListingToOverlay(listing));
+  //           }
+  //         });
+  //       } else {
+  //         console.log("no listings found");
+  //       }
+  //     }
+  //   }
+  //   handleListingToOverlay();
+  // }, [params.listingAddress, commonState.listings, dispatch]);
+
   useEffect(() => {
-    /**
-     * Find a listing that has the same formatted address as the one provided
-     * in the params
-     * @returns FetchedListing | undefined
-     */
-    function handleListingToOverlay() {
-      if (!params.listingAddress) {
-        // console.log(
-        //   `Effect: handleListingToOverlay: dispatching listingToOverlay `
-        // );
-        dispatch(setListingToOverlay(undefined));
-      } else if (params.listingAddress) {
-        if (commonState.listings) {
-          commonState.listings.forEach((listing) => {
-            if (
-              listing.data.address.formattedAddress.value ===
-              params.listingAddress
-            ) {
-              console.log(
-                `Effect: handleListingToOverlay: dispatching listingToOverlay `
-              );
-              dispatch(setListingToOverlay(listing));
-            }
-          });
+    function handler() {
+      // Change url to match the listing to overlay
+      if (pageState.showFullListingOverlay) {
+        if (pageState.listingToOverlay) {
+          console.log("navigating to listing");
+          navigate(
+            `/explore-listings/details/${pageState.listingToOverlay.data.address.formattedAddress.value}/${pageState.listingToOverlay.id}`
+          );
         } else {
-          console.log("no listings found");
+          console.error(`No listing to overlay was found`);
         }
+      } else if (!pageState.showFullListingOverlay) {
+        console.log("navigating to map");
+        if (placeFilter.place) {
+          const place = JSON.parse(placeFilter.place);
+          const address = place.formatted_address;
+          if (address) {
+            navigate(`/explore-listings/${address}`);
+          } else {
+            console.error("No formatted_address was found on <place>");
+          }
+        } else if (placeFilter.place === undefined) {
+          navigate(`/explore-listings`);
+        } else {
+          console.warn("escaped");
+          const path = ``;
+          return path;
+        }
+      } else {
+        console.error(
+          `A non boolean value was found where is should only be boolean`
+        );
       }
     }
-    handleListingToOverlay();
-  }, [params.listingAddress, commonState.listings, dispatch]);
+    handler();
+  }, [pageState.showFullListingOverlay]);
 
   /**
    * Sync the searchbox value with placeFilter.place
@@ -277,12 +311,14 @@ export default function ExploreListingsPage(): JSX.Element {
             libraries={["places", "marker"]}
           >
             <div className={styles["map-container"]}>
-              <ExploreListingsMap isMobile={false} />
+              <ExploreListingsMap />
             </div>
           </Wrapper>
         </div>
 
-        {pageState.listingToOverlay ? <DesktopListingOverlayPage /> : null}
+        {pageState.showFullListingOverlay && pageState.listingToOverlay ? (
+          <DesktopListingOverlayPage />
+        ) : null}
       </div>
     );
   }
@@ -299,7 +335,7 @@ export default function ExploreListingsPage(): JSX.Element {
         libraries={["places", "marker"]}
       >
         <div className={`${styles["map-container"]}  ${styles.mobile}`}>
-          <ExploreListingsMap isMobile={true} />
+          <ExploreListingsMap />
         </div>
       </Wrapper>
 
@@ -424,7 +460,10 @@ export default function ExploreListingsPage(): JSX.Element {
 
 
         </div> */}
-      {pageState.listingToOverlay ? <MobileListingOverlayPage /> : null}
+      {pageState.listingToOverlay ? (
+        <MobileOverlayCard listing={pageState.listingToOverlay} />
+      ) : null}
+      {pageState.showFullListingOverlay ? <MobileListingOverlayPage /> : null}
     </div>
   );
 }

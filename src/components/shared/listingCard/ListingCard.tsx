@@ -7,6 +7,11 @@ import * as T from "../../../types/index";
 import { ReactComponent as ImageSVG } from "../../../assets/svg/image-regular.svg";
 import styles from "./listingCard.module.scss";
 import Spinner from "../loaders/Spinner";
+import { useDispatch } from "react-redux";
+import {
+  setListingToOverlay,
+  setShowFullOverlay,
+} from "../../pages/exploreListingsPage/exploreListingsPageSlice";
 
 interface Props {
   listing: T.FetchedListing;
@@ -22,33 +27,7 @@ export default function ListingCard({
   handleEdit,
 }: Props): JSX.Element {
   const auth = getAuth();
-  // const params = useParams();
-  // const postal_code = getPostalCode();
-
-  // /**
-  //  * Get the simple postal_code (e.g. 95490) not the
-  //  * one including the postal_code_suffix (e.g. 95490-1234)
-  //  * @returns postal_code string without the postal_code_suffix
-  //  */
-  // function getPostalCode(): string {
-  //   let postal_code = "";
-  //   console.log(
-  //     "Address components: ",
-  //     listing.data.address.address_components
-  //   );
-  //   for (const key in listing.data.address.address_components) {
-  //     let component = listing.data.address.address_components[key];
-  //     // console.log(component);
-  //     for (const key in component) {
-  //       //@ts-ignore
-  //       if (key === "types" && component[key].includes("postal_code")) {
-  //         postal_code = component["long_name"];
-  //       }
-  //     }
-  //   }
-
-  //   return postal_code;
-  // }
+  const dispatch = useDispatch();
 
   if (!listing) {
     return <Spinner size="small" />;
@@ -61,6 +40,10 @@ export default function ListingCard({
           <Link
             to={`/explore-listings/details/${listing.data.address.formattedAddress.value}/${listing.id}`}
             className={styles.link}
+            onClick={() => {
+              dispatch(setListingToOverlay(listing));
+              dispatch(setShowFullOverlay(true));
+            }}
           >
             {listing.data.uploads.images.value[0] !== undefined ? (
               <img

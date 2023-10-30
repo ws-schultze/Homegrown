@@ -8,6 +8,7 @@ export interface ExploreListingsState {
   currentListings: FetchedListing[];
   currentFilteredListings: FetchedListing[];
   listingToOverlay: FetchedListing | undefined;
+  showFullListingOverlay: boolean;
   hoveredListing: FetchedListing | undefined;
   mapIsLoading: boolean;
   mapZoom: number;
@@ -22,12 +23,13 @@ export const initialExploreListingsState: ExploreListingsState = {
   currentListings: [],
   currentFilteredListings: [],
   listingToOverlay: undefined,
+  showFullListingOverlay: false,
   hoveredListing: undefined,
   mapIsLoading: false,
   mapZoom: 10,
   mapIsFullScreen: false,
   mapMarkerSize: "small",
-  mapMinZoomForLargeMarkers: 13,
+  mapMinZoomForLargeMarkers: 11,
   mapCenter: undefined,
 };
 
@@ -67,6 +69,10 @@ export const exploreListingsPageSlice = createSlice({
       ...state,
       listingToOverlay: action.payload,
     }),
+    setShowFullOverlay: (state, action) => ({
+      ...state,
+      showFullListingOverlay: action.payload,
+    }),
     setHoveredListing: (
       state,
       action: { payload: FetchedListing | undefined; type: string }
@@ -103,6 +109,7 @@ export const {
   setCurrentListings,
   setCurrentFilteredListings,
   setListingToOverlay,
+  setShowFullOverlay,
   setHoveredListing,
   setMapIsLoading,
   setMapIsFullScreen,
