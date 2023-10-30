@@ -29,7 +29,7 @@ export default function ProfileBtn({ closeMenu }: Props) {
           onClick={closeMenu}
           className={pathMatchRoute("/sign-in") ? "active" : ""}
         >
-          Sign In
+          Sign in
         </NavbarLink>
       ) : (
         <NavbarLink

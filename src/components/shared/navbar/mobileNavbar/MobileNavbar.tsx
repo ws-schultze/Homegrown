@@ -11,6 +11,7 @@ import useCloseMenu from "./hooks/useCloseMenu";
 import { ReactComponent as CloseSVG } from "./assets/close-icon.svg";
 import { useScreenSizeContext } from "../../../../ScreenSizeProvider";
 import MobileLogo from "../../logo/mobile/MobileLogo";
+import DesktopLogo from "../../logo/desktop/DesktopLogo";
 
 export default function MobileNavbar() {
   const location = useLocation();
@@ -48,7 +49,7 @@ export default function MobileNavbar() {
     <nav className={styles.container} ref={containerRef}>
       <div className={styles.nav}>
         <Link to={"/"}>
-          <MobileLogo />
+          <DesktopLogo />
         </Link>
 
         <button
@@ -89,7 +90,7 @@ export default function MobileNavbar() {
               ${styles["nav-link"]}
               ${pathMatchRoute("/listings", location) ? "active" : ""}`}
             >
-              Explore
+              Home finder
             </Link>
             <Link
               to={"/create-listing"}
@@ -98,7 +99,7 @@ export default function MobileNavbar() {
               ${styles["nav-link"]}
               ${pathMatchRoute("/listings", location) ? "active" : ""}`}
             >
-              Create
+              List your property
             </Link>
 
             <ProfileBtn

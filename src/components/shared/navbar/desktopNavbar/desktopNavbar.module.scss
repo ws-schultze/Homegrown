@@ -62,12 +62,8 @@
   }
 }
 
-.logo {
-  height: 50px !important;
-  :nth-child(1) {
-    fill: green;
-  }
-  :nth-child(n + 2) {
-    fill: var(--color-primary) !important;
-  }
+.logo-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }

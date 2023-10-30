@@ -151,61 +151,61 @@ export default function MobileListingOverlayPage() {
                 </button>
               </div>
             </header>
+            <div className={styles["info-card"]}>
+              <div className={styles["basic-info"]}>
+                <div className={styles.price}>
+                  {basicInfo.price.shortFormatted}
+                </div>
+                <div className={styles.specs}>
+                  {singleFamilyHome || multiFamilyHomeUnit || apartment ? (
+                    <>
+                      {/* Bedrooms */}
+                      <div>
+                        <b>
+                          {singleFamilyHome?.bedrooms.number ||
+                            multiFamilyHomeUnit?.bedrooms.number ||
+                            apartment?.bedrooms.number}
+                        </b>
+                        bd
+                      </div>
+                      {" | "}
+                      {/* Bathrooms */}
+                      <div>
+                        <b>
+                          {singleFamilyHome?.fullBathrooms.number! +
+                            singleFamilyHome?.halfBathrooms.number! * 0.5 ||
+                            multiFamilyHomeUnit?.fullBathrooms.number! +
+                              multiFamilyHomeUnit?.halfBathrooms.number! *
+                                0.5 ||
+                            apartment?.fullBathrooms.number! +
+                              apartment?.halfBathrooms.number! * 0.5}
+                        </b>
+                        ba
+                      </div>
+                      {" | "}
+                      {/* Square feet */}
+                      <div>
+                        <b>
+                          {singleFamilyHome?.squareFeet.formatted ||
+                            multiFamilyHomeUnit?.squareFeet.formatted ||
+                            apartment?.squareFeet.formatted}
+                        </b>
+                        ft<sup>2</sup>
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+              </div>
+              <div className={styles.address}>
+                {address.formattedAddress.value}
+              </div>
+            </div>
             <div className={styles.images}>
               {uploads.images.value.map((image, i) => (
                 <img className={styles.image} key={i} src={image.url} alt="" />
               ))}
             </div>
             <div className={styles.info}>
-              <div className={styles["info-card"]}>
-                <div className={styles["basic-info"]}>
-                  <div className={styles.price}>
-                    {basicInfo.price.shortFormatted}
-                  </div>
-                  <div className={styles.specs}>
-                    {singleFamilyHome || multiFamilyHomeUnit || apartment ? (
-                      <>
-                        {/* Bedrooms */}
-                        <div>
-                          <b>
-                            {singleFamilyHome?.bedrooms.number ||
-                              multiFamilyHomeUnit?.bedrooms.number ||
-                              apartment?.bedrooms.number}
-                          </b>
-                          bd
-                        </div>
-                        {" | "}
-                        {/* Bathrooms */}
-                        <div>
-                          <b>
-                            {singleFamilyHome?.fullBathrooms.number! +
-                              singleFamilyHome?.halfBathrooms.number! * 0.5 ||
-                              multiFamilyHomeUnit?.fullBathrooms.number! +
-                                multiFamilyHomeUnit?.halfBathrooms.number! *
-                                  0.5 ||
-                              apartment?.fullBathrooms.number! +
-                                apartment?.halfBathrooms.number! * 0.5}
-                          </b>
-                          ba
-                        </div>
-                        {" | "}
-                        {/* Square feet */}
-                        <div>
-                          <b>
-                            {singleFamilyHome?.squareFeet.formatted ||
-                              multiFamilyHomeUnit?.squareFeet.formatted ||
-                              apartment?.squareFeet.formatted}
-                          </b>
-                          ft<sup>2</sup>
-                        </div>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
-                <div className={styles.address}>
-                  {address.formattedAddress.value}
-                </div>
-              </div>
               <div className={styles.overview}>
                 <div className={styles.features}>
                   {basicInfo.listingKind.value?.id !== "land" ? (

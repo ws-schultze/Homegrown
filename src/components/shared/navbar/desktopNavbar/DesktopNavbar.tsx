@@ -41,7 +41,7 @@ export default function DesktopNavbar({ maxWidth }: Props) {
             ${styles["nav-link"]}
             ${pathMatchRoute("/listings", location) ? "active" : ""}`}
           >
-            Explore
+            Home finder
           </Link>
 
           <Link
@@ -50,11 +50,11 @@ export default function DesktopNavbar({ maxWidth }: Props) {
             ${styles["nav-link"]}
             ${pathMatchRoute("/listings", location) ? "active" : ""}`}
           >
-            Create
+            List your property
           </Link>
         </div>
 
-        <Link to={"/"}>
+        <Link to={"/"} className={styles["logo-container"]}>
           <DesktopLogo />
         </Link>
 
