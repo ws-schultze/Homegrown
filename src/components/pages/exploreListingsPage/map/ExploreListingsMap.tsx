@@ -239,11 +239,10 @@ export default function ExploreListingsMap(): JSX.Element {
                         "for-sale"
                       ? styles["for-sale"]
                       : ""
-                  } ${
-                    pageState.listingToOverlay?.id === listing.id
-                      ? styles.highlight
-                      : ""
-                  }`}
+                  } `}
+                  onClick={() => {
+                    dispatch(setHoveredListing(listing));
+                  }}
                 >
                   {listing.data.basicInfo.price.shortFormatted}
                 </div>
@@ -871,7 +870,9 @@ export default function ExploreListingsMap(): JSX.Element {
         } else if (!hoveredListing) {
           largeMarkersRef.current.forEach((marker) => {
             unhighlightMarker(marker);
-            clearMarkerContentClassList(marker);
+            if (screenSize === "desktop") {
+              clearMarkerContentClassList(marker);
+            }
           });
         }
       } else {
