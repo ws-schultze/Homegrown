@@ -18,6 +18,7 @@ import PageBtns from "./PageBtns";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 import { Header } from "./styledComponents";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -135,12 +136,12 @@ export default function AgentForm({
   return (
     <>
       {state.saved === true ? (
-        <div className="listing-form__section">
+        <div className={styles.section}>
           <EditFormSection parent={state} emit={handleVerify} />
         </div>
       ) : null}
 
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Header>Agent Information</Header>
         <InputStr<typeof state>
           size="lg"

@@ -30,6 +30,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../firebase.config";
 import { Header } from "./styledComponents";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -284,12 +285,12 @@ export default function UploadsEditForm({
   return (
     <>
       {state.saved === true ? (
-        <div className="listing-form__section">
+        <div className={styles.section}>
           <EditFormSection parent={state} emit={handleVerify} />
         </div>
       ) : null}
 
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Header>Images</Header>
         <p>The first image will be the listing's cover.</p>
         {state.images.value.length > 0 && (

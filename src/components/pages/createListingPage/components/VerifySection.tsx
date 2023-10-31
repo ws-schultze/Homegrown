@@ -8,6 +8,7 @@ import {
 import setAddressValidationApiResponseToState from "./utils/address/setAddressValidationApiResponseToState";
 import { ReactComponent as AlertSVG } from "../../../../assets/svg/circle-exclamation-solid.svg";
 import { Notice } from "./styledComponents";
+import styles from "../create-listing-page.module.scss";
 
 interface Props<T> {
   /** The name that shows in the toast for a successful save (e.g. Agent, Owner, Company, House etc..) */
@@ -97,7 +98,7 @@ export default function VerifySection<T extends Verify>({
 
   return (
     <>
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Notice>
           <AlertSVG />
           Does everything look correct?

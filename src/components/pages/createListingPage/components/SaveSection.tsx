@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import getAddressValidationApiResponse from "./utils/address/getAddressValidationApiResponse";
 
 import Spinner from "../../../shared/loaders/Spinner";
+import styles from "../create-listing-page.module.scss";
 
 interface Props<T> {
   parentInitialState: T;
@@ -123,7 +124,7 @@ export default function SaveSection<T extends Address | AddressOptional>({
 
   return (
     <>
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <p>
           <>{children}</>
           Save to proceed

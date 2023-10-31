@@ -1,5 +1,6 @@
 import { ReactComponent as ArrowLeftSVG } from "../../../../assets/svg/arrow-left-solid.svg";
 import { ReactComponent as ArrowRightSVG } from "../../../../assets/svg/arrow-right-solid.svg";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   prevPage?: () => void;
@@ -17,19 +18,14 @@ export default function PageBtns({
   prevPage,
   nextPage,
   toPageNumber,
-  deleteListing,
   pageNumbers,
   currentPage,
 }: Props): JSX.Element {
   return (
-    <div className="listing-form__section">
-      <div className="listing-form__page-number-btn-row">
+    <div className={styles.section}>
+      <div className={styles["page-number-btns"]}>
         {prevPage ? (
-          <button
-            className="listing-form__page-number-btn"
-            type="button"
-            onClick={prevPage}
-          >
+          <button className="btn-solid" type="button" onClick={prevPage}>
             <ArrowLeftSVG />
           </button>
         ) : null}
@@ -37,9 +33,7 @@ export default function PageBtns({
           ? pageNumbers.map((pgNum, index) => (
               <button
                 key={index}
-                className={`listing-form__page-number-btn ${
-                  currentPage === pgNum ? "active" : ""
-                }`}
+                className={`btn-solid ${currentPage === pgNum ? "active" : ""}`}
                 type="button"
                 onClick={() => toPageNumber(pgNum)}
               >
@@ -48,23 +42,10 @@ export default function PageBtns({
             ))
           : null}
         {nextPage ? (
-          <button
-            className="listing-form__page-number-btn"
-            type="button"
-            onClick={nextPage}
-          >
+          <button className="btn-solid" type="button" onClick={nextPage}>
             <ArrowRightSVG />
           </button>
         ) : null}
-      </div>
-      <div className="listing-form__delete-btn-wrap">
-        <button
-          type="button"
-          className="listing-form__btn"
-          onClick={deleteListing}
-        >
-          Delete Listing
-        </button>
       </div>
     </div>
   );

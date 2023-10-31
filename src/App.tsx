@@ -1,10 +1,10 @@
 import "./css/addressAutoCompleteForm.css";
-import "./scss/style.scss";
-import "./css/dropdown.css";
-import "./css/listing-page.css";
-import "./css/listing-form.css";
+// import "./scss/style.scss";
+// import "./css/dropdown.css";
+// import "./css/listing-page.css";
+// import "./components/pages/createListingPage/createListingPage.css";
 import "./css/loaders.css";
-import "./css/theme-toggle-btn.css";
+// import "./css/theme-toggle-btn.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Route,
@@ -16,7 +16,7 @@ import PrivateRoute from "./components/shared/privateRoute/PrivateRoute";
 import RootBoundary from "./components/pages/rootBoundary/RootBoundary";
 import Root from "./components/pages/root/Root";
 import ContactLandlordPage from "./components/pages/contactLandlordPage/ContactLandlordPage";
-import EditListingPage from "./components/pages/editListingPage/EditListingPage";
+import EditListingPage from "./components/pages/createListingPage/EditListingPage";
 import CreateListingPage from "./components/pages/createListingPage/CreateListingPage";
 import ProfilePage from "./components/pages/profilePage/ProfilePage";
 import ExploreListingsPage from "./components/pages/exploreListingsPage/ExploreListingsPage";

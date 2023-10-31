@@ -34,11 +34,11 @@ import PrivateOwnerForm from "./components/PrivateOwnerForm";
 import ListingAddressForm from "./components/ListingAddressForm";
 import BasicInfoForm from "./components/BasicInfoForm";
 import UploadsForm from "./components/UploadsForm";
-import ReviewForm from "./components/ReviewForm";
+import ReviewForm from "./components/ReviewPage";
 import makeFileNameForUpload from "../utils/makeFileNameForUpload";
 import Footer from "../../shared/footer/Footer";
 
-import styles from "./createListingPage.module.scss";
+import styles from "./create-listing-page.module.scss";
 
 export default function CreateListingPage(): JSX.Element {
   const { userId, isAuthenticated, isLoading } = useUserContext();
@@ -267,7 +267,7 @@ export default function CreateListingPage(): JSX.Element {
             {/* <header>
               <p className="page__header">Create a Listing</p>
             </header> */}
-            <form ref={formRef} className="listing-form">
+            <form ref={formRef} className={styles.form}>
               <UserAcknowledgementForm
                 parent={state}
                 nextPage={nextPage}
@@ -287,7 +287,7 @@ export default function CreateListingPage(): JSX.Element {
       return (
         <>
           <div className={styles.container}>
-            <form ref={formRef} className="listing-form">
+            <form ref={formRef} className={styles.form}>
               <BasicInfoForm
                 parent={state}
                 prevPage={prevPage}
@@ -308,7 +308,7 @@ export default function CreateListingPage(): JSX.Element {
       return (
         <>
           <div className={styles.container}>
-            <form ref={formRef} className="listing-form">
+            <form ref={formRef} className={styles.form}>
               <ListingAddressForm
                 parent={state}
                 prevPage={prevPage}
@@ -330,7 +330,7 @@ export default function CreateListingPage(): JSX.Element {
       return (
         <>
           <div className={styles.container}>
-            <form ref={formRef} className="listing-form">
+            <form ref={formRef} className={styles.form}>
               {state.basicInfo.forSaleBy !== undefined ? (
                 <>
                   {state.basicInfo.forSaleBy.value?.id === "agent" ? (
@@ -406,7 +406,7 @@ export default function CreateListingPage(): JSX.Element {
       return (
         <>
           <div className={styles.container}>
-            <form ref={formRef} className="listing-form">
+            <form ref={formRef} className={styles.form}>
               {state.basicInfo.listingKind.value?.id ===
               "single-family-home" ? (
                 <SingleFamilyHomeForm
@@ -530,7 +530,7 @@ export default function CreateListingPage(): JSX.Element {
     case 6:
       return (
         <div className={styles.container}>
-          <form ref={formRef} className="listing-form">
+          <form ref={formRef} className={styles.form}>
             <UploadsForm
               parent={state}
               nextPage={nextPage}
@@ -548,7 +548,7 @@ export default function CreateListingPage(): JSX.Element {
     case 7:
       return (
         <div className={styles.container}>
-          <form ref={formRef} className="listing-form">
+          <form ref={formRef} className={styles.form}>
             <ReviewForm
               editListing={false}
               parent={state}

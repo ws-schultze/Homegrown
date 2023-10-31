@@ -5,6 +5,7 @@ import {
   ListingData,
 } from "../../../../types/index";
 import { Header } from "./styledComponents";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -40,7 +41,7 @@ export default function UserAcknowledgementForm({
 
   return (
     <>
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Header>Notice</Header>
         <p>All fields are required unless their label ends with *</p>
         <p>Any unsaved progress will be lost if you refresh the browser.</p>

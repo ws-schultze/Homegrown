@@ -17,22 +17,24 @@ import {
   ListingData,
 } from "../../../types/index";
 import { initListingData } from "../../../initialValues";
-import Review from "../createListingPage/components/ReviewForm";
-import PageBtns from "../createListingPage/components/PageBtns";
-import SingleFamilyHome from "../createListingPage/components/SingleFamilyHomeForm";
-import UserAcknowledgementForm from "../createListingPage/components/UserAcknowledgementForm";
-import MultiFamilyHomeForSaleForm from "../createListingPage/components/MultiFamilyHomeForSaleForm";
-import MultiFamilyHomeUnitForRentForm from "../createListingPage/components/MultiFamilyHomeUnitForRentForm";
-import ApartmentBuildingForSaleForm from "../createListingPage/components/ApartmentBuildingForSaleForm";
-import ApartmentForRentForm from "../createListingPage/components/ApartmentForRentForm";
-import CompanyForm from "../createListingPage/components/CompanyForm";
-import PrivateOwnerForm from "../createListingPage/components/PrivateOwnerForm";
-import OwnerForm from "../createListingPage/components/OwnerForm";
-import AgentForm from "../createListingPage/components/AgentForm";
-import ListingAddressForm from "../createListingPage/components/ListingAddressForm";
-import BasicInfoForm from "../createListingPage/components/BasicInfoForm";
-import UploadsEditForm from "../createListingPage/components/UploadsEditForm";
+import Review from "./components/ReviewPage";
+import PageBtns from "./components/PageBtns";
+import SingleFamilyHome from "./components/SingleFamilyHomeForm";
+import UserAcknowledgementForm from "./components/UserAcknowledgementForm";
+import MultiFamilyHomeForSaleForm from "./components/MultiFamilyHomeForSaleForm";
+import MultiFamilyHomeUnitForRentForm from "./components/MultiFamilyHomeUnitForRentForm";
+import ApartmentBuildingForSaleForm from "./components/ApartmentBuildingForSaleForm";
+import ApartmentForRentForm from "./components/ApartmentForRentForm";
+import CompanyForm from "./components/CompanyForm";
+import PrivateOwnerForm from "./components/PrivateOwnerForm";
+import OwnerForm from "./components/OwnerForm";
+import AgentForm from "./components/AgentForm";
+import ListingAddressForm from "./components/ListingAddressForm";
+import BasicInfoForm from "./components/BasicInfoForm";
+import UploadsEditForm from "./components/UploadsEditForm";
 import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
+import styles from "./create-listing-page.module.scss";
+import Footer from "../../shared/footer/Footer";
 
 export default function EditListingPage() {
   const [loading, setLoading] = useState(false);
@@ -82,150 +84,6 @@ export default function EditListingPage() {
 
     fetchListing();
   }, [params.listingId]);
-
-  // Set userRef to logged in user's uuid
-  // useEffect(() => {
-  //   if (isMounted) {
-  //     // Add the user to state
-  //     onAuthStateChanged(auth, (user) => {
-  //       if (user) {
-  //         // userRef NOT useRef. This will be set in state
-  //         setFormData({ ...formData, userRef: user.uid });
-  //       } else {
-  //         navigate("/sign-in");
-  //       }
-  //     });
-  //   }
-
-  //   return () => {
-  //     isMounted.current = false;
-  //   };
-  // }, [isMounted]);
-
-  //   const onSubmit = async (e) => {
-  //     setLoading(true);
-  //     e.preventDefault();
-
-  //     // Prices
-  //     // Since priceChange and regularPrice will enter as strings, use '+' to evaluate them as numbers.
-  //     if (+priceChange >= +regularPrice) {
-  //       setLoading(false);
-  //       toast.error("priceChangeActive price must be less than regular price");
-  //       return;
-  //     }
-
-  //     // imgUrls
-  //     if (images.length > 6) {
-  //       setLoading(false);
-  //       toast.error("You can only upload 6 images per listing");
-  //       return;
-  //     }
-
-  //     // Location
-  //     let geolocation = {};
-  //     let location;
-
-  //     if (geolocationEnabled) {
-  //       const response = await fetch(
-  //         // In production use a .env file to place the api key
-  //         `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
-  //       );
-
-  //       const data = await response.json();
-
-  //       geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
-  //       geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
-
-  //       location = data.status === "ZERO_RESULTS" ? undefined : data.results[0]?.formatted_address;
-
-  //       console.log(location);
-
-  //       if (location === undefined || location.includes("undefined")) {
-  //         setLoading(false);
-  //         toast.error("Please enter a correct address");
-  //         return;
-  //       }
-  //     } else {
-  //       geolocation.lat = latitude;
-  //       geolocation.lng = longitude;
-  //     }
-
-  //     // Store image in firebase
-  //     // See the docs at https://firebase.google.com/docs/storage/web/upload-files?hl=en&authuser=0#full_example
-  //     // The following storeImage function is just like the #full_example in the docs link above
-  //     const storeImage = async (image) => {
-  //       return new Promise((resolve, reject) => {
-  //         const storage = getStorage();
-  //         const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-  //         const storageRef = ref(storage, "images/" + fileName);
-  //         const uploadTask = uploadBytesResumable(storageRef, image);
-
-  //         // Listen for state changes, errors, and completion of the upload.
-  //         uploadTask.on(
-  //           "state_changed",
-  //           (snapshot) => {
-  //             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //             console.log("Upload is " + progress + "% done");
-  //             switch (snapshot.state) {
-  //               case "paused":
-  //                 console.log("Upload is paused");
-  //                 break;
-  //               case "running":
-  //                 console.log("Upload is running");
-  //                 break;
-  //               default:
-  //                 break;
-  //             }
-  //           },
-  //           (error) => {
-  //             // A full list of error codes is available at
-  //             // https://firebase.google.com/docs/storage/web/handle-errors
-  //             reject(error);
-  //           },
-  //           () => {
-  //             // Handle successful uploads on complete
-  //             // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-  //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //               resolve(downloadURL);
-  //             });
-  //           }
-  //         );
-  //       });
-  //     };
-
-  //     // Create an array of image urls for all images being uploaded
-  //     const imgUrls = await Promise.all([...images].map((image) => storeImage(image))).catch(() => {
-  //       setLoading(false);
-  //       toast.error("Images Not Uploaded");
-  //       return;
-  //     });
-
-  //     const formDataCopy = {
-  //       ...formData,
-  //       imgUrls,
-  //       geolocation,
-  //       timestamp: serverTimestamp(),
-  //     };
-
-  //     // Do some cleanup on the form data to be submitted to db
-  //     // 1) Since we made imgUrls we don't need the images
-  //     // 2) If there is no offer, then we don't have a priceChangeActive price
-  //     delete formDataCopy.images;
-  //     delete formDataCopy.address;
-  //     // formatted_address on geolocation is not reliable all the time, for example it may not say the unit or unit number
-  //     // location && (formDataCopy.location = location)
-  //     // Instead just use the value typed into the address part of the form
-  //     formDataCopy.location = address;
-  //     !formDataCopy.offer && delete formDataCopy.priceChange;
-
-  //     // Update listing
-  //     const docRef = doc(db, "listings", params.listingId);
-  //     await updateDoc(docRef, formDataCopy);
-
-  //     setLoading(false);
-  //     toast.success("Listing Updated");
-  //     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
-  //   };
 
   /**
    * Handle the forms submission
@@ -319,15 +177,13 @@ export default function EditListingPage() {
   if (loading) {
     return <Spinner size="large" />;
   }
+
   // Return pages
   switch (state.page) {
     case 1:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             <UserAcknowledgementForm
               parent={state}
               nextPage={nextPage}
@@ -338,16 +194,14 @@ export default function EditListingPage() {
               emit={handleEmit}
             />
           </form>
+          <Footer />
         </div>
       );
 
     case 2:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             <BasicInfoForm
               deleteListing={deleteListing}
               parent={state}
@@ -359,16 +213,14 @@ export default function EditListingPage() {
               emit={handleEmit}
             />
           </form>
+          <Footer />
         </div>
       );
 
     case 3:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             <ListingAddressForm
               parent={state}
               prevPage={prevPage}
@@ -381,16 +233,14 @@ export default function EditListingPage() {
               emit={handleEmit}
             />
           </form>
+          <Footer />
         </div>
       );
 
     case 4:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             {state.basicInfo.forSaleBy !== undefined ? (
               <>
                 {state.basicInfo.forSaleBy.value?.id === "agent" ? (
@@ -457,16 +307,14 @@ export default function EditListingPage() {
               </div>
             )}
           </form>
+          <Footer />
         </div>
       );
 
     case 5:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             {state.basicInfo.listingKind.value?.id === "single-family-home" ? (
               <SingleFamilyHome
                 parent={state}
@@ -592,16 +440,14 @@ export default function EditListingPage() {
               </div>
             )}
           </form>
+          <Footer />
         </div>
       );
 
     case 6:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             <UploadsEditForm
               parent={state}
               listingId={params.listingId!}
@@ -614,16 +460,14 @@ export default function EditListingPage() {
               emit={handleEmit}
             />
           </form>
+          <Footer />
         </div>
       );
 
     case 7:
       return (
-        <div className="page-wrap">
-          <header>
-            <p className="page__header">Update Listing</p>
-          </header>
-          <form className="listing-form">
+        <div className={styles.container}>
+          <form className={styles.form}>
             <Review
               editListing={true}
               parent={state}
@@ -636,6 +480,7 @@ export default function EditListingPage() {
               submit={handleSubmit}
             />
           </form>
+          <Footer />
         </div>
       );
 

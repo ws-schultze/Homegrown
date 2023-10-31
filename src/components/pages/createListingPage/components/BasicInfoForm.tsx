@@ -49,6 +49,7 @@ import SaveSection from "./SaveSection";
 import PageBtns from "./PageBtns";
 import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import { Header } from "./styledComponents";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -545,12 +546,12 @@ export default function BasicInfoForm({
     <>
       {/* Edit */}
       {state.saved === true ? (
-        <div className="listing-form__section">
+        <div className={styles.section}>
           <EditFormSection<typeof state> parent={state} emit={handleVerify} />
         </div>
       ) : null}
 
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Header>Basic Information</Header>
         <InputStr<typeof state>
           size="lg"

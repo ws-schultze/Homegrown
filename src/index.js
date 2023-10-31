@@ -2,13 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./css/addressAutoCompleteForm.css";
 import "./scss/style.scss";
-
-import "./css/navbar.css";
+// import "./css/navbar.css";
 import "./css/dropdown.css";
-import "./css/listing-page.css";
-import "./css/listing-form.css";
+// import "./components/pages/createListingPage/createListingPage.css";
 import "./css/loaders.css";
-import "./css/theme-toggle-btn.css";
+// import "./css/theme-toggle-btn.css";
 
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";

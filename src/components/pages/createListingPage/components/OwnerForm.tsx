@@ -20,6 +20,7 @@ import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { Header } from "./styledComponents";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -189,12 +190,12 @@ export default function OwnerForm({
   return (
     <>
       {state.saved === true ? (
-        <div className="listing-form__section">
+        <div className={styles.section}>
           <EditFormSection parent={state} emit={handleVerify} />
         </div>
       ) : null}
 
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Header>Owner Information</Header>
         <InputStr<typeof state>
           size="lg"

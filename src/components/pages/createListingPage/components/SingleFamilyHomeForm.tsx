@@ -27,6 +27,7 @@ import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
 import { Header } from "./styledComponents";
+import styles from "../create-listing-page.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -176,12 +177,12 @@ export default function SingleFamilyHomeForm({
   return (
     <>
       {state.saved === true ? (
-        <div className="listing-form__section">
+        <div className={styles.section}>
           <EditFormSection parent={state} emit={handleVerify} />
         </div>
       ) : null}
 
-      <div className="listing-form__section">
+      <div className={styles.section}>
         <Header>House Features</Header>
         <div className="listing-form__flex-row">
           <InputStr<typeof state>
