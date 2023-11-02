@@ -184,7 +184,7 @@ export default function SingleFamilyHomeForm({
 
       <div className={styles.section}>
         <Header>House Features</Header>
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="yearBuilt"
@@ -206,7 +206,7 @@ export default function SingleFamilyHomeForm({
             emit={handleInputStr}
           />
         </div>
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="stories"
@@ -228,7 +228,7 @@ export default function SingleFamilyHomeForm({
             emit={handleInputStr}
           />
         </div>
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="sm"
             fieldName="bedrooms"
@@ -347,7 +347,7 @@ export default function SingleFamilyHomeForm({
               parent={state.garageAttached}
               emit={handleTwoBtnRow}
             />
-            <div className="listing-form__flex-row">
+            <div className={styles.flex_row}>
               <InputStr<typeof state>
                 size="md"
                 fieldName="garageNumCars"

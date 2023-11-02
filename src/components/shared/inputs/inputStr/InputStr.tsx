@@ -10,13 +10,7 @@
  *
  */
 
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  ReactNode,
-  forwardRef,
-} from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import { repositionCursor, validatePassword } from "./utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import * as Types from "../../../../types/index";
@@ -39,7 +33,7 @@ import {
 } from "./utils";
 import { getKeyDown } from "./utils";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
-import styles from "./styles.module.scss";
+import styles from "./inputStr.module.scss";
 
 interface Props<T> {
   /**
@@ -61,10 +55,6 @@ interface Props<T> {
    * For USD consider "$"
    */
   prefix?: string;
-  /**
-   * Icon that will be placed to the left of the input field
-   */
-  prefixIcon?: ReactNode;
   /**
    * Determines the width of the input field
    */
@@ -124,7 +114,6 @@ function InputStrInner<T>(
     placeholder,
     groupSeparators,
     prefix,
-    prefixIcon,
     size,
     isPriceChange,
     originalPrice,
@@ -463,25 +452,20 @@ function InputStrInner<T>(
   }
 
   return (
-    <div className={`hg-input-field-wrap ${size}`}>
-      {prefixIcon ? <i className="hg-input-field-icon">{prefixIcon}</i> : null}
-
+    <div className={`${styles.container} ${styles[size]}`}>
       {formatType !== "description" ? (
-        <div className="hg-input-field">
-          <label
-            className={`hg-input-label ${
-              state.value.length > 0 ? "show" : "hide"
-            }`}
-          >
-            {placeholder}
-          </label>
+        <>
+          <>
+            <label
+              className={` ${
+                state.value.length > 0 ? styles.show : styles.hide
+              }`}
+            >
+              {placeholder}
+            </label>
 
-          <div className={styles["input-container"]}>
             <input
               placeholder={placeholder}
-              className={`${styles["hg-input"]} ${
-                state.errorMsg && state.errorMsg.length > 0 ? "error" : ""
-              }`}
               onKeyDown={handleKeyDown}
               ref={(node) => {
                 localRef.current = node;
@@ -497,20 +481,18 @@ function InputStrInner<T>(
               onBlur={handleBlur}
               disabled={parent.readOnly}
             />
-
             {formatType === "password" ? (
               <VisibilityIcon
-                className={styles["visibility-icon"]}
+                className={styles.visibility_icon}
                 onClick={() => setShowInputText((prev) => !prev)}
               />
             ) : null}
-          </div>
-
+          </>
           {isPriceChange && state.valid === true ? (
             <div
-              className={`listing-form__price-change-percent ${
-                priceChangePercent < 0 ? "decrease" : "increase"
-              }`}
+              className={`${styles.price_change_percent} ${
+                state.formatted.length > 0 ? styles.show : styles.hide
+              } ${priceChangePercent < 0 ? styles.decrease : styles.increase}`}
             >
               {formattedPercent}%{" "}
               {priceChangePercent < 0
@@ -522,23 +504,16 @@ function InputStrInner<T>(
                 : ""}
             </div>
           ) : null}
-
           <ErrorMsg errorMsg={state.errorMsg} />
-        </div>
+        </>
       ) : (
-        <div className="hg-input-field">
-          <label
-            className={`hg-input-label ${
-              state.value.length > 0 ? "show" : "hide"
-            }`}
-          >
+        <>
+          <label className={state.value.length > 0 ? styles.show : styles.hide}>
             {placeholder}
           </label>
           <textarea
             placeholder={placeholder}
-            className={`hg-textarea ${
-              state.errorMsg && state.errorMsg.length > 0 ? "invalid" : ""
-            }`}
+            // className={state.errorMsg}
             onKeyDown={handleKeyDown}
             value={state.formatted}
             onChange={handleChange}
@@ -549,7 +524,7 @@ function InputStrInner<T>(
           />
           <div>
             {min !== undefined ? (
-              <div className="hg-textarea__subtext">
+              <div className={styles.subtext}>
                 <small>Min {min} characters</small>
                 <small>
                   {min - state.formatted.length >= 0
@@ -562,14 +537,14 @@ function InputStrInner<T>(
           </div>
           <div>
             {max !== undefined ? (
-              <div className="hg-textarea__subtext">
+              <div className={styles.subtext}>
                 <small>Max {max} characters</small>
                 <small>{max - state.formatted.length} remaining.</small>
               </div>
             ) : null}
           </div>
           <ErrorMsg errorMsg={state.errorMsg} />
-        </div>
+        </>
       )}
     </div>
   );

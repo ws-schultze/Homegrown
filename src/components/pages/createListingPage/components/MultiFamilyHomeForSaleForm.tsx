@@ -156,7 +156,7 @@ export default function MultiFamilyHomeForSaleForm({
       <div className={styles.section}>
         <Header>Multi-Family Home Features</Header>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="totalUnits"
@@ -179,7 +179,7 @@ export default function MultiFamilyHomeForSaleForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="stories"
@@ -202,7 +202,7 @@ export default function MultiFamilyHomeForSaleForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="unitsWithGarageSpace"
@@ -225,7 +225,7 @@ export default function MultiFamilyHomeForSaleForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="fullBathrooms"

@@ -105,15 +105,15 @@ export default function VerifySection<T extends Verify>({
         </Notice>
 
         {children ? (
-          <div className="listing-form__info-to-verify">
+          <div className={styles.info_to_verify}>
             <>{children}</>
           </div>
         ) : null}
 
-        <div className="listing-form__btns-row">
+        <div className={styles.two_btn_row}>
           <button
             type="button"
-            className="listing-form__btn"
+            className={styles.btn}
             onClick={() => handleValidate(false)}
             disabled={parent.readOnly}
           >
@@ -122,7 +122,7 @@ export default function VerifySection<T extends Verify>({
 
           <button
             type="button"
-            className="listing-form__btn"
+            className={styles.btn}
             onClick={() => handleValidate(true)}
             disabled={parent.readOnly}
           >

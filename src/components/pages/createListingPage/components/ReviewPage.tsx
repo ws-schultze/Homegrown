@@ -53,11 +53,7 @@ export default function ReviewPage({
         {/* Page 1 -- User Acknowledgment */}
         <div className={styles["review-row"]}>
           Notice
-          <button
-            className="btn-solid"
-            type="button"
-            onClick={() => goToPage(1)}
-          >
+          <button className="btn" type="button" onClick={() => goToPage(1)}>
             Review
           </button>
         </div>
@@ -65,11 +61,7 @@ export default function ReviewPage({
         {/* Page 2 -- Basic Info */}
         <div className={styles["review-row"]}>
           Basics
-          <button
-            className="btn-solid"
-            type="button"
-            onClick={() => goToPage(2)}
-          >
+          <button className="btn" type="button" onClick={() => goToPage(2)}>
             Review
           </button>
         </div>
@@ -78,7 +70,7 @@ export default function ReviewPage({
         <div className={styles["review-row"]}>
           Address
           <button
-            className="btn-solid"
+            className={styles.btn}
             type="button"
             onClick={() => goToPage(3)}
           >
@@ -91,7 +83,7 @@ export default function ReviewPage({
           {parent.basicInfo.forSaleBy?.value?.label ||
             parent.basicInfo.forRentBy?.value?.label}
           <button
-            className="btn-solid"
+            className={styles.btn}
             type="button"
             onClick={() => goToPage(4)}
           >
@@ -103,7 +95,7 @@ export default function ReviewPage({
         <div className={styles["review-row"]}>
           {parent.basicInfo.listingKind.value?.label}
           <button
-            className="btn-solid"
+            className={styles.btn}
             type="button"
             onClick={() => goToPage(5)}
           >
@@ -115,7 +107,7 @@ export default function ReviewPage({
         <div className={styles["review-row"]}>
           Images
           <button
-            className="btn-solid"
+            className={styles.btn}
             type="button"
             onClick={() => goToPage(6)}
           >
@@ -127,31 +119,28 @@ export default function ReviewPage({
       <div className={styles.section}>
         {editListing === true ? (
           <div className={styles["submit-btns"]}>
-            <button type="button" className="btn-solid" onClick={submit}>
+            <button type="button" className={styles.btn} onClick={submit}>
               Submit Update
             </button>
-            <button
-              className={"btn-solid"}
-              onClick={() => navigate("/profile")}
-            >
+            <button className={styles.btn} onClick={() => navigate("/profile")}>
               Cancel Update
             </button>
-            <button type="button" className="btn-solid" onClick={deleteListing}>
+            <button
+              type="button"
+              className={styles.btn}
+              onClick={deleteListing}
+            >
               Delete Listing
             </button>
           </div>
         ) : (
           <>
-            <button
-              type="button"
-              className="listing-form__btn wide"
-              onClick={submit}
-            >
+            <button type="button" className={styles.btn} onClick={submit}>
               Submit Listing
             </button>
             <button
               type="button"
-              className="listing-form__btn"
+              className={styles.btn}
               onClick={deleteListing}
             >
               Delete Listing

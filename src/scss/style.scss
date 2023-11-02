@@ -428,42 +428,6 @@ input:-internal-autofill-selected {
   }
 }
 
-.listing-form__input-file__btn__icon {
-  height: 4rem;
-  cursor: pointer;
-  display: block;
-}
-
-.imagePreviewAddBtnContainer {
-  display: flex;
-  align-items: center;
-}
-
-.listing-form__input-file__btn {
-  background: none;
-}
-
-.listing-form__input-file__btn:focus svg {
-  fill: var(--color-primary);
-}
-
-.listing-form__input-file__btn-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.listing-form__input-file__btn-wrap label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-/* .listing-form__input-file__btn-wrap p {
-  padding: 2rem;
-} */
-
 .iframe {
   width: 100vw;
   height: 100vh;
@@ -507,7 +471,7 @@ input:-internal-autofill-selected {
   animation: fadeIn 1.5s ease-in infinite alternate;
 }
 
-.btn-solid {
+.btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -518,8 +482,14 @@ input:-internal-autofill-selected {
   border-radius: var(--border-radius);
   fill: var(--color-text);
   &:hover {
-    background: var(--color-primary);
+    // background: var(--color-primary);
+    color: var(--color-primary);
+    fill: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  &.active {
     color: var(--color-btn-solid__text);
     fill: var(--color-btn-solid__text);
+    background-color: var(--color-primary);
   }
 }

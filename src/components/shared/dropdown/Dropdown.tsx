@@ -1,10 +1,8 @@
-// https://medium.com/tinyso/how-to-create-a-dropdown-select-component-in-react-bf85df53e206
-// https://wanago.io/2020/03/09/functional-react-components-with-generic-props-in-typescript/
-
 import React, { useState, useEffect, useRef } from "react";
 import { ReactComponent as Icon } from "../../../assets/svg/dropdownIcon.svg";
 import { ReactComponent as CloseIcon } from "../../../assets/svg/closeIcon.svg";
 import ErrorMsg from "../errorMsg/ErrorMsg";
+import styles from "./dropdown.module.scss";
 
 export type DropdownMenuItem = {
   id: string;
@@ -33,7 +31,6 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
   emit: (options: T[]) => void;
 }): JSX.Element {
   const [showMenu, setShowMenu] = useState(false);
-  const [flipped, setFlipped] = useState(false);
   const [selectedItems, setSelectedItems] = useState<T[] | []>(parent);
   const [searchValue, setSearchValue] = useState("");
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -59,8 +56,8 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
    * Handle closing the menu when items are clicked
    */
   useEffect(() => {
-    function handler({ target }: MouseEvent): void {
-      assertIsNode(target);
+    function handler(e: MouseEvent): void {
+      const target = e.target as Node;
       // For single select menus, clicking anywhere in the window, except the search box, will close the menu.
       if (!isMulti) {
         if (parentRef.current && !parentRef.current.contains(target)) {
@@ -132,11 +129,11 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
           {selectedItems.map((option) => (
             <>
               {option !== null ? (
-                <div key={option.id} className="dropdown-btn__tags-wrap__tag">
+                <div key={option.id} className={styles.tag}>
                   {option.label}
                   <span
                     onClick={(e) => onTagRemove(e, option)}
-                    className="dropdown-btn__tags-wrap__tag__icon-wrap"
+                    className={styles.icon_container}
                   >
                     <CloseIcon />
                   </span>
@@ -189,17 +186,10 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
     emit(items);
   }
 
-  function assertIsNode(e: EventTarget | null): asserts e is Node {
-    if (!e || !("nodeType" in e)) {
-      throw new Error(`Node expected`);
-    }
-  }
-
   /**
    *  Toggle hide/show menu
    */
   function handleInputClick() {
-    setFlipped(!flipped); // flip icon
     setShowMenu(!showMenu);
   }
 
@@ -317,24 +307,26 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
   }
 
   return (
-    <div className="dropdown-wrap">
-      <label className={`listing-form__label`}>{label}</label>
+    <div className={styles.container}>
+      <label>{label}</label>
       <button
         type="button"
         ref={parentRef}
         onClick={handleInputClick}
-        className="dropdown-btn"
+        className={styles.btn}
         disabled={disabled}
       >
-        <div className="dropdown-btn__tags-wrap">{getDisplay()}</div>
-        <div className="dropdown-btn__icon-wrap">
-          <Icon className={`dropdown-btn__icon ${showMenu ? "flipped" : ""}`} />
+        <div className={styles.tags}>{getDisplay()}</div>
+        <div className={styles.icon_container}>
+          <Icon
+            className={`${styles.icon} ${showMenu ? styles.flipped : ""}`}
+          />
         </div>
       </button>
       {showMenu && (
-        <div ref={menuRef} className="dropdown__menu-wrap">
+        <div ref={menuRef} className={styles.menu}>
           {isSearchable && (
-            <div className="dropdown__menu__search-box">
+            <div className={styles.search_container}>
               <input onChange={onSearch} value={searchValue} ref={searchRef} />
             </div>
           )}
@@ -345,8 +337,8 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
                   type="button"
                   onClick={() => onItemClick(option)}
                   key={option.id}
-                  className={`dropdown__menu__item ${
-                    isSelected(option) ? "selected" : ""
+                  className={`${styles.item} ${
+                    isSelected(option) ? styles.selected : ""
                   }`}
                 >
                   {option.label}

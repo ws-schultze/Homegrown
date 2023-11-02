@@ -10,6 +10,7 @@ import {
   ForSaleOrRent,
   ForSaleOrRentValue,
 } from "../../../../types/index";
+import styles from "../create-listing-page.module.scss";
 
 export type TypeTwoBtnRowState =
   | TypeBool
@@ -82,9 +83,9 @@ export default function TwoBtnRow<T>({
     if (parent.value === null && btnValue === null) {
       btnClass = "";
     } else if (parent.value === true && btnValue === true) {
-      btnClass = "active";
+      btnClass = styles.active;
     } else if (parent.value === false && btnValue === false) {
-      btnClass = "active";
+      btnClass = styles.active;
     } else if (
       parent.value !== null &&
       parent.value !== true &&
@@ -94,7 +95,7 @@ export default function TwoBtnRow<T>({
       btnValue !== false
     ) {
       if (parent.value.label === btnValue.label) {
-        btnClass = "active";
+        btnClass = styles.active;
       }
     }
 
@@ -102,26 +103,18 @@ export default function TwoBtnRow<T>({
   }
 
   return (
-    <div>
+    <div className={styles.labeled}>
       {state ? (
         <>
-          {label !== undefined ? (
-            <label
-              className={`listing-form__label ${
-                state.errorMsg.length > 0 ? "invalid" : ""
-              }`}
-            >
-              {label}
-            </label>
-          ) : null}
-          <div className="listing-form__btns-row">
+          {label !== undefined ? <label>{label}</label> : null}
+          <div className={styles.two_btn_row}>
             <button
               className={`
                 ${
                   formLayer === "1"
-                    ? "listing-form__btn"
+                    ? styles.btn
                     : formLayer === "2"
-                    ? "listing-form__section__btn"
+                    ? styles.btn
                     : ""
                 }
                 ${getBtnClass(leftBtnValue)}
@@ -138,9 +131,9 @@ export default function TwoBtnRow<T>({
               className={`
                 ${
                   formLayer === "1"
-                    ? "listing-form__btn"
+                    ? styles.btn
                     : formLayer === "2"
-                    ? "listing-form__section__btn"
+                    ? styles.btn
                     : ""
                 }
                 ${getBtnClass(rightBtnValue)}

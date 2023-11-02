@@ -181,7 +181,7 @@ export default function ApartmentForRentForm({
 
       <div className={styles.section}>
         <Header>Apartment Features</Header>
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="yearBuilt"
@@ -204,7 +204,7 @@ export default function ApartmentForRentForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="floorNumber"
@@ -227,7 +227,7 @@ export default function ApartmentForRentForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="fullBathrooms"
@@ -346,7 +346,7 @@ export default function ApartmentForRentForm({
         state.numAssignedSpaces &&
         state.numAssignedSpacesWithCover ? (
           <>
-            <div className="listing-form__flex-row">
+            <div className={styles.flex_row}>
               <InputStr<typeof state>
                 size="md"
                 fieldName="numAssignedSpaces"

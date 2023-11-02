@@ -1,6 +1,7 @@
 import { TypeBool, Str, VerifyActionName } from "../../../../types/index";
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
 import { Notice } from "./styledComponents";
+import styles from "../create-listing-page.module.scss";
 
 interface Props<T> {
   // /** Whether or not a field remains disabled in edit mode -- set to false by parent when user confirms a prompt */
@@ -58,11 +59,7 @@ export default function EditFormSection<T>({
         Enable editing to make changes.
       </Notice>
       {/* <p>Enable editing to make changes.</p> */}
-      <button
-        type="button"
-        className="listing-form__btn wide"
-        onClick={handleClick}
-      >
+      <button type="button" className={styles.btn} onClick={handleClick}>
         Enable Editing
       </button>
     </>

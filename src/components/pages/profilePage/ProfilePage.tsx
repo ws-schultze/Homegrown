@@ -26,6 +26,7 @@ import UsernameInput, {
 import EmailInput, { Email } from "../../shared/inputs/emailInput/EmailInput";
 import styles from "./profile.module.scss";
 import { ReactComponent as LockSVG } from "./assets/lockIcon.svg";
+import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 
 export interface TypeProfile {
   username: Username;
@@ -37,6 +38,7 @@ export interface TypeProfile {
 }
 
 export default function ProfilePage() {
+  const screenSize = useScreenSizeContext();
   const [state, setState] = useState<TypeProfile>({
     username: {
       value: "",
@@ -359,6 +361,7 @@ export default function ProfilePage() {
                   handleEdit={handleEdit}
                   key={listing.id}
                   listing={listing}
+                  isMobile={screenSize !== "desktop" ? true : false}
                 />
               ))}
             </>

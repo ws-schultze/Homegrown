@@ -150,7 +150,7 @@ export default function CompanyForm({
           parent={state.name}
           emit={handleInputStr}
         />
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="phoneNumber"
@@ -200,7 +200,7 @@ export default function CompanyForm({
             parent={state.city}
             emit={handleInputStr}
           />
-          <div className="listing-form__flex-row">
+          <div className={styles.flex_row}>
             <InputStr<typeof state>
               size="md"
               fieldName="adminAreaLevel1"

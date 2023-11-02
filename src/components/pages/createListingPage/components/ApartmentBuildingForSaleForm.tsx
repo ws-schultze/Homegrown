@@ -153,7 +153,7 @@ export default function ApartmentBuildingForSaleForm({
       <div className={styles.section}>
         <Header>Apartment Building Features</Header>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="totalUnits"
@@ -176,7 +176,7 @@ export default function ApartmentBuildingForSaleForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="stories"
@@ -200,7 +200,7 @@ export default function ApartmentBuildingForSaleForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="squareFeet"
@@ -223,7 +223,7 @@ export default function ApartmentBuildingForSaleForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="fullBathrooms"

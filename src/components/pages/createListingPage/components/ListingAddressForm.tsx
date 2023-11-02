@@ -237,7 +237,7 @@ function ListingAddressForm({
             parent={state.city}
             emit={handleInputStr}
           />
-          <div className="listing-form__flex-row">
+          <div className={styles.flex_row}>
             <InputStr<typeof state>
               size="md"
               fieldName="adminAreaLevel1"
@@ -264,7 +264,7 @@ function ListingAddressForm({
             emit={handleInputStr}
           />
           {showMap === true ? (
-            <div ref={mapRef} className="listing-form__map-container">
+            <div ref={mapRef} className={styles.map_container}>
               <AddressMap center={mapCenter} />
             </div>
           ) : null}

@@ -216,15 +216,15 @@ export default function UploadsForm({
         <Header>Images</Header>
         <p>The first image will be the listing's cover.</p>
         {state.images.value.length > 0 && (
-          <div className="listing-form__image-preview">
+          <div className={styles.image_preview}>
             <>
               {state.images.value.map((image, index) => (
                 <div key={index}>
-                  <div className="listing-form__image-preview-card">
+                  <div className={styles.card}>
                     <img src={image.url} alt="" />
                     <button disabled={state.readOnly} type="button">
                       <DeleteIcon
-                        className="listing-form__image-preview__delete-icon"
+                        className={styles.delete}
                         onClick={(e) => onDelete(e, image)}
                       />
                     </button>
@@ -235,7 +235,7 @@ export default function UploadsForm({
           </div>
         )}
         <div
-          className="listing-form__input-file-wrap"
+          className={styles.input_file_wrap}
           draggable
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -254,20 +254,12 @@ export default function UploadsForm({
           />
           <label
             htmlFor="listing-form__input-file"
-            className={`listing-form__input-file-label ${
-              dragActive ? "dragActive" : ""
-            }`}
+            className={dragActive ? styles.drag_active : ""}
           >
-            <div className="listing-form__input-file__btn-wrap">
-              <label>Drag and drop or click to add your file(s)</label>
-              <button
-                disabled={state.readOnly}
-                onClick={handleInputClick}
-                className="listing-form__input-file__btn"
-              >
-                <PlusIcon className="listing-form__input-file__btn__icon" />
-              </button>
-            </div>
+            <button disabled={state.readOnly} onClick={handleInputClick}>
+              Drag and drop or click to add your file(s)
+              <PlusIcon className={styles.icon} />
+            </button>
           </label>
         </div>
         <ErrorMsg errorMsg={state.images.errorMsg} />

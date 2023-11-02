@@ -25,7 +25,7 @@ export default function PageBtns({
     <div className={styles.section}>
       <div className={styles["page-number-btns"]}>
         {prevPage ? (
-          <button className="btn-solid" type="button" onClick={prevPage}>
+          <button className="btn" type="button" onClick={prevPage}>
             <ArrowLeftSVG />
           </button>
         ) : null}
@@ -33,7 +33,7 @@ export default function PageBtns({
           ? pageNumbers.map((pgNum, index) => (
               <button
                 key={index}
-                className={`btn-solid ${currentPage === pgNum ? "active" : ""}`}
+                className={`btn ${currentPage === pgNum ? "active" : ""}`}
                 type="button"
                 onClick={() => toPageNumber(pgNum)}
               >
@@ -42,7 +42,7 @@ export default function PageBtns({
             ))
           : null}
         {nextPage ? (
-          <button className="btn-solid" type="button" onClick={nextPage}>
+          <button className="btn" type="button" onClick={nextPage}>
             <ArrowRightSVG />
           </button>
         ) : null}

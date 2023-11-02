@@ -52,8 +52,8 @@ export default function UserAcknowledgementForm({
         </p>
         <button
           type="button"
-          className={`listing-form__btn wide ${
-            parent.userAcknowledged === true ? "active" : ""
+          className={`${styles.btn} ${
+            parent.userAcknowledged === true ? styles.active : ""
           }`}
           onClick={handleClick}
         >

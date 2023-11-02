@@ -130,25 +130,17 @@ export default function SaveSection<T extends Address | AddressOptional>({
           Save to proceed
         </p>
 
-        <div className="listing-form__btns-row">
-          <button
-            type="button"
-            className="listing-form__btn"
-            onClick={handleClear}
-          >
+        <div className={styles.two_btn_row}>
+          <button type="button" className={styles.btn} onClick={handleClear}>
             Clear
           </button>
 
           {loading ? (
-            <div className="listing-form__btn">
+            <div className={styles.btn}>
               <Spinner size="large" />
             </div>
           ) : (
-            <button
-              type="button"
-              className="listing-form__btn"
-              onClick={handleSave}
-            >
+            <button type="button" className={styles.btn} onClick={handleSave}>
               Save
             </button>
           )}

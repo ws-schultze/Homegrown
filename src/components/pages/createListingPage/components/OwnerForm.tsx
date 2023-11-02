@@ -221,7 +221,7 @@ export default function OwnerForm({
           parent={state.lastName}
           emit={handleInputStr}
         />
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="phoneNumber"
@@ -290,7 +290,7 @@ export default function OwnerForm({
               parent={state.city}
               emit={handleInputStr}
             />
-            <div className="listing-form__flex-row">
+            <div className={styles.flex_row}>
               <InputStr<typeof state>
                 size="md"
                 fieldName="adminAreaLevel1"

@@ -187,7 +187,7 @@ export default function MultiFamilyHomeUnitForRentForm({
       <div className={styles.section}>
         <Header>Multi-Family Home Unit</Header>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="yearBuilt"
@@ -210,7 +210,7 @@ export default function MultiFamilyHomeUnitForRentForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="fullBathrooms"
@@ -233,7 +233,7 @@ export default function MultiFamilyHomeUnitForRentForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="stories"
@@ -256,7 +256,7 @@ export default function MultiFamilyHomeUnitForRentForm({
           />
         </div>
 
-        <div className="listing-form__flex-row">
+        <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
             fieldName="parkingSpaces"
@@ -360,7 +360,7 @@ export default function MultiFamilyHomeUnitForRentForm({
               parent={state.garageAttached}
               emit={handleTwoBtnRow}
             />
-            <div className="listing-form__flex-row">
+            <div className={styles.flex_row}>
               <InputStr<typeof state>
                 size="md"
                 fieldName="garageNumCars"
