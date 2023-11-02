@@ -1,29 +1,28 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 // import "swiper/swiper-bundle.css";
 import { getAuth } from "firebase/auth";
-import { ReactComponent as ShareSVG } from "../../../../assets/svg/share-from-square-regular.svg";
-import { ReactComponent as CloseSVG } from "../../../../assets/svg/circle-xmark-regular.svg";
-import { ReactComponent as BuildingSVG } from "../../../../assets/svg/building-regular.svg";
-import { ReactComponent as CalendarSVG } from "../../../../assets/svg/calendar-days-solid.svg";
-import { ReactComponent as ThermometerSVG } from "../../../../assets/svg/temperature-full-solid.svg";
-import { ReactComponent as SnowflakeSVG } from "../../../../assets/svg/snowflake-regular.svg";
-import { ReactComponent as MapSVG } from "../../../../assets/svg/mapIcon.svg";
-import { ReactComponent as RulerSVG } from "../../../../assets/svg/ruler-combined-solid.svg";
-import { ReactComponent as MagnifyMoneySVG } from "../../../../assets/svg/magnifying-glass-dollar-solid.svg";
+import { ReactComponent as ShareSVG } from "../assets/arrow-up-from-bracket-solid.svg";
+import { ReactComponent as CloseSVG } from "../assets/close-icon.svg";
+import { ReactComponent as BuildingSVG } from "../assets/building-regular.svg";
+import { ReactComponent as CalendarSVG } from "../assets/calendar-days-solid.svg";
+import { ReactComponent as ThermometerSVG } from "../assets/temperature-full-solid.svg";
+import { ReactComponent as SnowflakeSVG } from "../assets/snowflake-regular.svg";
+import { ReactComponent as MapSVG } from "../assets/mapIcon.svg";
+import { ReactComponent as RulerSVG } from "../assets/ruler-combined-solid.svg";
+import { ReactComponent as MagnifyMoneySVG } from "../assets/magnifying-glass-dollar-solid.svg";
 
-import { ReactComponent as StairsSVG } from "../../../../assets/svg/stairs-solid.svg";
-import { ReactComponent as ElevatorSVG } from "../../../../assets/svg/elevator-solid.svg";
+import { ReactComponent as StairsSVG } from "../assets/stairs-solid.svg";
+import { ReactComponent as ElevatorSVG } from "../assets/elevator-solid.svg";
 
-// import { ReactComponent as ClockSVG } from "../assets/svg/clock-regular.svg";
-import { ReactComponent as FaucetSVG } from "../../../../assets/svg/faucet-drip-solid.svg";
-import { ReactComponent as PlugSVG } from "../../../../assets/svg/plug-solid.svg";
-import { ReactComponent as EnvelopeSVG } from "../../../../assets/svg/envelopeIcon.svg";
-import { ReactComponent as BedSVG } from "../../../../assets/svg/bed-solid.svg";
+// import { ReactComponent as ClockSVG } from "../assets/clock-regular.svg";
+import { ReactComponent as FaucetSVG } from "../assets/faucet-drip-solid.svg";
+import { ReactComponent as PlugSVG } from "../assets/plug-solid.svg";
+import { ReactComponent as EnvelopeSVG } from "../assets/envelopeIcon.svg";
+import { ReactComponent as BedSVG } from "../assets/bed-solid.svg";
 
-import { ReactComponent as BathSVG } from "../../../../assets/svg/bath-solid.svg";
-import { ReactComponent as ToiletSVG } from "../../../../assets/svg/toilet-solid.svg";
-import { ReactComponent as LogoSVG } from "../assets/mobile-logo.svg";
+import { ReactComponent as BathSVG } from "../assets/bath-solid.svg";
+import { ReactComponent as ToiletSVG } from "../assets/toilet-solid.svg";
 
 import { Wrapper } from "@googlemaps/react-wrapper";
 import AddressMap from "../../../shared/addressMap/AddressMap";
@@ -33,6 +32,21 @@ import styles from "./mobileListingOverlayPage.module.scss";
 import MobileLogo from "../../../shared/logo/mobile/MobileLogo";
 import { setShowFullOverlay } from "../../exploreListingsPage/exploreListingsPageSlice";
 import { useDispatch } from "react-redux";
+import {
+  Apartment,
+  ApartmentBuilding,
+  Condo,
+  Cooling,
+  Heating,
+  ListingData,
+  ManufacturedHome,
+  MultiFamilyHome,
+  MultiFamilyHomeUnit,
+  Power,
+  TypeFetchedListingData,
+  Water,
+} from "../../../../types";
+import { SingleFamilyHome } from "../../../../types/index";
 
 export default function MobileListingOverlayPage() {
   const state = useAppSelector((state) => state.exploreListings);
@@ -110,6 +124,126 @@ export default function MobileListingOverlayPage() {
     }
   }
 
+  function heating(
+    listing:
+      | Apartment
+      | SingleFamilyHome
+      | ApartmentBuilding
+      | Condo
+      | ManufacturedHome
+      | MultiFamilyHome
+      | MultiFamilyHomeUnit
+  ): JSX.Element {
+    return (
+      <div className={styles.feature}>
+        <ThermometerSVG />
+        Heating:
+        <div className={styles.options}>
+          {listing.heating.value.slice(0, -1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label},{" "}
+            </div>
+          ))}
+          {listing?.heating.value.slice(-1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function cooling(
+    listing:
+      | SingleFamilyHome
+      | Apartment
+      | ApartmentBuilding
+      | Condo
+      | ManufacturedHome
+      | MultiFamilyHome
+      | MultiFamilyHomeUnit
+  ): JSX.Element {
+    return (
+      <div className={styles.feature}>
+        <SnowflakeSVG />
+        Cooling:
+        <div className={styles.options}>
+          {listing.cooling.value.slice(0, -1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label},{" "}
+            </div>
+          ))}
+          {listing.cooling.value.slice(-1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function water(
+    listing:
+      | SingleFamilyHome
+      | Apartment
+      | ApartmentBuilding
+      | Condo
+      | ManufacturedHome
+      | MultiFamilyHome
+      | MultiFamilyHomeUnit
+  ): JSX.Element {
+    return (
+      <div className={styles.feature}>
+        <FaucetSVG />
+        Water:
+        <div className={styles.options}>
+          {listing.water.value.slice(0, -1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label},{" "}
+            </div>
+          ))}
+          {listing.water.value.slice(-1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function power(
+    listing:
+      | SingleFamilyHome
+      | Apartment
+      | ApartmentBuilding
+      | Condo
+      | ManufacturedHome
+      | MultiFamilyHome
+      | MultiFamilyHomeUnit
+  ): JSX.Element {
+    return (
+      <div className={styles.feature}>
+        <PlugSVG />
+        Power:
+        <div className={styles.options}>
+          {listing.power.value.slice(0, -1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label},{" "}
+            </div>
+          ))}
+          {listing.power.value.slice(-1).map((option, i) => (
+            <div className={styles.option} key={i}>
+              {option?.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container} ref={containerRef}>
       <div className={styles.contents} ref={overlayRef}>
@@ -147,18 +281,19 @@ export default function MobileListingOverlayPage() {
                     }, 2000);
                   }}
                 >
-                  <ShareSVG />
+                  <ShareSVG className={styles.share_icon} />
                   <label>Share</label>
+
                   {shareLinkCopied ? (
-                    <div className="listing-share-link-copied">Link Copied</div>
+                    <div className={styles.share_link_copied}>Link Copied</div>
                   ) : null}
                 </button>
                 <button onClick={() => dispatch(setShowFullOverlay(false))}>
                   <CloseSVG />
-                  <label>Close</label>
                 </button>
               </div>
             </header>
+            <div></div>
             <div className={styles["info-card"]}>
               <div className={styles["basic-info"]}>
                 <div className={styles.price}>
@@ -233,335 +368,59 @@ export default function MobileListingOverlayPage() {
                         {singleFamilyHome?.yearBuilt.number}
                         {townhouse?.yearBuilt.number}
                       </div>
-                      <div className={styles.feature}>
-                        <ThermometerSVG />
-                        Heating:{" "}
-                        {singleFamilyHome?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {singleFamilyHome?.heating.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {apartment?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartment?.heating.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {condo?.heating.value.slice(0, -1).map((option, i) => (
-                          <div key={i}>{option?.label}, </div>
-                        ))}
-                        {condo?.heating.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {apartmentBuilding?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartmentBuilding?.heating.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {manufacturedHome?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {manufacturedHome?.heating.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHome?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHome?.heating.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHomeUnit?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHomeUnit?.heating.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {townhouse?.heating.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {townhouse?.heating.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                      </div>
-                      <div className={styles.feature}>
-                        <SnowflakeSVG />
-                        Cooling:{" "}
-                        {singleFamilyHome?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {singleFamilyHome?.cooling.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {apartment?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartment?.cooling.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {condo?.cooling.value.slice(0, -1).map((option, i) => (
-                          <div key={i}>{option?.label}, </div>
-                        ))}
-                        {condo?.cooling.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {apartmentBuilding?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartmentBuilding?.cooling.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {manufacturedHome?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {manufacturedHome?.cooling.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHome?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHome?.cooling.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHomeUnit?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHomeUnit?.cooling.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {townhouse?.cooling.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {townhouse?.cooling.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                      </div>
-                      <div className={styles.feature}>
-                        <FaucetSVG />
-                        Water:{" "}
-                        {singleFamilyHome?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {singleFamilyHome?.water.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {apartment?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartment?.water.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {condo?.water.value.slice(0, -1).map((option, i) => (
-                          <div key={i}>{option?.label}, </div>
-                        ))}
-                        {condo?.water.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {apartmentBuilding?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartmentBuilding?.water.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {manufacturedHome?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {manufacturedHome?.water.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHome?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHome?.water.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHomeUnit?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHomeUnit?.water.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {townhouse?.water.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {townhouse?.water.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                      </div>
-                      <div className={styles.feature}>
-                        <PlugSVG />
-                        Power:{" "}
-                        {singleFamilyHome?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {singleFamilyHome?.power.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {apartment?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartment?.power.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {condo?.power.value.slice(0, -1).map((option, i) => (
-                          <div key={i}>{option?.label}, </div>
-                        ))}
-                        {condo?.power.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                        {apartmentBuilding?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {apartmentBuilding?.power.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {manufacturedHome?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {manufacturedHome?.power.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHome?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHome?.power.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {multiFamilyHomeUnit?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {multiFamilyHomeUnit?.power.value
-                          .slice(-1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}</div>
-                          ))}
-                        {townhouse?.power.value
-                          .slice(0, -1)
-                          .map((option, i) => (
-                            <div key={i}>{option?.label}, </div>
-                          ))}
-                        {townhouse?.power.value.slice(-1).map((option, i) => (
-                          <div key={i}>{option?.label}</div>
-                        ))}
-                      </div>
+
+                      {/* Heating */}
+                      {singleFamilyHome ? heating(singleFamilyHome) : null}
+                      {apartment ? heating(apartment) : null}
+                      {apartmentBuilding ? heating(apartmentBuilding) : null}
+                      {condo ? heating(condo) : null}
+                      {multiFamilyHome ? heating(multiFamilyHome) : null}
+                      {multiFamilyHomeUnit
+                        ? heating(multiFamilyHomeUnit)
+                        : null}
+                      {manufacturedHome ? heating(manufacturedHome) : null}
+
+                      {/* Cooling */}
+                      {singleFamilyHome ? cooling(singleFamilyHome) : null}
+                      {apartment ? cooling(apartment) : null}
+                      {apartmentBuilding ? cooling(apartmentBuilding) : null}
+                      {condo ? cooling(condo) : null}
+                      {multiFamilyHome ? cooling(multiFamilyHome) : null}
+                      {multiFamilyHomeUnit
+                        ? cooling(multiFamilyHomeUnit)
+                        : null}
+                      {manufacturedHome ? cooling(manufacturedHome) : null}
+
+                      {/* Water */}
+                      {singleFamilyHome ? water(singleFamilyHome) : null}
+                      {apartment ? water(apartment) : null}
+                      {apartmentBuilding ? water(apartmentBuilding) : null}
+                      {condo ? water(condo) : null}
+                      {multiFamilyHome ? water(multiFamilyHome) : null}
+                      {multiFamilyHomeUnit ? water(multiFamilyHomeUnit) : null}
+                      {manufacturedHome ? water(manufacturedHome) : null}
+
+                      {/* Power */}
+
+                      {singleFamilyHome ? power(singleFamilyHome) : null}
+                      {apartment ? power(apartment) : null}
+                      {apartmentBuilding ? water(apartmentBuilding) : null}
+                      {condo ? power(condo) : null}
+                      {multiFamilyHome ? power(multiFamilyHome) : null}
+                      {multiFamilyHomeUnit ? power(multiFamilyHomeUnit) : null}
+                      {manufacturedHome ? power(manufacturedHome) : null}
+
                       <div className={styles.feature}>
                         <RulerSVG />
-                        Square Feet:{" "}
-                        {singleFamilyHome?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
-                        {multiFamilyHome?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
-                        {multiFamilyHomeUnit?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
-                        {apartment?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
-                        {apartmentBuilding?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
-                        {condo?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
-                        {manufacturedHome?.squareFeet.formatted
-                          ? singleFamilyHome?.squareFeet.formatted
-                          : null}
+                        Square Feet: {singleFamilyHome?.squareFeet.formatted}
+                        {multiFamilyHome?.squareFeet.formatted}
+                        {multiFamilyHomeUnit?.squareFeet.formatted}
+                        {apartment?.squareFeet.formatted}
+                        {apartmentBuilding?.squareFeet.formatted}
+                        {condo?.squareFeet.formatted}
+                        {manufacturedHome?.squareFeet.formatted}
                       </div>
+
                       {singleFamilyHome && basicInfo.priceChange.number > 0 ? (
                         <div className={styles.feature}>
                           <MagnifyMoneySVG />
@@ -582,81 +441,70 @@ export default function MobileListingOverlayPage() {
                           ).toFixed(0)}
                         </div>
                       ) : null}
-                      <div className={styles.feature}>
-                        <BedSVG />
-                        Bedrooms:{" "}
-                        {singleFamilyHome?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                        {multiFamilyHome?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                        {multiFamilyHomeUnit?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                        {apartment?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                        {apartmentBuilding?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                        {condo?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                        {manufacturedHome?.bedrooms.number
-                          ? singleFamilyHome?.bedrooms.number
-                          : null}
-                      </div>
-                      <div className={styles.feature}>
-                        <BathSVG />
-                        Full Bathrooms:{" "}
-                        {singleFamilyHome?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                        {multiFamilyHome?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                        {multiFamilyHomeUnit?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                        {apartment?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                        {apartmentBuilding?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                        {condo?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                        {manufacturedHome?.fullBathrooms.number
-                          ? singleFamilyHome?.fullBathrooms.number
-                          : null}
-                      </div>
-                      <div className={styles.feature}>
-                        <ToiletSVG />
-                        Half Bathrooms:{" "}
-                        {singleFamilyHome?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                        {multiFamilyHome?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                        {multiFamilyHomeUnit?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                        {apartment?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                        {apartmentBuilding?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                        {condo?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                        {manufacturedHome?.halfBathrooms.number
-                          ? singleFamilyHome?.halfBathrooms.number
-                          : null}
-                      </div>
+
+                      {/* Bedrooms */}
+                      {singleFamilyHome ||
+                      multiFamilyHome ||
+                      multiFamilyHomeUnit ||
+                      apartment ||
+                      apartmentBuilding ||
+                      condo ||
+                      manufacturedHome ? (
+                        <div className={styles.feature}>
+                          <BedSVG />
+                          Bedrooms: {singleFamilyHome?.bedrooms.number}
+                          {multiFamilyHome?.bedrooms.number}
+                          {multiFamilyHomeUnit?.bedrooms.number}
+                          {apartment?.bedrooms.number}
+                          {apartmentBuilding?.bedrooms.number}
+                          {condo?.bedrooms.number}
+                          {manufacturedHome?.bedrooms.number}
+                        </div>
+                      ) : null}
+
+                      {/* Full Bathrooms */}
+                      {singleFamilyHome ||
+                      multiFamilyHome ||
+                      multiFamilyHomeUnit ||
+                      apartment ||
+                      apartmentBuilding ||
+                      condo ||
+                      manufacturedHome ? (
+                        <div className={styles.feature}>
+                          <BathSVG />
+                          Full Bathrooms:{" "}
+                          {singleFamilyHome?.fullBathrooms.number}
+                          {multiFamilyHome?.fullBathrooms.number}
+                          {multiFamilyHomeUnit?.fullBathrooms.number}
+                          {apartment?.fullBathrooms.number}
+                          {apartmentBuilding?.fullBathrooms.number}
+                          {condo?.fullBathrooms.number}
+                          {manufacturedHome?.fullBathrooms.number}
+                        </div>
+                      ) : null}
+
+                      {/* Half Bathrooms */}
+                      {singleFamilyHome ||
+                      multiFamilyHome ||
+                      multiFamilyHomeUnit ||
+                      apartment ||
+                      apartmentBuilding ||
+                      condo ||
+                      manufacturedHome ? (
+                        <div className={styles.feature}>
+                          <ToiletSVG />
+                          Half Bathrooms:{" "}
+                          {singleFamilyHome?.halfBathrooms.number}{" "}
+                          {multiFamilyHome?.halfBathrooms.number}
+                          {multiFamilyHomeUnit?.halfBathrooms.number}
+                          {apartment?.halfBathrooms.number}
+                          {apartmentBuilding?.halfBathrooms.number}
+                          {condo?.halfBathrooms.number}
+                          {manufacturedHome?.halfBathrooms.number}
+                        </div>
+                      ) : null}
+
+                      {/* Number of stories */}
                       {singleFamilyHome ||
                       multiFamilyHome ||
                       multiFamilyHomeUnit ||
@@ -669,6 +517,8 @@ export default function MobileListingOverlayPage() {
                           {apartmentBuilding?.stories.number}
                         </div>
                       ) : null}
+
+                      {/* Elevator Access */}
                       {apartment || condo ? (
                         <div className={styles.feature}>
                           <ElevatorSVG />

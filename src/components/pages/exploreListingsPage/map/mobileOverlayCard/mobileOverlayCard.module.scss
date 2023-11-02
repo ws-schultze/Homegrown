@@ -33,8 +33,7 @@
   background-color: var(--color-bg-primary);
   display: flex;
   flex-direction: column;
-  border-top-right-radius: var(--border-radius);
-  border-top-left-radius: var(--border-radius);
+  margin-bottom: 10px;
   overflow: hidden;
 
   img {
