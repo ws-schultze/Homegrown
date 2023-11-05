@@ -7,15 +7,13 @@ input[type="checkbox"] {
   left: 0;
 }
 
-.container {
-}
-
 .label {
   background-color: var(--color-bg-secondary);
   cursor: pointer;
   width: 75px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 20px;
   padding: 2px 4px;
   height: 36px;

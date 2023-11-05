@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import { ReactComponent as VisibilityIcon } from "./assets/visibilityIcon.svg";
 import styles from "./passwordInput.module.scss";
 import { ReactComponent as LockIcon } from "./assets/lockIcon.svg";
+import { ref } from "firebase/storage";
 
 interface Props {
   emit: (object: Password) => void;
@@ -27,7 +28,9 @@ export const initPassword = {
 export default function PasswordInput(props: Props) {
   const [state, setState] = useState<Password>(initPassword);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  // const [cursorPosition, setCursorPosition] = useState<number | null>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const visBtnRef = useRef<HTMLButtonElement | null>(null);
 
   function validatePassword(value: string): {
     valid: boolean;
@@ -43,19 +46,7 @@ export default function PasswordInput(props: Props) {
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
-    const { valid } = validatePassword(e.target.value);
-    setState((s) => ({
-      ...s,
-      value: e.target.value,
-      valid: valid,
-    }));
-  }
-
-  function handleBlur(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void {
     const { valid, errorMsg } = validatePassword(e.target.value);
-
     setState((s) => ({
       ...s,
       value: e.target.value,
@@ -63,7 +54,13 @@ export default function PasswordInput(props: Props) {
       errorMsg: errorMsg,
     }));
 
-    props.emit(state);
+    // setCursorPosition(e.target.selectionStart);
+  }
+
+  function handleVisibilityClick() {
+    setShowPassword(!showPassword);
+
+    if (inputRef.current) inputRef.current.focus();
   }
 
   return (
@@ -89,13 +86,17 @@ export default function PasswordInput(props: Props) {
           type={showPassword ? "text" : "password"}
           value={state.value}
           onChange={handleChange}
-          onBlur={handleBlur}
+          onBlur={() => props.emit(state)}
           disabled={false}
         />
-        <VisibilityIcon
-          className={`${styles["visibility-icon"]}`}
-          onClick={() => setShowPassword((sp) => !sp)}
-        />
+        <button
+          type="button"
+          ref={visBtnRef}
+          className={styles.visibility_icon_container}
+          onClick={handleVisibilityClick}
+        >
+          <VisibilityIcon className={`${styles["visibility-icon"]}`} />
+        </button>
       </div>
 
       <ErrorMsg errorMsg={state.errorMsg} />

@@ -19,6 +19,7 @@ import { register } from "swiper/element/bundle";
 import { Link } from "react-router-dom";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Error from "../../shared/error/Error";
+import { ReactComponent as MagnifyingGlassSVG } from "./assets/magnifying-glass-solid.svg";
 
 register();
 
@@ -87,19 +88,23 @@ export default function HomePage() {
               screenSize !== "desktop" ? styles.mobile : ""
             }`}
           >
-            <input
+            <div
               className={`${styles.searchbox} ${
                 screenSize !== "desktop" ? styles.mobile : ""
               }`}
-              id="place-filter-searchbox"
-              type="search"
-              ref={searchRef}
-              placeholder={
-                screenSize !== "desktop"
-                  ? "Search listings by location"
-                  : "Search by city, postal code, county, state or country"
-              }
-            />
+            >
+              <MagnifyingGlassSVG className={styles.magnifying_glass} />
+              <input
+                id="place-filter-searchbox"
+                type="search"
+                ref={searchRef}
+                placeholder={
+                  screenSize !== "desktop"
+                    ? "Search listings by location"
+                    : "Search by city, postal code, county, state or country"
+                }
+              />
+            </div>
           </div>
           <Wrapper
             apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}

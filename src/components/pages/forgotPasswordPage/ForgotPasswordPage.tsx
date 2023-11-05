@@ -8,6 +8,7 @@ import EmailInput, {
   initEmail,
 } from "../../shared/inputs/emailInput/EmailInput";
 import Button from "../../shared/button/Button";
+import Footer from "../../shared/footer/Footer";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<Email>(initEmail);
@@ -28,26 +29,24 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="page-wrap">
+    <>
       <div className={styles.container}>
-        <form className="form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <p className={styles.notice}>
             Please enter the email address associated with the account that you
             would like to recover.
           </p>
           <EmailInput emit={handleEmail} />
-
           <Button text="Send password reset email" emit={handleSubmit} />
-
           <Link to="/sign-in" className={styles.link}>
             Sign in
           </Link>
-
           <Link to="/sign-up" className={styles.link}>
             Create an account
           </Link>
         </form>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
