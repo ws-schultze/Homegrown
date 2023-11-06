@@ -3,8 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Spinner from "../../shared/loaders/Spinner";
-import OAuth from "../../shared/oAuth/OAuth";
-import SignInBtn from "../../shared/signInButton/SignInBtn";
 import styles from "./signInPage.module.scss";
 import PasswordInput, {
   Password,
@@ -14,6 +12,8 @@ import EmailInput, {
   Email,
   initEmail,
 } from "../../shared/inputs/emailInput/EmailInput";
+import Footer from "../../shared/footer/Footer";
+import GoogleOAuth from "../../shared/oAuth/google/GoogleOAuth";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,23 +69,30 @@ export default function SignInPage() {
   }
 
   return (
-    <div className={"page-wrap"}>
+    <>
       <div className={styles.container}>
         <form>
           <EmailInput emit={handleEmail} />
           <PasswordInput emit={handlePassword} />
-          <div className={styles.btns}>
-            <SignInBtn emit={handleSubmit} />
-            <Link to="/forgot-password" className={styles.link}>
-              Forgot password
-            </Link>
-            <Link to="/sign-up" className={styles.link}>
-              Create an account
-            </Link>
-            <OAuth />
-          </div>
+          <button
+            className={`btn ${styles.btn} ${styles.submit_btn}`}
+            onClick={handleSubmit}
+          >
+            {"Sign in"}
+          </button>
+          <h4>More options</h4>
         </form>
+        <div className={styles.more_options}>
+          <Link to="/forgot-password" className={`btn ${styles.btn}`}>
+            Forgot password
+          </Link>
+          <Link to="/sign-up" className={`btn ${styles.btn}`}>
+            Create an account
+          </Link>
+          <GoogleOAuth />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

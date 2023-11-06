@@ -15,7 +15,6 @@ import styles from "./signUpPage.module.scss";
 // import { ReactComponent as EnvelopeIcon } from "../../../assets/svg/envelopeIcon.svg";
 // import { ReactComponent as LockIcon } from "../../../assets/svg/lockIcon.svg";
 // import { ReactComponent as VisibilityIcon } from "../../../assets/svg/visibilityIcon.svg";
-import OAuth from "../../shared/oAuth/OAuth";
 import EmailInput, {
   Email,
   initEmail,
@@ -30,6 +29,8 @@ import UsernameInput, {
   initUsername,
 } from "../../shared/inputs/usernameInput/UsernameInput";
 import Spinner from "../../shared/loaders/Spinner";
+import Footer from "../../shared/footer/Footer";
+import GoogleOAuth from "../../shared/oAuth/google/GoogleOAuth";
 
 interface State {
   username: Username;
@@ -140,24 +141,32 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="page-wrap">
+    <>
       <div className={styles.container}>
         <form id="sign-up-form">
           <UsernameInput emit={handleUserName} />
           <EmailInput emit={handleEmail} />
           <PasswordInput emit={handlePassword} />
-          <div className={styles.btns}>
-            <SignUpBtn emit={handleSubmit} />
-            <Link to="/forgot-password" className={styles.link}>
-              Forgot password
-            </Link>
-            <Link to="/sign-in" className={styles.link}>
-              Already have an account?
-            </Link>
-            <OAuth />
-          </div>
+          <button
+            className={`btn ${styles.btn} ${styles.submit_btn}`}
+            onClick={handleSubmit}
+          >
+            {"Create account"}
+          </button>
+          <h4>More options</h4>
         </form>
+        <div className={styles.more_options}>
+          {" "}
+          <Link to="/forgot-password" className={`btn ${styles.btn}`}>
+            Forgot password
+          </Link>
+          <Link to="/sign-in" className={`btn ${styles.btn}`}>
+            Already have an account?
+          </Link>
+          <GoogleOAuth />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

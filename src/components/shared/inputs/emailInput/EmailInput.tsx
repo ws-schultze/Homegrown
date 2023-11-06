@@ -102,6 +102,7 @@ export default function EmailInput(props: Props) {
           onBlur={handleBlur}
           disabled={props.readonly}
           autoComplete="on"
+          required={true}
         />
       </div>
 

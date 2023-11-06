@@ -59,7 +59,7 @@ export default function GoogleOAuth() {
     >
       <img src={googleIcon} alt="Google" />
       Sign
-      {location.pathname === "/sign-up" ? " up" : " in"} with Google
+      {location.pathname === "/sign-up" ? " up" : " in"} through Google
     </button>
   );
 }

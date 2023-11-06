@@ -7,8 +7,9 @@ import EmailInput, {
   Email,
   initEmail,
 } from "../../shared/inputs/emailInput/EmailInput";
-import Button from "../../shared/button/Button";
 import Footer from "../../shared/footer/Footer";
+import { ReactComponent as BellSVG } from "./assets/bell-regular.svg";
+import GoogleOAuth from "../../shared/oAuth/google/GoogleOAuth";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<Email>(initEmail);
@@ -21,6 +22,13 @@ export default function ForgotPasswordPage() {
       toast.success(`Password reset email was went to ${email}`);
     } catch (error) {
       toast.error("Password reset email could not be sent");
+      handleEmail({
+        value: "",
+        errorMsg: "Required",
+        valid: false,
+        readOnly: false,
+        required: true,
+      });
     }
   }
 
@@ -32,19 +40,31 @@ export default function ForgotPasswordPage() {
     <>
       <div className={styles.container}>
         <form onSubmit={handleSubmit}>
-          <p className={styles.notice}>
-            Please enter the email address associated with the account that you
-            would like to recover.
-          </p>
+          <div className={styles.notice}>
+            <BellSVG />
+            <p>
+              Please enter the email address associated with the account that
+              you would like to recover.
+            </p>
+          </div>
           <EmailInput emit={handleEmail} />
-          <Button text="Send password reset email" emit={handleSubmit} />
-          <Link to="/sign-in" className={styles.link}>
+          <button
+            className={`btn ${styles.btn} ${styles.submit_btn}`}
+            onClick={handleSubmit}
+          >
+            {"Send password reset email"}
+          </button>
+          <h4>More options</h4>
+        </form>
+        <div className={styles.more_options}>
+          <Link to="/sign-in" className={`btn ${styles.btn}`}>
             Sign in
           </Link>
-          <Link to="/sign-up" className={styles.link}>
+          <Link to="/sign-up" className={`btn ${styles.btn}`}>
             Create an account
           </Link>
-        </form>
+          <GoogleOAuth />
+        </div>
       </div>
       <Footer />
     </>
