@@ -25,7 +25,6 @@ import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
-import { Header } from "./styledComponents";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -146,15 +145,15 @@ export default function MultiFamilyHomeForSaleForm({
     }
   }
   return (
-    <>
+    <form>
       {state.saved === true ? (
-        <div className={styles.section}>
+        <section>
           <EditFormSection<typeof state> parent={state} emit={handleVerify} />
-        </div>
+        </section>
       ) : null}
 
-      <div className={styles.section}>
-        <Header>Multi-Family Home Features</Header>
+      <section>
+        <header>Multi-Family Home Features</header>
 
         <div className={styles.flex_row}>
           <InputStr<typeof state>
@@ -318,7 +317,7 @@ export default function MultiFamilyHomeForSaleForm({
         />
 
         {/* End Unit Features */}
-      </div>
+      </section>
 
       {state.saved === false && state.beingVerified === false ? (
         <SaveSection<typeof state>
@@ -351,6 +350,6 @@ export default function MultiFamilyHomeForSaleForm({
           currentPage={currentPage}
         />
       )}
-    </>
+    </form>
   );
 }

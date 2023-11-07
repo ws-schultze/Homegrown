@@ -25,7 +25,7 @@ export default function PageBtns({
     <div className={styles.pagination}>
       {prevPage ? (
         <button
-          className={`btn ${styles.btn}`}
+          className={`btn ${styles.btn} ${styles.page_btn}`}
           type="button"
           onClick={prevPage}
         >
@@ -36,7 +36,7 @@ export default function PageBtns({
         ? pageNumbers.map((pgNum, index) => (
             <button
               key={index}
-              className={`btn ${styles.btn} ${
+              className={`btn ${styles.btn} ${styles.page_btn} ${
                 currentPage === pgNum ? "active" : ""
               }`}
               type="button"
@@ -48,7 +48,7 @@ export default function PageBtns({
         : null}
       {nextPage ? (
         <button
-          className={`btn ${styles.btn}`}
+          className={`btn ${styles.btn} ${styles.page_btn}`}
           type="button"
           onClick={nextPage}
         >

@@ -44,6 +44,8 @@ export default function EditListingPage() {
   const params = useParams();
   const pageNumbers = [1, 2, 3, 4, 5, 6, 7];
 
+  console.log("rendering page");
+
   // Add userId to state
   useEffect(() => {
     setLoading(true);
@@ -85,6 +87,12 @@ export default function EditListingPage() {
     fetchListing();
   }, [params.listingId]);
 
+  useEffect(() => {
+    console.log("page loaded");
+    // window.scrollTo(0, 0);
+    document.getElementById("main-container")?.scrollTo(0, 0);
+  }, [state.page]);
+
   /**
    * Handle the forms submission
    * @param e FormEvent - submit state
@@ -111,27 +119,30 @@ export default function EditListingPage() {
   }
 
   function nextPage() {
-    const { page } = state;
-    setState((s) => ({
-      ...s,
-      page: page + 1,
-    }));
+    setTimeout(() => {
+      setState((s) => ({
+        ...s,
+        page: state.page + 1,
+      }));
+    }, 300);
   }
 
   function prevPage() {
-    const { page } = state;
-    setState((s) => ({
-      ...s,
-      page: page - 1,
-    }));
+    setTimeout(() => {
+      setState((s) => ({
+        ...s,
+        page: state.page - 1,
+      }));
+    }, 300);
   }
 
   function toPageNumber(number: number) {
-    console.log("to page number clicked");
-    setState((s) => ({
-      ...s,
-      page: number,
-    }));
+    setTimeout(() => {
+      setState((s) => ({
+        ...s,
+        page: number,
+      }));
+    }, 300);
   }
 
   function handleEmit(
@@ -192,15 +203,6 @@ export default function EditListingPage() {
             deleteListing={deleteListing}
             emit={handleEmit}
           />
-          {state.userAcknowledged === true ? (
-            <PageBtns
-              deleteListing={deleteListing}
-              nextPage={nextPage}
-              toPageNumber={toPageNumber}
-              pageNumbers={state.savedPages}
-              currentPage={state.page}
-            />
-          ) : null}
           <Footer />
         </div>
       );
@@ -208,18 +210,16 @@ export default function EditListingPage() {
     case 2:
       return (
         <div className={styles.container}>
-          <form className={styles.form}>
-            <BasicInfoForm
-              deleteListing={deleteListing}
-              parent={state}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              toPageNumber={toPageNumber}
-              pageNumbers={pageNumbers}
-              currentPage={state.page}
-              emit={handleEmit}
-            />
-          </form>
+          <BasicInfoForm
+            deleteListing={deleteListing}
+            parent={state}
+            prevPage={prevPage}
+            nextPage={nextPage}
+            toPageNumber={toPageNumber}
+            pageNumbers={pageNumbers}
+            currentPage={state.page}
+            emit={handleEmit}
+          />
           <Footer />
         </div>
       );
@@ -227,19 +227,17 @@ export default function EditListingPage() {
     case 3:
       return (
         <div className={styles.container}>
-          <form className={styles.form}>
-            <ListingAddressForm
-              parent={state}
-              prevPage={prevPage}
-              nextPage={nextPage}
-              toPageNumber={toPageNumber}
-              deleteListing={deleteListing}
-              pageNumbers={pageNumbers}
-              currentPage={state.page}
-              showMap={true}
-              emit={handleEmit}
-            />
-          </form>
+          <ListingAddressForm
+            parent={state}
+            prevPage={prevPage}
+            nextPage={nextPage}
+            toPageNumber={toPageNumber}
+            deleteListing={deleteListing}
+            pageNumbers={pageNumbers}
+            currentPage={state.page}
+            showMap={true}
+            emit={handleEmit}
+          />
           <Footer />
         </div>
       );
@@ -247,73 +245,72 @@ export default function EditListingPage() {
     case 4:
       return (
         <div className={styles.container}>
-          <form className={styles.form}>
-            {state.basicInfo.forSaleBy !== undefined ? (
-              <>
-                {state.basicInfo.forSaleBy.value?.id === "agent" ? (
-                  <AgentForm
-                    parent={state}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    toPageNumber={toPageNumber}
-                    pageNumbers={pageNumbers}
-                    deleteListing={deleteListing}
-                    currentPage={state.page}
-                    emit={handleEmit}
-                  />
-                ) : null}
-
-                {state.basicInfo.forSaleBy.value?.id === "owner" ? (
-                  <OwnerForm
-                    parent={state}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    deleteListing={deleteListing}
-                    toPageNumber={toPageNumber}
-                    pageNumbers={pageNumbers}
-                    currentPage={state.page}
-                    emit={handleEmit}
-                  />
-                ) : null}
-              </>
-            ) : state.basicInfo.forRentBy !== undefined ? (
-              <>
-                {state.basicInfo.forRentBy.value?.id === "company" ? (
-                  <CompanyForm
-                    parent={state}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    toPageNumber={toPageNumber}
-                    pageNumbers={pageNumbers}
-                    deleteListing={deleteListing}
-                    currentPage={state.page}
-                    emit={handleEmit}
-                  />
-                ) : state.basicInfo.forRentBy.value?.id === "private-owner" ? (
-                  <PrivateOwnerForm
-                    parent={state}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    toPageNumber={toPageNumber}
-                    deleteListing={deleteListing}
-                    pageNumbers={pageNumbers}
-                    currentPage={state.page}
-                    emit={handleEmit}
-                  />
-                ) : null}
-              </>
-            ) : (
-              <div>
-                ERROR..
-                <PageBtns
-                  deleteListing={deleteListing}
-                  prevPage={prevPage}
+          {state.basicInfo.forSaleBy !== undefined ? (
+            <>
+              {state.basicInfo.forSaleBy.value?.id === "agent" ? (
+                <AgentForm
+                  parent={state}
                   nextPage={nextPage}
+                  prevPage={prevPage}
                   toPageNumber={toPageNumber}
+                  pageNumbers={pageNumbers}
+                  deleteListing={deleteListing}
+                  currentPage={state.page}
+                  emit={handleEmit}
                 />
-              </div>
-            )}
-          </form>
+              ) : null}
+
+              {state.basicInfo.forSaleBy.value?.id === "owner" ? (
+                <OwnerForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  deleteListing={deleteListing}
+                  toPageNumber={toPageNumber}
+                  pageNumbers={pageNumbers}
+                  currentPage={state.page}
+                  emit={handleEmit}
+                />
+              ) : null}
+            </>
+          ) : state.basicInfo.forRentBy !== undefined ? (
+            <>
+              {state.basicInfo.forRentBy.value?.id === "company" ? (
+                <CompanyForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  toPageNumber={toPageNumber}
+                  pageNumbers={pageNumbers}
+                  deleteListing={deleteListing}
+                  currentPage={state.page}
+                  emit={handleEmit}
+                />
+              ) : state.basicInfo.forRentBy.value?.id === "private-owner" ? (
+                <PrivateOwnerForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  toPageNumber={toPageNumber}
+                  deleteListing={deleteListing}
+                  pageNumbers={pageNumbers}
+                  currentPage={state.page}
+                  emit={handleEmit}
+                />
+              ) : null}
+            </>
+          ) : (
+            <div>
+              ERROR..
+              <PageBtns
+                deleteListing={deleteListing}
+                prevPage={prevPage}
+                nextPage={nextPage}
+                toPageNumber={toPageNumber}
+              />
+            </div>
+          )}
+
           <Footer />
         </div>
       );
@@ -321,143 +318,9 @@ export default function EditListingPage() {
     case 5:
       return (
         <div className={styles.container}>
-          <form className={styles.form}>
-            {state.basicInfo.listingKind.value?.id === "single-family-home" ? (
-              <SingleFamilyHome
-                parent={state}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                toPageNumber={toPageNumber}
-                deleteListing={deleteListing}
-                pageNumbers={pageNumbers}
-                currentPage={state.page}
-                emit={handleEmit}
-              />
-            ) : state.basicInfo.listingKind.value?.id ===
-              "multi-family-home" ? (
-              <MultiFamilyHomeForSaleForm
-                parent={state}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                toPageNumber={toPageNumber}
-                deleteListing={deleteListing}
-                pageNumbers={pageNumbers}
-                currentPage={state.page}
-                emit={handleEmit}
-              />
-            ) : state.basicInfo.listingKind.value?.id ===
-              "multi-family-home-unit" ? (
-              <MultiFamilyHomeUnitForRentForm
-                parent={state}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                toPageNumber={toPageNumber}
-                deleteListing={deleteListing}
-                pageNumbers={pageNumbers}
-                currentPage={state.page}
-                emit={handleEmit}
-              />
-            ) : state.basicInfo.listingKind.value?.id ===
-              "apartment-building" ? (
-              <ApartmentBuildingForSaleForm
-                parent={state}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                toPageNumber={toPageNumber}
-                deleteListing={deleteListing}
-                pageNumbers={pageNumbers}
-                currentPage={state.page}
-                emit={handleEmit}
-              />
-            ) : state.basicInfo.listingKind.value?.id === "apartment" ? (
-              <ApartmentForRentForm
-                parent={state}
-                nextPage={nextPage}
-                prevPage={prevPage}
-                toPageNumber={toPageNumber}
-                deleteListing={deleteListing}
-                pageNumbers={pageNumbers}
-                currentPage={state.page}
-                emit={handleEmit}
-              />
-            ) : (
-              // : state.basicInfo.listingKind.value?.id === "manufacturedHome" ? (
-              //   <ManufacturedHome
-              //     nextPage={nextPage}
-              //     prevPage={prevPage}
-              //     showMap={false}
-              //     parent={state}
-              //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
-              //     emit={handleEmit}
-              //   />
-              // )
-
-              // : state.basicInfo.listingKind.value?.id === "apartment" ? (
-              //   <Apartment
-              //     nextPage={nextPage}
-              //     prevPage={prevPage}
-              //     showMap={false}
-              //     parent={state}
-              //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
-              //     emit={handleEmit}
-              //   />
-              // )
-
-              // : state.basicInfo.listingKind.value?.id === "townhouse" ? (
-              //   <Townhouse
-              //     nextPage={nextPage}
-              //     prevPage={prevPage}
-              //     showMap={false}
-              //     parent={state}
-              //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
-              //     emit={handleEmit}
-              //   />
-              // )
-
-              // : state.basicInfo.listingKind.value?.id === "condo" ? (
-              //   <Condo
-              //     nextPage={nextPage}
-              //     prevPage={prevPage}
-              //     showMap={false}
-              //     parent={state}
-              //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
-              //     emit={handleEmit}
-              //   />
-              // )
-
-              // : state.basicInfo.listingKind.value?.id === "land" ? (
-              //   <Land
-              //     nextPage={nextPage}
-              //     prevPage={prevPage}
-              //     showMap={false}
-              //     parent={state}
-              //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
-              //     emit={handleEmit}
-              //   />
-              // )
-
-              <div>
-                ERROR..
-                <PageBtns
-                  deleteListing={deleteListing}
-                  prevPage={prevPage}
-                  nextPage={nextPage}
-                  toPageNumber={toPageNumber}
-                />
-              </div>
-            )}
-          </form>
-          <Footer />
-        </div>
-      );
-
-    case 6:
-      return (
-        <div className={styles.container}>
-          <form className={styles.form}>
-            <UploadsEditForm
+          {state.basicInfo.listingKind.value?.id === "single-family-home" ? (
+            <SingleFamilyHome
               parent={state}
-              listingId={params.listingId!}
               nextPage={nextPage}
               prevPage={prevPage}
               toPageNumber={toPageNumber}
@@ -466,7 +329,136 @@ export default function EditListingPage() {
               currentPage={state.page}
               emit={handleEmit}
             />
-          </form>
+          ) : state.basicInfo.listingKind.value?.id === "multi-family-home" ? (
+            <MultiFamilyHomeForSaleForm
+              parent={state}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              toPageNumber={toPageNumber}
+              deleteListing={deleteListing}
+              pageNumbers={pageNumbers}
+              currentPage={state.page}
+              emit={handleEmit}
+            />
+          ) : state.basicInfo.listingKind.value?.id ===
+            "multi-family-home-unit" ? (
+            <MultiFamilyHomeUnitForRentForm
+              parent={state}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              toPageNumber={toPageNumber}
+              deleteListing={deleteListing}
+              pageNumbers={pageNumbers}
+              currentPage={state.page}
+              emit={handleEmit}
+            />
+          ) : state.basicInfo.listingKind.value?.id === "apartment-building" ? (
+            <ApartmentBuildingForSaleForm
+              parent={state}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              toPageNumber={toPageNumber}
+              deleteListing={deleteListing}
+              pageNumbers={pageNumbers}
+              currentPage={state.page}
+              emit={handleEmit}
+            />
+          ) : state.basicInfo.listingKind.value?.id === "apartment" ? (
+            <ApartmentForRentForm
+              parent={state}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              toPageNumber={toPageNumber}
+              deleteListing={deleteListing}
+              pageNumbers={pageNumbers}
+              currentPage={state.page}
+              emit={handleEmit}
+            />
+          ) : (
+            // : state.basicInfo.listingKind.value?.id === "manufacturedHome" ? (
+            //   <ManufacturedHome
+            //     nextPage={nextPage}
+            //     prevPage={prevPage}
+            //     showMap={false}
+            //     parent={state}
+            //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
+            //     emit={handleEmit}
+            //   />
+            // )
+
+            // : state.basicInfo.listingKind.value?.id === "apartment" ? (
+            //   <Apartment
+            //     nextPage={nextPage}
+            //     prevPage={prevPage}
+            //     showMap={false}
+            //     parent={state}
+            //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
+            //     emit={handleEmit}
+            //   />
+            // )
+
+            // : state.basicInfo.listingKind.value?.id === "townhouse" ? (
+            //   <Townhouse
+            //     nextPage={nextPage}
+            //     prevPage={prevPage}
+            //     showMap={false}
+            //     parent={state}
+            //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
+            //     emit={handleEmit}
+            //   />
+            // )
+
+            // : state.basicInfo.listingKind.value?.id === "condo" ? (
+            //   <Condo
+            //     nextPage={nextPage}
+            //     prevPage={prevPage}
+            //     showMap={false}
+            //     parent={state}
+            //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
+            //     emit={handleEmit}
+            //   />
+            // )
+
+            // : state.basicInfo.listingKind.value?.id === "land" ? (
+            //   <Land
+            //     nextPage={nextPage}
+            //     prevPage={prevPage}
+            //     showMap={false}
+            //     parent={state}
+            //     forSaleOrRentChoice={state.basicInfo.forSaleOrRent}
+            //     emit={handleEmit}
+            //   />
+            // )
+
+            <div>
+              ERROR..
+              <PageBtns
+                deleteListing={deleteListing}
+                prevPage={prevPage}
+                nextPage={nextPage}
+                toPageNumber={toPageNumber}
+              />
+            </div>
+          )}
+
+          <Footer />
+        </div>
+      );
+
+    case 6:
+      return (
+        <div className={styles.container}>
+          <UploadsEditForm
+            parent={state}
+            listingId={params.listingId!}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            toPageNumber={toPageNumber}
+            deleteListing={deleteListing}
+            pageNumbers={pageNumbers}
+            currentPage={state.page}
+            emit={handleEmit}
+          />
           <Footer />
         </div>
       );
@@ -474,19 +466,17 @@ export default function EditListingPage() {
     case 7:
       return (
         <div className={styles.container}>
-          <form className={styles.form}>
-            <Review
-              editListing={true}
-              parent={state}
-              prevPage={prevPage}
-              toPageNumber={toPageNumber}
-              deleteListing={deleteListing}
-              pageNumbers={pageNumbers}
-              currentPage={state.page}
-              emit={handleEmit}
-              submit={handleSubmit}
-            />
-          </form>
+          <Review
+            editListing={true}
+            parent={state}
+            prevPage={prevPage}
+            toPageNumber={toPageNumber}
+            deleteListing={deleteListing}
+            pageNumbers={pageNumbers}
+            currentPage={state.page}
+            emit={handleEmit}
+            submit={handleSubmit}
+          />
           <PageBtns
             deleteListing={deleteListing}
             prevPage={prevPage}

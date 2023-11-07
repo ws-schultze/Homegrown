@@ -36,7 +36,9 @@ export default function Root({
         <MobileNavbar />
       )}
 
-      <main className={styles.main}>{children ?? <Outlet />}</main>
+      <main id="main-container" className={styles.main}>
+        {children ?? <Outlet />}
+      </main>
 
       <ToastContainer
         position="top-right"

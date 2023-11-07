@@ -90,7 +90,6 @@ export default function CreateListingPage(): JSX.Element {
   }, [isAuthenticated, userId]);
 
   useEffect(() => {
-    console.log("Form ref changed: ", state.page);
     window.scrollTo(0, 0);
   }, [state.page]);
 
@@ -203,27 +202,30 @@ export default function CreateListingPage(): JSX.Element {
   }
 
   function nextPage() {
-    const { page } = state;
-    setState((s) => ({
-      ...s,
-      page: page + 1,
-    }));
+    setTimeout(() => {
+      setState((s) => ({
+        ...s,
+        page: state.page + 1,
+      }));
+    }, 300);
   }
 
   function prevPage() {
-    const { page } = state;
-    setState((s) => ({
-      ...s,
-      page: page - 1,
-    }));
+    setTimeout(() => {
+      setState((s) => ({
+        ...s,
+        page: state.page - 1,
+      }));
+    }, 300);
   }
 
   function toPageNumber(number: number) {
-    console.log("to page number clicked");
-    setState((s) => ({
-      ...s,
-      page: number,
-    }));
+    setTimeout(() => {
+      setState((s) => ({
+        ...s,
+        page: number,
+      }));
+    }, 300);
   }
 
   function deleteListing() {
@@ -272,15 +274,6 @@ export default function CreateListingPage(): JSX.Element {
             deleteListing={deleteListing}
             emit={handleEmit}
           />
-          {state.userAcknowledged === true ? (
-            <PageBtns
-              deleteListing={deleteListing}
-              nextPage={nextPage}
-              toPageNumber={toPageNumber}
-              pageNumbers={state.savedPages}
-              currentPage={state.page}
-            />
-          ) : null}
           <Footer />
         </div>
       );
@@ -305,100 +298,92 @@ export default function CreateListingPage(): JSX.Element {
 
     case 3:
       return (
-        <>
-          <div className={styles.container}>
-            <form ref={formRef} className={styles.form}>
-              <ListingAddressForm
-                parent={state}
-                prevPage={prevPage}
-                nextPage={nextPage}
-                toPageNumber={toPageNumber}
-                pageNumbers={state.savedPages}
-                currentPage={state.page}
-                showMap={true}
-                deleteListing={deleteListing}
-                emit={handleEmit}
-              />
-            </form>
-          </div>
+        <div className={styles.container}>
+          <ListingAddressForm
+            parent={state}
+            prevPage={prevPage}
+            nextPage={nextPage}
+            toPageNumber={toPageNumber}
+            pageNumbers={state.savedPages}
+            currentPage={state.page}
+            showMap={true}
+            deleteListing={deleteListing}
+            emit={handleEmit}
+          />
           <Footer />
-        </>
+        </div>
       );
 
     case 4:
       return (
-        <>
-          <div className={styles.container}>
-            <form ref={formRef} className={styles.form}>
-              {state.basicInfo.forSaleBy !== undefined ? (
-                <>
-                  {state.basicInfo.forSaleBy.value?.id === "agent" ? (
-                    <AgentForm
-                      parent={state}
-                      nextPage={nextPage}
-                      prevPage={prevPage}
-                      toPageNumber={toPageNumber}
-                      pageNumbers={state.savedPages}
-                      currentPage={state.page}
-                      deleteListing={deleteListing}
-                      emit={handleEmit}
-                    />
-                  ) : null}
-                  {state.basicInfo.forSaleBy.value?.id === "owner" ? (
-                    <OwnerForm
-                      parent={state}
-                      nextPage={nextPage}
-                      prevPage={prevPage}
-                      toPageNumber={toPageNumber}
-                      pageNumbers={state.savedPages}
-                      currentPage={state.page}
-                      deleteListing={deleteListing}
-                      emit={handleEmit}
-                    />
-                  ) : null}
-                </>
-              ) : state.basicInfo.forRentBy !== undefined ? (
-                <>
-                  {state.basicInfo.forRentBy.value?.id === "company" ? (
-                    <CompanyForm
-                      parent={state}
-                      nextPage={nextPage}
-                      prevPage={prevPage}
-                      toPageNumber={toPageNumber}
-                      pageNumbers={state.savedPages}
-                      currentPage={state.page}
-                      deleteListing={deleteListing}
-                      emit={handleEmit}
-                    />
-                  ) : state.basicInfo.forRentBy.value?.id ===
-                    "private-owner" ? (
-                    <PrivateOwnerForm
-                      parent={state}
-                      nextPage={nextPage}
-                      prevPage={prevPage}
-                      toPageNumber={toPageNumber}
-                      pageNumbers={state.savedPages}
-                      currentPage={state.page}
-                      deleteListing={deleteListing}
-                      emit={handleEmit}
-                    />
-                  ) : null}
-                </>
-              ) : (
-                <div>
-                  ERROR..
-                  <PageBtns
-                    deleteListing={deleteListing}
-                    prevPage={prevPage}
-                    nextPage={nextPage}
-                    toPageNumber={toPageNumber}
-                  />
-                </div>
-              )}
-            </form>
-          </div>
+        <div className={styles.container}>
+          {state.basicInfo.forSaleBy !== undefined ? (
+            <>
+              {state.basicInfo.forSaleBy.value?.id === "agent" ? (
+                <AgentForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  toPageNumber={toPageNumber}
+                  pageNumbers={state.savedPages}
+                  currentPage={state.page}
+                  deleteListing={deleteListing}
+                  emit={handleEmit}
+                />
+              ) : null}
+              {state.basicInfo.forSaleBy.value?.id === "owner" ? (
+                <OwnerForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  toPageNumber={toPageNumber}
+                  pageNumbers={state.savedPages}
+                  currentPage={state.page}
+                  deleteListing={deleteListing}
+                  emit={handleEmit}
+                />
+              ) : null}
+            </>
+          ) : state.basicInfo.forRentBy !== undefined ? (
+            <>
+              {state.basicInfo.forRentBy.value?.id === "company" ? (
+                <CompanyForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  toPageNumber={toPageNumber}
+                  pageNumbers={state.savedPages}
+                  currentPage={state.page}
+                  deleteListing={deleteListing}
+                  emit={handleEmit}
+                />
+              ) : state.basicInfo.forRentBy.value?.id === "private-owner" ? (
+                <PrivateOwnerForm
+                  parent={state}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                  toPageNumber={toPageNumber}
+                  pageNumbers={state.savedPages}
+                  currentPage={state.page}
+                  deleteListing={deleteListing}
+                  emit={handleEmit}
+                />
+              ) : null}
+            </>
+          ) : (
+            <div>
+              ERROR..
+              <PageBtns
+                deleteListing={deleteListing}
+                prevPage={prevPage}
+                nextPage={nextPage}
+                toPageNumber={toPageNumber}
+              />
+            </div>
+          )}
+
           <Footer />
-        </>
+        </div>
       );
 
     case 5:

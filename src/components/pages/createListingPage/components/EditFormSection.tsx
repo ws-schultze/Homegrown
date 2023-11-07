@@ -1,6 +1,5 @@
 import { TypeBool, Str, VerifyActionName } from "../../../../types/index";
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
-import { Notice } from "./styledComponents";
 import styles from "../styles.module.scss";
 
 interface Props<T> {
@@ -53,15 +52,12 @@ export default function EditFormSection<T>({
   }
 
   return (
-    <>
-      <Notice>
-        <BellSVG />
-        Enable editing to make changes.
-      </Notice>
-      {/* <p>Enable editing to make changes.</p> */}
+    <div className={styles.notice}>
+      <BellSVG />
+      Enable editing to make changes.
       <button type="button" className={styles.btn} onClick={handleClick}>
         Enable Editing
       </button>
-    </>
+    </div>
   );
 }

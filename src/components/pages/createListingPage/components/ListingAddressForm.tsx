@@ -196,7 +196,7 @@ function ListingAddressForm({
   // **You can also include a visible label as long as the word address is not in it.**
 
   return (
-    <>
+    <form>
       {state.saved === true ? (
         <section>
           <EditFormSection parent={state} emit={handleVerify} />
@@ -312,7 +312,7 @@ function ListingAddressForm({
           currentPage={currentPage}
         />
       )}
-    </>
+    </form>
   );
 }
 

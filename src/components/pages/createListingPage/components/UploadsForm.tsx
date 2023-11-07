@@ -17,7 +17,6 @@ import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
 import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import makeFileNameForUpload from "../../utils/makeFileNameForUpload";
-import { Header } from "./styledComponents";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -205,7 +204,7 @@ export default function UploadsForm({
   // }
 
   return (
-    <>
+    <form>
       {state.saved === true ? (
         <section>
           <EditFormSection parent={state} emit={handleVerify} />
@@ -300,6 +299,6 @@ export default function UploadsForm({
           currentPage={currentPage}
         />
       )}
-    </>
+    </form>
   );
 }

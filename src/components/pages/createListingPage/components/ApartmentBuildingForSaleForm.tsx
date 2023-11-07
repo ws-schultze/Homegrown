@@ -25,7 +25,6 @@ import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
-import { Header } from "./styledComponents";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -143,15 +142,15 @@ export default function ApartmentBuildingForSaleForm({
     }
   }
   return (
-    <>
+    <form>
       {state.saved === true ? (
-        <div className={styles.section}>
+        <section>
           <EditFormSection<typeof state> parent={state} emit={handleVerify} />
-        </div>
+        </section>
       ) : null}
 
-      <div className={styles.section}>
-        <Header>Apartment Building Features</Header>
+      <section>
+        <header>Apartment Building Features</header>
 
         <div className={styles.flex_row}>
           <InputStr<typeof state>
@@ -292,7 +291,7 @@ export default function ApartmentBuildingForSaleForm({
         />
 
         {/* End features */}
-      </div>
+      </section>
 
       {/* Save */}
       {state.saved === false && state.beingVerified === false ? (
@@ -327,6 +326,6 @@ export default function ApartmentBuildingForSaleForm({
           currentPage={currentPage}
         />
       )}
-    </>
+    </form>
   );
 }

@@ -544,7 +544,6 @@ export default function BasicInfoForm({
   return (
     <>
       <form>
-        {/* Edit */}
         {state.saved === true ? (
           <section>
             <EditFormSection<typeof state> parent={state} emit={handleVerify} />

@@ -26,7 +26,6 @@ import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
-import { Header } from "./styledComponents";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -175,7 +174,7 @@ export default function SingleFamilyHomeForm({
   }
 
   return (
-    <>
+    <form tabIndex={0}>
       {state.saved === true ? (
         <section>
           <EditFormSection parent={state} emit={handleVerify} />
@@ -426,6 +425,6 @@ export default function SingleFamilyHomeForm({
           currentPage={currentPage}
         />
       )}
-    </>
+    </form>
   );
 }

@@ -7,7 +7,6 @@ import {
 } from "../../../../types/index";
 import setAddressValidationApiResponseToState from "./utils/address/setAddressValidationApiResponseToState";
 import { ReactComponent as AlertSVG } from "../../../../assets/svg/circle-exclamation-solid.svg";
-import { Notice } from "./styledComponents";
 import styles from "../styles.module.scss";
 
 interface Props<T> {
@@ -98,10 +97,10 @@ export default function VerifySection<T extends Verify>({
 
   return (
     <div className={styles.verify_container}>
-      <Notice>
+      <div className={styles.notice}>
         <AlertSVG />
         Does everything look correct?
-      </Notice>
+      </div>
 
       {children ? (
         <div className={styles.info_to_verify}>

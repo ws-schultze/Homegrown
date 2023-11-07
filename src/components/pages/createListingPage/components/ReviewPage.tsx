@@ -3,7 +3,6 @@ import { ListingData } from "../../../../types/index";
 import PageBtns from "./PageBtns";
 
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
-import { Notice } from "./styledComponents";
 
 import styles from "../styles.module.scss";
 import { useNavigate } from "react-router";
@@ -43,7 +42,7 @@ export default function ReviewPage({
   }
 
   return (
-    <>
+    <form>
       <section>
         <div className={styles.notice}>
           <BellSVG />
@@ -100,9 +99,9 @@ export default function ReviewPage({
         </div>
       </section>
 
-      <div className={styles.section}>
+      <>
         {editListing === true ? (
-          <div className={styles.two_btn_row}>
+          <div className={styles.review_bottom_btns}>
             <button type="button" className={styles.btn} onClick={submit}>
               Submit Update
             </button>
@@ -131,7 +130,7 @@ export default function ReviewPage({
             </button>
           </div>
         )}
-      </div>
-    </>
+      </>
+    </form>
   );
 }

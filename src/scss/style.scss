@@ -1,3 +1,5 @@
+@use "./fwd" as fwd;
+
 :root {
   --max-width-mobile: 480px;
   --max-width-content: 1200px;

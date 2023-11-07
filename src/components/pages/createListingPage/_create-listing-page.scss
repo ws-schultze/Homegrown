@@ -1,10 +1,11 @@
+@use "../../../scss/breakpoints" as bp;
+
 .container {
   display: flex;
   flex-direction: column;
-  // gap: 50px;
   justify-content: center;
+  flex-grow: 1;
   align-items: center;
-  // margin: auto;
   color: var(--color-text);
 
   small {
@@ -16,8 +17,9 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     gap: 10px;
-    padding: 50px 0 50px 0;
+    padding: 10px 0 10px 0;
     align-items: center;
     width: 340px;
     height: fit-content;
@@ -61,29 +63,12 @@
   }
 }
 
-.pagination {
-  width: 340px;
-  /* background-color: aliceblue; */
-  height: 64px;
-  display: flex;
-  gap: 5px;
-  justify-content: center;
-  align-items: center;
-  /* border-top: var(--border); */
-  button {
-    height: 40px;
-    width: 40px;
-  }
-}
-
-.btn {
+@mixin btn {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-grow: 1;
   font-size: 16px;
-  // height: 40px;
-  // width: 40px;
   background: var(--color-bg-primary);
   color: var(--color-text);
   border: var(--border);
@@ -97,8 +82,16 @@
   &:hover {
     color: var(--color-primary);
     fill: var(--color-primary);
-
     border-color: var(--color-primary);
+  }
+  @include bp.sm-screen-breakpoint {
+    &:hover {
+      color: var(--color--text);
+      border: var(--border);
+      svg {
+        fill: var(--color-text);
+      }
+    }
   }
   &.active {
     color: var(--color-btn-solid__text);
@@ -108,6 +101,45 @@
     }
   }
 }
+
+.btn {
+  @include btn;
+}
+
+.page_btn {
+  flex-grow: unset;
+}
+
+.review_bottom_btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  button {
+    @include btn;
+    width: 200px;
+  }
+}
+
+.review_row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  height: 4rem;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 1rem;
+  width: 100%;
+
+  button {
+    width: 6rem;
+    height: 2.5rem;
+  }
+}
+
 .notice {
   font-size: 16px;
   background: var(--color-bg-secondary);
@@ -137,18 +169,6 @@
   width: 100%;
 }
 
-.submit-btns {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  button {
-    height: 50px;
-    width: 100%;
-    font-size: 16px;
-  }
-}
-
 .two_btn_row {
   display: flex;
   gap: 20px;
@@ -169,22 +189,6 @@
   gap: 20px;
   width: 100%;
   /* justify-content: space-between; */
-}
-
-.map_container {
-  border: var(--border);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-}
-
-.input_file_wrap {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  text-align: center;
-  display: flex;
-  margin-top: 10px;
-  /* box-shadow: var(--box-shadow); */
 }
 
 .image_preview_wrap {
@@ -243,6 +247,7 @@
   max-width: 100%;
   text-align: center;
   display: flex;
+  margin-top: 10px;
 
   label {
     height: 12rem;
@@ -304,318 +309,31 @@
   width: 100%;
 }
 
-.listing-form__section header,
-.listing-form__section__verification header {
+.pagination {
+  width: 340px;
+  height: 64px;
   display: flex;
-  font-size: 24px;
-  gap: 10px;
-  color: var(--color-primary);
-  width: 100%;
-  align-items: center;
-  border-radius: 5px;
-}
-
-.listing-form__section p {
-  margin: 0;
-  color: var(--color-text);
-  border-radius: var(--border-radius);
-  border-left: 0.3rem solid var(--color-border);
-  padding: 0.5rem 0.5rem;
-  background: var(--color-bg-primary);
-}
-
-.listing-form__section {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 1rem 0.5rem;
-  border-radius: var(--border-radius);
-}
-
-.listing-form__sub-section {
-  border: 1px solid var(--color-border);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 1rem 0.5rem;
-  border-radius: var(--border-radius);
-}
-
-.listing-form__section-complete,
-.listing-form__section-end__savable {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 1.5rem;
-  margin-top: 1rem;
-}
-
-.listing-form__section__verification {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding-top: 1rem;
-  margin-top: 1rem;
-}
-
-.listing-form__section__verification p {
-  display: flex;
+  gap: 5px;
   justify-content: center;
-  align-content: flex-end;
   align-items: center;
-  font-size: 1.2rem;
-  gap: 1rem;
-  height: 2rem;
-  color: var(--color-warning);
-  padding: 0;
-  margin: 0;
-}
-
-/* .listing-form__section__verification p svg {
-  height: 100%;
-  fill: var(--color-warning);
-} */
-
-.listing-form__section-complete__notice {
-  display: flex;
-  justify-content: center;
-  height: 2rem;
-  margin: unset;
-  align-content: flex-end;
-  align-items: center;
-  font-size: 1.3rem;
-  gap: 1rem;
-  height: 3rem;
-  color: var(--color-warning);
-  fill: var(--color-warning);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  background: var(--color-bg-tertiary);
-}
-
-.listing-form__section-complete svg {
-  height: 1.2rem;
-}
-
-.listing-address {
-  min-height: 1067px;
-}
-
-.listing-form label {
-  display: flex;
-  /* gap: 0.5rem; */
-  color: var(--color-primary);
-  /* border-radius: var(--border-radius); */
-  justify-content: space-between;
-}
-
-.listing-form__heating-options,
-.listing-form__cooling-dropdown {
-  box-shadow: var(--box-shadow);
-  border-radius: var(--border-radius);
-}
-
-.listing-form__input-wrap {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-}
-
-.listing-form__input.x-small {
-  outline-color: var(--color-outline);
-  width: 6rem;
-}
-
-.listing-form__input.small,
-.listing-form__input.sm {
-  outline-color: var(--color-outline);
-  width: 10rem;
-}
-
-.listing-form__section__input.small,
-.listing-form__section__input.sm {
-  outline-color: var(--color-outline);
-  width: 9rem;
-}
-
-.listing-form__street-address {
-  position: relative;
-  margin-top: 1rem;
-}
-
-/*
-   This is a hack to still have a label on an address input while making chrome respect autocomplete="off"
-*/
-.listing-form__street-address::before {
-  content: "Street address";
-  position: absolute;
-  bottom: 100%;
-  color: var(--color-text);
-  height: 1rem;
-  padding-bottom: 0.2rem;
-}
-
-.input-name-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.listing-form__input.invalid:focus {
-  border-bottom: 1px solid yellow;
-}
-
-.listing-form__section > header > svg {
-  height: 1.5rem;
-  fill: var(--color-warning);
-}
-
-.formLayer1Div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.formPriceDiv {
-  display: flex;
-  align-items: center;
-}
-
-.formPriceText {
-  margin-left: 0rem;
-  font-weight: 300;
-  color: var(--color-text);
-}
-
-.createListing {
-  background-color: var(--color-primary);
-  border-radius: var(--border-radius);
-  padding: 0.25rem 1rem;
-  box-shadow: rgba(0, 0, 0, 0.2);
-  margin-top: 1rem;
-  font-weight: 600;
-  max-width: 500px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 18rem;
-  margin: 1rem auto;
-}
-
-.label {
-  font-size: 1rem;
-  color: var(--color-text);
-}
-
-.listing-form__btns-row,
-.listing-form__section-end__btns-row {
-  display: flex;
-  /* flex-direction: row; */
-  /* flex-wrap: wrap; */
-  gap: 0.5rem;
-  /* justify-content: center; */
-  /* align-items: flex-end; */
-  /* justify-content: space-around; */
-}
-
-.listing-form__section-end__btns-row {
-  padding-top: 1.5rem;
-  margin-top: 1rem;
-  border-top: 1px solid var(--color-border);
-}
-
-.listing-form__price-wrap {
-  display: flex;
-  flex-direction: column;
-  width: 21rem;
-  margin: auto;
-}
-
-.listing-form__address-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.listing-form__address-validation-wrap {
-  color: var(--color-btn-text);
-  background: var(--color-error);
-  padding: 0.9rem;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--color-border);
-  /* font-weight: 600; */
-}
-
-.valid_svg {
-  height: 2rem;
-  fill: var(--color-primary);
-  margin: 0 1rem;
-  position: absolute;
-  right: 5px;
-  top: 5px;
-}
-
-.page-number-btns {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-
   button {
-    width: 40px;
     height: 40px;
+    width: 40px;
   }
 }
 
-#drag-file-element {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--border-radius);
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  background-attachment: blue;
-}
-
-.review_row {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--color-border);
-  height: 4rem;
-  align-items: center;
-  font-size: 1.2rem;
-  gap: 1rem;
-  width: 100%;
-
-  button {
-    width: 6rem;
-    height: 2.5rem;
-  }
-}
-
-.listing-form__review-btn {
-  width: 6rem;
-  height: 2.5rem;
-  border-radius: var(--border-radius);
-  background: var(--color-bg-primary);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  /* box-shadow: var(--box-shadow); */
-}
-
-.listing-form__review-btn:hover {
-  background: var(--color-primary);
-  color: black;
-}
-
-.listing-form__delete-btn-wrap {
-  display: flex;
-  justify-content: center;
-  margin-top: 6rem;
-}
+// .listing-form__street-address {
+//   position: relative;
+//   margin-top: 1rem;
+// }
+// /*
+//    This is a hack to still have a label on an address input while making chrome respect autocomplete="off"
+// */
+// .listing-form__street-address::before {
+//   content: "Street address";
+//   position: absolute;
+//   bottom: 100%;
+//   color: var(--color-text);
+//   height: 1rem;
+//   padding-bottom: 0.2rem;
+// }

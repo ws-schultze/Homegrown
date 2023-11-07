@@ -16,7 +16,6 @@ import VerifySection from "./VerifySection";
 import SaveSection from "./SaveSection";
 import PageBtns from "./PageBtns";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
-import { Header } from "./styledComponents";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import styles from "../styles.module.scss";
 
@@ -41,7 +40,7 @@ export default function AgentForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<TypeAgent>(initAgent);
+  const [state, setState] = useState<TypeAgent>(parent.agent!);
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
@@ -134,15 +133,15 @@ export default function AgentForm({
   }
 
   return (
-    <>
+    <form>
       {state.saved === true ? (
-        <div className={styles.section}>
+        <section>
           <EditFormSection parent={state} emit={handleVerify} />
-        </div>
+        </section>
       ) : null}
 
-      <div className={styles.section}>
-        <Header>Agent Information</Header>
+      <section>
+        <header>Agent Information</header>
         <InputStr<typeof state>
           size="lg"
           fieldName="firstName"
@@ -261,7 +260,7 @@ export default function AgentForm({
             emit={handleInputStr}
           />
         </Wrapper>
-      </div>
+      </section>
 
       {/* Clear/Save */}
       {state.saved === false && state.beingVerified === false ? (
@@ -321,6 +320,6 @@ export default function AgentForm({
           currentPage={currentPage}
         />
       )}
-    </>
+    </form>
   );
 }

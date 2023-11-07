@@ -434,8 +434,10 @@ function InputStrInner<T>(
   /**
    * Emit state to parent
    */
-  function handleBlur(): void {
-    console.log("state: ", state);
+  function handleBlur(e: React.FocusEvent): void {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("handling blur");
     emit(state, fieldName);
 
     // const s: ListingData = {
@@ -457,7 +459,9 @@ function InputStrInner<T>(
     <div
       className={`${styles.container} ${styles[size]} `}
       style={{
-        marginRight: `${fieldName === "unitNumber" ? "auto" : ""}`,
+        marginRight: `${
+          fieldName === "unitNumber" || fieldName === "middleName" ? "auto" : ""
+        }`,
       }}
     >
       {formatType !== "description" ? (
