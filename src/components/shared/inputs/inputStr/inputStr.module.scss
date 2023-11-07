@@ -16,11 +16,11 @@
   }
 
   &.md {
-    width: 10.75rem;
+    width: 160px;
   }
 
   &.sm {
-    width: 7rem;
+    width: 100px;
   }
 
   i {
@@ -40,6 +40,9 @@
     border-bottom-style: none;
     border-bottom-width: medium;
     border-bottom: 3px solid var(--color-border);
+    border-radius: 0;
+    padding: 0;
+
     outline: none;
     color: var(--color-text);
     &:focus::placeholder {

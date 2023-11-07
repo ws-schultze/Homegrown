@@ -38,7 +38,7 @@ import ReviewForm from "./components/ReviewPage";
 import makeFileNameForUpload from "../utils/makeFileNameForUpload";
 import Footer from "../../shared/footer/Footer";
 
-import styles from "./create-listing-page.module.scss";
+import styles from "./styles.module.scss";
 
 export default function CreateListingPage(): JSX.Element {
   const { userId, isAuthenticated, isLoading } = useUserContext();
@@ -262,46 +262,45 @@ export default function CreateListingPage(): JSX.Element {
   switch (state.page) {
     case 1:
       return (
-        <>
-          <div className={styles.container}>
-            {/* <header>
-              <p className="page__header">Create a Listing</p>
-            </header> */}
-            <form ref={formRef} className={styles.form}>
-              <UserAcknowledgementForm
-                parent={state}
-                nextPage={nextPage}
-                toPageNumber={toPageNumber}
-                pageNumbers={state.savedPages}
-                currentPage={state.page}
-                deleteListing={deleteListing}
-                emit={handleEmit}
-              />
-            </form>
-          </div>
+        <div className={styles.container}>
+          <UserAcknowledgementForm
+            parent={state}
+            nextPage={nextPage}
+            toPageNumber={toPageNumber}
+            pageNumbers={state.savedPages}
+            currentPage={state.page}
+            deleteListing={deleteListing}
+            emit={handleEmit}
+          />
+          {state.userAcknowledged === true ? (
+            <PageBtns
+              deleteListing={deleteListing}
+              nextPage={nextPage}
+              toPageNumber={toPageNumber}
+              pageNumbers={state.savedPages}
+              currentPage={state.page}
+            />
+          ) : null}
           <Footer />
-        </>
+        </div>
       );
 
     case 2:
       return (
-        <>
-          <div className={styles.container}>
-            <form ref={formRef} className={styles.form}>
-              <BasicInfoForm
-                parent={state}
-                prevPage={prevPage}
-                nextPage={nextPage}
-                toPageNumber={toPageNumber}
-                pageNumbers={state.savedPages}
-                currentPage={state.page}
-                deleteListing={deleteListing}
-                emit={handleEmit}
-              />
-            </form>
-          </div>
+        <div className={styles.container}>
+          <BasicInfoForm
+            parent={state}
+            prevPage={prevPage}
+            nextPage={nextPage}
+            toPageNumber={toPageNumber}
+            pageNumbers={state.savedPages}
+            currentPage={state.page}
+            deleteListing={deleteListing}
+            emit={handleEmit}
+          />
+
           <Footer />
-        </>
+        </div>
       );
 
     case 3:
@@ -559,6 +558,13 @@ export default function CreateListingPage(): JSX.Element {
               deleteListing={deleteListing}
               emit={handleEmit}
               submit={handleSubmit}
+            />
+            <PageBtns
+              deleteListing={deleteListing}
+              prevPage={prevPage}
+              toPageNumber={toPageNumber}
+              pageNumbers={state.savedPages}
+              currentPage={state.page}
             />
           </form>
         </div>

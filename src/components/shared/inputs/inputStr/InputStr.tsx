@@ -428,7 +428,7 @@ function InputStrInner<T>(
       readOnly: false,
     };
     setState(s);
-    emit(s, fieldName);
+    // emit(s, fieldName);
   }
 
   /**
@@ -436,6 +436,8 @@ function InputStrInner<T>(
    */
   function handleBlur(): void {
     console.log("state: ", state);
+    emit(state, fieldName);
+
     // const s: ListingData = {
     //   ...listingFormState,
     //   [fieldName]: state,
@@ -452,7 +454,12 @@ function InputStrInner<T>(
   }
 
   return (
-    <div className={`${styles.container} ${styles[size]}`}>
+    <div
+      className={`${styles.container} ${styles[size]} `}
+      style={{
+        marginRight: `${fieldName === "unitNumber" ? "auto" : ""}`,
+      }}
+    >
       {formatType !== "description" ? (
         <>
           <>
@@ -466,7 +473,7 @@ function InputStrInner<T>(
 
             <input
               placeholder={placeholder}
-              onKeyDown={handleKeyDown}
+              // onKeyDown={handleKeyDown}
               ref={(node) => {
                 localRef.current = node;
                 if (typeof ref === "function") {
@@ -514,7 +521,7 @@ function InputStrInner<T>(
           <textarea
             placeholder={placeholder}
             // className={state.errorMsg}
-            onKeyDown={handleKeyDown}
+            // onKeyDown={handleKeyDown}
             value={state.formatted}
             onChange={handleChange}
             onBlur={handleBlur}

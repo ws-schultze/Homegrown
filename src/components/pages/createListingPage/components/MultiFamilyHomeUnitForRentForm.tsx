@@ -30,7 +30,7 @@ import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
 import { Header } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;

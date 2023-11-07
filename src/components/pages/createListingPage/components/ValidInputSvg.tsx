@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactComponent as ThumbsUpIcon } from "../../../assets/svg/thumbsUp.svg";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   valid: boolean;

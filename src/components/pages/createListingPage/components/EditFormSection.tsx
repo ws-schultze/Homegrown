@@ -1,7 +1,7 @@
 import { TypeBool, Str, VerifyActionName } from "../../../../types/index";
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
 import { Notice } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props<T> {
   // /** Whether or not a field remains disabled in edit mode -- set to false by parent when user confirms a prompt */

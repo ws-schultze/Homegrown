@@ -33,6 +33,7 @@
   pointer-events: none;
   transition: 0.3s;
   overflow-y: auto;
+  z-index: 999;
 
   &.is-open {
     pointer-events: all;

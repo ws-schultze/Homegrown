@@ -10,7 +10,7 @@ import {
   ForSaleOrRent,
   ForSaleOrRentValue,
 } from "../../../../types/index";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 export type TypeTwoBtnRowState =
   | TypeBool

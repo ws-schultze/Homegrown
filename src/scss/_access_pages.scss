@@ -6,7 +6,8 @@
   gap: 50px;
   justify-content: center;
   align-items: center;
-  height: calc(100dvh - var(--height-navbar));
+  margin: auto;
+  // height: calc(100dvh - var(--height-navbar));
 
   form {
     position: relative;
@@ -44,5 +45,6 @@
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    margin-bottom: 20px;
   }
 }

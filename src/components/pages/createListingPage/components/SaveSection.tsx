@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import getAddressValidationApiResponse from "./utils/address/getAddressValidationApiResponse";
 
 import Spinner from "../../../shared/loaders/Spinner";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props<T> {
   parentInitialState: T;
@@ -124,15 +124,15 @@ export default function SaveSection<T extends Address | AddressOptional>({
 
   return (
     <>
-      <div className={styles.section}>
-        <p>
+      <section>
+        <header>
           <>{children}</>
-          Save to proceed
-        </p>
+          {/* Save to proceed */}
+        </header>
 
         <div className={styles.two_btn_row}>
           <button type="button" className={styles.btn} onClick={handleClear}>
-            Clear
+            Clear form
           </button>
 
           {loading ? (
@@ -141,11 +141,11 @@ export default function SaveSection<T extends Address | AddressOptional>({
             </div>
           ) : (
             <button type="button" className={styles.btn} onClick={handleSave}>
-              Save
+              Save and continue
             </button>
           )}
         </div>
-      </div>
+      </section>
     </>
   );
 }

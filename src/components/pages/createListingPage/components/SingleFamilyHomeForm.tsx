@@ -27,7 +27,7 @@ import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns";
 import { Header } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -177,13 +177,13 @@ export default function SingleFamilyHomeForm({
   return (
     <>
       {state.saved === true ? (
-        <div className={styles.section}>
+        <section>
           <EditFormSection parent={state} emit={handleVerify} />
-        </div>
+        </section>
       ) : null}
 
-      <div className={styles.section}>
-        <Header>House Features</Header>
+      <section>
+        <header>House Features</header>
         <div className={styles.flex_row}>
           <InputStr<typeof state>
             size="md"
@@ -393,7 +393,7 @@ export default function SingleFamilyHomeForm({
           parent={state.fencedYard}
           emit={handleTwoBtnRow}
         />
-      </div>
+      </section>
 
       {state.saved === false && state.beingVerified === false ? (
         <SaveSection<typeof state>

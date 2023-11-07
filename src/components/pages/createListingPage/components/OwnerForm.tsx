@@ -20,7 +20,7 @@ import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { Header } from "./styledComponents";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;

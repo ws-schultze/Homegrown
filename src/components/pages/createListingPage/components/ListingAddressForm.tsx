@@ -18,9 +18,8 @@ import PageBtns from "./PageBtns";
 import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 
-import { Header } from "./styledComponents";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   /**
@@ -199,13 +198,13 @@ function ListingAddressForm({
   return (
     <>
       {state.saved === true ? (
-        <div className={styles.section}>
+        <section>
           <EditFormSection parent={state} emit={handleVerify} />
-        </div>
+        </section>
       ) : null}
 
-      <div className={styles.section}>
-        <Header>Listing Address</Header>
+      <section>
+        <header>Listing Address</header>
         <Wrapper
           apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
           render={renderMap}
@@ -269,7 +268,7 @@ function ListingAddressForm({
             </div>
           ) : null}
         </Wrapper>
-      </div>
+      </section>
 
       {state.saved === false && state.beingVerified === false ? (
         <SaveSection<typeof state>

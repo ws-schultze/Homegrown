@@ -8,7 +8,7 @@ import {
 import setAddressValidationApiResponseToState from "./utils/address/setAddressValidationApiResponseToState";
 import { ReactComponent as AlertSVG } from "../../../../assets/svg/circle-exclamation-solid.svg";
 import { Notice } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props<T> {
   /** The name that shows in the toast for a successful save (e.g. Agent, Owner, Company, House etc..) */
@@ -97,39 +97,37 @@ export default function VerifySection<T extends Verify>({
   }
 
   return (
-    <>
-      <div className={styles.section}>
-        <Notice>
-          <AlertSVG />
-          Does everything look correct?
-        </Notice>
+    <div className={styles.verify_container}>
+      <Notice>
+        <AlertSVG />
+        Does everything look correct?
+      </Notice>
 
-        {children ? (
-          <div className={styles.info_to_verify}>
-            <>{children}</>
-          </div>
-        ) : null}
-
-        <div className={styles.two_btn_row}>
-          <button
-            type="button"
-            className={styles.btn}
-            onClick={() => handleValidate(false)}
-            disabled={parent.readOnly}
-          >
-            No
-          </button>
-
-          <button
-            type="button"
-            className={styles.btn}
-            onClick={() => handleValidate(true)}
-            disabled={parent.readOnly}
-          >
-            Yes
-          </button>
+      {children ? (
+        <div className={styles.info_to_verify}>
+          <>{children}</>
         </div>
+      ) : null}
+
+      <div className={styles.two_btn_row}>
+        <button
+          type="button"
+          className={styles.btn}
+          onClick={() => handleValidate(false)}
+          disabled={parent.readOnly}
+        >
+          No
+        </button>
+
+        <button
+          type="button"
+          className={styles.btn}
+          onClick={() => handleValidate(true)}
+          disabled={parent.readOnly}
+        >
+          Yes
+        </button>
       </div>
-    </>
+    </div>
   );
 }

@@ -48,8 +48,7 @@ import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import PageBtns from "./PageBtns";
 import InputStr from "../../../shared/inputs/inputStr/InputStr";
-import { Header } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -544,38 +543,37 @@ export default function BasicInfoForm({
 
   return (
     <>
-      {/* Edit */}
-      {state.saved === true ? (
-        <div className={styles.section}>
-          <EditFormSection<typeof state> parent={state} emit={handleVerify} />
-        </div>
-      ) : null}
-
-      <div className={styles.section}>
-        <Header>Basic Information</Header>
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="description"
-          placeholder="Listing Description"
-          formatType="description"
-          min={20}
-          max={120}
-          parent={state.description}
-          emit={handleInputStr}
-        />
-        <TwoBtnRow<typeof state>
-          leftBtnText="For Sale"
-          leftBtnValue={{ id: "for-sale", label: "For Sale" }}
-          rightBtnText="For Rent"
-          rightBtnValue={{ id: "for-rent", label: "For Rent" }}
-          fieldName="forSaleOrRent"
-          formLayer="1"
-          label="Sell/Rent"
-          parent={state.forSaleOrRent}
-          emit={handleTwoBtnRow}
-        />
-        {state.forSaleBy !== undefined ? (
-          <div>
+      <form>
+        {/* Edit */}
+        {state.saved === true ? (
+          <section>
+            <EditFormSection<typeof state> parent={state} emit={handleVerify} />
+          </section>
+        ) : null}
+        <section>
+          <header>Basic Information</header>
+          <InputStr<typeof state>
+            size="lg"
+            fieldName="description"
+            placeholder="Listing Description"
+            formatType="description"
+            min={20}
+            max={120}
+            parent={state.description}
+            emit={handleInputStr}
+          />
+          <TwoBtnRow<typeof state>
+            leftBtnText="For Sale"
+            leftBtnValue={{ id: "for-sale", label: "For Sale" }}
+            rightBtnText="For Rent"
+            rightBtnValue={{ id: "for-rent", label: "For Rent" }}
+            fieldName="forSaleOrRent"
+            formLayer="1"
+            label="Sell/Rent"
+            parent={state.forSaleOrRent}
+            emit={handleTwoBtnRow}
+          />
+          {state.forSaleBy !== undefined ? (
             <TwoBtnRow<typeof state>
               leftBtnText="Agent"
               leftBtnValue={{ id: "agent", label: "Agent" }}
@@ -587,108 +585,104 @@ export default function BasicInfoForm({
               parent={state.forSaleBy}
               emit={handleTwoBtnRow}
             />
-          </div>
-        ) : null}
-        {state.forRentBy !== undefined ? (
-          <TwoBtnRow<typeof state>
-            leftBtnText="Company"
-            leftBtnValue={{ id: "company", label: "Company" }}
-            rightBtnText="Private Owner"
-            rightBtnValue={{ id: "private-owner", label: "Private Owner" }}
-            fieldName="forRentBy"
-            formLayer="1"
-            label="Listed by"
-            parent={state.forRentBy}
-            emit={handleTwoBtnRow}
+          ) : null}
+          {state.forRentBy !== undefined ? (
+            <TwoBtnRow<typeof state>
+              leftBtnText="Company"
+              leftBtnValue={{ id: "company", label: "Company" }}
+              rightBtnText="Private Owner"
+              rightBtnValue={{ id: "private-owner", label: "Private Owner" }}
+              fieldName="forRentBy"
+              formLayer="1"
+              label="Listed by"
+              parent={state.forRentBy}
+              emit={handleTwoBtnRow}
+            />
+          ) : null}
+          {state.forSaleOrRent.value?.id === "for-sale" ? (
+            <Dropdown<ListingKindValue>
+              placeHolder={"What are you selling?"}
+              menuItems={listingKindValuesForSale}
+              isMulti={false}
+              isSearchable={false}
+              parent={[state.listingKind.value]}
+              disabled={state.listingKind.readOnly}
+              errorMsg={state.listingKind.errorMsg}
+              label={"Listing Kind"}
+              emit={handleListingKind}
+            />
+          ) : null}
+          {state.forSaleOrRent.value?.id === "for-rent" ? (
+            <Dropdown<ListingKindValue>
+              placeHolder={"What are you renting?"}
+              menuItems={listingKindValuesForRent}
+              isMulti={false}
+              isSearchable={false}
+              parent={[state.listingKind.value]}
+              errorMsg={state.listingKind.errorMsg}
+              label={"Listing Kind"}
+              disabled={state.listingKind.readOnly}
+              emit={handleListingKind}
+            />
+          ) : null}
+          <InputStr<typeof state>
+            size="lg"
+            fieldName="price"
+            placeholder={
+              state.forSaleOrRent &&
+              state.forSaleOrRent.value?.id === "for-sale"
+                ? "Price"
+                : state.forSaleOrRent &&
+                  state.forSaleOrRent.value?.id === "for-rent"
+                ? "Price/month"
+                : "Price"
+            }
+            groupSeparators={[","]}
+            prefix="$"
+            formatType="USD-no-decimal"
+            min={1}
+            parent={state.price}
+            emit={handleInputStr}
           />
-        ) : null}
-
-        {state.forSaleOrRent.value?.id === "for-sale" ? (
-          <Dropdown<ListingKindValue>
-            placeHolder={"What are you selling?"}
-            menuItems={listingKindValuesForSale}
-            isMulti={false}
-            isSearchable={false}
-            parent={[state.listingKind.value]}
-            disabled={state.listingKind.readOnly}
-            errorMsg={state.listingKind.errorMsg}
-            label={"Listing Kind"}
-            emit={handleListingKind}
+          <InputStr<typeof state>
+            size="lg"
+            fieldName="priceChange"
+            groupSeparators={[","]}
+            formatType="USD-no-decimal"
+            prefix="$"
+            min={1}
+            isPriceChange={true}
+            placeholder={
+              state.forSaleOrRent &&
+              state.forSaleOrRent.value?.id === "for-sale"
+                ? "New Price*"
+                : state.forSaleOrRent &&
+                  state.forSaleOrRent.value?.id === "for-rent"
+                ? "New Price/Month*"
+                : "New Price*"
+            }
+            originalPrice={state.price.number || 0}
+            parent={state.priceChange || initStrOpt}
+            emit={handleInputStr}
           />
-        ) : null}
-
-        {state.forSaleOrRent.value?.id === "for-rent" ? (
-          <Dropdown<ListingKindValue>
-            placeHolder={"What are you renting?"}
-            menuItems={listingKindValuesForRent}
-            isMulti={false}
-            isSearchable={false}
-            parent={[state.listingKind.value]}
-            errorMsg={state.listingKind.errorMsg}
-            label={"Listing Kind"}
-            disabled={state.listingKind.readOnly}
-            emit={handleListingKind}
-          />
-        ) : null}
-
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="price"
-          placeholder={
-            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
-              ? "Price"
-              : state.forSaleOrRent &&
-                state.forSaleOrRent.value?.id === "for-rent"
-              ? "Price/month"
-              : "Price"
-          }
-          groupSeparators={[","]}
-          prefix="$"
-          formatType="USD-no-decimal"
-          min={1}
-          parent={state.price}
-          emit={handleInputStr}
-        />
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="priceChange"
-          groupSeparators={[","]}
-          formatType="USD-no-decimal"
-          prefix="$"
-          min={1}
-          isPriceChange={true}
-          placeholder={
-            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
-              ? "New Price*"
-              : state.forSaleOrRent &&
-                state.forSaleOrRent.value?.id === "for-rent"
-              ? "New Price/Month*"
-              : "New Price*"
-          }
-          originalPrice={state.price.number || 0}
-          parent={state.priceChange || initStrOpt}
-          emit={handleInputStr}
-        />
-
-        {/* End Basic Info */}
-      </div>
-
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
-          needsAddressValidation={false}
-          parent={state}
-          parentInitialState={initBasicInfo}
-          emit={handleVerify}
-        />
-      ) : null}
-
-      {state.beingVerified === true ? (
-        <VerifySection<typeof state>
-          parentName="Basic Information"
-          parent={state}
-          emit={handleVerify}
-        />
-      ) : null}
+          {/* End Basic Info */}
+          {state.saved === false && state.beingVerified === false ? (
+            <SaveSection<typeof state>
+              needsAddressValidation={false}
+              parent={state}
+              parentInitialState={initBasicInfo}
+              emit={handleVerify}
+            />
+          ) : null}
+          {state.beingVerified === true ? (
+            <VerifySection<typeof state>
+              parentName="Basic Information"
+              parent={state}
+              emit={handleVerify}
+            />
+          ) : null}
+        </section>
+      </form>
 
       {state.saved === true ? (
         <PageBtns

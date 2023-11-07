@@ -4,8 +4,7 @@ import {
   AddressValidationApi_Response,
   ListingData,
 } from "../../../../types/index";
-import { Header } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -40,9 +39,9 @@ export default function UserAcknowledgementForm({
   }
 
   return (
-    <>
-      <div className={styles.section}>
-        <Header>Notice</Header>
+    <form>
+      <section>
+        <header>Notice</header>
         <p>All fields are required unless their label ends with *</p>
         <p>Any unsaved progress will be lost if you refresh the browser.</p>
         <p>Saved progress will be kept until the browser is closed.</p>
@@ -59,17 +58,7 @@ export default function UserAcknowledgementForm({
         >
           I understand
         </button>
-      </div>
-
-      {parent.userAcknowledged === true ? (
-        <PageBtns
-          deleteListing={deleteListing}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      ) : null}
-    </>
+      </section>
+    </form>
   );
 }

@@ -5,7 +5,7 @@ import PageBtns from "./PageBtns";
 import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.svg";
 import { Notice } from "./styledComponents";
 
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 import { useNavigate } from "react-router";
 
 interface Props {
@@ -44,14 +44,14 @@ export default function ReviewPage({
 
   return (
     <>
-      <div className={styles.section}>
-        <Notice>
+      <section>
+        <div className={styles.notice}>
           <BellSVG />
           Review any parts of this listing before submission, if you want to.
-        </Notice>
+        </div>
 
         {/* Page 1 -- User Acknowledgment */}
-        <div className={styles["review-row"]}>
+        <div className={styles.review_row}>
           Notice
           <button className="btn" type="button" onClick={() => goToPage(1)}>
             Review
@@ -59,7 +59,7 @@ export default function ReviewPage({
         </div>
 
         {/* Page 2 -- Basic Info */}
-        <div className={styles["review-row"]}>
+        <div className={styles.review_row}>
           Basics
           <button className="btn" type="button" onClick={() => goToPage(2)}>
             Review
@@ -67,58 +67,42 @@ export default function ReviewPage({
         </div>
 
         {/* Page 3 -- Listing Address */}
-        <div className={styles["review-row"]}>
+        <div className={styles.review_row}>
           Address
-          <button
-            className={styles.btn}
-            type="button"
-            onClick={() => goToPage(3)}
-          >
+          <button className={"btn"} type="button" onClick={() => goToPage(3)}>
             Review
           </button>
         </div>
 
         {/* Page 4 -- Lister */}
-        <div className={styles["review-row"]}>
+        <div className={styles.review_row}>
           {parent.basicInfo.forSaleBy?.value?.label ||
             parent.basicInfo.forRentBy?.value?.label}
-          <button
-            className={styles.btn}
-            type="button"
-            onClick={() => goToPage(4)}
-          >
+          <button className="btn" type="button" onClick={() => goToPage(4)}>
             Review
           </button>
         </div>
 
         {/* Page 5 -- Listing Kind */}
-        <div className={styles["review-row"]}>
+        <div className={styles.review_row}>
           {parent.basicInfo.listingKind.value?.label}
-          <button
-            className={styles.btn}
-            type="button"
-            onClick={() => goToPage(5)}
-          >
+          <button className="btn" type="button" onClick={() => goToPage(5)}>
             Review
           </button>
         </div>
 
         {/* Page 6 -- Images */}
-        <div className={styles["review-row"]}>
+        <div className={styles.review_row}>
           Images
-          <button
-            className={styles.btn}
-            type="button"
-            onClick={() => goToPage(6)}
-          >
+          <button className="btn" type="button" onClick={() => goToPage(6)}>
             Review
           </button>
         </div>
-      </div>
+      </section>
 
       <div className={styles.section}>
         {editListing === true ? (
-          <div className={styles["submit-btns"]}>
+          <div className={styles.two_btn_row}>
             <button type="button" className={styles.btn} onClick={submit}>
               Submit Update
             </button>
@@ -134,7 +118,7 @@ export default function ReviewPage({
             </button>
           </div>
         ) : (
-          <>
+          <div className={styles.two_btn_row}>
             <button type="button" className={styles.btn} onClick={submit}>
               Submit Listing
             </button>
@@ -145,17 +129,9 @@ export default function ReviewPage({
             >
               Delete Listing
             </button>
-          </>
+          </div>
         )}
       </div>
-
-      <PageBtns
-        deleteListing={deleteListing}
-        prevPage={prevPage}
-        toPageNumber={toPageNumber}
-        pageNumbers={pageNumbers}
-        currentPage={currentPage}
-      />
     </>
   );
 }

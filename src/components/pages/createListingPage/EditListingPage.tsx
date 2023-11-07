@@ -33,7 +33,7 @@ import ListingAddressForm from "./components/ListingAddressForm";
 import BasicInfoForm from "./components/BasicInfoForm";
 import UploadsEditForm from "./components/UploadsEditForm";
 import deleteImageFromFirestore from "../utils/deleteImageFromFirestore";
-import styles from "./create-listing-page.module.scss";
+import styles from "./styles.module.scss";
 import Footer from "../../shared/footer/Footer";
 
 export default function EditListingPage() {
@@ -183,17 +183,24 @@ export default function EditListingPage() {
     case 1:
       return (
         <div className={styles.container}>
-          <form className={styles.form}>
-            <UserAcknowledgementForm
-              parent={state}
+          <UserAcknowledgementForm
+            parent={state}
+            nextPage={nextPage}
+            toPageNumber={toPageNumber}
+            pageNumbers={state.savedPages}
+            currentPage={state.page}
+            deleteListing={deleteListing}
+            emit={handleEmit}
+          />
+          {state.userAcknowledged === true ? (
+            <PageBtns
+              deleteListing={deleteListing}
               nextPage={nextPage}
               toPageNumber={toPageNumber}
-              deleteListing={deleteListing}
               pageNumbers={state.savedPages}
               currentPage={state.page}
-              emit={handleEmit}
             />
-          </form>
+          ) : null}
           <Footer />
         </div>
       );
@@ -480,6 +487,13 @@ export default function EditListingPage() {
               submit={handleSubmit}
             />
           </form>
+          <PageBtns
+            deleteListing={deleteListing}
+            prevPage={prevPage}
+            toPageNumber={toPageNumber}
+            pageNumbers={state.savedPages}
+            currentPage={state.page}
+          />
           <Footer />
         </div>
       );

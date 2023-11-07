@@ -18,7 +18,7 @@ import EditFormSection from "./EditFormSection";
 import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import makeFileNameForUpload from "../../utils/makeFileNameForUpload";
 import { Header } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;
@@ -207,13 +207,13 @@ export default function UploadsForm({
   return (
     <>
       {state.saved === true ? (
-        <div className={styles.section}>
+        <section>
           <EditFormSection parent={state} emit={handleVerify} />
-        </div>
+        </section>
       ) : null}
 
-      <div className={styles.section}>
-        <Header>Images</Header>
+      <section>
+        <header>Images</header>
         <p>The first image will be the listing's cover.</p>
         {state.images.value.length > 0 && (
           <div className={styles.image_preview}>
@@ -263,7 +263,7 @@ export default function UploadsForm({
           </label>
         </div>
         <ErrorMsg errorMsg={state.images.errorMsg} />
-      </div>
+      </section>
 
       {state.saved === false && state.beingVerified === false ? (
         <SaveSection<typeof state>

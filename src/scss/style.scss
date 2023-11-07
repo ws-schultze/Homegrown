@@ -44,7 +44,7 @@
 .dark {
   --color-primary: var(--color-primary-dark);
 
-  --color-bg-primary: #121520;
+  --color-bg-primary: #000000;
   --color-bg-secondary: #35363a;
   --color-bg-tertiary: #122b31;
 
@@ -120,6 +120,15 @@
   border: 3px solid transparent;
   border-radius: 9px;
   background-clip: content-box;
+}
+
+// Prevent webkit from adding icons in search inputs
+// This project has its own icons for that
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
 }
 
 * {

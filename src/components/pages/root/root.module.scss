@@ -14,9 +14,13 @@
   overflow-x: hidden;
 
   main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     max-height: calc(100dvh - var(--height-navbar));
     margin-top: var(--height-navbar);
-    // overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   main.loading div {

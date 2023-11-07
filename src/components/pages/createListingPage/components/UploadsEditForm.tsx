@@ -30,7 +30,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../firebase.config";
 import { Header } from "./styledComponents";
-import styles from "../create-listing-page.module.scss";
+import styles from "../styles.module.scss";
 
 interface Props {
   parent: ListingData;
