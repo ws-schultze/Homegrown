@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Spinner from "../../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import {
   AddressValidationApi_Response,
   Image,
@@ -262,7 +262,7 @@ export default function UploadsEditForm({
       emit({
         ...parent,
         uploads: obj,
-        page: 7,
+        currentPage: 7,
         savedPages: [1, 2, 3, 4, 5, 6, 7],
       });
       // nextPage();
@@ -348,6 +348,7 @@ export default function UploadsEditForm({
           parent={state}
           parentInitialState={initUploads}
           emit={handleVerify}
+          deleteListing={deleteListing}
         />
       ) : null}
 

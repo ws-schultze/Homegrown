@@ -819,9 +819,6 @@ export const initUploads: T.Uploads = {
  * Contains only the required props.
  */
 export const initListingData: T.ListingData = {
-  page: 1,
-  savedPages: [],
-  userAcknowledged: false,
   address: initAddress,
   basicInfo: initBasicInfo,
   uploads: initUploads,

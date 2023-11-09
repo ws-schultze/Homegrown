@@ -1,5 +1,5 @@
 import React from "react";
-import * as T from "../../../../types/index";
+import * as T from "../../../types/index";
 import isEmail from "validator/lib/isEmail";
 
 /**

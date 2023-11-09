@@ -103,8 +103,6 @@ export default function setAutocompletePlaceValuesToState<
       throw new Error("Could not find lat/lng for this location...");
     }
 
-    console.log("_adminAreaLevel1 WTF: ", _adminAreaLevel1);
-
     // Define new state object
     const s: T = {
       ...state,
@@ -166,6 +164,8 @@ export default function setAutocompletePlaceValuesToState<
       address_components: place.address_components,
       beingVerified: false,
     };
+
+    console.log(s);
 
     return s;
 

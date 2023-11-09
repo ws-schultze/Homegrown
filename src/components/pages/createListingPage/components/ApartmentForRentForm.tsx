@@ -24,7 +24,7 @@ import TwoBtnRow, { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -48,7 +48,7 @@ export default function ApartmentForRentForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<Apartment>(initApartment);
+  const [state, setState] = useState<Apartment>(parent.apartment!);
 
   /**
    * Keeps inputs showing values in parent state on page change
@@ -156,7 +156,7 @@ export default function ApartmentForRentForm({
       emit({
         ...parent,
         apartment: obj,
-        page: 6,
+        currentPage: 6,
         savedPages: [1, 2, 3, 4, 5, 6],
       });
       // nextPage();
@@ -427,6 +427,7 @@ export default function ApartmentForRentForm({
           parent={state}
           parentInitialState={initApartment}
           emit={handleVerify}
+          deleteListing={deleteListing}
         />
       ) : null}
 

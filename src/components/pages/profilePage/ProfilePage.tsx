@@ -27,6 +27,7 @@ import EmailInput, { Email } from "../../shared/inputs/emailInput/EmailInput";
 import styles from "./profile.module.scss";
 import { ReactComponent as LockSVG } from "./assets/lockIcon.svg";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
+import { useAppSelector } from "../../../redux/hooks";
 
 export interface TypeProfile {
   username: Username;
@@ -61,6 +62,7 @@ export default function ProfilePage() {
   });
   const auth = getAuth();
   const navigate = useNavigate();
+  const createListingPageState = useAppSelector((s) => s.createListingPage);
 
   // Fetch the user's listings
   useEffect(() => {
@@ -328,12 +330,15 @@ export default function ProfilePage() {
               Reset password
             </button>
             {state.unfinishedListing === null ? (
-              <Link to="/create-listing" className={styles.btn}>
+              <Link to="/create-listing/1/notice" className={styles.btn}>
                 <MoneySVG />
                 <p>List a Property</p>
               </Link>
             ) : (
-              <Link to="/create-listing" className={styles.btn}>
+              <Link
+                to={`/create-listing/${createListingPageState.currentPageNumber}/${createListingPageState.currentPageName}`}
+                className={styles.btn}
+              >
                 <MoneySVG />
                 <p>Continue Listing</p>
               </Link>

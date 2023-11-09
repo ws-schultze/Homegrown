@@ -15,6 +15,10 @@ import getAddressValidationApiResponse from "./utils/address/getAddressValidatio
 
 import Spinner from "../../../shared/loaders/Spinner";
 import styles from "../styles.module.scss";
+import useDeleteNotYetSubmittedListing from "./hooks/useDeleteNotYetSubmittedListing";
+import useDeleteListingFromFirestore from "./hooks/useDeleteListingFromFirestore";
+import { useAppSelector } from "../../../../redux/hooks";
+import { useParams } from "react-router";
 
 interface Props<T> {
   parentInitialState: T;
@@ -38,6 +42,15 @@ export default function SaveSection<T extends Address | AddressOptional>({
 }: Props<T>): JSX.Element {
   const [loading, setLoading] = useState(false);
   let addressValidationApiResponse: AddressValidationApi_Response | undefined;
+
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const params = useParams();
+
+  const { deleteNotYetSubmittedListing } = useDeleteNotYetSubmittedListing();
+  const { deleteListingFromFirestore } = useDeleteListingFromFirestore(
+    pageState.listing.uploads.images,
+    params
+  );
 
   function handleClear() {
     emit("save", parentInitialState);
@@ -127,23 +140,33 @@ export default function SaveSection<T extends Address | AddressOptional>({
       <section>
         <header>
           <>{children}</>
-          {/* Save to proceed */}
         </header>
 
-        <div className={styles.two_btn_row}>
-          <button type="button" className={styles.btn} onClick={handleClear}>
-            Clear form
-          </button>
-
+        <div className={styles.save_section_btns}>
           {loading ? (
             <div className={styles.btn}>
-              <Spinner size="large" />
+              <Spinner size="small" />
             </div>
           ) : (
             <button type="button" className={styles.btn} onClick={handleSave}>
               Save and continue
             </button>
           )}
+          <button type="button" className={styles.btn} onClick={handleClear}>
+            Clear form
+          </button>
+
+          <button
+            type="button"
+            className={styles.btn}
+            onClick={
+              pageState.editListing === true
+                ? deleteListingFromFirestore
+                : deleteNotYetSubmittedListing
+            }
+          >
+            Delete Listing
+          </button>
         </div>
       </section>
     </>

@@ -51,7 +51,10 @@ export const appRouter = createBrowserRouter(
       </Route>
       <Route path="sign-in/" element={<SignInPage />} />
       <Route path="sign-up/" element={<SignUpPage />} />
-      <Route path="create-listing/" element={<CreateListingPage />} />
+      <Route
+        path="create-listing/:pageNumber/:pageName"
+        element={<CreateListingPage />}
+      />
       <Route path="edit-listing/:listingId/" element={<EditListingPage />} />
       <Route
         path="contact/:landlordId/:listingId/"

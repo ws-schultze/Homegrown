@@ -477,7 +477,9 @@ function InputStrInner<T>(
 
             <input
               placeholder={placeholder}
-              // onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDown}
+              // TODO: Deal with the focus breaking ref that safari can't handle
+              // ==== BREAKS FOCUS ON SAFARI =====
               ref={(node) => {
                 localRef.current = node;
                 if (typeof ref === "function") {
@@ -486,6 +488,7 @@ function InputStrInner<T>(
                   ref.current = node;
                 }
               }}
+              // =================================
               type={showInputText ? "text" : "password"}
               value={state.formatted}
               onChange={handleChange}
@@ -524,8 +527,7 @@ function InputStrInner<T>(
           </label>
           <textarea
             placeholder={placeholder}
-            // className={state.errorMsg}
-            // onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDown}
             value={state.formatted}
             onChange={handleChange}
             onBlur={handleBlur}

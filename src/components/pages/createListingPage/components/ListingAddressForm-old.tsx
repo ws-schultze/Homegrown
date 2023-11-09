@@ -1,77 +1,90 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
-  Str,
+  Address,
   AddressValidationApi_Response,
-  Company,
-  VerifyActionName,
+  Str,
   ListingData,
+  VerifyActionName,
 } from "../../../../types/index";
-import { initCompany } from "../../../../initialValues";
-import InputStr from "../../../shared/inputs/inputStr/InputStr";
+import { initAddress } from "../../../../initialValues";
 import { Wrapper } from "@googlemaps/react-wrapper";
-import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
+import AddressMap from "../../../shared/addressMap/AddressMap";
 import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
+import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import PageBtns from "./PageBtns-old";
+import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import styles from "../styles.module.scss";
 
 interface Props {
+  /**
+   * Shows a map with a marker for the given address.
+   */
   parent: ListingData;
-  prevPage: () => void;
+  showMap: boolean;
+  prevPage?: () => void;
   nextPage: () => void;
   deleteListing: () => void;
-  toPageNumber: (number: number) => void;
+  toPageNumber?: (number: number) => void;
   pageNumbers?: number[];
   currentPage?: number;
   emit: (obj: ListingData) => void;
 }
 
-export default function CompanyForm({
+function ListingAddressForm({
   parent,
-  nextPage,
+  showMap,
   prevPage,
+  nextPage,
   toPageNumber,
   deleteListing,
   pageNumbers,
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<Company>(parent.company!);
-  const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<AddressValidationApi_Response | null>(null);
+  const [state, setState] = useState<Address>(parent.address);
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
-  const streetAddressRef = useRef<HTMLInputElement | null>(null);
+  const [addressValidationApiResponse, setAddressValidationApiResponse] =
+    useState<AddressValidationApi_Response | null>(null);
+
+  // const streetAddressRef = useRef<HTMLInputElement | null>(null);
+  const streetAddressRef = React.createRef<HTMLInputElement>();
+  const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    document.body.focus();
-  }, [streetAddressRef.current]);
+    setState(parent.address);
+  }, [parent]);
 
   /**
-   * Keeps inputs showing values in parent state on page change
-   * Also catches error messages
+   * Scroll map into window center is state is validated by user
    */
   useEffect(() => {
-    if (parent.company) {
-      setState(parent.company);
-    } else {
-      throw new Error("Owner object not found in parent");
+    if (
+      mapRef.current &&
+      state.geolocation.value.lat > 0 &&
+      state.geolocation.value.lng > 0
+    ) {
+      mapRef.current.scrollIntoView({ behavior: "auto", block: "center" });
     }
-  }, [parent]);
+  }, [state.geolocation.value.lat, state.geolocation.value.lng]);
 
   /**
    * Generate the places autocompleteWidget, set it to state and add an event listener to it
    * https://developers.google.com/maps/documentation/javascript/reference/places-widget
    */
   function handleAutocompleteWidget() {
+    console.log("handling widget");
     if (streetAddressRef.current && streetAddressRef.current !== null) {
       const widget = makeAutocompleteWidget(streetAddressRef);
       setAutocompleteWidget(widget);
+    } else {
+      console.log("No street address ref found");
     }
 
     // Listen for click on widget item
@@ -85,6 +98,63 @@ export default function CompanyForm({
         );
         setState(s);
       });
+    }
+  }
+
+  // /**
+  //  * Set state for a given address field
+  //  * @param e React.ChangeEvent<HTMLInputElement>
+  //  * @param key keyof typeof state
+  //  */
+  // function handleAddress(e: React.ChangeEvent<HTMLInputElement>, key: keyof typeof state): void {
+  //   const field = state[key] as Str | TypeBool;
+  //   if (key === "streetAddress") {
+  //     handleAutocompleteWidget();
+  //   }
+  //   const s: typeof state = setAddressFieldToState(state, e.target.value, key, field.required);
+  //   setState(s);
+  // }
+
+  // function handleBlur(key: keyof typeof state): void {
+  //   const field = state[key] as Str | TypeBool;
+  //   if (field.required === true && field.valid === false && field.value === "") {
+  //     const field = setErrorMsg<typeof state>(state, key, "Required");
+  //     setState((s) => ({
+  //       ...s,
+  //       [key]: field,
+  //     }));
+  //   }
+  // }
+
+  function handleVerify(
+    actionName: VerifyActionName,
+    obj: Address,
+    addressValidationApiResponse?: AddressValidationApi_Response
+  ) {
+    if (addressValidationApiResponse) {
+      setAddressValidationApiResponse(addressValidationApiResponse);
+    }
+    if (actionName === "save" || actionName === "edit") {
+      emit({
+        ...parent,
+        address: obj,
+      });
+    } else if (actionName === "verify" && obj.saved === true) {
+      emit({
+        ...parent,
+        address: obj,
+        currentPage: 4,
+        savedPages: [1, 2, 3, 4],
+      });
+      // nextPage();
+    } else if (actionName === "verify" && obj.saved === false) {
+      emit({
+        ...parent,
+        address: obj,
+        savedPages: [1, 2, 3],
+      });
+    } else {
+      throw new Error("Whoops");
     }
   }
 
@@ -102,38 +172,28 @@ export default function CompanyForm({
     }
   }
 
-  function handleVerify(
-    actionName: VerifyActionName,
-    obj: Company,
-    addressValidationApiResponse?: AddressValidationApi_Response
-  ) {
-    if (addressValidationApiResponse) {
-      setAddressValidationApiResponse(addressValidationApiResponse);
-    }
+  // To keep map from re-rendering on each state update, memoize the props of the map.
+  // const mapZoom = useMemo(() => 17, []);
+  // const markerLabel = useMemo(() => state.formattedAddress.value, [state.formattedAddress.value]);
+  const mapCenter = useMemo(
+    () => ({
+      lat: state.geolocation.value.lat,
+      lng: state.geolocation.value.lng,
+    }),
+    [state.geolocation.value.lat, state.geolocation.value.lng]
+  );
 
-    if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        company: obj,
-      });
-    } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        company: obj,
-        currentPage: 5,
-        savedPages: [1, 2, 3, 4, 5],
-      });
-      // nextPage();
-    } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        company: obj,
-        savedPages: [1, 2, 3, 4],
-      });
-    } else {
-      throw new Error("Whoops");
-    }
-  }
+  // ** Note about street address label **
+  //--------------------------------------//
+
+  // Avoid the word "address" in id, name, or label text to avoid browser autofill from conflicting with Place Autocomplete. Star or comment bug https://crbug.com/587466 to request Chromium to honor   autoComplete="off" attribute.
+  // Hack! ---> to have a label on an address input with the word "address", just use the pseudo element ::before on the parent div, then chromium will respect autocomplete="off"
+  // In this case listing-form__street-address::before is the label for street address
+  // https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
+  // To Make sure that autocomplete="off" actually works on chrome, put a hidden label on the input
+  // and do NOT include the work address in it's text.
+  // Note that removing the hidden label will make chrome NOT respect autocomplete="off"
+  // **You can also include a visible label as long as the word address is not in it.**
 
   return (
     <form>
@@ -144,34 +204,7 @@ export default function CompanyForm({
       ) : null}
 
       <section>
-        <header>Company Information</header>
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="name"
-          placeholder="Company Name"
-          formatType="name"
-          parent={state.name}
-          emit={handleInputStr}
-        />
-        <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="phoneNumber"
-            placeholder="Phone Number"
-            groupSeparators={[")", "-"]}
-            formatType="phone-number"
-            parent={state.phoneNumber}
-            emit={handleInputStr}
-          />
-        </div>
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="email"
-          placeholder="Email"
-          formatType="email"
-          parent={state.email}
-          emit={handleInputStr}
-        />
+        <header>Listing Address</header>
         <Wrapper
           apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
           render={renderMap}
@@ -229,6 +262,11 @@ export default function CompanyForm({
             parent={state.country}
             emit={handleInputStr}
           />
+          {showMap === true ? (
+            <div ref={mapRef} className={styles.map_container}>
+              <AddressMap center={mapCenter} />
+            </div>
+          ) : null}
         </Wrapper>
       </section>
 
@@ -236,7 +274,7 @@ export default function CompanyForm({
         <SaveSection<typeof state>
           needsAddressValidation={true}
           parent={state}
-          parentInitialState={initCompany}
+          parentInitialState={initAddress}
           emit={handleVerify}
           deleteListing={deleteListing}
         />
@@ -245,18 +283,12 @@ export default function CompanyForm({
       {state.beingVerified === true &&
       addressValidationApiResponse?.result?.address.formattedAddress ? (
         <VerifySection
-          addressValidationApiResponse={addressValidationApiResponse}
-          parentName="Company"
+          parentName="Address"
           parent={state}
+          addressValidationApiResponse={addressValidationApiResponse}
           emit={handleVerify}
           children={
             <div>
-              {state.name.formatted}
-              <br />
-              {state.phoneNumber.formatted}
-              <br />
-              {state.email.formatted}
-              <br />
               {addressValidationApiResponse.result.address.formattedAddress}
             </div>
           }
@@ -284,3 +316,5 @@ export default function CompanyForm({
     </form>
   );
 }
+
+export default React.memo(ListingAddressForm);

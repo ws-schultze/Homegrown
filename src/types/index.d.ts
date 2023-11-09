@@ -26,7 +26,7 @@ export interface Verify {
   required: boolean;
 }
 
-export type VerifyActionName = "save" | "verify" | "edit";
+export type VerifyActionName = "save" | "verify" | "edit" | "blur";
 
 export interface TypeInputBase extends Verify {
   /** String with only numeric characters */
@@ -76,7 +76,9 @@ export interface Address extends Verify {
   unitNumber: Str;
   city: Str;
   zipCode: Str;
+  /** A county in the USA */
   adminAreaLevel2: Str;
+  /** A state in the USA */
   adminAreaLevel1: Str;
   country: Str;
   formattedAddress: Str;
@@ -765,9 +767,10 @@ export interface Uploads extends Verify {
 }
 
 export interface ListingData {
-  page: number;
-  savedPages: number[];
-  userAcknowledged: boolean;
+  // pages: number[];
+  // currentPage: number;
+  // savedPages: number[];
+  // userAcknowledged: boolean;
   address: Address;
   basicInfo: BasicInfo;
   agent?: TypeAgent;

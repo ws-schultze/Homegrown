@@ -30,11 +30,16 @@ import mapTypeMenuReducer, {
   initialMapTypeMenuState,
 } from "../components/shared/mapTypeMenu/mapTypeMenuSlice";
 
+import createListingPageReducer, {
+  initialCreateListingPageState,
+} from "../components/pages/createListingPage/createListingPageSlice";
+
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage";
 
 export const store = configureStore({
   reducer: {
     common: commonReducer,
+    createListingPage: createListingPageReducer,
     exploreListings: exploreListingsReducer,
     placeFilter: placeFilterReducer,
     forSaleOrRentFilter: forSaleOrRentReducer,
@@ -55,6 +60,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 export const initialRootState: RootState = {
   common: initialCommonState,
+  createListingPage: initialCreateListingPageState,
   exploreListings: initialExploreListingsState,
   placeFilter: initialPlaceFilterState,
   forSaleOrRentFilter: initialForSaleOrRentFilterState,

@@ -24,7 +24,7 @@ import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -48,7 +48,9 @@ export default function ApartmentBuildingForSaleForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<ApartmentBuilding>(initApartmentBuilding);
+  const [state, setState] = useState<ApartmentBuilding>(
+    parent.apartmentBuilding!
+  );
 
   /**
    * Keeps inputs showing values in parent state on page change
@@ -127,7 +129,7 @@ export default function ApartmentBuildingForSaleForm({
       emit({
         ...parent,
         apartmentBuilding: obj,
-        page: 6,
+        currentPage: 6,
         savedPages: [1, 2, 3, 4, 5, 6],
       });
       // nextPage();
@@ -300,6 +302,7 @@ export default function ApartmentBuildingForSaleForm({
           parent={state}
           parentInitialState={initApartmentBuilding}
           emit={handleVerify}
+          deleteListing={deleteListing}
         />
       ) : null}
 

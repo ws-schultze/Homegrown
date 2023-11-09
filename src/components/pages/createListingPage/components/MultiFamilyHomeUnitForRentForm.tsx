@@ -28,7 +28,7 @@ import TwoBtnRow, { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -53,7 +53,7 @@ export default function MultiFamilyHomeUnitForRentForm({
   emit,
 }: Props) {
   const [state, setState] = useState<MultiFamilyHomeUnit>(
-    initMultiFamilyHomeUnit
+    parent.multiFamilyHomeUnit!
   );
 
   /**
@@ -163,7 +163,7 @@ export default function MultiFamilyHomeUnitForRentForm({
       emit({
         ...parent,
         multiFamilyHomeUnit: obj,
-        page: 6,
+        currentPage: 6,
         savedPages: [1, 2, 3, 4, 5, 6],
       });
       // nextPage();
@@ -424,6 +424,7 @@ export default function MultiFamilyHomeUnitForRentForm({
           parent={state}
           parentInitialState={initMultiFamilyHomeUnit}
           emit={handleVerify}
+          deleteListing={deleteListing}
         />
       ) : null}
 

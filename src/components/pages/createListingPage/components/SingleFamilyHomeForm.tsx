@@ -25,7 +25,7 @@ import TwoBtnRow, { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import styles from "../styles.module.scss";
 
 interface Props {
@@ -49,7 +49,9 @@ export default function SingleFamilyHomeForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<SingleFamilyHome>(initSingleFamilyHome);
+  const [state, setState] = useState<SingleFamilyHome>(
+    parent.singleFamilyHome!
+  );
 
   /**
    * Keeps inputs showing values in parent state on page change
@@ -158,7 +160,7 @@ export default function SingleFamilyHomeForm({
       emit({
         ...parent,
         singleFamilyHome: obj,
-        page: 6,
+        currentPage: 6,
         savedPages: [1, 2, 3, 4, 5, 6],
       });
       // nextPage();
@@ -400,6 +402,7 @@ export default function SingleFamilyHomeForm({
           parent={state}
           parentInitialState={initSingleFamilyHome}
           emit={handleVerify}
+          deleteListing={deleteListing}
         />
       ) : null}
 

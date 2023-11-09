@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TwoBtnRow from "./TwoBtnRow";
 import {
   AddressValidationApi_Response,
@@ -46,42 +46,48 @@ import Dropdown from "../../../shared/dropdown/Dropdown";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import InputStr from "../../../shared/inputs/inputStr/InputStr";
-import styles from "../styles.module.scss";
+import { useAppSelector } from "../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import {
+  setCurrentPageNumber,
+  setListing,
+  setSavedPages,
+} from "../createListingPageSlice";
 
 interface Props {
-  parent: ListingData;
-  nextPage: () => void;
-  prevPage?: () => void;
-  toPageNumber?: (number: number) => void;
-  deleteListing: () => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (
-    obj: ListingData,
-    addressValidationApiResponse?: AddressValidationApi_Response
-  ) => void;
+  // parent: ListingData;
+  // nextPage: () => void;
+  // prevPage?: () => void;
+  // toPageNumber?: (number: number) => void;
+  // deleteListing: () => void;
+  // pageNumbers?: number[];
+  // currentPage?: number;
+  // emit: (
+  //   obj: ListingData,
+  //   addressValidationApiResponse?: AddressValidationApi_Response
+  // ) => void;
 }
 
-export default function BasicInfoForm({
-  parent,
-  prevPage,
-  nextPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props) {
-  const [state, setState] = useState<BasicInfo>(parent.basicInfo);
+export default function BasicInfoForm() {
+  // const [state, setState] = useState<BasicInfo>(parent.basicInfo);
 
-  useEffect(() => {
-    setState(parent.basicInfo);
-  }, [parent]);
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const dispatch = useDispatch();
+
+  const headerRef = useRef<HTMLHeadingElement>(null);
+
+  // useEffect(() => {
+  //   document.body.focus();
+  // }, []);
+
+  // useEffect(() => {
+  //   setState(parent.basicInfo);
+  // }, [parent]);
 
   function handleTwoBtnRow(
-    fieldName: keyof typeof state,
+    fieldName: keyof typeof pageState.listing.basicInfo,
     obj: TypeBool | ForSaleOrRent | ForRentBy | ForSaleBy
   ) {
     const object = obj as ForSaleOrRent | ForRentBy | ForSaleBy;
@@ -112,8 +118,8 @@ export default function BasicInfoForm({
   }
 
   function forSale(): void {
-    const { company, privateOwner, ...p } = parent;
-    const { forRentBy, ...rest } = state;
+    const { company, privateOwner, ...p } = pageState.listing;
+    const { forRentBy, ...rest } = pageState.listing.basicInfo;
 
     // Create new form state object
     const s: ListingData = {
@@ -138,8 +144,9 @@ export default function BasicInfoForm({
         "Selecting FOR SALE will delete the rental COMPANY information you have already entered. Do you wish to proceed?"
       )
     ) {
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
+      // setState(s.basicInfo);
+      // emit(s);
 
       // Private owner is not empty --> prompt user, erase private owner and forRentBy
     } else if (
@@ -149,8 +156,9 @@ export default function BasicInfoForm({
         "Selecting FOR SALE will delete the rental's PRIVATE OWNER information you have already entered. Do you wish to proceed?"
       )
     ) {
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
+      // setState(s.basicInfo);
+      // emit(s);
 
       // Company and private owner are either both undefined and/or empty
     } else if (
@@ -160,16 +168,17 @@ export default function BasicInfoForm({
         (privateOwner &&
           compareObjects(privateOwner, initPrivateOwner) === true))
     ) {
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
+      // setState(s.basicInfo);
+      // emit(s);
     } else {
       throw new Error("Escaped");
     }
   }
 
   function forRent(): void {
-    const { agent, owner, ...p } = parent;
-    const { forSaleBy, ...rest } = state;
+    const { agent, owner, ...p } = pageState.listing;
+    const { forSaleBy, ...rest } = pageState.listing.basicInfo;
 
     const s: ListingData = {
       ...p,
@@ -193,8 +202,9 @@ export default function BasicInfoForm({
         "Selecting FOR RENT will delete the AGENT information you have already entered. Do you wish to proceed?"
       )
     ) {
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
+      // setState(s.basicInfo);
+      // emit(s);
 
       // Sale's owner is not empty --> prompt user, erase owner
     } else if (
@@ -204,16 +214,18 @@ export default function BasicInfoForm({
         "Selecting FOR RENT will delete the sales' OWNER information you have already entered. Do you wish to proceed?"
       )
     ) {
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
+      // setState(s.basicInfo);
+      // emit(s);
 
       //Sale's agent and owner are either both undefined and/or empty
     } else if (
       (!agent || (agent && compareObjects(agent, initAgent) === true)) &&
       (!owner || (owner && compareObjects(owner, initOwner) === true))
     ) {
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
+      // setState(s.basicInfo);
+      // emit(s);
     } else {
       throw new Error("Escaped");
     }
@@ -226,15 +238,15 @@ export default function BasicInfoForm({
    * 2) Select "Agent" after "Owner" has been selected and information has been filled out --> "Owner" cleanup needed.
    */
   function forSaleByAgent(): void {
-    if (state.forSaleBy !== undefined) {
-      const { owner, company, privateOwner, ...o } = parent;
+    if (pageState.listing.basicInfo.forSaleBy !== undefined) {
+      const { owner, company, privateOwner, ...o } = pageState.listing;
 
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state,
+          ...pageState.listing.basicInfo,
           forSaleBy: {
-            ...state.forSaleBy,
+            ...pageState.listing.basicInfo.forSaleBy,
             value: { id: "agent", label: "Agent" },
             valid: true,
             errorMsg: "",
@@ -250,11 +262,14 @@ export default function BasicInfoForm({
           "Choosing AGENT will erase all OWNER data, are you sure you want to proceed?"
         )
       ) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
+        // setState(s.basicInfo);
+        // emit(s);
       } else if (!owner || compareObjects(owner, initOwner) === true) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
+
+        // setState(s.basicInfo);
+        // emit(s);
       } else {
         throw new Error("Escaped");
       }
@@ -272,14 +287,14 @@ export default function BasicInfoForm({
   function forSaleByOwner(): void {
     // If for sale by owner, make sure agent is not in state
 
-    if (state.forSaleBy !== undefined) {
-      const { agent, company, privateOwner, ...o } = parent;
+    if (pageState.listing.basicInfo.forSaleBy !== undefined) {
+      const { agent, company, privateOwner, ...o } = pageState.listing;
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state,
+          ...pageState.listing.basicInfo,
           forSaleBy: {
-            ...state.forSaleBy,
+            ...pageState.listing.basicInfo.forSaleBy,
             value: { id: "owner", label: "Owner" },
 
             valid: true,
@@ -296,11 +311,14 @@ export default function BasicInfoForm({
           "Choosing OWNER will erase all AGENT data, are you sure you want to proceed?"
         ) === true
       ) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
+        // setState(s.basicInfo);
+        // emit(s);
       } else if (!agent || compareObjects(agent, initAgent) === true) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
+
+        // setState(s.basicInfo);
+        // emit(s);
       } else {
         throw new Error("Escaped");
       }
@@ -316,18 +334,17 @@ export default function BasicInfoForm({
    * 2) Select "Company" after "Private Party" has been selected and information has been filled out --> cleanup "Private Party"
    */
   function forRentByCompany(): void {
-    if (state.forRentBy !== undefined) {
+    if (pageState.listing.basicInfo.forRentBy !== undefined) {
       // Remove other seller kinds from state
-      const { agent, owner, privateOwner, ...o } = parent;
+      const { agent, owner, privateOwner, ...o } = pageState.listing;
 
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state,
+          ...pageState.listing.basicInfo,
           forRentBy: {
-            ...state.forRentBy,
+            ...pageState.listing.basicInfo.forRentBy,
             value: { id: "company", label: "Company" },
-
             valid: true,
             errorMsg: "",
           },
@@ -342,14 +359,12 @@ export default function BasicInfoForm({
           "Choosing COMPANY will erase all PRIVATE OWNER data, are you sure you want to proceed?"
         )
       ) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
       } else if (
         !privateOwner ||
         compareObjects(privateOwner, initPrivateOwner) === true
       ) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
       } else {
         throw new Error("Escaped");
       }
@@ -365,16 +380,15 @@ export default function BasicInfoForm({
    * 2) Select "Private Party" after "Company" has been selected and information has been filled out --> cleanup "Company"
    */
   function forRentByPrivateOwner(): void {
-    if (state.forRentBy !== undefined) {
+    if (pageState.listing.basicInfo.forRentBy !== undefined) {
       // Remove other seller kinds from state
-      const { agent, owner, company, ...o } = parent;
-
+      const { agent, owner, company, ...o } = pageState.listing;
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state,
+          ...pageState.listing.basicInfo,
           forRentBy: {
-            ...state.forRentBy,
+            ...pageState.listing.basicInfo.forRentBy,
             value: { id: "private-owner", label: "Private Owner" },
             valid: true,
             errorMsg: "",
@@ -390,11 +404,9 @@ export default function BasicInfoForm({
           "Choosing PRIVATE OWNER will erase all COMPANY data, are you sure you want to proceed?"
         )
       ) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
       } else if (!company || compareObjects(company, initCompany) === true) {
-        setState(s.basicInfo);
-        emit(s);
+        dispatch(setListing(s));
       } else {
         throw new Error("Escaped");
       }
@@ -470,14 +482,14 @@ export default function BasicInfoForm({
         manufacturedHome,
         land,
         ...o
-      } = parent;
+      } = pageState.listing;
 
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state,
+          ...pageState.listing.basicInfo,
           listingKind: {
-            ...state.listingKind,
+            ...pageState.listing.basicInfo.listingKind,
             value: kind,
             valid: true,
             errorMsg: "",
@@ -485,9 +497,7 @@ export default function BasicInfoForm({
         },
         [kind.name]: init,
       };
-
-      setState(s.basicInfo);
-      emit(s);
+      dispatch(setListing(s));
 
       // Either no options found or more than one found
     } else {
@@ -497,210 +507,195 @@ export default function BasicInfoForm({
     }
   }
 
-  function handleInputStr(object: Str, fieldName: keyof typeof state) {
-    setState((s) => ({
-      ...s,
-      [fieldName]: object,
-    }));
+  function handleInputStr(
+    object: Str,
+    fieldName: keyof typeof pageState.listing.basicInfo
+  ) {
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        [fieldName]: object,
+      })
+    );
   }
 
-  function handleVerify(
-    actionName: VerifyActionName,
-    obj: BasicInfo,
-    addressValidationApiResponse?: AddressValidationApi_Response
-  ) {
+  function handleVerify(actionName: VerifyActionName, obj: BasicInfo) {
     if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        basicInfo: obj,
-      });
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          basicInfo: obj,
+        })
+      );
     } else if (actionName === "verify" && obj.saved === true) {
-      // Cleanup undefined parent objects
-      let key: keyof typeof parent;
-      for (key in parent) {
-        if (parent[key] === undefined) {
-          delete parent[key];
+      // Cleanup undefined listing objects
+      let key: keyof typeof pageState.listing;
+      for (key in pageState.listing) {
+        if (pageState.listing[key] === undefined) {
+          delete pageState.listing[key];
         }
       }
-
-      emit({
-        ...parent,
-        basicInfo: obj,
-        page: 3,
-        savedPages: [1, 2, 3],
-      });
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          basicInfo: obj,
+        })
+      );
+      dispatch(setSavedPages([1, 2, 3]));
+      dispatch(setCurrentPageNumber(3));
       // nextPage();
     } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        basicInfo: obj,
-        savedPages: [1, 2],
-      });
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          basicInfo: obj,
+        })
+      );
+      dispatch(setSavedPages([1, 2, 3]));
     } else {
       throw new Error("Whoops");
     }
   }
 
+  const state = pageState.listing.basicInfo;
+
   return (
-    <>
-      <form>
-        {state.saved === true ? (
-          <section>
-            <EditFormSection<typeof state> parent={state} emit={handleVerify} />
-          </section>
-        ) : null}
+    <form>
+      {state.saved === true ? (
         <section>
-          <header>Basic Information</header>
-          <InputStr<typeof state>
-            size="lg"
-            fieldName="description"
-            placeholder="Listing Description"
-            formatType="description"
-            min={20}
-            max={120}
-            parent={state.description}
-            emit={handleInputStr}
-          />
+          <EditFormSection<typeof state> parent={state} emit={handleVerify} />
+        </section>
+      ) : null}
+      <section>
+        <header ref={headerRef}>Basic Information</header>
+        <InputStr<typeof state>
+          size="lg"
+          fieldName="description"
+          placeholder="Listing Description"
+          formatType="description"
+          min={20}
+          max={120}
+          parent={state.description}
+          emit={handleInputStr}
+        />
+        <TwoBtnRow<typeof state>
+          leftBtnText="For Sale"
+          leftBtnValue={{ id: "for-sale", label: "For Sale" }}
+          rightBtnText="For Rent"
+          rightBtnValue={{ id: "for-rent", label: "For Rent" }}
+          fieldName="forSaleOrRent"
+          formLayer="1"
+          label="Sell/Rent"
+          parent={state.forSaleOrRent}
+          emit={handleTwoBtnRow}
+        />
+        {state.forSaleBy !== undefined ? (
           <TwoBtnRow<typeof state>
-            leftBtnText="For Sale"
-            leftBtnValue={{ id: "for-sale", label: "For Sale" }}
-            rightBtnText="For Rent"
-            rightBtnValue={{ id: "for-rent", label: "For Rent" }}
-            fieldName="forSaleOrRent"
+            leftBtnText="Agent"
+            leftBtnValue={{ id: "agent", label: "Agent" }}
+            rightBtnText="Owner"
+            rightBtnValue={{ id: "owner", label: "Owner" }}
+            fieldName="forSaleBy"
             formLayer="1"
-            label="Sell/Rent"
-            parent={state.forSaleOrRent}
+            label="Listed by"
+            parent={state.forSaleBy}
             emit={handleTwoBtnRow}
           />
-          {state.forSaleBy !== undefined ? (
-            <TwoBtnRow<typeof state>
-              leftBtnText="Agent"
-              leftBtnValue={{ id: "agent", label: "Agent" }}
-              rightBtnText="Owner"
-              rightBtnValue={{ id: "owner", label: "Owner" }}
-              fieldName="forSaleBy"
-              formLayer="1"
-              label="Listed by"
-              parent={state.forSaleBy}
-              emit={handleTwoBtnRow}
-            />
-          ) : null}
-          {state.forRentBy !== undefined ? (
-            <TwoBtnRow<typeof state>
-              leftBtnText="Company"
-              leftBtnValue={{ id: "company", label: "Company" }}
-              rightBtnText="Private Owner"
-              rightBtnValue={{ id: "private-owner", label: "Private Owner" }}
-              fieldName="forRentBy"
-              formLayer="1"
-              label="Listed by"
-              parent={state.forRentBy}
-              emit={handleTwoBtnRow}
-            />
-          ) : null}
-          {state.forSaleOrRent.value?.id === "for-sale" ? (
-            <Dropdown<ListingKindValue>
-              placeHolder={"What are you selling?"}
-              menuItems={listingKindValuesForSale}
-              isMulti={false}
-              isSearchable={false}
-              parent={[state.listingKind.value]}
-              disabled={state.listingKind.readOnly}
-              errorMsg={state.listingKind.errorMsg}
-              label={"Listing Kind"}
-              emit={handleListingKind}
-            />
-          ) : null}
-          {state.forSaleOrRent.value?.id === "for-rent" ? (
-            <Dropdown<ListingKindValue>
-              placeHolder={"What are you renting?"}
-              menuItems={listingKindValuesForRent}
-              isMulti={false}
-              isSearchable={false}
-              parent={[state.listingKind.value]}
-              errorMsg={state.listingKind.errorMsg}
-              label={"Listing Kind"}
-              disabled={state.listingKind.readOnly}
-              emit={handleListingKind}
-            />
-          ) : null}
-          <InputStr<typeof state>
-            size="lg"
-            fieldName="price"
-            placeholder={
-              state.forSaleOrRent &&
-              state.forSaleOrRent.value?.id === "for-sale"
-                ? "Price"
-                : state.forSaleOrRent &&
-                  state.forSaleOrRent.value?.id === "for-rent"
-                ? "Price/month"
-                : "Price"
-            }
-            groupSeparators={[","]}
-            prefix="$"
-            formatType="USD-no-decimal"
-            min={1}
-            parent={state.price}
-            emit={handleInputStr}
+        ) : null}
+        {state.forRentBy !== undefined ? (
+          <TwoBtnRow<typeof state>
+            leftBtnText="Company"
+            leftBtnValue={{ id: "company", label: "Company" }}
+            rightBtnText="Private Owner"
+            rightBtnValue={{ id: "private-owner", label: "Private Owner" }}
+            fieldName="forRentBy"
+            formLayer="1"
+            label="Listed by"
+            parent={state.forRentBy}
+            emit={handleTwoBtnRow}
           />
-          <InputStr<typeof state>
-            size="lg"
-            fieldName="priceChange"
-            groupSeparators={[","]}
-            formatType="USD-no-decimal"
-            prefix="$"
-            min={1}
-            isPriceChange={true}
-            placeholder={
-              state.forSaleOrRent &&
-              state.forSaleOrRent.value?.id === "for-sale"
-                ? "New Price*"
-                : state.forSaleOrRent &&
-                  state.forSaleOrRent.value?.id === "for-rent"
-                ? "New Price/Month*"
-                : "New Price*"
-            }
-            originalPrice={state.price.number || 0}
-            parent={state.priceChange || initStrOpt}
-            emit={handleInputStr}
+        ) : null}
+        {state.forSaleOrRent.value?.id === "for-sale" ? (
+          <Dropdown<ListingKindValue>
+            placeHolder={"What are you selling?"}
+            menuItems={listingKindValuesForSale}
+            isMulti={false}
+            isSearchable={false}
+            parent={[state.listingKind.value]}
+            disabled={state.listingKind.readOnly}
+            errorMsg={state.listingKind.errorMsg}
+            label={"Listing Kind"}
+            emit={handleListingKind}
           />
-          {/* End Basic Info */}
-          {state.saved === false && state.beingVerified === false ? (
-            <SaveSection<typeof state>
-              needsAddressValidation={false}
-              parent={state}
-              parentInitialState={initBasicInfo}
-              emit={handleVerify}
-            />
-          ) : null}
-          {state.beingVerified === true ? (
-            <VerifySection<typeof state>
-              parentName="Basic Information"
-              parent={state}
-              emit={handleVerify}
-            />
-          ) : null}
-        </section>
-      </form>
-
-      {state.saved === true ? (
-        <PageBtns
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-          deleteListing={deleteListing}
+        ) : null}
+        {state.forSaleOrRent.value?.id === "for-rent" ? (
+          <Dropdown<ListingKindValue>
+            placeHolder={"What are you renting?"}
+            menuItems={listingKindValuesForRent}
+            isMulti={false}
+            isSearchable={false}
+            parent={[state.listingKind.value]}
+            errorMsg={state.listingKind.errorMsg}
+            label={"Listing Kind"}
+            disabled={state.listingKind.readOnly}
+            emit={handleListingKind}
+          />
+        ) : null}
+        <InputStr<typeof state>
+          size="lg"
+          fieldName="price"
+          placeholder={
+            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
+              ? "Price"
+              : state.forSaleOrRent &&
+                state.forSaleOrRent.value?.id === "for-rent"
+              ? "Price/month"
+              : "Price"
+          }
+          groupSeparators={[","]}
+          prefix="$"
+          formatType="USD-no-decimal"
+          min={1}
+          parent={state.price}
+          emit={handleInputStr}
         />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
+        <InputStr<typeof state>
+          size="lg"
+          fieldName="priceChange"
+          groupSeparators={[","]}
+          formatType="USD-no-decimal"
+          prefix="$"
+          min={1}
+          isPriceChange={true}
+          placeholder={
+            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
+              ? "New Price*"
+              : state.forSaleOrRent &&
+                state.forSaleOrRent.value?.id === "for-rent"
+              ? "New Price/Month*"
+              : "New Price*"
+          }
+          originalPrice={state.price.number || 0}
+          parent={state.priceChange || initStrOpt}
+          emit={handleInputStr}
         />
-      )}
-    </>
+        {/* End Basic Info */}
+        {state.saved === false && state.beingVerified === false ? (
+          <SaveSection<typeof state>
+            needsAddressValidation={false}
+            parent={state}
+            parentInitialState={initBasicInfo}
+            emit={handleVerify}
+          />
+        ) : null}
+        {state.beingVerified === true ? (
+          <VerifySection<typeof state>
+            parentName="Basic Information"
+            parent={state}
+            emit={handleVerify}
+          />
+        ) : null}
+      </section>
+    </form>
   );
 }

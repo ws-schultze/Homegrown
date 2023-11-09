@@ -14,50 +14,57 @@ import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
 import EditFormSection from "./EditFormSection";
 import VerifySection from "./VerifySection";
 import SaveSection from "./SaveSection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import styles from "../styles.module.scss";
+import { useAppSelector } from "../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import {
+  setCurrentPageNumber,
+  setListing,
+  setSavedPages,
+} from "../createListingPageSlice";
+import NameInput from "../../../shared/inputs/nameInput/NameInput";
+import AgentLicenseIdInput from "../../../shared/inputs/agentLicenseIdinput/AgentLicenseIdInput";
+import PhoneNumberInput from "../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
+import EmailStrInput from "../../../shared/inputs/emailInput/EmailStrInput";
 
-interface Props {
-  parent: ListingData;
-  prevPage: () => void;
-  nextPage: () => void;
-  toPageNumber?: (number: number) => void;
-  deleteListing: () => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (obj: ListingData) => void;
-}
+// interface Props {
+//   parent: ListingData;
+//   prevPage: () => void;
+//   nextPage: () => void;
+//   toPageNumber?: (number: number) => void;
+//   deleteListing: () => void;
+//   pageNumbers?: number[];
+//   currentPage?: number;
+//   emit: (obj: ListingData) => void;
+// }
 
-export default function AgentForm({
-  parent,
-  nextPage,
-  prevPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props) {
-  const [state, setState] = useState<TypeAgent>(parent.agent!);
+export default function AgentForm() {
+  // const [state, setState] = useState<TypeAgent>(parent.agent!);
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const { agent } = pageState.listing;
+  const dispatch = useDispatch();
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
     useState<AddressValidationApi_Response | null>(null);
   const streetAddressRef = useRef<HTMLInputElement | null>(null);
 
+  if (!agent) throw new Error("agent is undefined");
+
   /**
    * Keeps inputs showing values in parent state on page change
    * Also catches error messages
    */
-  useEffect(() => {
-    if (parent.agent) {
-      setState(parent.agent);
-    } else {
-      throw new Error("Agent object not found in parent");
-    }
-  }, [parent]);
+  // useEffect(() => {
+  //   if (parent.agent) {
+  //     setState(parent.agent);
+  //   } else {
+  //     throw new Error("Agent object not found in parent");
+  //   }
+  // }, [parent]);
 
   // console.log("Agent.tsx rendered");
 
@@ -74,59 +81,86 @@ export default function AgentForm({
     // Listen for click on widget item
     if (autocompleteWidget) {
       autocompleteWidget.addListener("place_changed", () => {
-        const s: typeof state = setAutocompletePlaceValuesToState<typeof state>(
-          {
-            state: state,
+        if (agent) {
+          const s: typeof agent = setAutocompletePlaceValuesToState<
+            typeof agent
+          >({
+            state: agent,
             autocomplete: autocompleteWidget,
-          }
-        );
-        setState(s);
+          });
+          dispatch(
+            setListing({
+              ...pageState.listing,
+              agent: s,
+            })
+          );
+        }
       });
     }
   }
 
-  function handleInputStr(object: Str, fieldName: keyof typeof state) {
+  function handleInputStr(object: Str, fieldName: keyof typeof agent) {
     if (fieldName === "streetAddress") {
       handleAutocompleteWidget();
     } else if (fieldName === "unitNumber") {
-      const s: typeof state = setUnitNumberToState(state, object);
-      setState(s);
+      if (agent) {
+        const s: typeof agent = setUnitNumberToState(agent, object);
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            agent: s,
+          })
+        );
+      } else {
+        console.error("Agent is undefined");
+      }
     } else {
-      setState((s) => ({
-        ...s,
-        [fieldName]: object,
-      }));
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          [fieldName]: object,
+        })
+      );
     }
   }
 
   function handleVerify(
     actionName: VerifyActionName,
-    obj: typeof state,
+    obj: typeof agent,
     addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (addressValidationApiResponse) {
       setAddressValidationApiResponse(addressValidationApiResponse);
     }
 
-    if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        agent: obj,
-      });
-    } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        agent: obj,
-        page: 5,
-        savedPages: [1, 2, 3, 4, 5],
-      });
-      // nextPage();
-    } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        agent: obj,
-        savedPages: [1, 2, 3, 4],
-      });
+    if (
+      actionName === "save" ||
+      actionName === "edit" ||
+      actionName === "blur"
+    ) {
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          agent: obj,
+        })
+      );
+    } else if (actionName === "verify" && obj!.saved === true) {
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          agent: obj,
+        })
+      );
+      dispatch(setSavedPages([1, 2, 3, 4, 5]));
+      dispatch(setCurrentPageNumber(5));
+    } else if (actionName === "verify" && obj!.saved === false) {
+      dispatch(
+        setListing({
+          ...pageState.listing,
+          agent: obj,
+        })
+      );
+      dispatch(setSavedPages([1, 2, 3, 4]));
     } else {
       throw new Error("Whoops");
     }
@@ -134,73 +168,130 @@ export default function AgentForm({
 
   return (
     <form>
-      {state.saved === true ? (
+      {agent.saved === true ? (
         <section>
-          <EditFormSection parent={state} emit={handleVerify} />
+          <EditFormSection parent={agent} emit={handleVerify} />
         </section>
       ) : null}
 
       <section>
         <header>Agent Information</header>
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="firstName"
-          placeholder="First Name"
-          formatType="name"
-          parent={state.firstName}
-          emit={handleInputStr}
+
+        <NameInput<typeof agent.firstName>
+          state={agent.firstName}
+          placeholder="First name"
+          handleInput={(name) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                agent: {
+                  ...pageState.listing.agent!,
+                  firstName: name,
+                },
+              })
+            )
+          }
         />
-        <InputStr<typeof state>
-          size="md"
-          fieldName="middleName"
-          placeholder="Middle Name*"
-          formatType="name"
-          parent={state.middleName}
-          emit={handleInputStr}
+
+        <NameInput<typeof agent.middleName>
+          state={agent.middleName}
+          placeholder="Middle name*"
+          handleInput={(name) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                agent: {
+                  ...pageState.listing.agent!,
+                  middleName: name,
+                },
+              })
+            )
+          }
         />
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="lastName"
-          placeholder="Last Name"
-          formatType="name"
-          parent={state.lastName}
-          emit={handleInputStr}
+
+        <NameInput<typeof agent.lastName>
+          state={agent.lastName}
+          placeholder="Last name"
+          handleInput={(name) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                agent: {
+                  ...pageState.listing.agent!,
+                  lastName: name,
+                },
+              })
+            )
+          }
         />
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="companyName"
-          placeholder="Company Name"
-          formatType="name"
-          parent={state.companyName}
-          emit={handleInputStr}
+
+        <NameInput<typeof agent.companyName>
+          state={agent.companyName}
+          placeholder="Company name"
+          handleInput={(name) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                agent: {
+                  ...pageState.listing.agent!,
+                  companyName: name,
+                },
+              })
+            )
+          }
         />
+
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="licenseId"
+          <AgentLicenseIdInput<typeof agent.licenseId>
+            state={agent.licenseId}
             placeholder="License ID"
-            formatType="real-estate-license-id"
-            parent={state.licenseId}
-            emit={handleInputStr}
+            handleInput={(state) =>
+              dispatch(
+                setListing({
+                  ...pageState.listing,
+                  agent: {
+                    ...pageState.listing.agent!,
+                    licenseId: state,
+                  },
+                })
+              )
+            }
           />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="phoneNumber"
-            placeholder="Phone Number"
+
+          <PhoneNumberInput<typeof agent.phoneNumber>
+            state={agent.phoneNumber}
+            placeholder="Phone number"
             groupSeparators={[")", "-"]}
-            formatType="phone-number"
-            parent={state.phoneNumber}
-            emit={handleInputStr}
+            handleInput={(state) =>
+              dispatch(
+                setListing({
+                  ...pageState.listing,
+                  agent: {
+                    ...pageState.listing.agent!,
+                    phoneNumber: state,
+                  },
+                })
+              )
+            }
           />
         </div>
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="email"
+
+        <EmailStrInput<typeof agent.email>
+          state={agent.email}
           placeholder="Email"
-          formatType="email"
-          parent={state.email}
-          emit={handleInputStr}
+          handleInput={(state) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                agent: {
+                  ...pageState.listing.agent!,
+                  email: state,
+                },
+              })
+            )
+          }
         />
+
         {/* Address */}
         <Wrapper
           apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
@@ -263,63 +354,43 @@ export default function AgentForm({
       </section>
 
       {/* Clear/Save */}
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
+      {agent.saved === false && agent.beingVerified === false ? (
+        <SaveSection<typeof agent>
           needsAddressValidation={true}
-          parent={state}
+          parent={agent}
           parentInitialState={initAgent}
-          // children={<BellSVG />}
           emit={handleVerify}
         />
       ) : null}
 
       {/* Verify*/}
-      {state.beingVerified === true &&
+      {agent.beingVerified === true &&
       addressValidationApiResponse?.result?.address.formattedAddress ? (
         <VerifySection
           parentName="Private Owner"
-          parent={state}
+          parent={agent}
           addressValidationApiResponse={addressValidationApiResponse}
           emit={handleVerify}
           children={
             <div>
-              {state.firstName.formatted}{" "}
-              {state.middleName && state.middleName.formatted.length > 0
-                ? `${state.middleName.formatted} ${state.lastName.formatted}`
-                : `${state.lastName.formatted}`}
+              {agent.firstName.formatted}{" "}
+              {agent.middleName && agent.middleName.formatted.length > 0
+                ? `${agent.middleName.formatted} ${agent.lastName.formatted}`
+                : `${agent.lastName.formatted}`}
               <br />
-              License# {state.licenseId.formatted}
+              License# {agent.licenseId.formatted}
               <br />
-              {state.phoneNumber.formatted}
+              {agent.phoneNumber.formatted}
               <br />
-              {state.email.formatted}
+              {agent.email.formatted}
               <br />
-              {state.companyName.formatted}
+              {agent.companyName.formatted}
               <br />
               {addressValidationApiResponse.result.address.formattedAddress}
             </div>
           }
         />
       ) : null}
-
-      {state.saved === true ? (
-        <PageBtns
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-          deleteListing={deleteListing}
-        />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      )}
     </form>
   );
 }

@@ -15,7 +15,7 @@ import TwoBtnRow, { TypeTwoBtnRowState } from "./TwoBtnRow";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
@@ -42,7 +42,7 @@ export default function OwnerForm({
   currentPage,
   emit,
 }: Props) {
-  const [state, setState] = useState<Owner>(initOwner);
+  const [state, setState] = useState<Owner>(parent.owner!);
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
@@ -171,7 +171,7 @@ export default function OwnerForm({
       emit({
         ...parent,
         owner: obj,
-        page: 5,
+        currentPage: 5,
         savedPages: [1, 2, 3, 4, 5],
       });
       // nextPage();
@@ -327,6 +327,7 @@ export default function OwnerForm({
           parent={state}
           parentInitialState={initOwner}
           emit={handleVerify}
+          deleteListing={deleteListing}
         />
       ) : null}
 

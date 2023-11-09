@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 // import Spinner from "../../../loaders/Spinner";
 import { toast } from "react-toastify";
-import PageBtns from "./PageBtns";
+import PageBtns from "./PageBtns-old";
 import {
   AddressValidationApi_Response,
   Image,
@@ -18,41 +18,30 @@ import EditFormSection from "./EditFormSection";
 import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import makeFileNameForUpload from "../../utils/makeFileNameForUpload";
 import styles from "../styles.module.scss";
+import { useAppSelector } from "../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import {
+  setCurrentPageNumber,
+  setListing,
+  setSavedPages,
+} from "../createListingPageSlice";
 
-interface Props {
-  parent: ListingData;
-  prevPage: () => void;
-  nextPage: () => void;
-  toPageNumber?: (number: number) => void;
-  deleteListing: () => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (obj: ListingData) => void;
-}
+export default function UploadsForm(): JSX.Element {
+  const [uploads, setUploads] = useState<Uploads>(initUploads);
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const dispatch = useDispatch();
 
-export default function UploadsForm({
-  parent,
-  prevPage,
-  nextPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props): JSX.Element {
-  const [state, setState] = useState<Uploads>(parent.uploads);
-  // const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false); // used for conditional styling
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // Re-render once the parent is updated, to make save and verify work
-  useEffect(() => {
-    setState(parent.uploads);
-  }, [parent]);
+  // // Re-render once the parent is updated, to make save and verify work
+  // useEffect(() => {
+  //   setState(parent.uploads);
+  // }, [parent]);
 
   function handleUploads(files: File[]) {
     let images: Image[] = [];
-    let toBig: string[] = [];
+    let tooBig: string[] = [];
 
     if (files.length > 0) {
       files.forEach((file) => {
@@ -61,27 +50,34 @@ export default function UploadsForm({
           const url = URL.createObjectURL(file);
           images.push({
             file: file,
-            name: makeFileNameForUpload(parent.userRef.uid, file.name),
+            name: makeFileNameForUpload(
+              pageState.listing.userRef.uid,
+              file.name
+            ),
             url: url,
           });
         } else {
           // File is larger than 2MB
-          toBig.push(file.name);
+          tooBig.push(file.name);
         }
       });
 
-      if (toBig.length > 0) {
-        toast.warn(`These files were larger than 2MB: \n ${toBig}`);
+      if (tooBig.length > 0) {
+        toast.warn(`These files were larger than 2MB: \n ${tooBig}`);
       }
 
-      setState((s) => ({
+      setUploads((s) => ({
         ...s,
         images: {
           ...s.images,
-          value: [...state.images.value, ...images],
+          value: [...uploads.images.value, ...images],
           valid: true,
           errorMsg: "",
         },
+      }));
+
+      setUploads((u) => ({
+        ...u,
       }));
     } else {
       throw new Error("No files found");
@@ -142,13 +138,15 @@ export default function UploadsForm({
     e.stopPropagation();
 
     if (window.confirm("Delete this file from uploads?")) {
-      const index = state.images.value.map((img) => img.url).indexOf(image.url);
+      const index = uploads.images.value
+        .map((img) => img.url)
+        .indexOf(image.url);
 
-      let newValue: Image[] = [...state.images.value];
+      let newValue: Image[] = [...uploads.images.value];
       newValue.splice(index, 1);
 
       if (newValue.length > 0) {
-        setState((s) => ({
+        setUploads((s) => ({
           ...s,
           images: {
             ...s.images,
@@ -156,7 +154,7 @@ export default function UploadsForm({
           },
         }));
       } else {
-        setState((s) => ({
+        setUploads((s) => ({
           ...s,
           images: {
             ...s.images,
@@ -171,29 +169,18 @@ export default function UploadsForm({
 
   function handleVerify(
     actionName: VerifyActionName,
-    obj: typeof state,
+    obj: typeof uploads,
     addressValidationApiResponse?: AddressValidationApi_Response
   ) {
     if (actionName === "save" || actionName === "edit") {
-      console.log("saving");
-      emit({
-        ...parent,
-        uploads: obj,
-      });
+      dispatch(setListing({ ...pageState.listing, uploads: obj }));
     } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        uploads: obj,
-        page: 7,
-        savedPages: [1, 2, 3, 4, 5, 6, 7],
-      });
-      // nextPage();
+      dispatch(setListing({ ...pageState.listing, uploads: obj }));
+      dispatch(setSavedPages([1, 2, 3, 4, 5, 6, 7]));
+      dispatch(setCurrentPageNumber(7));
     } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        uploads: obj,
-        savedPages: [1, 2, 3, 4, 5, 6],
-      });
+      dispatch(setListing({ ...pageState.listing, uploads: obj }));
+      dispatch(setSavedPages([1, 2, 3, 4, 5, 6]));
     } else {
       throw new Error("Whoops");
     }
@@ -205,23 +192,29 @@ export default function UploadsForm({
 
   return (
     <form>
-      {state.saved === true ? (
+      {pageState.listing.uploads.saved === true ? (
         <section>
-          <EditFormSection parent={state} emit={handleVerify} />
+          <EditFormSection
+            parent={pageState.listing.uploads}
+            emit={handleVerify}
+          />
         </section>
       ) : null}
 
       <section>
         <header>Images</header>
         <p>The first image will be the listing's cover.</p>
-        {state.images.value.length > 0 && (
+        {pageState.listing.uploads.images.value.length > 0 && (
           <div className={styles.image_preview}>
             <>
-              {state.images.value.map((image, index) => (
+              {pageState.listing.uploads.images.value.map((image, index) => (
                 <div key={index}>
                   <div className={styles.card}>
                     <img src={image.url} alt="" />
-                    <button disabled={state.readOnly} type="button">
+                    <button
+                      disabled={pageState.listing.uploads.readOnly}
+                      type="button"
+                    >
                       <DeleteIcon
                         className={styles.delete}
                         onClick={(e) => onDelete(e, image)}
@@ -249,56 +242,41 @@ export default function UploadsForm({
             onChange={onClickToUpload}
             accept=".jpg,.png,.jpeg"
             multiple
-            disabled={state.readOnly}
+            disabled={pageState.listing.uploads.readOnly}
           />
           <label
             htmlFor="listing-form__input-file"
             className={dragActive ? styles.drag_active : ""}
           >
-            <button disabled={state.readOnly} onClick={handleInputClick}>
+            <button
+              disabled={pageState.listing.uploads.readOnly}
+              onClick={handleInputClick}
+            >
               Drag and drop or click to add your file(s)
               <PlusIcon className={styles.icon} />
             </button>
           </label>
         </div>
-        <ErrorMsg errorMsg={state.images.errorMsg} />
+        <ErrorMsg errorMsg={pageState.listing.uploads.images.errorMsg} />
       </section>
 
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
+      {pageState.listing.uploads.saved === false &&
+      pageState.listing.uploads.beingVerified === false ? (
+        <SaveSection<typeof pageState.listing.uploads>
           needsAddressValidation={false}
-          parent={state}
+          parent={pageState.listing.uploads}
           parentInitialState={initUploads}
           emit={handleVerify}
         />
       ) : null}
 
-      {state.beingVerified === true ? (
-        <VerifySection<typeof state>
+      {pageState.listing.uploads.beingVerified === true ? (
+        <VerifySection<typeof pageState.listing.uploads>
           parentName="Image"
-          parent={state}
+          parent={pageState.listing.uploads}
           emit={handleVerify}
         />
       ) : null}
-
-      {state.saved === true ? (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      )}
     </form>
   );
 }
