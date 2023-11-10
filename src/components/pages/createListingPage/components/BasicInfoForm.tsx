@@ -66,8 +66,8 @@ export default function BasicInfoForm() {
   const headerRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    headerRef.current?.focus();
-  }, [headerRef.current]);
+    document.body.focus();
+  }, []);
 
   function handleTwoBtnRow(
     fieldName: keyof typeof pageState.listing.basicInfo,
@@ -627,6 +627,7 @@ export default function BasicInfoForm() {
         <PriceInput
           state={state.price}
           isPriceFilter={false}
+          isDiscountPrice={false}
           minPrice={1}
           placeholder={
             state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
@@ -637,6 +638,8 @@ export default function BasicInfoForm() {
               : "Price"
           }
           groupSeparators={[","]}
+          currency="USD"
+          prefix="$"
           handleInput={(obj) =>
             dispatch(
               setListing({
@@ -650,11 +653,15 @@ export default function BasicInfoForm() {
           }
         />
 
-        {/* <DiscountPriceInput
+        <DiscountPriceInput
           state={state.priceChange}
+          isPriceFilter={false}
+          isDiscountPrice={true}
           groupSeparators={[","]}
-          originalPrice={state.price.number}
+          currency="USD"
           prefix="$"
+          minPrice={0}
+          originalPrice={state.price.number}
           placeholder={
             state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
               ? "New price*"
@@ -674,13 +681,13 @@ export default function BasicInfoForm() {
               })
             )
           }
-        /> */}
+        />
 
-        <TestInput
+        {/* <TestInput
           state={state.price}
           placeholder="Stop It Safari!"
           handleInput={(obj) => console.log(obj)}
-        />
+        /> */}
 
         {/* <InputStr<typeof state>
           size="lg"

@@ -30,14 +30,14 @@ export default function PhoneNumberInput(props: Props) {
   /**
    * Prevent cursor jumping white editing input
    */
-  useEffect(() => {
-    // Cursor position
-    if (inputRef === null) return;
-    if (inputRef.current === null) return;
-    if (inputRef && inputRef.current) {
-      inputRef.current.setSelectionRange(cursorPosition, cursorPosition);
-    }
-  }, [cursorPosition]);
+  // useEffect(() => {
+  //   // Cursor position
+  //   if (inputRef === null) return;
+  //   if (inputRef.current === null) return;
+  //   if (inputRef && inputRef.current) {
+  //     inputRef.current.setSelectionRange(cursorPosition, cursorPosition);
+  //   }
+  // }, [cursorPosition]);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

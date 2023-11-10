@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../../../shared/inputs/scss/inputs.module.scss";
 import { InputProps } from "../../../shared/inputs/inputProps";
 import { Str } from "../../../../types";
-import { ref } from "firebase/storage";
 import { getKeyDown } from "../../../shared/inputs/utils";
 import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 
@@ -13,6 +12,9 @@ export default function TestInput(props: InputProps) {
 
   /**
    * Prevent cursor jumping white editing input
+   *
+   * ================== WARNING =======================================
+   * ++++++ MAKES SAFARI FOCUS ON THIS COMPONENT ON RENDER !!! ++++++++
    */
   useEffect(() => {
     if (inputRef === null) return;

@@ -1,6 +1,7 @@
 import React from "react";
 import * as T from "../../../types/index";
 import isEmail from "validator/lib/isEmail";
+import useSetCursorPosition from "./discountPriceInput/hooks/useSetCursorPosition";
 
 /**
  * Format a string containing only numeric characters into comma separated form format (e.g "123456" --> "123,456")
@@ -617,4 +618,136 @@ export function validateRealEstateLicenseIdNumber(value: string): {
     throw new Error(`Something went wrong.`);
   }
   return { valid, errorMsg };
+}
+
+/**
+ * Set last key down to state.
+ * Without this, the cursor will get stuck behind a group separator
+ * because repositionCursor() won't work right.
+ */
+export function handleKeyDown(
+  event: React.KeyboardEvent<Element>,
+  setLastKeyDown: (lastKeydown: string) => void
+) {
+  const lastKeyDown: string = getKeyDown(event);
+  setLastKeyDown(lastKeyDown);
+}
+
+export function formatPriceOnChange({
+  e,
+  priceState,
+  isDiscountPrice,
+  lastKeyDown,
+  groupSeparators,
+  minPrice,
+  currency,
+  prefix,
+  setCursorPosition,
+  handleInput,
+}: {
+  e: React.ChangeEvent<HTMLInputElement>;
+  priceState: T.Str;
+  isDiscountPrice: boolean;
+  lastKeyDown: string;
+  groupSeparators: string[];
+  minPrice: number;
+  currency: string;
+  prefix: string;
+  setCursorPosition: (num: number) => void;
+  handleInput: (obj: T.Str) => void;
+}): void {
+  const {
+    target: { value, selectionStart },
+  } = e;
+
+  // Prevent cursor jumping on "Backspace" and "Delete"
+  const { modifiedValue, modifiedCursorPosition } = repositionCursor({
+    eventTargetValue: value,
+    formattedValueFromState: priceState.formatted,
+    lastKeyDown: lastKeyDown,
+    selectionStart: selectionStart,
+    groupSeparators: groupSeparators,
+  });
+
+  // Get rid of non numeric characters
+  const numStr = removeNonNumericChars(modifiedValue);
+
+  // Get rid of leading zero because this price does not have decimal values
+  const numNoLeadingZeros = Number(numStr);
+
+  // Make a string out of the number without leading zeros
+  const numStrNoLeadingZeros = numNoLeadingZeros.toString();
+
+  // Format the number into USD comma separated with no decimal
+  const fmt = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency,
+    maximumFractionDigits: 0,
+  }).format(Number(numNoLeadingZeros));
+
+  // If the formatted value is zero dollars, clear the input field
+  const _formatted = fmt === `${prefix}0` ? "" : fmt;
+  // Create a short formatted version of the
+  // number's string representation and avoid
+  // formatting an empty string
+
+  const _shortFormatted =
+    // numStrNoLeadingZeros === "" ? "" : formatCompactCurrencyNoDecimal(numStr);
+    numStrNoLeadingZeros === ""
+      ? ""
+      : new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: currency,
+          notation: "compact",
+          compactDisplay: "short",
+          maximumFractionDigits: 0,
+          maximumSignificantDigits: 4,
+        }).format(Number(numNoLeadingZeros));
+
+  let _valid = priceState.valid;
+  let _errorMsg = priceState.errorMsg;
+
+  // Validate the price and get a errorMsg, if it's not a discount price
+  if (isDiscountPrice === false) {
+    const { valid, errorMsg } = validateNumber(
+      numNoLeadingZeros,
+      minPrice,
+      undefined
+    );
+    _valid = valid;
+    _errorMsg = errorMsg;
+  }
+
+  // Hide the prefix when no amount is present
+  let _value = value;
+  if (value === prefix) {
+    _value = "";
+  }
+
+  // Store the cursor position to state, while taking
+  // into account a groupSeparator and or prefix.
+  if (modifiedCursorPosition !== undefined && modifiedCursorPosition !== null) {
+    let newCursor = modifiedCursorPosition + (_formatted.length - value.length);
+
+    newCursor = newCursor <= 0 ? (prefix ? prefix.length : 0) : newCursor;
+
+    setCursorPosition(newCursor);
+  }
+
+  const s: T.Str = {
+    ...priceState,
+    value: _value,
+    formatted: _formatted,
+    number: numNoLeadingZeros,
+    shortFormatted: _shortFormatted,
+    numberStr: numStrNoLeadingZeros,
+    valid: _valid,
+    errorMsg: _errorMsg,
+    required: priceState.required,
+    beingVerified: false,
+    saved: false,
+    readOnly: false,
+  };
+
+  handleInput(s);
 }
