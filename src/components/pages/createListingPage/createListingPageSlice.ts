@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { initListingData } from "../../../initialValues";
 import { ListingData } from "../../../types";
 
-interface CreateListingPageState {
+export interface CreateListingPageState {
   userAcknowledged: boolean;
   listing: ListingData;
   loading: boolean;

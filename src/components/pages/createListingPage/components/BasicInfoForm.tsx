@@ -56,11 +56,13 @@ import DescriptionInput from "../../../shared/inputs/descriptionInput/Descriptio
 import PriceInput from "../../../shared/inputs/priceInput/PriceInput";
 import DiscountPriceInput from "../../../shared/inputs/discountPriceInput/DiscountPriceInput";
 import TestInput from "./TestInput";
+import FormCheck from "./FormCheck";
 
 export default function BasicInfoForm() {
   // const [state, setState] = useState<BasicInfo>(parent.basicInfo);
 
   const pageState = useAppSelector((s) => s.createListingPage);
+  const basicInfo = pageState.listing.basicInfo;
   const dispatch = useDispatch();
 
   const headerRef = useRef<HTMLHeadingElement>(null);
@@ -551,7 +553,7 @@ export default function BasicInfoForm() {
               setListing({
                 ...pageState.listing,
                 basicInfo: {
-                  ...pageState.listing.basicInfo,
+                  ...basicInfo,
                   description: obj,
                 },
               })
@@ -645,7 +647,7 @@ export default function BasicInfoForm() {
               setListing({
                 ...pageState.listing,
                 basicInfo: {
-                  ...pageState.listing.basicInfo,
+                  ...basicInfo,
                   price: obj,
                 },
               })
@@ -675,57 +677,19 @@ export default function BasicInfoForm() {
               setListing({
                 ...pageState.listing,
                 basicInfo: {
-                  ...pageState.listing.basicInfo,
+                  ...basicInfo,
                   priceChange: obj,
                 },
               })
             )
           }
         />
-
-        {/* <TestInput
-          state={state.price}
-          placeholder="Stop It Safari!"
-          handleInput={(obj) => console.log(obj)}
-        /> */}
-
-        {/* <InputStr<typeof state>
-          size="lg"
-          fieldName="priceChange"
-          groupSeparators={[","]}
-          formatType="USD-no-decimal"
-          prefix="$"
-          min={1}
-          isPriceChange={true}
-          placeholder={
-            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
-              ? "New Price*"
-              : state.forSaleOrRent &&
-                state.forSaleOrRent.value?.id === "for-rent"
-              ? "New Price/Month*"
-              : "New Price*"
-          }
-          originalPrice={state.price.number || 0}
-          parent={state.priceChange || initStrOpt}
-          emit={handleInputStr}
-        /> */}
-        {/* End Basic Info */}
-        {state.saved === false && state.beingVerified === false ? (
-          <SaveSection<typeof state>
-            needsAddressValidation={false}
-            parent={state}
-            parentInitialState={initBasicInfo}
-            emit={handleVerify}
-          />
-        ) : null}
-        {state.beingVerified === true ? (
-          <VerifySection<typeof state>
-            parentName="Basic Information"
-            parent={state}
-            emit={handleVerify}
-          />
-        ) : null}
       </section>
+      <FormCheck
+        formState={basicInfo}
+        initialFormState={initBasicInfo}
+        handleFormVerification={handleVerify}
+      />
     </form>
   );
 }

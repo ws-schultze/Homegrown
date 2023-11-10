@@ -79,11 +79,13 @@
   }
 
   .state {
-    width: calc(50% - 10px);
+    // width: calc(50% - 10px);
+    width: 100%;
   }
 
   .zip {
-    width: calc(50% - 10px);
+    // width: calc(50% - 10px);
+    width: 100%;
   }
 
   .county {

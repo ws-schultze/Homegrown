@@ -16,6 +16,7 @@ import {
   setListing,
   setSavedPages,
 } from "../createListingPageSlice";
+import { useNavigate } from "react-router";
 
 /**
  * Notice that this component only formats objects of Str
@@ -33,34 +34,26 @@ export default function ListingAddressForm() {
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
     useState<Types.AddressValidationApi_Response | null>(null);
 
-  const [address, setAddress] = useState<Types.Address>(initAddress);
+  // const [address, setAddress] = useState<Types.Address>(initAddress);
   const dispatch = useDispatch();
   const pageState = useAppSelector((s) => s.createListingPage);
-
-  /**
-   * Emit state to parent
-   */
-  function handleBlur(e: React.FocusEvent): void {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("handling blur");
-    dispatch(
-      setListing({
-        ...pageState.listing,
-        address: address,
-      })
-    );
-  }
+  const { address } = pageState.listing;
+  const navigate = useNavigate();
 
   function handleStreet(e: React.ChangeEvent<HTMLInputElement>) {
     handleAutocompleteWidget();
-    setAddress((s) => ({
-      ...s,
-      streetAddress: {
-        ...s.streetAddress,
-        value: e.target.value,
-      },
-    }));
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        address: {
+          ...address,
+          streetAddress: {
+            ...address.streetAddress,
+            value: e.target.value,
+          },
+        },
+      })
+    );
   }
 
   function handleUnit(e: React.ChangeEvent<HTMLInputElement>) {
@@ -68,57 +61,72 @@ export default function ListingAddressForm() {
     unit.value = e.target.value;
 
     const s: typeof address = setUnitNumberToState(address, unit);
-    setAddress(s);
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        address: s,
+      })
+    );
   }
 
   function handleCity(e: React.ChangeEvent<HTMLInputElement>) {
-    setAddress((s) => ({
-      ...s,
-      city: {
-        ...s.city,
-        value: e.target.value,
-      },
-    }));
-  }
-
-  function handleCounty(e: React.ChangeEvent<HTMLInputElement>) {
-    setAddress((s) => ({
-      ...s,
-      adminAreaLevel2: {
-        ...s.adminAreaLevel2,
-        value: e.target.value,
-      },
-    }));
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        address: {
+          ...address,
+          city: {
+            ...address.city,
+            value: e.target.value,
+          },
+        },
+      })
+    );
   }
 
   function handleZip(e: React.ChangeEvent<HTMLInputElement>) {
-    setAddress((s) => ({
-      ...s,
-      zipCode: {
-        ...s.zipCode,
-        value: e.target.value,
-      },
-    }));
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        address: {
+          ...address,
+          zipCode: {
+            ...address.zipCode,
+            value: e.target.value,
+          },
+        },
+      })
+    );
   }
 
   function handleState(e: React.ChangeEvent<HTMLInputElement>) {
-    setAddress((s) => ({
-      ...s,
-      adminAreaLevel1: {
-        ...s.adminAreaLevel1,
-        value: e.target.value,
-      },
-    }));
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        address: {
+          ...address,
+          adminAreaLevel1: {
+            ...address.adminAreaLevel1,
+            value: e.target.value,
+          },
+        },
+      })
+    );
   }
 
   function handleCountry(e: React.ChangeEvent<HTMLInputElement>) {
-    setAddress((s) => ({
-      ...s,
-      country: {
-        ...s.country,
-        value: e.target.value,
-      },
-    }));
+    dispatch(
+      setListing({
+        ...pageState.listing,
+        address: {
+          ...address,
+          country: {
+            ...address.country,
+            value: e.target.value,
+          },
+        },
+      })
+    );
   }
 
   function handleAutocompleteWidget() {
@@ -130,13 +138,17 @@ export default function ListingAddressForm() {
     // Listen for click on widget item
     if (autocompleteWidget) {
       autocompleteWidget.addListener("place_changed", () => {
-        const s: typeof address = setAutocompletePlaceValuesToState<
-          typeof address
-        >({
-          state: address,
-          autocomplete: autocompleteWidget,
-        });
-        setAddress(s);
+        const s: Types.Address =
+          setAutocompletePlaceValuesToState<Types.Address>({
+            state: pageState.listing.address,
+            autocomplete: autocompleteWidget,
+          });
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            address: s,
+          })
+        );
       });
     }
   }
@@ -170,6 +182,7 @@ export default function ListingAddressForm() {
       );
       dispatch(setSavedPages([1, 2, 3, 4]));
       dispatch(setCurrentPageNumber(4));
+      navigate("/create-listing/4");
     } else if (actionName === "verify" && address.saved === false) {
       dispatch(
         setListing({
@@ -193,6 +206,10 @@ export default function ListingAddressForm() {
 
       <section>
         <header>Listing Address</header>
+        <p>
+          Start entering the street address and select an option from the
+          dropdown menu
+        </p>
 
         <Wrapper
           apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
@@ -216,7 +233,7 @@ export default function ListingAddressForm() {
               type="text"
               value={address.streetAddress.value}
               onChange={handleStreet}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.streetAddress.errorMsg} />
@@ -236,7 +253,7 @@ export default function ListingAddressForm() {
               type="text"
               value={address.unitNumber.value}
               onChange={handleUnit}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.unitNumber.errorMsg} />
@@ -257,13 +274,13 @@ export default function ListingAddressForm() {
               type="text"
               value={address.city.value}
               onChange={handleCity}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.city.errorMsg} />
           </div>
 
-          <div className={`${styles.input_wrap} ${styles.admin_1}`}>
+          <div className={`${styles.input_wrap} ${styles.state}`}>
             <label
               className={` ${
                 address.adminAreaLevel1.value.length > 0
@@ -280,7 +297,7 @@ export default function ListingAddressForm() {
               type="text"
               value={address.adminAreaLevel1.value}
               onChange={handleState}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.adminAreaLevel1.errorMsg} />
@@ -301,33 +318,10 @@ export default function ListingAddressForm() {
               type="text"
               value={address.zipCode.value}
               onChange={handleZip}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.zipCode.errorMsg} />
-          </div>
-
-          <div className={`${styles.input_wrap} ${styles.admin_2}`}>
-            <label
-              className={` ${
-                address.adminAreaLevel2.value.length > 0
-                  ? styles.show
-                  : styles.hide
-              }`}
-            >
-              County
-            </label>
-
-            <input
-              placeholder="County"
-              ref={countyRef}
-              type="text"
-              value={address.adminAreaLevel2.value}
-              onChange={handleCounty}
-              onBlur={handleBlur}
-              disabled={address.readOnly}
-            />
-            <ErrorMsg errorMsg={address.adminAreaLevel2.errorMsg} />
           </div>
 
           <div className={`${styles.input_wrap} ${styles.admin_2}`}>
@@ -344,7 +338,7 @@ export default function ListingAddressForm() {
               type="text"
               value={address.country.value}
               onChange={handleCountry}
-              onBlur={handleBlur}
+              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.country.errorMsg} />
