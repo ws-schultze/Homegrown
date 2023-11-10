@@ -11,6 +11,7 @@ import {
   ForSaleOrRentValue,
 } from "../../../../types/index";
 import styles from "../styles.module.scss";
+import { useAppSelector } from "../../../../redux/hooks";
 
 export type TypeTwoBtnRowState =
   | TypeBool
@@ -23,49 +24,56 @@ export type BtnValue =
   | ForRentByValue
   | ForSaleByValue;
 
-interface Props<T> {
-  /** Default value is "Yes" */
-  leftBtnText: string;
-  leftBtnValue: BtnValue;
-  /** Default value is "No" */
-  rightBtnText: string;
-  rightBtnValue: BtnValue;
-  fieldName: keyof T;
-  parent: TypeTwoBtnRowState;
-  /**
-   * Layer 1 has larger btns than layer 2
-   */
-  formLayer: "1" | "2";
-  label?: string;
-  emit: (key: keyof T, obj: TypeTwoBtnRowState) => void;
-}
+// interface Props<T> {
+//   /** Default value is "Yes" */
+//   leftBtnText: string;
+//   leftBtnValue: BtnValue;
+//   /** Default value is "No" */
+//   rightBtnText: string;
+//   rightBtnValue: BtnValue;
+//   fieldName: keyof T;
+//   parent: T;
+//   /**
+//    * Layer 1 has larger btns than layer 2
+//    */
+//   formLayer: "1" | "2";
+//   label?: string;
+//   handleSelected: (obj: T) => void;
+// }
 
 export default function TwoBtnRow<T>({
   leftBtnText,
   leftBtnValue,
   rightBtnText,
   rightBtnValue,
+  state,
   fieldName,
-  parent,
-  formLayer,
   label,
-  emit,
-}: Props<T>) {
-  const [state, setState] = useState<TypeTwoBtnRowState>(parent);
+  handleSelected,
+}: {
+  /** Default value is "Yes" */
+  leftBtnText: string;
+  leftBtnValue: BtnValue;
+  /** Default value is "No" */
+  rightBtnText: string;
+  rightBtnValue: BtnValue;
+  state: TypeTwoBtnRowState;
+  fieldName: keyof T;
+  label?: string;
+  handleSelected: (fieldName: keyof T, obj: TypeTwoBtnRowState) => void;
+}) {
+  // const [state, setState] = useState<TypeTwoBtnRowState>(parent);
 
   /**
    * Catch error msg passed down from parent
    */
-  useEffect(() => {
-    setState({
-      ...parent,
-    });
-  }, [parent]);
+  // useEffect(() => {
+  //   setState({
+  //     ...parent,
+  //   });
+  // }, [parent]);
 
   function handleClick(value: BtnValue): void {
-    console.log("click");
-    if (parent.value !== null) {
-    }
     const s: typeof state = {
       ...state,
       value: value,
@@ -73,29 +81,30 @@ export default function TwoBtnRow<T>({
       errorMsg: "",
     };
 
-    setState(s);
-    emit(fieldName, s);
+    // setState(s);
+    // emit(fieldName, s);
+    handleSelected(fieldName, s);
   }
 
   function getBtnClass(btnValue: BtnValue): string {
     let btnClass = "";
 
-    if (parent.value === null && btnValue === null) {
+    if (state.value === null && btnValue === null) {
       btnClass = "";
-    } else if (parent.value === true && btnValue === true) {
-      btnClass = styles.active;
-    } else if (parent.value === false && btnValue === false) {
-      btnClass = styles.active;
+    } else if (state.value === true && btnValue === true) {
+      btnClass = "active";
+    } else if (state.value === false && btnValue === false) {
+      btnClass = "active";
     } else if (
-      parent.value !== null &&
-      parent.value !== true &&
-      parent.value !== false &&
+      state.value !== null &&
+      state.value !== true &&
+      state.value !== false &&
       btnValue !== null &&
       btnValue !== true &&
       btnValue !== false
     ) {
-      if (parent.value.label === btnValue.label) {
-        btnClass = styles.active;
+      if (state.value.label === btnValue.label) {
+        btnClass = "active";
       }
     }
 
@@ -109,16 +118,7 @@ export default function TwoBtnRow<T>({
           {label !== undefined ? <label>{label}</label> : null}
           <div className={styles.two_btn_row}>
             <button
-              className={`
-                ${
-                  formLayer === "1"
-                    ? styles.btn
-                    : formLayer === "2"
-                    ? styles.btn
-                    : ""
-                }
-                ${getBtnClass(leftBtnValue)}
-              `}
+              className={`btn ${styles.btn} ${getBtnClass(leftBtnValue)} `}
               type="button"
               onClick={() => {
                 handleClick(leftBtnValue);
@@ -128,16 +128,7 @@ export default function TwoBtnRow<T>({
               {leftBtnText !== undefined ? leftBtnText : "Yes"}
             </button>
             <button
-              className={`
-                ${
-                  formLayer === "1"
-                    ? styles.btn
-                    : formLayer === "2"
-                    ? styles.btn
-                    : ""
-                }
-                ${getBtnClass(rightBtnValue)}
-              `}
+              className={`btn ${styles.btn} ${getBtnClass(rightBtnValue)} `}
               type="button"
               value="false"
               onClick={() => {

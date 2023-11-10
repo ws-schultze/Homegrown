@@ -36,8 +36,22 @@ export interface TypeInputBase extends Verify {
   shortFormatted: string;
 }
 
-export interface Str extends TypeInputBase {
+// export interface Str extends TypeInputBase {
+//   value: string;
+// }
+
+export interface Str {
   value: string;
+  numberStr: string;
+  number: number;
+  formatted: string;
+  shortFormatted: string;
+  beingVerified: boolean;
+  errorMsg: string;
+  valid: boolean;
+  saved: boolean;
+  readOnly: boolean;
+  required: boolean;
 }
 
 export type TypeBoolValue = boolean | null;

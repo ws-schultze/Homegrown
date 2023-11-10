@@ -7,15 +7,18 @@ import {
   setUserAcknowledged,
 } from "../createListingPageSlice";
 import Pagination from "./Pagination";
+import { useNavigate } from "react-router";
 
 export default function UserAcknowledgementForm(): JSX.Element {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const pageState = useAppSelector((s) => s.createListingPage);
 
   function handleClick() {
     dispatch(setUserAcknowledged(true));
     dispatch(setSavedPages([1, 2]));
     dispatch(setCurrentPageNumber(2));
+    navigate("/create-listing/2");
   }
 
   return (
@@ -31,14 +34,15 @@ export default function UserAcknowledgementForm(): JSX.Element {
         </p>
         <button
           type="button"
-          className={`${styles.btn} ${
-            pageState.userAcknowledged === true ? styles.active : ""
+          className={`btn ${styles.btn} ${
+            pageState.userAcknowledged === true ? "active" : ""
           }`}
           onClick={handleClick}
         >
           I understand
         </button>
       </section>
+      {pageState.userAcknowledged === true ? <Pagination /> : null}
     </form>
   );
 }

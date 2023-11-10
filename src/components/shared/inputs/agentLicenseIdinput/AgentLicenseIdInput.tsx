@@ -1,21 +1,19 @@
 import React, { useRef } from "react";
 import { validateRealEstateLicenseIdNumber } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
-import * as Types from "../../../../types/index";
-import styles from "./inputStr.module.scss";
+import styles from "../scss/inputs.module.scss";
+import { Str } from "../../../../types";
 
-interface Props<T> {
-  state: T;
+interface Props {
+  state: Str;
   placeholder: string;
-  handleInput: (state: T) => void;
+  handleInput: (state: Str) => void;
 }
 
 /**
  * Notice that this component only formats objects of Str
  */
-export default function AgentLicenseIdInput<T extends Types.Str>(
-  props: Props<T>
-) {
+export default function AgentLicenseIdInput(props: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   function handleChange(
@@ -27,7 +25,7 @@ export default function AgentLicenseIdInput<T extends Types.Str>(
 
     const { valid, errorMsg } = validateRealEstateLicenseIdNumber(value);
 
-    const s: T = {
+    const s: Str = {
       ...props.state,
       value: value,
       valid: valid,

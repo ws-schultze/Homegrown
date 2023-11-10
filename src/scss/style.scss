@@ -155,6 +155,10 @@ button {
   border: none;
 }
 
+.btn {
+  @include fwd.btn;
+}
+
 .primary-btn {
   cursor: pointer;
   border-radius: var(--border-radius);
@@ -465,27 +469,4 @@ input:-internal-autofill-selected {
 .mapLoaderSvg g {
   fill: var(--color-primary) !important;
   animation: fadeIn 1.5s ease-in infinite alternate;
-}
-
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  background: var(--color-bg-primary);
-  color: var(--color-text);
-  border: var(--border);
-  border-radius: var(--border-radius);
-  fill: var(--color-text);
-  &:hover {
-    // background: var(--color-primary);
-    color: var(--color-primary);
-    fill: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-  &.active {
-    color: var(--color-btn-solid__text);
-    fill: var(--color-btn-solid__text);
-    background-color: var(--color-primary);
-  }
 }

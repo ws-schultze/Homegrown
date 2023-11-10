@@ -1,4 +1,5 @@
 @use "../../../scss/breakpoints" as bp;
+@use "sass:map";
 
 .container {
   display: flex;
@@ -81,27 +82,6 @@
     fill: var(--color-text);
     width: 40px;
     height: 40px;
-  }
-  &:hover {
-    color: var(--color-primary);
-    fill: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-  @include bp.sm-screen-breakpoint {
-    &:hover {
-      color: var(--color--text);
-      border: var(--border);
-      svg {
-        fill: var(--color-text);
-      }
-    }
-  }
-  &.active {
-    color: var(--color-btn-solid__text);
-    background-color: var(--color-primary);
-    svg {
-      fill: var(--color-btn-solid__text);
-    }
   }
 }
 

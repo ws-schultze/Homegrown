@@ -3,7 +3,7 @@ import { ReactComponent as BellSVG } from "../../../../assets/svg/bell-regular.s
 import styles from "../styles.module.scss";
 
 interface Props<T> {
-  // /** Whether or not a field remains disabled in edit mode -- set to false by parent when user confirms a prompt */
+  /** Whether or not a field remains disabled in edit mode -- set to false by parent when user confirms a prompt */
   parent: T;
   // children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
   emit: (actionName: VerifyActionName, obj: T) => void;

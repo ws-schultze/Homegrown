@@ -4,21 +4,26 @@ import { ReactComponent as ArrowRightSVG } from "../../../../assets/svg/arrow-ri
 import styles from "../styles.module.scss";
 import { setCurrentPageNumber } from "../createListingPageSlice";
 import { useAppSelector } from "../../../../redux/hooks";
+import { useNavigate } from "react-router";
 
 export default function Pagination(): JSX.Element {
   const dispatch = useDispatch();
   const pageState = useAppSelector((s) => s.createListingPage);
+  const navigate = useNavigate();
 
   function nextPage() {
     dispatch(setCurrentPageNumber(pageState.currentPageNumber + 1));
+    navigate(`/create-listing/${pageState.currentPageNumber}`);
   }
 
   function prevPage() {
     dispatch(setCurrentPageNumber(pageState.currentPageNumber - 1));
+    navigate(`/create-listing/${pageState.currentPageNumber}`);
   }
 
   function toPageNumber(num: number) {
     dispatch(setCurrentPageNumber(num));
+    navigate(`/create-listing/${pageState.currentPageNumber}`);
   }
 
   return (

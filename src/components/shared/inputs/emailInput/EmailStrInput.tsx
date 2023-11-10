@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { validateEmail } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import * as Types from "../../../../types/index";
-import styles from "./inputStr.module.scss";
+import styles from "../scss/inputs.module.scss";
 
 interface Props<T> {
   state: T;

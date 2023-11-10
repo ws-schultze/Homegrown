@@ -6,20 +6,23 @@ import {
   validateRealEstateLicenseIdNumber,
 } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
-import * as Types from "../../../../types/index";
-import styles from "./inputStr.module.scss";
+import styles from "../scss/inputs.module.scss";
+import { Str } from "../../../../types";
+import { InputProps } from "../inputProps";
 
-interface Props<T> {
-  state: T;
-  placeholder: string;
-  groupSeparators: string[];
-  handleInput: (state: T) => void;
+interface Props extends InputProps {
+  /**
+   * For inputs such as phone number, consider [")", "-"]
+   *
+   * For money consider [",", "."]
+   */
+  groupSeparators?: string[];
 }
 
 /**
  * Notice that this component only formats objects of Str
  */
-export default function PhoneNumberInput<T extends Types.Str>(props: Props<T>) {
+export default function PhoneNumberInput(props: Props) {
   const [cursorPosition, setCursorPosition] = useState(0);
   const [lastKeyDown, setLastKeyDown] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -68,7 +71,7 @@ export default function PhoneNumberInput<T extends Types.Str>(props: Props<T>) {
       setCursorPosition(newCursor);
     }
 
-    const s: T = {
+    const s: Str = {
       ...props.state,
       value: value,
       formatted: formatted,

@@ -37,7 +37,6 @@ import {
   initPrivateOwner,
   initSingleFamilyHome,
   initTownhouse,
-  initStrOpt,
   listingKindValuesForRent,
   listingKindValuesForSale,
 } from "../../../../initialValues";
@@ -46,8 +45,6 @@ import Dropdown from "../../../shared/dropdown/Dropdown";
 import VerifySection from "./VerifySection";
 import EditFormSection from "./EditFormSection";
 import SaveSection from "./SaveSection";
-import PageBtns from "./PageBtns-old";
-import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import {
@@ -55,20 +52,10 @@ import {
   setListing,
   setSavedPages,
 } from "../createListingPageSlice";
-
-interface Props {
-  // parent: ListingData;
-  // nextPage: () => void;
-  // prevPage?: () => void;
-  // toPageNumber?: (number: number) => void;
-  // deleteListing: () => void;
-  // pageNumbers?: number[];
-  // currentPage?: number;
-  // emit: (
-  //   obj: ListingData,
-  //   addressValidationApiResponse?: AddressValidationApi_Response
-  // ) => void;
-}
+import DescriptionInput from "../../../shared/inputs/descriptionInput/DescriptionInput";
+import PriceInput from "../../../shared/inputs/priceInput/PriceInput";
+import DiscountPriceInput from "../../../shared/inputs/discountPriceInput/DiscountPriceInput";
+import TestInput from "./TestInput";
 
 export default function BasicInfoForm() {
   // const [state, setState] = useState<BasicInfo>(parent.basicInfo);
@@ -78,13 +65,9 @@ export default function BasicInfoForm() {
 
   const headerRef = useRef<HTMLHeadingElement>(null);
 
-  // useEffect(() => {
-  //   document.body.focus();
-  // }, []);
-
-  // useEffect(() => {
-  //   setState(parent.basicInfo);
-  // }, [parent]);
+  useEffect(() => {
+    headerRef.current?.focus();
+  }, [headerRef.current]);
 
   function handleTwoBtnRow(
     fieldName: keyof typeof pageState.listing.basicInfo,
@@ -94,22 +77,22 @@ export default function BasicInfoForm() {
     switch (object.value?.id) {
       case "for-sale":
         console.log("SALE");
-        forSale();
+        handleForSale();
         break;
       case "for-rent":
-        forRent();
+        handleForRent();
         break;
       case "agent":
-        forSaleByAgent();
+        handleForSaleByAgent();
         break;
       case "owner":
-        forSaleByOwner();
+        handleForSaleByOwner();
         break;
       case "company":
-        forRentByCompany();
+        handleForRentByCompany();
         break;
       case "private-owner":
-        forRentByPrivateOwner();
+        handleForRentByPrivateOwner();
         break;
 
       default:
@@ -117,7 +100,7 @@ export default function BasicInfoForm() {
     }
   }
 
-  function forSale(): void {
+  function handleForSale(): void {
     const { company, privateOwner, ...p } = pageState.listing;
     const { forRentBy, ...rest } = pageState.listing.basicInfo;
 
@@ -176,7 +159,7 @@ export default function BasicInfoForm() {
     }
   }
 
-  function forRent(): void {
+  function handleForRent(): void {
     const { agent, owner, ...p } = pageState.listing;
     const { forSaleBy, ...rest } = pageState.listing.basicInfo;
 
@@ -237,7 +220,7 @@ export default function BasicInfoForm() {
    * 1) Select "Agent" initially --> no "Owner" cleanup needed.
    * 2) Select "Agent" after "Owner" has been selected and information has been filled out --> "Owner" cleanup needed.
    */
-  function forSaleByAgent(): void {
+  function handleForSaleByAgent(): void {
     if (pageState.listing.basicInfo.forSaleBy !== undefined) {
       const { owner, company, privateOwner, ...o } = pageState.listing;
 
@@ -284,7 +267,7 @@ export default function BasicInfoForm() {
    * 1) Select "Owner" initially --> no "Agent" cleanup needed.
    * 2) Select "Owner" after "Agent" has been selected and information has been filled out --> "Agent" cleanup needed.
    */
-  function forSaleByOwner(): void {
+  function handleForSaleByOwner(): void {
     // If for sale by owner, make sure agent is not in state
 
     if (pageState.listing.basicInfo.forSaleBy !== undefined) {
@@ -333,7 +316,7 @@ export default function BasicInfoForm() {
    * 1) Select "Company" initially --> no "Private Party" cleanup needed.
    * 2) Select "Company" after "Private Party" has been selected and information has been filled out --> cleanup "Private Party"
    */
-  function forRentByCompany(): void {
+  function handleForRentByCompany(): void {
     if (pageState.listing.basicInfo.forRentBy !== undefined) {
       // Remove other seller kinds from state
       const { agent, owner, privateOwner, ...o } = pageState.listing;
@@ -379,7 +362,7 @@ export default function BasicInfoForm() {
    * 1) Select "Private Party" initially --> no "Company" cleanup needed.
    * 2) Select "Private Party" after "Company" has been selected and information has been filled out --> cleanup "Company"
    */
-  function forRentByPrivateOwner(): void {
+  function handleForRentByPrivateOwner(): void {
     if (pageState.listing.basicInfo.forRentBy !== undefined) {
       // Remove other seller kinds from state
       const { agent, owner, company, ...o } = pageState.listing;
@@ -507,18 +490,6 @@ export default function BasicInfoForm() {
     }
   }
 
-  function handleInputStr(
-    object: Str,
-    fieldName: keyof typeof pageState.listing.basicInfo
-  ) {
-    dispatch(
-      setListing({
-        ...pageState.listing,
-        [fieldName]: object,
-      })
-    );
-  }
-
   function handleVerify(actionName: VerifyActionName, obj: BasicInfo) {
     if (actionName === "save" || actionName === "edit") {
       dispatch(
@@ -559,6 +530,7 @@ export default function BasicInfoForm() {
 
   const state = pageState.listing.basicInfo;
 
+  setTimeout(() => {}, 200);
   return (
     <form>
       {state.saved === true ? (
@@ -568,53 +540,62 @@ export default function BasicInfoForm() {
       ) : null}
       <section>
         <header ref={headerRef}>Basic Information</header>
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="description"
-          placeholder="Listing Description"
-          formatType="description"
-          min={20}
-          max={120}
-          parent={state.description}
-          emit={handleInputStr}
+
+        <DescriptionInput
+          minDescriptionLength={20}
+          maxDescriptionLength={280}
+          state={pageState.listing.basicInfo.description}
+          placeholder="Property description"
+          handleInput={(obj) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                basicInfo: {
+                  ...pageState.listing.basicInfo,
+                  description: obj,
+                },
+              })
+            )
+          }
         />
-        <TwoBtnRow<typeof state>
+
+        <TwoBtnRow<typeof pageState.listing.basicInfo>
           leftBtnText="For Sale"
           leftBtnValue={{ id: "for-sale", label: "For Sale" }}
           rightBtnText="For Rent"
           rightBtnValue={{ id: "for-rent", label: "For Rent" }}
+          label="For sale/rent"
+          state={state.forSaleOrRent}
           fieldName="forSaleOrRent"
-          formLayer="1"
-          label="Sell/Rent"
-          parent={state.forSaleOrRent}
-          emit={handleTwoBtnRow}
+          handleSelected={handleTwoBtnRow}
         />
-        {state.forSaleBy !== undefined ? (
-          <TwoBtnRow<typeof state>
+
+        {state.forSaleBy ? (
+          <TwoBtnRow<typeof pageState.listing.basicInfo>
             leftBtnText="Agent"
             leftBtnValue={{ id: "agent", label: "Agent" }}
             rightBtnText="Owner"
             rightBtnValue={{ id: "owner", label: "Owner" }}
-            fieldName="forSaleBy"
-            formLayer="1"
             label="Listed by"
-            parent={state.forSaleBy}
-            emit={handleTwoBtnRow}
+            state={state.forSaleBy}
+            fieldName="forSaleBy"
+            handleSelected={handleTwoBtnRow}
           />
         ) : null}
-        {state.forRentBy !== undefined ? (
-          <TwoBtnRow<typeof state>
+
+        {state.forRentBy ? (
+          <TwoBtnRow<typeof pageState.listing.basicInfo>
             leftBtnText="Company"
             leftBtnValue={{ id: "company", label: "Company" }}
-            rightBtnText="Private Owner"
+            rightBtnText="Owner"
             rightBtnValue={{ id: "private-owner", label: "Private Owner" }}
-            fieldName="forRentBy"
-            formLayer="1"
             label="Listed by"
-            parent={state.forRentBy}
-            emit={handleTwoBtnRow}
+            state={state.forRentBy}
+            fieldName="forRentBy"
+            handleSelected={handleTwoBtnRow}
           />
         ) : null}
+
         {state.forSaleOrRent.value?.id === "for-sale" ? (
           <Dropdown<ListingKindValue>
             placeHolder={"What are you selling?"}
@@ -628,6 +609,7 @@ export default function BasicInfoForm() {
             emit={handleListingKind}
           />
         ) : null}
+
         {state.forSaleOrRent.value?.id === "for-rent" ? (
           <Dropdown<ListingKindValue>
             placeHolder={"What are you renting?"}
@@ -641,9 +623,11 @@ export default function BasicInfoForm() {
             emit={handleListingKind}
           />
         ) : null}
-        <InputStr<typeof state>
-          size="lg"
-          fieldName="price"
+
+        <PriceInput
+          state={state.price}
+          isPriceFilter={false}
+          minPrice={1}
           placeholder={
             state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
               ? "Price"
@@ -653,13 +637,52 @@ export default function BasicInfoForm() {
               : "Price"
           }
           groupSeparators={[","]}
-          prefix="$"
-          formatType="USD-no-decimal"
-          min={1}
-          parent={state.price}
-          emit={handleInputStr}
+          handleInput={(obj) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                basicInfo: {
+                  ...pageState.listing.basicInfo,
+                  price: obj,
+                },
+              })
+            )
+          }
         />
-        <InputStr<typeof state>
+
+        {/* <DiscountPriceInput
+          state={state.priceChange}
+          groupSeparators={[","]}
+          originalPrice={state.price.number}
+          prefix="$"
+          placeholder={
+            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
+              ? "New price*"
+              : state.forSaleOrRent &&
+                state.forSaleOrRent.value?.id === "for-rent"
+              ? "New price/month*"
+              : "New price*"
+          }
+          handleInput={(obj) =>
+            dispatch(
+              setListing({
+                ...pageState.listing,
+                basicInfo: {
+                  ...pageState.listing.basicInfo,
+                  priceChange: obj,
+                },
+              })
+            )
+          }
+        /> */}
+
+        <TestInput
+          state={state.price}
+          placeholder="Stop It Safari!"
+          handleInput={(obj) => console.log(obj)}
+        />
+
+        {/* <InputStr<typeof state>
           size="lg"
           fieldName="priceChange"
           groupSeparators={[","]}
@@ -678,7 +701,7 @@ export default function BasicInfoForm() {
           originalPrice={state.price.number || 0}
           parent={state.priceChange || initStrOpt}
           emit={handleInputStr}
-        />
+        /> */}
         {/* End Basic Info */}
         {state.saved === false && state.beingVerified === false ? (
           <SaveSection<typeof state>

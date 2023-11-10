@@ -330,7 +330,10 @@ export default function ProfilePage() {
               Reset password
             </button>
             {state.unfinishedListing === null ? (
-              <Link to="/create-listing/1/notice" className={styles.btn}>
+              <Link
+                to={`/create-listing/${createListingPageState.currentPageNumber}`}
+                className={styles.btn}
+              >
                 <MoneySVG />
                 <p>List a Property</p>
               </Link>

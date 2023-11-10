@@ -17,7 +17,7 @@ export const initialCreateListingPageState: CreateListingPageState = {
   userAcknowledged: false,
   listing: initListingData,
   loading: false,
-  pageNumbers: [],
+  pageNumbers: [1, 2, 3, 4, 5, 6, 7],
   currentPageNumber: 1,
   currentPageName: "acknowledgment",
   savedPages: [],

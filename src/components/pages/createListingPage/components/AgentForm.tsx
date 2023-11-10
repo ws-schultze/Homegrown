@@ -1,20 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Str,
-  TypeAgent,
   AddressValidationApi_Response,
-  ListingData,
   VerifyActionName,
 } from "../../../../types/index";
 import { initAgent } from "../../../../initialValues";
-import InputStr from "../../../shared/inputs/inputStr/InputStr";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
 import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
 import EditFormSection from "./EditFormSection";
 import VerifySection from "./VerifySection";
 import SaveSection from "./SaveSection";
-import PageBtns from "./PageBtns-old";
 import setUnitNumberToState from "./utils/setUnitNumberToState";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import styles from "../styles.module.scss";
@@ -29,20 +25,9 @@ import NameInput from "../../../shared/inputs/nameInput/NameInput";
 import AgentLicenseIdInput from "../../../shared/inputs/agentLicenseIdinput/AgentLicenseIdInput";
 import PhoneNumberInput from "../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
 import EmailStrInput from "../../../shared/inputs/emailInput/EmailStrInput";
-
-// interface Props {
-//   parent: ListingData;
-//   prevPage: () => void;
-//   nextPage: () => void;
-//   toPageNumber?: (number: number) => void;
-//   deleteListing: () => void;
-//   pageNumbers?: number[];
-//   currentPage?: number;
-//   emit: (obj: ListingData) => void;
-// }
+import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 
 export default function AgentForm() {
-  // const [state, setState] = useState<TypeAgent>(parent.agent!);
   const pageState = useAppSelector((s) => s.createListingPage);
   const { agent } = pageState.listing;
   const dispatch = useDispatch();
@@ -50,7 +35,7 @@ export default function AgentForm() {
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
     useState<AddressValidationApi_Response | null>(null);
-  const streetAddressRef = useRef<HTMLInputElement | null>(null);
+  const streetRef = useRef<HTMLInputElement | null>(null);
 
   if (!agent) throw new Error("agent is undefined");
 
@@ -73,8 +58,8 @@ export default function AgentForm() {
    * https://developers.google.com/maps/documentation/javascript/reference/places-widget
    */
   function handleAutocompleteWidget() {
-    if (streetAddressRef.current && streetAddressRef.current !== null) {
-      const widget = makeAutocompleteWidget(streetAddressRef);
+    if (streetRef.current && streetRef.current !== null) {
+      const widget = makeAutocompleteWidget(streetRef);
       setAutocompleteWidget(widget);
     }
 
@@ -177,7 +162,7 @@ export default function AgentForm() {
       <section>
         <header>Agent Information</header>
 
-        <NameInput<typeof agent.firstName>
+        <NameInput
           state={agent.firstName}
           placeholder="First name"
           handleInput={(name) =>
@@ -193,7 +178,7 @@ export default function AgentForm() {
           }
         />
 
-        <NameInput<typeof agent.middleName>
+        <NameInput
           state={agent.middleName}
           placeholder="Middle name*"
           handleInput={(name) =>
@@ -209,7 +194,7 @@ export default function AgentForm() {
           }
         />
 
-        <NameInput<typeof agent.lastName>
+        <NameInput
           state={agent.lastName}
           placeholder="Last name"
           handleInput={(name) =>
@@ -225,7 +210,7 @@ export default function AgentForm() {
           }
         />
 
-        <NameInput<typeof agent.companyName>
+        <NameInput
           state={agent.companyName}
           placeholder="Company name"
           handleInput={(name) =>
@@ -242,7 +227,7 @@ export default function AgentForm() {
         />
 
         <div className={styles.flex_row}>
-          <AgentLicenseIdInput<typeof agent.licenseId>
+          <AgentLicenseIdInput
             state={agent.licenseId}
             placeholder="License ID"
             handleInput={(state) =>
@@ -258,7 +243,7 @@ export default function AgentForm() {
             }
           />
 
-          <PhoneNumberInput<typeof agent.phoneNumber>
+          <PhoneNumberInput
             state={agent.phoneNumber}
             placeholder="Phone number"
             groupSeparators={[")", "-"]}
@@ -276,7 +261,7 @@ export default function AgentForm() {
           />
         </div>
 
-        <EmailStrInput<typeof agent.email>
+        <EmailStrInput<Str>
           state={agent.email}
           placeholder="Email"
           handleInput={(state) =>
@@ -293,7 +278,7 @@ export default function AgentForm() {
         />
 
         {/* Address */}
-        <Wrapper
+        {/* <Wrapper 
           apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
           render={renderMap}
           version="beta"
@@ -350,7 +335,122 @@ export default function AgentForm() {
             parent={state.country}
             emit={handleInputStr}
           />
-        </Wrapper>
+        </Wrapper> */}
+
+        <div className={styles.container}>
+          {agent.saved === true ? (
+            <section>
+              <EditFormSection parent={agent} emit={handleVerify} />
+            </section>
+          ) : null}
+
+          <section>
+            <header>Agent Address</header>
+
+            <Wrapper
+              apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
+              render={renderMap}
+              version="beta"
+              libraries={["places", "marker"]}
+            >
+              <NameInput
+                state={agent.streetAddress}
+                placeholder="Street number"
+                handleInput={(obj) =>
+                  dispatch(
+                    setListing({
+                      ...pageState.listing,
+                      agent: {
+                        ...pageState.listing.agent!,
+                        streetAddress: obj,
+                      },
+                    })
+                  )
+                }
+              />
+
+              <NameInput
+                state={agent.unitNumber}
+                placeholder="Unit number"
+                handleInput={(obj) =>
+                  dispatch(
+                    setListing({
+                      ...pageState.listing,
+                      agent: {
+                        ...pageState.listing.agent!,
+                        unitNumber: obj,
+                      },
+                    })
+                  )
+                }
+              />
+
+              <NameInput
+                state={agent.city}
+                placeholder="City"
+                handleInput={(obj) =>
+                  dispatch(
+                    setListing({
+                      ...pageState.listing,
+                      agent: {
+                        ...pageState.listing.agent!,
+                        city: obj,
+                      },
+                    })
+                  )
+                }
+              />
+
+              <NameInput
+                state={agent.adminAreaLevel1}
+                placeholder="State"
+                handleInput={(obj) =>
+                  dispatch(
+                    setListing({
+                      ...pageState.listing,
+                      agent: {
+                        ...pageState.listing.agent!,
+                        adminAreaLevel1: obj,
+                      },
+                    })
+                  )
+                }
+              />
+
+              <NameInput
+                state={agent.zipCode}
+                placeholder="Postal Code"
+                handleInput={(obj) =>
+                  dispatch(
+                    setListing({
+                      ...pageState.listing,
+                      agent: {
+                        ...pageState.listing.agent!,
+                        zipCode: obj,
+                      },
+                    })
+                  )
+                }
+              />
+
+              <NameInput
+                state={agent.country}
+                placeholder="Country"
+                handleInput={(obj) =>
+                  dispatch(
+                    setListing({
+                      ...pageState.listing,
+                      agent: {
+                        ...pageState.listing.agent!,
+                        country: obj,
+                      },
+                    })
+                  )
+                }
+              />
+            </Wrapper>
+          </section>
+        </div>
       </section>
 
       {/* Clear/Save */}

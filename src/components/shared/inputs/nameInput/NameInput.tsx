@@ -1,24 +1,14 @@
 import React, { useRef } from "react";
 import { validateName } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
-import * as Types from "../../../../types/index";
-import styles from "./inputStr.module.scss";
-
-interface Props<T> {
-  /**
-   * If this is used for a first name input, the state will be the first name object of type str
-   */
-  state: T;
-  //   fieldName: keyof T;
-  placeholder?: string;
-  //   emit: (name: Types.Str, key: keyof T) => void;
-  handleInput: (state: T) => void;
-}
+import styles from "../scss/inputs.module.scss";
+import { Str } from "../../../../types";
+import { InputProps } from "../inputProps";
 
 /**
  * Notice that this component only formats objects of Str
  */
-export default function NameInput<T extends Types.Str>(props: Props<T>) {
+export default function NameInput(props: InputProps) {
   //   const [state, setState] = useState<Types.Str>(props.state);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -35,7 +25,7 @@ export default function NameInput<T extends Types.Str>(props: Props<T>) {
 
     const { valid, errorMsg } = validateName(value, props.state.required);
 
-    const s: T = {
+    const s: Str = {
       ...props.state,
       value: value,
       valid: valid,

@@ -14,6 +14,7 @@ import MobileLogo from "../../logo/mobile/MobileLogo";
 import DesktopLogo from "../../logo/desktop/DesktopLogo";
 
 export default function MobileNavbar() {
+  const createListingPageState = useAppSelector((s) => s.createListingPage);
   const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const placeFilter = useAppSelector((state) => state.placeFilter);
@@ -92,15 +93,27 @@ export default function MobileNavbar() {
             >
               Home finder
             </Link>
-            <Link
-              to={"/create-listing"}
-              onClick={closeMenu}
-              className={`
-              ${styles["nav-link"]}
-              ${pathMatchRoute("/listings", location) ? "active" : ""}`}
-            >
-              List your property
-            </Link>
+            {createListingPageState.userAcknowledged ? (
+              <Link
+                to={`/create-listing/${createListingPageState.currentPageNumber}`}
+                onClick={closeMenu}
+                className={`
+${styles["nav-link"]}
+${pathMatchRoute("/listings", location) ? "active" : ""}`}
+              >
+                Continue your listing
+              </Link>
+            ) : (
+              <Link
+                to={"/create-listing/1"}
+                onClick={closeMenu}
+                className={`
+                ${styles["nav-link"]}
+                ${pathMatchRoute("/listings", location) ? "active" : ""}`}
+              >
+                List your property
+              </Link>
+            )}
 
             <ProfileBtn
               closeMenu={screenSize !== "desktop" ? closeMenu : undefined}

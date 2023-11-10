@@ -97,6 +97,7 @@ export default function CreateListingPage(): JSX.Element {
   }, [isAuthenticated, userId]);
 
   useEffect(() => {
+    console.log("scrolling to top");
     document.getElementById("main-container")?.scrollTo(0, 0);
   }, [pageState.currentPageNumber]);
 
@@ -243,25 +244,25 @@ export default function CreateListingPage(): JSX.Element {
   //   }
   // }
 
-  function handleEmit(
-    obj: ListingData,
-    addressValidationApiResponse?: AddressValidationApi_Response
-  ) {
-    setState(obj);
+  // function handleEmit(
+  //   obj: ListingData,
+  //   addressValidationApiResponse?: AddressValidationApi_Response
+  // ) {
+  //   setState(obj);
 
-    // Don't use local storage to keep images
-    const s: typeof state = {
-      ...obj,
-      uploads: {
-        ...obj.uploads,
-        images: {
-          ...obj.uploads.images,
-          value: [],
-        },
-      },
-    };
-    localStorage.setItem("unfinished-listing", JSON.stringify(s));
-  }
+  //   // Don't use local storage to keep images
+  //   const s: typeof state = {
+  //     ...obj,
+  //     uploads: {
+  //       ...obj.uploads,
+  //       images: {
+  //         ...obj.uploads.images,
+  //         value: [],
+  //       },
+  //     },
+  //   };
+  //   localStorage.setItem("unfinished-listing", JSON.stringify(s));
+  // }
 
   // function handleListingAddress(
   //   address: Address,
@@ -310,7 +311,6 @@ export default function CreateListingPage(): JSX.Element {
       return (
         <div className={styles.container}>
           <UserAcknowledgementForm />
-          {pageState.userAcknowledged === true ? <Pagination /> : null}
           <Footer />
         </div>
       );
@@ -325,8 +325,6 @@ export default function CreateListingPage(): JSX.Element {
       );
 
     case 3:
-      console.log("hello");
-      navigate("create-listing/3/listing-address");
       return (
         <div className={styles.container}>
           <ListingAddressForm />
@@ -336,9 +334,6 @@ export default function CreateListingPage(): JSX.Element {
       );
 
     case 4:
-      console.log("hello");
-
-      navigate("create-listing/4/lister-info");
       return (
         <div className={styles.container}>
           {state.basicInfo.forSaleBy !== undefined ? (
