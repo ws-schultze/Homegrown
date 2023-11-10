@@ -28,13 +28,15 @@ export default function Pagination(): JSX.Element {
 
   return (
     <div className={styles.pagination}>
-      <button
-        className={`btn ${styles.btn} ${styles.page_btn}`}
-        type="button"
-        onClick={prevPage}
-      >
-        <ArrowLeftSVG />
-      </button>
+      {pageState.currentPageNumber === 1 ? null : (
+        <button
+          className={`btn ${styles.btn} ${styles.page_btn}`}
+          type="button"
+          onClick={prevPage}
+        >
+          <ArrowLeftSVG />
+        </button>
+      )}
 
       {pageState.pageNumbers.map((pg, index) => (
         <button
@@ -49,13 +51,15 @@ export default function Pagination(): JSX.Element {
         </button>
       ))}
 
-      <button
-        className={`btn ${styles.btn} ${styles.page_btn}`}
-        type="button"
-        onClick={nextPage}
-      >
-        <ArrowRightSVG />
-      </button>
+      {pageState.currentPageNumber === 7 ? null : (
+        <button
+          className={`btn ${styles.btn} ${styles.page_btn}`}
+          type="button"
+          onClick={nextPage}
+        >
+          <ArrowRightSVG />
+        </button>
+      )}
     </div>
   );
 }

@@ -311,6 +311,7 @@ export default function CreateListingPage(): JSX.Element {
       return (
         <div className={styles.container}>
           <UserAcknowledgementForm />
+          {pageState.userAcknowledged ? <Pagination /> : null}
           <Footer />
         </div>
       );

@@ -16,7 +16,6 @@ import {
   setListing,
   setSavedPages,
 } from "../createListingPageSlice";
-import Pagination from "./Pagination";
 
 /**
  * Notice that this component only formats objects of Str

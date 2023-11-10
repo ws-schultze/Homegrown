@@ -42,7 +42,6 @@ export default function UserAcknowledgementForm(): JSX.Element {
           I understand
         </button>
       </section>
-      {pageState.userAcknowledged === true ? <Pagination /> : null}
     </form>
   );
 }
