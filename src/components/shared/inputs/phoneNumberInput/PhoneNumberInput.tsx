@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   formatPhoneNumber,
+  handleKeyDown,
   removeNonNumericChars,
   repositionCursor,
+  validatePhoneNumber,
   validateRealEstateLicenseIdNumber,
 } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
@@ -16,7 +18,7 @@ interface Props extends InputProps {
    *
    * For money consider [",", "."]
    */
-  groupSeparators?: string[];
+  groupSeparators: string[];
 }
 
 /**
@@ -48,17 +50,17 @@ export default function PhoneNumberInput(props: Props) {
 
     //Prevent cursor jumping on "Backspace" and "Delete"
     const { modifiedValue, modifiedCursorPosition } = repositionCursor({
-      eventTargetValue: value, // <------ must be e.target.value
-      formattedValueFromState: props.state.formatted, // <---- must be state.formatted
+      eventTargetValue: value,
+      formattedValueFromState: props.state.formatted,
       lastKeyDown: lastKeyDown,
       selectionStart: selectionStart,
       groupSeparators: props.groupSeparators,
     });
 
     const numberStr = removeNonNumericChars(modifiedValue);
-    const number = Number(numberStr); // Becomes 123
+    const num = Number(numberStr); // Becomes 123
     const formatted = formatPhoneNumber(numberStr);
-    const { valid, errorMsg } = validateRealEstateLicenseIdNumber(value);
+    const { valid, errorMsg } = validatePhoneNumber(numberStr);
 
     // Prevent cursor jumping when formatting applies a groupSeparator and or prefix
     if (
@@ -75,7 +77,7 @@ export default function PhoneNumberInput(props: Props) {
       ...props.state,
       value: value,
       formatted: formatted,
-      number: number,
+      number: num,
       numberStr: numberStr,
       valid: valid,
       errorMsg: errorMsg,
@@ -103,6 +105,7 @@ export default function PhoneNumberInput(props: Props) {
         type="text"
         value={props.state.formatted}
         onChange={handleChange}
+        onKeyDown={(e) => handleKeyDown(e, setLastKeyDown)}
         disabled={props.state.readOnly}
       />
       <ErrorMsg errorMsg={props.state.errorMsg} />

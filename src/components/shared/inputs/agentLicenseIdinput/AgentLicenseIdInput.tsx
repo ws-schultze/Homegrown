@@ -52,7 +52,7 @@ export default function AgentLicenseIdInput(props: Props) {
         placeholder={props.placeholder}
         ref={inputRef}
         type="text"
-        value={props.state.formatted}
+        value={props.state.value}
         onChange={handleChange}
         disabled={props.state.readOnly}
       />

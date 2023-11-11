@@ -49,7 +49,7 @@ export default function EmailStrInput<T extends Types.Str>(props: Props<T>) {
         placeholder={props.placeholder}
         ref={inputRef}
         type="text"
-        value={props.state.formatted}
+        value={props.state.value}
         onChange={handleChange}
         disabled={props.state.readOnly}
       />

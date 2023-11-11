@@ -2,20 +2,27 @@ import React, { useRef, useState } from "react";
 import { handleAutocompleteWidget, validateName } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import styles from "../scss/inputs.module.scss";
-import { Str } from "../../../../types";
+import { Address, AddressOptional, Str } from "../../../../types";
 import { InputProps } from "../inputProps";
+
+export interface Props extends InputProps {
+  /**
+   * Passes a new address object back to parent so the rest of the address
+   * form's fields can be auto populated with the data retrieved from
+   * Google Places Autocomplete widget
+   * @param state Address | AddressOptional
+   */
+  handleCompleteAddressObj: (state: Address | AddressOptional) => void;
+}
 
 /**
  * Notice that this component only formats objects of Str
  */
-export default function NameInput(props: InputProps) {
-  // const [state, setState] = useState<Types.Str>(props.state);
+export default function AddressAutocompleteInput(props: Props) {
+  const [autocompleteWidget, setAutocompleteWidget] =
+    useState<google.maps.places.Autocomplete | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  /**
-   * Handle component state and emit state to parent component when changes to input are made.
-   * @param e React.ChangeEvent<HTMLInputElement>
-   */
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
@@ -36,6 +43,13 @@ export default function NameInput(props: InputProps) {
       readOnly: false,
     };
     props.handleInput(s);
+
+    handleAutocompleteWidget(
+      inputRef,
+      autocompleteWidget,
+      setAutocompleteWidget,
+      props.handleCompleteAddressObj
+    );
   }
 
   return (

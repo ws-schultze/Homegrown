@@ -24,8 +24,23 @@ export type FormState =
   | Land;
 
 export interface FormCheckProps {
+  /**
+   * For an Agent form, the formState would be an agent object.
+   */
   formState: FormState;
+  /**
+   * The initial for values, such as initialAgentState
+   */
   initialFormState: FormState;
+  /**
+   * Nodes to be displayed in the verification section. If verifying an address,
+   * the address will be displayed
+   */
+  children?: JSX.Element;
+  /**
+   * Each form has its own verification function that does error message checks
+   * and prevents the user from saving an incomplete form
+   */
   handleFormVerification: (...args: any[]) => void;
 }
 
@@ -37,6 +52,7 @@ export interface FormCheckProps {
 export default function FormCheck({
   formState,
   initialFormState,
+  children,
   handleFormVerification,
 }: FormCheckProps) {
   return (
@@ -51,8 +67,9 @@ export default function FormCheck({
       ) : null}
       {formState.beingVerified === true ? (
         <VerifySection<typeof formState>
-          parentName="Basic Information"
+          // parentName="Basic Information"
           parent={formState}
+          children={children}
           emit={handleFormVerification}
         />
       ) : null}

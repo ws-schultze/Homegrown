@@ -11,7 +11,7 @@ import styles from "../styles.module.scss";
 
 interface Props<T> {
   /** The name that shows in the toast for a successful save (e.g. Agent, Owner, Company, House etc..) */
-  parentName: string;
+  // parentName: string;
   parent: T;
   addressValidationApiResponse?: AddressValidationApi_Response;
   children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
@@ -19,7 +19,6 @@ interface Props<T> {
 }
 
 export default function VerifySection<T extends Verify>({
-  parentName,
   parent,
   addressValidationApiResponse,
   children,

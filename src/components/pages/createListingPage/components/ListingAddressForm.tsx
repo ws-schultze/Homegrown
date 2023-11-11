@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
 import * as Types from "../../../../types/index";
-import styles from "../../../shared/inputs/addressInput/addressInput.module.scss";
+import styles from "../../../shared/inputs/addressAutocompleteInput/addressAutocompleteInput.module.scss";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
@@ -17,6 +17,7 @@ import {
   setSavedPages,
 } from "../createListingPageSlice";
 import { useNavigate } from "react-router";
+import FormCheck from "./FormCheck";
 
 /**
  * Notice that this component only formats objects of Str
@@ -208,7 +209,7 @@ export default function ListingAddressForm() {
         <header>Listing Address</header>
         <p>
           Start entering the street address and select an option from the
-          dropdown menu
+          dropdown menu that will appear.
         </p>
 
         <Wrapper
@@ -233,7 +234,6 @@ export default function ListingAddressForm() {
               type="text"
               value={address.streetAddress.value}
               onChange={handleStreet}
-              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.streetAddress.errorMsg} />
@@ -253,7 +253,6 @@ export default function ListingAddressForm() {
               type="text"
               value={address.unitNumber.value}
               onChange={handleUnit}
-              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.unitNumber.errorMsg} />
@@ -274,7 +273,6 @@ export default function ListingAddressForm() {
               type="text"
               value={address.city.value}
               onChange={handleCity}
-              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.city.errorMsg} />
@@ -297,7 +295,6 @@ export default function ListingAddressForm() {
               type="text"
               value={address.adminAreaLevel1.value}
               onChange={handleState}
-              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.adminAreaLevel1.errorMsg} />
@@ -309,16 +306,15 @@ export default function ListingAddressForm() {
                 address.zipCode.value.length > 0 ? styles.show : styles.hide
               }`}
             >
-              Zip Code
+              Postal Code
             </label>
 
             <input
-              placeholder="Zip Code"
+              placeholder="Postal Code"
               ref={zipRef}
               type="text"
               value={address.zipCode.value}
               onChange={handleZip}
-              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.zipCode.errorMsg} />
@@ -338,13 +334,17 @@ export default function ListingAddressForm() {
               type="text"
               value={address.country.value}
               onChange={handleCountry}
-              // onBlur={handleBlur}
               disabled={address.readOnly}
             />
             <ErrorMsg errorMsg={address.country.errorMsg} />
           </div>
         </Wrapper>
       </section>
+      <FormCheck
+        formState={address}
+        initialFormState={initAddress}
+        handleFormVerification={handleVerify}
+      />
     </form>
   );
 }
