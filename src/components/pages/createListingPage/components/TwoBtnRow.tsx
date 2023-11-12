@@ -47,7 +47,7 @@ export default function TwoBtnRow<T>({
   rightBtnText,
   rightBtnValue,
   state,
-  fieldName,
+  // fieldName,
   label,
   handleSelected,
 }: {
@@ -58,9 +58,9 @@ export default function TwoBtnRow<T>({
   rightBtnText: string;
   rightBtnValue: BtnValue;
   state: TypeTwoBtnRowState;
-  fieldName: keyof T;
+  // fieldName: keyof T;
   label?: string;
-  handleSelected: (fieldName: keyof T, obj: TypeTwoBtnRowState) => void;
+  handleSelected: (obj: TypeTwoBtnRowState) => void;
 }) {
   // const [state, setState] = useState<TypeTwoBtnRowState>(parent);
 
@@ -83,7 +83,7 @@ export default function TwoBtnRow<T>({
 
     // setState(s);
     // emit(fieldName, s);
-    handleSelected(fieldName, s);
+    handleSelected(s);
   }
 
   function getBtnClass(btnValue: BtnValue): string {

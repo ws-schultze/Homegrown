@@ -11,41 +11,46 @@ import EditFormSection from "./EditFormSection";
 import { initAddress } from "../../../../initialValues";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
-import {
-  setCurrentPageNumber,
-  setListing,
-  setSavedPages,
-} from "../createListingPageSlice";
+import { setListing, setSavedPages } from "../createListingPageSlice";
 import { useNavigate } from "react-router";
 import FormCheck from "./FormCheck";
+import { handleFormVerification } from "./formUtils";
 
 /**
  * Notice that this component only formats objects of Str
  */
-export default function ListingAddressForm() {
+export default function ListingAddressForm({
+  thisPageNum,
+}: {
+  /**
+   * Used by handleVerify to add this page number to the array of
+   * saved pages in the createListingPage state
+   */
+  thisPageNum: number;
+}) {
   const streetRef = useRef<HTMLInputElement | null>(null);
   const unitRef = useRef<HTMLInputElement | null>(null);
   const cityRef = useRef<HTMLInputElement | null>(null);
   const stateRef = useRef<HTMLInputElement | null>(null);
   const zipRef = useRef<HTMLInputElement | null>(null);
-  const countyRef = useRef<HTMLInputElement | null>(null);
   const countryRef = useRef<HTMLInputElement | null>(null);
+
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
-  const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<Types.AddressValidationApi_Response | null>(null);
 
-  // const [address, setAddress] = useState<Types.Address>(initAddress);
+  const [addressValidationApiResponse, setAddressValidationApiResponse] =
+    useState<Types.AddressValidationApi_Response | undefined>(undefined);
+
   const dispatch = useDispatch();
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const { address } = pageState.listing;
+  const state = useAppSelector((s) => s.createListingPage);
+  const { address } = state.listing;
   const navigate = useNavigate();
 
   function handleStreet(e: React.ChangeEvent<HTMLInputElement>) {
     handleAutocompleteWidget();
     dispatch(
       setListing({
-        ...pageState.listing,
+        ...state.listing,
         address: {
           ...address,
           streetAddress: {
@@ -64,7 +69,7 @@ export default function ListingAddressForm() {
     const s: typeof address = setUnitNumberToState(address, unit);
     dispatch(
       setListing({
-        ...pageState.listing,
+        ...state.listing,
         address: s,
       })
     );
@@ -73,7 +78,7 @@ export default function ListingAddressForm() {
   function handleCity(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(
       setListing({
-        ...pageState.listing,
+        ...state.listing,
         address: {
           ...address,
           city: {
@@ -88,7 +93,7 @@ export default function ListingAddressForm() {
   function handleZip(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(
       setListing({
-        ...pageState.listing,
+        ...state.listing,
         address: {
           ...address,
           zipCode: {
@@ -103,7 +108,7 @@ export default function ListingAddressForm() {
   function handleState(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(
       setListing({
-        ...pageState.listing,
+        ...state.listing,
         address: {
           ...address,
           adminAreaLevel1: {
@@ -118,7 +123,7 @@ export default function ListingAddressForm() {
   function handleCountry(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(
       setListing({
-        ...pageState.listing,
+        ...state.listing,
         address: {
           ...address,
           country: {
@@ -141,12 +146,12 @@ export default function ListingAddressForm() {
       autocompleteWidget.addListener("place_changed", () => {
         const s: Types.Address =
           setAutocompletePlaceValuesToState<Types.Address>({
-            state: pageState.listing.address,
+            state: state.listing.address,
             autocomplete: autocompleteWidget,
           });
         dispatch(
           setListing({
-            ...pageState.listing,
+            ...state.listing,
             address: s,
           })
         );
@@ -154,54 +159,107 @@ export default function ListingAddressForm() {
     }
   }
 
-  function handleVerify(
-    actionName: Types.VerifyActionName,
-    address: Types.Address,
-    addressValidationApiResponse?: Types.AddressValidationApi_Response
-  ) {
-    if (addressValidationApiResponse) {
-      setAddressValidationApiResponse(addressValidationApiResponse);
-    }
+  // function handleVerify(
+  //   actionName: Types.VerifyActionName,
+  //   obj: Types.Address,
+  //   addressValidationApiResponse?: Types.AddressValidationApi_Response
+  // ) {
+  //   if (addressValidationApiResponse) {
+  //     setAddressValidationApiResponse(addressValidationApiResponse);
+  //   }
 
-    if (
-      actionName === "save" ||
-      actionName === "edit" ||
-      actionName === "blur"
-    ) {
-      dispatch(
-        setListing({
-          ...pageState.listing,
-          address: address,
-        })
-      );
-    } else if (actionName === "verify" && address.saved === true) {
-      dispatch(
-        setListing({
-          ...pageState.listing,
-          address: address,
-        })
-      );
-      dispatch(setSavedPages([1, 2, 3, 4]));
-      dispatch(setCurrentPageNumber(4));
-      navigate("/create-listing/4");
-    } else if (actionName === "verify" && address.saved === false) {
-      dispatch(
-        setListing({
-          ...pageState.listing,
-          address: address,
-        })
-      );
-      dispatch(setSavedPages([1, 2, 3]));
-    } else {
-      throw new Error("Whoops");
-    }
+  //   if (actionName === "save") {
+  //     /**
+  //      * Set this page to saved
+  //      */
+  //     dispatch(
+  //       setListing({
+  //         ...state.listing,
+  //         address: obj,
+  //       })
+  //     );
+  //     return;
+  //   }
+
+  //   if (actionName === "edit") {
+  //     /**
+  //      * Remove this page number from saved pages
+  //      */
+  //     dispatch(
+  //       setListing({
+  //         ...state.listing,
+  //         address: obj,
+  //       })
+  //     );
+  //     const idx = state.savedPages.indexOf(thisPageNum);
+  //     const savedPagesCopy = [...state.savedPages];
+  //     savedPagesCopy.splice(idx, 1);
+  //     dispatch(setSavedPages(savedPagesCopy));
+  //     return;
+  //   }
+
+  //   if (actionName === "verify" && obj.saved === true) {
+  //     /**
+  //      * Verify info and go to next page
+  //      */
+  //     dispatch(
+  //       setListing({
+  //         ...state.listing,
+  //         address: obj,
+  //       })
+  //     );
+  //     dispatch(setSavedPages(state.savedPages.concat(thisPageNum)));
+  //     navigate(`/create-listing/${thisPageNum + 1}`);
+  //     return;
+  //   }
+  //   if (actionName === "verify" && obj.saved === false) {
+  //     /**
+  //      * Info does not all look correct, hide verification component,
+  //      * stay on this page, show save component again.
+  //      */
+  // dispatch(
+  //   setListing({
+  //     ...state.listing,
+  //     address: obj,
+  //   })
+  // );
+  //     return;
+  //   }
+
+  //   throw new Error("Escaped");
+  // }
+
+  function handleFormVerificationWrapper(
+    actionName: Types.VerifyActionName,
+    obj: Types.Address
+  ) {
+    handleFormVerification<Types.Address>({
+      createListingPageState: state,
+      actionName,
+      obj,
+      thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...state.listing,
+            address: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+      addressValidationApiResponse,
+      setAddressValidationApiResponse,
+    });
   }
 
   return (
     <form className={styles.container}>
       {address.saved === true ? (
         <section>
-          <EditFormSection parent={address} emit={handleVerify} />
+          <EditFormSection
+            parent={address}
+            emit={handleFormVerificationWrapper}
+          />
         </section>
       ) : null}
 
@@ -343,7 +401,7 @@ export default function ListingAddressForm() {
       <FormCheck
         formState={address}
         initialFormState={initAddress}
-        handleFormVerification={handleVerify}
+        handleFormVerification={handleFormVerificationWrapper}
       />
     </form>
   );

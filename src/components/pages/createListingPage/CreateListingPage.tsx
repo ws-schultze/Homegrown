@@ -1,199 +1,199 @@
-import { useState, useEffect, useRef } from "react";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { db } from "../../../firebase.config";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../shared/loaders/Spinner";
-import { toast } from "react-toastify";
-import { useUserContext } from "../../../UserProvider";
-import {
-  Address,
-  AddressValidationApi_Response,
-  Image,
-  ListingData,
-  VerifyActionName,
-} from "../../../types/index";
-import { initListingData } from "../../../initialValues";
 import UserAcknowledgementForm from "./components/UserAcknowledgementForm";
-import PageBtns from "./components/PageBtns-old";
-
-// import Review from "./components/ReviewForm";
-// import Uploads from "./components/UploadsForm";
-import SingleFamilyHomeForm from "./components/SingleFamilyHomeForm";
-import MultiFamilyHomeForSaleForm from "./components/MultiFamilyHomeForSaleForm";
-import MultiFamilyHomeUnitForRentForm from "./components/MultiFamilyHomeUnitForRentForm";
-import ApartmentBuildingForSaleForm from "./components/ApartmentBuildingForSaleForm";
-import ApartmentForRentForm from "./components/ApartmentForRentForm";
-import OwnerForm from "./components/OwnerForm";
 import AgentForm from "./components/AgentForm";
-import CompanyForm from "./components/CompanyForm";
-import PrivateOwnerForm from "./components/PrivateOwnerForm";
 import ListingAddressForm from "./components/ListingAddressForm";
 import BasicInfoForm from "./components/BasicInfoForm";
 import UploadsForm from "./components/UploadsForm";
 import ReviewForm from "./components/ReviewForm";
-import makeFileNameForUpload from "../utils/makeFileNameForUpload";
 import Footer from "../../shared/footer/Footer";
 import styles from "./styles.module.scss";
-import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../redux/hooks";
 import Pagination from "./components/Pagination";
-// import AddressInput from "../../shared/inputs/addressInput/AddressInput";
+import { useDispatch } from "react-redux";
+import {
+  setCurrentPageNumber,
+  setListing,
+  setLoading,
+} from "./createListingPageSlice";
+import useSetUserRefToListing from "./components/hooks/useSetUserRefToListing";
+import Page1 from "./pages/Page1";
+import Page2 from "./pages/Page2";
+import useCurrentPageNumber from "./components/hooks/useCurrentPageNumber";
+import Page3 from "./pages/Page3";
+import Page4 from "./pages/Page4";
 
 export default function CreateListingPage(): JSX.Element {
-  const { userId, isAuthenticated, isLoading } = useUserContext();
-  const [loading, setLoading] = useState(false);
-  const [state, setState] = useState<ListingData>(initListingData);
   const formRef = useRef<HTMLFormElement | null>(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const listing = pageState.listing;
+  const state = useAppSelector((s) => s.createListingPage);
+  const listing = state.listing;
+
+  useCurrentPageNumber((num) => dispatch(setCurrentPageNumber(num)));
+
+  useSetUserRefToListing(
+    (loading) => dispatch(setLoading(loading)),
+    (userId) =>
+      dispatch(
+        setListing({ ...listing, userRef: { ...listing.userRef, uid: userId } })
+      )
+  );
+
+  // useEffect(() => {
+  //   // const unfinishedListing = localStorage.getItem("unfinished-listing");
+  //   if (listing) {
+  //     console.log("Setting state from local storage");
+  //     const s: typeof state = JSON.parse(unfinishedListing);
+
+  //     // Don't get images from local storage
+  //     const t: typeof state = {
+  //       ...s,
+  //       uploads: {
+  //         ...s.uploads,
+  //         images: {
+  //           ...s.uploads.images,
+  //           value: [],
+  //           valid: false,
+  //           saved: false,
+  //         },
+  //       },
+  //     };
+
+  //     setState(t);
+  //   }
+  // }, []);
+
+  // // Add userId to state
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (isAuthenticated && userId && !isLoading) {
+  //     setState((s) => ({
+  //       ...s,
+  //       userRef: {
+  //         ...s.userRef,
+  //         uid: userId,
+  //       },
+  //     }));
+  //     setLoading(false);
+  //   } else if (!isAuthenticated && !isLoading) {
+  //     navigate("/sign-in");
+  //     setLoading(false);
+  //   }
+  // }, [isAuthenticated, userId]);
 
   useEffect(() => {
-    const unfinishedListing = localStorage.getItem("unfinished-listing");
-    if (unfinishedListing !== null) {
-      console.log("Setting state from local storage");
-      const s: typeof state = JSON.parse(unfinishedListing);
-
-      // Don't get images from local storage
-      const t: typeof state = {
-        ...s,
-        uploads: {
-          ...s.uploads,
-          images: {
-            ...s.uploads.images,
-            value: [],
-            valid: false,
-            saved: false,
-          },
-        },
-      };
-
-      setState(t);
-    }
-  }, []);
-
-  // Add userId to state
-  useEffect(() => {
-    setLoading(true);
-    if (isAuthenticated && userId && !isLoading) {
-      setState((s) => ({
-        ...s,
-        userRef: {
-          ...s.userRef,
-          uid: userId,
-        },
-      }));
-      setLoading(false);
-    } else if (!isAuthenticated && !isLoading) {
-      navigate("/sign-in");
-      setLoading(false);
-    }
-  }, [isAuthenticated, userId]);
-
-  useEffect(() => {
-    console.log("scrolling to top");
     document.getElementById("main-container")?.scrollTo(0, 0);
-  }, [pageState.currentPageNumber]);
+  }, [state.currentPageNumber]);
 
-  if (loading) {
+  if (state.loading) {
     return <Spinner size="large" />;
   }
 
+  if (state.currentPageNumber === 1) {
+    return <Page1 />;
+  }
+
+  if (state.currentPageNumber === 2) {
+    return <Page2 />;
+  }
+
+  if (state.currentPageNumber === 3) {
+    return <Page3 />;
+  }
+
+  if (state.currentPageNumber === 4) {
+    return <Page4 />;
+  }
+
   // Return pages
-  switch (pageState.currentPageNumber) {
-    case 1:
-      return (
-        <div className={styles.container}>
-          <UserAcknowledgementForm />
-          {pageState.userAcknowledged ? <Pagination /> : null}
-          <Footer />
-        </div>
-      );
+  switch (state.currentPageNumber) {
+    // case 1:
+    //   return (
+    //     <div className={styles.container}>
+    //       <UserAcknowledgementForm />
+    //       {state.userAcknowledged ? <Pagination /> : null}
+    //       <Footer />
+    //     </div>
+    //   );
 
-    case 2:
-      return (
-        <div className={styles.container}>
-          <BasicInfoForm />
-          <Pagination />
-          <Footer />
-        </div>
-      );
+    // case 2:
+    //   return (
+    //     <div className={styles.container}>
+    //       <BasicInfoForm />
+    //       <Pagination />
+    //       <Footer />
+    //     </div>
+    //   );
 
-    case 3:
-      return (
-        <div className={styles.container}>
-          <ListingAddressForm />
-          <Pagination />
-          <Footer />
-        </div>
-      );
+    // case 3:
+    //   return (
+    //     <div className={styles.container}>
+    //       <ListingAddressForm />
+    //       <Pagination />
+    //       <Footer />
+    //     </div>
+    //   );
 
     case 4:
-      return (
-        <div className={styles.container}>
-          {listing.basicInfo.forSaleBy !== undefined ? (
-            <>
-              {listing.basicInfo.forSaleBy.value?.id === "agent" ? (
-                <AgentForm />
-              ) : null}
-              {/* {listing.basicInfo.forSaleBy.value?.id === "owner" ? (
-                <OwnerForm
-                  parent={state}
-                  nextPage={nextPage}
-                  prevPage={prevPage}
-                  toPageNumber={toPageNumber}
-                  pageNumbers={state.savedPages}
-                  currentPage={state.currentPage}
-                  deleteListing={deleteListing}
-                  emit={handleEmit}
-                />
-              ) : null} */}
-            </>
-          ) : null}
+    // return (
+    //   <div className={styles.container}>
+    //     {listing.basicInfo.forSaleBy !== undefined ? (
+    //       <>
+    //         {listing.basicInfo.forSaleBy.value?.id === "agent" ? (
+    //           <AgentForm />
+    //         ) : null}
+    //         {/* {listing.basicInfo.forSaleBy.value?.id === "owner" ? (
+    //           <OwnerForm
+    //             parent={state}
+    //             nextPage={nextPage}
+    //             prevPage={prevPage}
+    //             toPageNumber={toPageNumber}
+    //             pageNumbers={state.savedPages}
+    //             currentPage={state.currentPage}
+    //             deleteListing={deleteListing}
+    //             emit={handleEmit}
+    //           />
+    //         ) : null} */}
+    //       </>
+    //     ) : null}
 
-          {/* listing.basicInfo.forRentBy !== undefined ? (
-            <>
-              {listing.basicInfo.forRentBy.value?.id === "company" ? (
-                <CompanyForm
-                  parent={state}
-                  nextPage={nextPage}
-                  prevPage={prevPage}
-                  toPageNumber={toPageNumber}
-                  pageNumbers={state.savedPages}
-                  currentPage={state.currentPage}
-                  deleteListing={deleteListing}
-                  emit={handleEmit}
-                />
-              ) : listing.basicInfo.forRentBy.value?.id === "private-owner" ? (
-                <PrivateOwnerForm
-                  parent={state}
-                  nextPage={nextPage}
-                  prevPage={prevPage}
-                  toPageNumber={toPageNumber}
-                  pageNumbers={state.savedPages}
-                  currentPage={state.currentPage}
-                  deleteListing={deleteListing}
-                  emit={handleEmit}
-                />
-              ) : null}
-            </>
-          ) : (
-            <div>
-              ERROR..
-              <Pagination />
-            </div>
-          )} */}
+    //     {/* listing.basicInfo.forRentBy !== undefined ? (
+    //       <>
+    //         {listing.basicInfo.forRentBy.value?.id === "company" ? (
+    //           <CompanyForm
+    //             parent={state}
+    //             nextPage={nextPage}
+    //             prevPage={prevPage}
+    //             toPageNumber={toPageNumber}
+    //             pageNumbers={state.savedPages}
+    //             currentPage={state.currentPage}
+    //             deleteListing={deleteListing}
+    //             emit={handleEmit}
+    //           />
+    //         ) : listing.basicInfo.forRentBy.value?.id === "private-owner" ? (
+    //           <PrivateOwnerForm
+    //             parent={state}
+    //             nextPage={nextPage}
+    //             prevPage={prevPage}
+    //             toPageNumber={toPageNumber}
+    //             pageNumbers={state.savedPages}
+    //             currentPage={state.currentPage}
+    //             deleteListing={deleteListing}
+    //             emit={handleEmit}
+    //           />
+    //         ) : null}
+    //       </>
+    //     ) : (
+    //       <div>
+    //         ERROR..
+    //         <Pagination />
+    //       </div>
+    //     )} */}
 
-          <Footer />
-        </div>
-      );
+    //     <Footer />
+    //   </div>
+    // );
 
     case 5:
     // return <></>;

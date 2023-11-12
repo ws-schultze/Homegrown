@@ -3,41 +3,35 @@ import {
   Str,
   AddressValidationApi_Response,
   VerifyActionName,
+  TypeAgent,
 } from "../../../../types/index";
 import { initAgent } from "../../../../initialValues";
 import { Wrapper } from "@googlemaps/react-wrapper";
-import setAutocompletePlaceValuesToState from "./utils/address/setAutocompletePlaceValuesToState";
-import makeAutocompleteWidget from "./utils/address/makeAutocompleteWidget";
 import EditFormSection from "./EditFormSection";
-import VerifySection from "./VerifySection";
-import SaveSection from "./SaveSection";
-import setUnitNumberToState from "./utils/setUnitNumberToState";
 import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useDispatch } from "react-redux";
-import {
-  setCurrentPageNumber,
-  setListing,
-  setSavedPages,
-} from "../createListingPageSlice";
+import { setListing, setSavedPages } from "../createListingPageSlice";
 import NameInput from "../../../shared/inputs/nameInput/NameInput";
 import AgentLicenseIdInput from "../../../shared/inputs/agentLicenseIdInput/AgentLicenseIdInput";
 import PhoneNumberInput from "../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
 import EmailStrInput from "../../../shared/inputs/emailInput/EmailStrInput";
-import { handleAutocompleteWidget } from "../../../shared/inputs/utils";
-import AddressFieldInput from "../../../shared/inputs/addressAutocompleteInput/AddressAutocompleteInput";
 import AddressAutocompleteInput from "../../../shared/inputs/addressAutocompleteInput/AddressAutocompleteInput";
 import FormCheck from "./FormCheck";
+import { FormProps } from "./formProps";
+import { handleFormVerification } from "./formUtils";
+import { useNavigate } from "react-router";
 
-export default function AgentForm() {
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const { agent } = pageState.listing;
+export default function AgentForm(props: FormProps) {
+  const state = useAppSelector((s) => s.createListingPage);
+  const { agent } = state.listing;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [autocompleteWidget, setAutocompleteWidget] =
     useState<google.maps.places.Autocomplete | null>(null);
   const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<AddressValidationApi_Response | null>(null);
-  const streetRef = useRef<HTMLInputElement | null>(null);
+    useState<AddressValidationApi_Response | undefined>(undefined);
+  const streetRef = useRef<HTMLInputElement | undefined>(undefined);
 
   if (!agent) throw new Error("agent is undefined");
 
@@ -77,7 +71,7 @@ export default function AgentForm() {
   //         });
   //         dispatch(
   //           setListing({
-  //             ...pageState.listing,
+  //             ...state.listing,
   //             agent: s,
   //           })
   //         );
@@ -86,53 +80,79 @@ export default function AgentForm() {
   //   }
   // }
 
-  function handleVerify(
-    actionName: VerifyActionName,
-    obj: typeof agent,
-    addressValidationApiResponse?: AddressValidationApi_Response
-  ) {
-    if (addressValidationApiResponse) {
-      setAddressValidationApiResponse(addressValidationApiResponse);
-    }
+  // function handleVerify(
+  //   actionName: VerifyActionName,
+  //   obj: typeof agent,
+  //   addressValidationApiResponse?: AddressValidationApi_Response
+  // ) {
+  //   if (addressValidationApiResponse) {
+  //     setAddressValidationApiResponse(addressValidationApiResponse);
+  //   }
 
-    if (
-      actionName === "save" ||
-      actionName === "edit" ||
-      actionName === "blur"
-    ) {
-      dispatch(
-        setListing({
-          ...pageState.listing,
-          agent: obj,
-        })
-      );
-    } else if (actionName === "verify" && obj!.saved === true) {
-      dispatch(
-        setListing({
-          ...pageState.listing,
-          agent: obj,
-        })
-      );
-      dispatch(setSavedPages([1, 2, 3, 4, 5]));
-      dispatch(setCurrentPageNumber(5));
-    } else if (actionName === "verify" && obj!.saved === false) {
-      dispatch(
-        setListing({
-          ...pageState.listing,
-          agent: obj,
-        })
-      );
-      dispatch(setSavedPages([1, 2, 3, 4]));
-    } else {
-      throw new Error("Whoops");
-    }
+  //   if (
+  //     actionName === "save" ||
+  //     actionName === "edit" ||
+  //     actionName === "blur"
+  //   ) {
+  //     dispatch(
+  //       setListing({
+  //         ...state.listing,
+  //         agent: obj,
+  //       })
+  //     );
+  //   } else if (actionName === "verify" && obj!.saved === true) {
+  //     dispatch(
+  //       setListing({
+  //         ...state.listing,
+  //         agent: obj,
+  //       })
+  //     );
+  //     dispatch(setSavedPages([1, 2, 3, 4, 5]));
+  //     dispatch(setCurrentPageNumber(5));
+  //   } else if (actionName === "verify" && obj!.saved === false) {
+  //     dispatch(
+  //       setListing({
+  //         ...state.listing,
+  //         agent: obj,
+  //       })
+  //     );
+  //     dispatch(setSavedPages([1, 2, 3, 4]));
+  //   } else {
+  //     throw new Error("Whoops");
+  //   }
+  // }
+
+  function handleFormVerificationWrapper(
+    actionName: VerifyActionName,
+    obj: TypeAgent
+  ) {
+    handleFormVerification<TypeAgent>({
+      createListingPageState: state,
+      actionName,
+      obj,
+      thisPageNum: props.thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...state.listing,
+            agent: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+      addressValidationApiResponse,
+      setAddressValidationApiResponse,
+    });
   }
 
   return (
     <form>
       {agent.saved === true ? (
         <section>
-          <EditFormSection parent={agent} emit={handleVerify} />
+          <EditFormSection
+            parent={agent}
+            emit={handleFormVerificationWrapper}
+          />
         </section>
       ) : null}
 
@@ -145,9 +165,9 @@ export default function AgentForm() {
           handleInput={(name) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
+                  ...state.listing.agent!,
                   firstName: name,
                 },
               })
@@ -161,9 +181,9 @@ export default function AgentForm() {
           handleInput={(name) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
+                  ...state.listing.agent!,
                   middleName: name,
                 },
               })
@@ -177,9 +197,9 @@ export default function AgentForm() {
           handleInput={(name) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
+                  ...state.listing.agent!,
                   lastName: name,
                 },
               })
@@ -193,9 +213,9 @@ export default function AgentForm() {
           handleInput={(name) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
+                  ...state.listing.agent!,
                   companyName: name,
                 },
               })
@@ -206,13 +226,13 @@ export default function AgentForm() {
         <AgentLicenseIdInput
           state={agent.licenseId}
           placeholder="License ID"
-          handleInput={(state) =>
+          handleInput={(obj) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
-                  licenseId: state,
+                  ...state.listing.agent!,
+                  licenseId: obj,
                 },
               })
             )
@@ -223,13 +243,13 @@ export default function AgentForm() {
           state={agent.phoneNumber}
           placeholder="Phone number"
           groupSeparators={[")", "-"]}
-          handleInput={(state) =>
+          handleInput={(obj) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
-                  phoneNumber: state,
+                  ...state.listing.agent!,
+                  phoneNumber: obj,
                 },
               })
             )
@@ -239,13 +259,13 @@ export default function AgentForm() {
         <EmailStrInput<Str>
           state={agent.email}
           placeholder="Email"
-          handleInput={(state) =>
+          handleInput={(obj) =>
             dispatch(
               setListing({
-                ...pageState.listing,
+                ...state.listing,
                 agent: {
-                  ...pageState.listing.agent!,
-                  email: state,
+                  ...state.listing.agent!,
+                  email: obj,
                 },
               })
             )
@@ -264,9 +284,9 @@ export default function AgentForm() {
             handleInput={(obj) => {
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     streetAddress: obj,
                   },
                 })
@@ -275,9 +295,9 @@ export default function AgentForm() {
             handleCompleteAddressObj={(obj) => {
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     streetAddress: obj.streetAddress!,
                     unitNumber: obj.unitNumber!,
                     city: obj.city!,
@@ -297,9 +317,9 @@ export default function AgentForm() {
             handleInput={(obj) =>
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     unitNumber: obj,
                   },
                 })
@@ -313,9 +333,9 @@ export default function AgentForm() {
             handleInput={(obj) =>
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     city: obj,
                   },
                 })
@@ -329,9 +349,9 @@ export default function AgentForm() {
             handleInput={(obj) =>
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     adminAreaLevel1: obj,
                   },
                 })
@@ -345,9 +365,9 @@ export default function AgentForm() {
             handleInput={(obj) =>
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     zipCode: obj,
                   },
                 })
@@ -361,9 +381,9 @@ export default function AgentForm() {
             handleInput={(obj) =>
               dispatch(
                 setListing({
-                  ...pageState.listing,
+                  ...state.listing,
                   agent: {
-                    ...pageState.listing.agent!,
+                    ...state.listing.agent!,
                     country: obj,
                   },
                 })
@@ -391,10 +411,14 @@ export default function AgentForm() {
             <br />
             {agent.companyName.value}
             <br />
-            {addressValidationApiResponse!.result!.address.formattedAddress}
+            {addressValidationApiResponse &&
+            addressValidationApiResponse.result &&
+            addressValidationApiResponse.result.address.formattedAddress
+              ? addressValidationApiResponse.result.address.formattedAddress
+              : null}
           </div>
         }
-        handleFormVerification={handleVerify}
+        handleFormVerification={handleFormVerificationWrapper}
       />
     </form>
   );

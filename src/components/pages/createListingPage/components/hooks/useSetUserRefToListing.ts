@@ -1,6 +1,7 @@
-import { SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { useUserContext } from "../../../../../UserProvider";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 /**
  * Set the userId to the listing. If the user is not signed in,
@@ -9,28 +10,28 @@ import { useNavigate } from "react-router";
  * @param handleUserId (userId: string) => void
  */
 export default function useSetUserRefToListing(
-  setLoading: (value: SetStateAction<boolean>) => void,
+  handleLoading: (loading: boolean) => void,
   handleUserId: (userId: string) => void
 ) {
   const { userId, isAuthenticated, isLoading } = useUserContext();
   const navigate = useNavigate();
 
-  // Add userId to state
-  useEffect(() => {
-    setLoading(true);
-    if (isAuthenticated && userId && !isLoading) {
-      //   setState((s) => ({
-      //     ...s,
-      //     userRef: {
-      //       ...s.userRef,
-      //       uid: userId,
-      //     },
-      //   }));
-      handleUserId(userId);
-      setLoading(false);
-    } else if (!isAuthenticated && !isLoading) {
-      navigate("/sign-in");
-      setLoading(false);
-    }
-  }, [isAuthenticated, userId, handleUserId, isLoading, navigate, setLoading]);
+  useEffect(
+    () => {
+      handleLoading(true);
+      if (isAuthenticated && userId && !isLoading) {
+        handleUserId(userId);
+        handleLoading(false);
+      } else if (!isAuthenticated && !isLoading) {
+        navigate("/sign-in");
+        handleLoading(false);
+        toast.warn("You must be signed in to create a listing.");
+      }
+    },
+    /**
+     * Adding more deps will cause an infinite loop
+     */
+    //@ts-ignore
+    [isAuthenticated, userId]
+  );
 }

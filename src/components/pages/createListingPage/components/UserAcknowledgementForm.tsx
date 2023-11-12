@@ -1,24 +1,26 @@
 import styles from "../styles.module.scss";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
-import {
-  setCurrentPageNumber,
-  setSavedPages,
-  setUserAcknowledged,
-} from "../createListingPageSlice";
-import Pagination from "./Pagination";
+import { setSavedPages, setUserAcknowledged } from "../createListingPageSlice";
 import { useNavigate } from "react-router";
 
-export default function UserAcknowledgementForm(): JSX.Element {
+export default function UserAcknowledgementForm({
+  thisPageNum,
+}: {
+  /**
+   * Used by handleVerify to add this page number to the array of
+   * saved pages in the createListingPage state
+   */
+  thisPageNum: number;
+}): JSX.Element {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const pageState = useAppSelector((s) => s.createListingPage);
+  const state = useAppSelector((s) => s.createListingPage);
 
   function handleClick() {
     dispatch(setUserAcknowledged(true));
-    dispatch(setSavedPages([1, 2]));
-    dispatch(setCurrentPageNumber(2));
-    navigate("/create-listing/2");
+    dispatch(setSavedPages(state.savedPages.concat(thisPageNum)));
+    navigate(`/create-listing/${thisPageNum + 1}`);
   }
 
   return (
@@ -35,7 +37,7 @@ export default function UserAcknowledgementForm(): JSX.Element {
         <button
           type="button"
           className={`btn ${styles.btn} ${
-            pageState.userAcknowledged === true ? "active" : ""
+            state.userAcknowledged === true ? "active" : ""
           }`}
           onClick={handleClick}
         >

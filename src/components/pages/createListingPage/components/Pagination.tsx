@@ -8,27 +8,27 @@ import { useNavigate } from "react-router";
 
 export default function Pagination(): JSX.Element {
   const dispatch = useDispatch();
-  const pageState = useAppSelector((s) => s.createListingPage);
+  const state = useAppSelector((s) => s.createListingPage);
   const navigate = useNavigate();
 
   function nextPage() {
-    dispatch(setCurrentPageNumber(pageState.currentPageNumber + 1));
-    navigate(`/create-listing/${pageState.currentPageNumber}`);
+    // dispatch(setCurrentPageNumber(state.currentPageNumber + 1));
+    navigate(`/create-listing/${state.currentPageNumber + 1}`);
   }
 
   function prevPage() {
-    dispatch(setCurrentPageNumber(pageState.currentPageNumber - 1));
-    navigate(`/create-listing/${pageState.currentPageNumber}`);
+    // dispatch(setCurrentPageNumber(state.currentPageNumber - 1));
+    navigate(`/create-listing/${state.currentPageNumber - 1}`);
   }
 
   function toPageNumber(num: number) {
-    dispatch(setCurrentPageNumber(num));
-    navigate(`/create-listing/${pageState.currentPageNumber}`);
+    // dispatch(setCurrentPageNumber(num));
+    navigate(`/create-listing/${num}`);
   }
 
   return (
     <div className={styles.pagination}>
-      {pageState.currentPageNumber === 1 ? null : (
+      {state.currentPageNumber === 1 ? null : (
         <button
           className={`btn ${styles.btn} ${styles.page_btn}`}
           type="button"
@@ -38,11 +38,11 @@ export default function Pagination(): JSX.Element {
         </button>
       )}
 
-      {pageState.pageNumbers.map((pg, index) => (
+      {state.pageNumbers.map((pg, index) => (
         <button
           key={index}
           className={`btn ${styles.btn} ${styles.page_btn} ${
-            pageState.currentPageNumber === pg ? "active" : ""
+            state.currentPageNumber === pg ? "active" : ""
           }`}
           type="button"
           onClick={() => toPageNumber(pg)}
@@ -51,7 +51,7 @@ export default function Pagination(): JSX.Element {
         </button>
       ))}
 
-      {pageState.currentPageNumber === 7 ? null : (
+      {state.currentPageNumber === 7 ? null : (
         <button
           className={`btn ${styles.btn} ${styles.page_btn}`}
           type="button"
