@@ -44,7 +44,7 @@ export default function Page5() {
   if (id === "apartment") {
     return (
       <div className={styles.container}>
-        {/* <ApartmentForRentForm thisPageNum={5} /> */}
+        <ApartmentForRentForm thisPageNum={5} />
         <Pagination />
         <Footer />
       </div>

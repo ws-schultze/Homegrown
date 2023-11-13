@@ -200,10 +200,11 @@ export default function SingleFamilyHomeForm(props: FormProps) {
         </div>
         <div className={styles.flex_row}>
           <div className={styles.md}>
-            <CommaSeparatedWholeNumber
+            <NumberInput
               state={state.bedrooms}
               placeholder="Bedrooms"
               min={1}
+              max={20}
               handleInput={(obj) =>
                 dispatch(
                   setListing({
@@ -223,7 +224,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
               state={state.fullBathrooms}
               placeholder="Full baths"
               min={1}
-              max={10}
+              max={20}
               handleInput={(obj) =>
                 dispatch(
                   setListing({
@@ -244,7 +245,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
             state={state.halfBathrooms}
             placeholder="Half baths"
             min={0}
-            max={10}
+            max={20}
             handleInput={(obj) =>
               dispatch(
                 setListing({

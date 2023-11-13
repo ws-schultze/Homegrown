@@ -1,14 +1,12 @@
-import { useState, useEffect } from "react";
 import {
-  Str,
   HeatingOption,
-  AddressValidationApi_Response,
   VerifyActionName,
-  ListingData,
   Apartment,
   CoolingOption,
   WaterOption,
   PowerOption,
+  Str,
+  TypeBool,
 } from "../../../../../types/index";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import {
@@ -24,229 +22,180 @@ import TwoBtnRow, { TypeTwoBtnRowState } from "../../shared/TwoBtnRow";
 import EditFormSection from "../../shared/EditFormSection";
 import SaveSection from "../../shared/SaveSection";
 import VerifySection from "../../shared/VerifySection";
-import PageBtns from "../../shared/PageBtns-old";
 import styles from "../../styles.module.scss";
+import { FormProps } from "../../types/formProps";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
+import { setListing, setSavedPages } from "../../createListingPageSlice";
+import YearInput from "../../../../shared/inputs/yearInput/YearInput";
+import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
+import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
+import YesNoBtns from "../../shared/YesNoBtns";
+import FormCheck from "../../shared/FormCheck";
 
-interface Props {
-  parent: ListingData;
-  prevPage: () => void;
-  nextPage: () => void;
-  toPageNumber?: (number: number) => void;
-  deleteListing: () => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (obj: ListingData) => void;
-}
+export default function ApartmentForRentForm(props: FormProps) {
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const listing = pageState.listing;
+  const state = pageState.listing.apartment!;
+  const stateName: keyof typeof listing = "apartment";
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-export default function ApartmentForRentForm({
-  parent,
-  nextPage,
-  prevPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props) {
-  const [state, setState] = useState<Apartment>(parent.apartment!);
+  if (!state) throw new Error("state is undefined");
 
-  /**
-   * Keeps inputs showing values in parent state on page change
-   * Also catches error messages
-   */
-  useEffect(() => {
-    if (parent.apartment) {
-      setState(parent.apartment);
-    } else {
-      throw new Error("Single family home object not found in parent");
-    }
-  }, [parent]);
-
-  /**
-   * Given an array of options of type T, set them to state.
-   * @param options T[] (e.g. {id: string, label: string}[] )
-   * @param key keyof typeof state
-   */
-  function handleOptions<T>(options: T[], key: keyof typeof state) {
-    if (options.length === 0) {
-      setState((s) => ({
-        ...s,
-        [key]: {
-          valid: false,
-          value: options,
-          errorMsg: "Required",
-          required: true,
-        },
-      }));
-    } else if (options.length > 0) {
-      setState((s) => ({
-        ...s,
-        [key]: {
-          valid: true,
-          value: options,
-          errorMsg: "",
-          required: true,
-        },
-      }));
-    } else {
-      throw new Error("Something went wrong");
-    }
-  }
-
-  function handleTwoBtnRow(
-    fieldName: keyof typeof state,
-    obj: TypeTwoBtnRowState
-  ) {
-    const value = obj.value;
-
-    if (value !== true && value !== false) {
-      throw new Error(`Must have a value of "true" or "false"`);
-    }
-
-    if (fieldName === "assignedParking") {
-      // Garage
-
-      const { numAssignedSpaces, numAssignedSpacesWithCover, ...rest } = state;
-
-      if (value === true) {
-        // Has assigned parking --> Add assigned parking props to state
-
-        setState((s) => ({
-          ...s,
-          assignedParking: obj,
-          numAssignedSpaces: initStrReq,
-          numAssignedSpacesWithCover: initStrReq,
-        }));
-      } else if (value === false) {
-        // No assigned parking --> remove assigned parking props from state
-
-        setState({
-          ...rest,
-          assignedParking: obj,
-        });
-      }
-    } else {
-      // Btns that do not add/subtract state props
-
-      setState((s) => ({
-        ...s,
-        [fieldName]: obj,
-      }));
-    }
-  }
-
-  function handleInputStr(object: Str, fieldName: keyof typeof state) {
-    setState((s) => ({
-      ...s,
-      [fieldName]: object,
-    }));
-  }
-
-  function handleVerify(
+  function handleFormVerificationWrapper(
     actionName: VerifyActionName,
-    obj: typeof state,
-    addressValidationApiResponse?: AddressValidationApi_Response
+    obj: typeof state
   ) {
-    if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        apartment: obj,
-      });
-    } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        apartment: obj,
-        currentPage: 6,
-        savedPages: [1, 2, 3, 4, 5, 6],
-      });
-      // nextPage();
-    } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        apartment: obj,
-        savedPages: [1, 2, 3, 4, 5],
-      });
-    } else {
-      throw new Error("Whoops");
+    handleFormVerification<Apartment>({
+      createListingPageState: pageState,
+      actionName,
+      obj,
+      thisPageNum: props.thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            [stateName]: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+    });
+  }
+
+  function handleInput<T>(obj: T, key: keyof typeof state) {
+    dispatch(
+      setListing({
+        ...listing,
+        [stateName]: {
+          ...state,
+          [key]: obj,
+        },
+      })
+    );
+  }
+
+  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
+    handleDropdown(options, state, key, (obj) =>
+      dispatch(
+        setListing({
+          ...listing,
+          [stateName]: obj,
+        })
+      )
+    );
+  }
+
+  function handleAssignedParking(obj: typeof state.assignedParking) {
+    const { numAssignedSpaces, numAssignedSpacesWithCover, ...rest } = state;
+
+    // Has assigned parking
+    if (obj.value === true) {
+      dispatch(
+        setListing({
+          ...listing,
+          apartment: {
+            ...state,
+            assignedParking: obj,
+            numAssignedSpaces: initStrReq,
+            numAssignedSpacesWithCover: initStrReq,
+          },
+        })
+      );
+      return;
+    }
+
+    // Does not have assigned parking
+    if (obj.value === false) {
+      dispatch(
+        setListing({
+          ...listing,
+          apartment: {
+            ...rest,
+            assignedParking: obj,
+          },
+        })
+      );
+      return;
     }
   }
+
   return (
     <form>
       {state.saved === true ? (
         <section>
-          <EditFormSection<typeof state> parent={state} emit={handleVerify} />
+          <EditFormSection<typeof state>
+            parent={state}
+            emit={handleFormVerificationWrapper}
+          />
         </section>
       ) : null}
 
       <section>
         <header>Apartment Features</header>
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="yearBuilt"
-            placeholder="Year Built"
-            formatType="year"
-            min={1}
-            max={new Date().getFullYear()}
-            parent={state.yearBuilt}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="squareFeet"
-            placeholder="Square Feet"
-            groupSeparators={[","]}
-            formatType="comma-separated-no-decimal"
-            min={100}
-            parent={state.squareFeet}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <YearInput
+              state={state.yearBuilt}
+              placeholder="Year built"
+              min={0}
+              max={new Date().getFullYear()}
+              handleInput={(obj) => handleInput(obj, "yearBuilt")}
+            />
+          </div>
+          <div className={styles.md}>
+            <CommaSeparatedWholeNumberInput
+              state={state.squareFeet}
+              placeholder="Sqft"
+              min={100}
+              handleInput={(obj) => handleInput(obj, "squareFeet")}
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="floorNumber"
-            placeholder="Floor"
-            formatType="number"
-            min={1}
-            max={100}
-            parent={state.floorNumber}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="bedrooms"
-            placeholder="Bedrooms"
-            formatType="number"
-            min={1}
-            max={50}
-            parent={state.bedrooms}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.floorNumber}
+              placeholder="Floor number"
+              min={1}
+              max={50}
+              handleInput={(obj) => handleInput(obj, "floorNumber")}
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.bedrooms}
+              placeholder="Bedrooms"
+              min={1}
+              max={10}
+              handleInput={(obj) => handleInput(obj, "bedrooms")}
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="fullBathrooms"
-            placeholder="Full Baths"
-            formatType="number"
-            min={1}
-            max={100}
-            parent={state.fullBathrooms}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="halfBathrooms"
-            placeholder="Half Baths"
-            formatType="number"
-            min={0}
-            max={100}
-            parent={state.halfBathrooms}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.fullBathrooms}
+              placeholder="Full baths"
+              min={1}
+              max={10}
+              handleInput={(obj) => handleInput(obj, "fullBathrooms")}
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.halfBathrooms}
+              placeholder="Half baths"
+              min={0}
+              max={10}
+              handleInput={(obj) => handleInput(obj, "halfBathrooms")}
+            />
+          </div>
         </div>
 
         <Dropdown<HeatingOption>
@@ -257,8 +206,10 @@ export default function ApartmentForRentForm({
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
-          label="Heating"
-          emit={(options) => handleOptions<HeatingOption>(options, "heating")}
+          label={"Heating"}
+          emit={(options) =>
+            handleDropdownWrapper<HeatingOption>(options, "heating")
+          }
         />
 
         <Dropdown<CoolingOption>
@@ -269,8 +220,10 @@ export default function ApartmentForRentForm({
           parent={state.cooling.value}
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
-          label="Cooling"
-          emit={(options) => handleOptions<CoolingOption>(options, "cooling")}
+          label={"Cooling"}
+          emit={(options) =>
+            handleDropdownWrapper<CoolingOption>(options, "cooling")
+          }
         />
 
         <Dropdown<WaterOption>
@@ -281,8 +234,10 @@ export default function ApartmentForRentForm({
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
-          label="Water"
-          emit={(options) => handleOptions<WaterOption>(options, "water")}
+          label={"Water"}
+          emit={(options) =>
+            handleDropdownWrapper<WaterOption>(options, "water")
+          }
         />
 
         <Dropdown<PowerOption>
@@ -293,166 +248,95 @@ export default function ApartmentForRentForm({
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
-          label="Power"
-          emit={(options) => handleOptions<PowerOption>(options, "power")}
+          label={"Power"}
+          emit={(options) =>
+            handleDropdownWrapper<PowerOption>(options, "power")
+          }
         />
 
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="stairAccess"
-          formLayer="1"
-          label="Stair Access"
-          parent={state.stairAccess}
-          emit={handleTwoBtnRow}
+        <YesNoBtns
+          state={state.stairAccess}
+          label="Stair access"
+          handleSelected={(obj) => handleInput(obj, "stairAccess")}
         />
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="elevatorAccess"
-          formLayer="1"
-          label="Elevator Access"
-          parent={state.elevatorAccess}
-          emit={handleTwoBtnRow}
+
+        <YesNoBtns
+          state={state.elevatorAccess}
+          label="Elevator access"
+          handleSelected={(obj) => handleInput(obj, "elevatorAccess")}
         />
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="furnished"
-          formLayer="1"
+
+        <YesNoBtns
+          state={state.furnished}
           label="Furnished"
-          parent={state.furnished}
-          emit={handleTwoBtnRow}
+          handleSelected={(obj) => handleInput(obj, "furnished")}
         />
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="assignedParking"
-          formLayer="1"
-          label="Assigned Parking"
-          parent={state.assignedParking}
-          emit={handleTwoBtnRow}
+        <YesNoBtns
+          state={state.assignedParking}
+          label="Assigned parking"
+          handleSelected={(obj) => handleInput(obj, "assignedParking")}
         />
         {state.assignedParking.value === true &&
         state.numAssignedSpaces &&
         state.numAssignedSpacesWithCover ? (
           <>
             <div className={styles.flex_row}>
-              <InputStr<typeof state>
-                size="md"
-                fieldName="numAssignedSpaces"
-                placeholder="Spaces"
-                groupSeparators={[","]}
-                formatType="comma-separated-no-decimal"
-                min={1}
-                parent={state.numAssignedSpaces}
-                emit={handleInputStr}
-              />
-              <InputStr<typeof state>
-                size="md"
-                fieldName="numAssignedSpacesWithCover"
-                placeholder="Covered Spaces"
-                groupSeparators={[","]}
-                formatType="comma-separated-no-decimal"
-                min={0}
-                parent={state.numAssignedSpacesWithCover}
-                emit={handleInputStr}
-              />
+              <div className={styles.md}>
+                <NumberInput
+                  state={state.numAssignedSpaces}
+                  placeholder="Spaces"
+                  min={1}
+                  max={10}
+                  handleInput={(obj) => handleInput(obj, "numAssignedSpaces")}
+                />
+              </div>
+              <div className={styles.md}>
+                <NumberInput
+                  state={state.numAssignedSpacesWithCover}
+                  placeholder="Covered spaces"
+                  min={1}
+                  max={10}
+                  handleInput={(obj) =>
+                    handleInput(obj, "numAssignedSpacesWithCover")
+                  }
+                />
+              </div>
             </div>
           </>
         ) : null}
 
-        {/* Unassigned Parking */}
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="unassignedParkingAvailable"
-          formLayer="1"
-          label="Unassigned Parking Available"
-          parent={state.unassignedParkingAvailable}
-          emit={handleTwoBtnRow}
+        <YesNoBtns
+          state={state.unassignedParkingAvailable}
+          label="Unassigned parking available"
+          handleSelected={(obj) =>
+            handleInput(obj, "unassignedParkingAvailable")
+          }
         />
 
-        {/* Street Parking */}
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="streetParking"
-          formLayer="1"
-          label="Street Parking Available"
-          parent={state.streetParking}
-          emit={handleTwoBtnRow}
+        <YesNoBtns
+          state={state.streetParking}
+          label="Street parking"
+          handleSelected={(obj) => handleInput(obj, "streetParking")}
         />
 
-        {/* Fenced Yard */}
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="fencedYard"
-          formLayer="1"
-          label="Fenced Yard"
-          parent={state.fencedYard}
-          emit={handleTwoBtnRow}
+        <YesNoBtns
+          state={state.fencedYard}
+          label="Fenced yard"
+          handleSelected={(obj) => handleInput(obj, "fencedYard")}
         />
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="sharedYard"
-          formLayer="1"
-          label="Shared Yard"
-          parent={state.sharedYard}
-          emit={handleTwoBtnRow}
+
+        <YesNoBtns
+          state={state.sharedYard}
+          label="Shared yard"
+          handleSelected={(obj) => handleInput(obj, "sharedYard")}
         />
       </section>
 
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
-          needsAddressValidation={false}
-          parent={state}
-          parentInitialState={initApartment}
-          emit={handleVerify}
-          deleteListing={deleteListing}
-        />
-      ) : null}
-
-      {state.beingVerified === true ? (
-        <VerifySection parentName="House" parent={state} emit={handleVerify} />
-      ) : null}
-
-      {state.saved === true ? (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      )}
+      <FormCheck
+        formState={state}
+        initialFormState={initApartment}
+        handleFormVerification={handleFormVerificationWrapper}
+      />
     </form>
   );
 }
