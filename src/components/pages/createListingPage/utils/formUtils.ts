@@ -1,6 +1,7 @@
 import { CreateListingPageState } from "../createListingPageSlice";
 import {
   AddressValidationApi_Response,
+  ListingData,
   Verify,
   VerifyActionName,
 } from "../../../../types";
@@ -128,4 +129,42 @@ export function handleFormVerification<T extends Verify>({
   }
 
   throw new Error("Escaped");
+}
+
+/**
+ * T is the type of options on the menu i.e. heating options
+ * S is the type of form state i.e. singleFamilyHome
+ * K is a keyof ListingData that defines the form state i.e. "singleFamilyHome"
+ */
+export function handleDropdown<O, S>(
+  options: O[],
+  state: S,
+  key: keyof S,
+  handleSelectedOptions: (obj: S) => void
+) {
+  if (options.length === 0) {
+    const obj: S = {
+      ...state,
+      [key]: {
+        valid: false,
+        value: options,
+        errorMsg: "Required",
+        required: true,
+      },
+    };
+    handleSelectedOptions(obj);
+  } else if (options.length > 0) {
+    const obj: S = {
+      ...state,
+      [key]: {
+        valid: true,
+        value: options,
+        errorMsg: "",
+        required: true,
+      },
+    };
+    handleSelectedOptions(obj);
+  } else {
+    throw new Error("Something went wrong");
+  }
 }

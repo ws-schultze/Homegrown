@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Str,
   HeatingOption,
@@ -24,44 +24,10 @@ import TwoBtnRow, { TypeTwoBtnRowState } from "../../shared/TwoBtnRow";
 import EditFormSection from "../../shared/EditFormSection";
 import SaveSection from "../../shared/SaveSection";
 import VerifySection from "../../shared/VerifySection";
-import PageBtns from "../../shared/PageBtns-old";
 import styles from "../../styles.module.scss";
+import { FormProps } from "../../types/formProps";
 
-interface Props {
-  parent: ListingData;
-  prevPage: () => void;
-  nextPage: () => void;
-  deleteListing: () => void;
-  toPageNumber?: (number: number) => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (obj: ListingData) => void;
-}
-
-export default function MultiFamilyHomeForSaleForm({
-  parent,
-  nextPage,
-  prevPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props) {
-  const [state, setState] = useState<MultiFamilyHome>(parent.multiFamilyHome!);
-
-  /**
-   * Keeps inputs showing values in parent state on page change
-   * Also catches error messages
-   */
-  useEffect(() => {
-    if (parent.multiFamilyHome) {
-      setState(parent.multiFamilyHome);
-    } else {
-      throw new Error("Single family home object not found in parent");
-    }
-  }, [parent]);
-
+export default function MultiFamilyHomeForSaleForm(props: FormProps) {
   /**
    * Given an array of options of type T, set them to state.
    * @param options T[] (e.g. {id: string, label: string}[] )

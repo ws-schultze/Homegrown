@@ -16,15 +16,13 @@ import {
   waterOptions,
   powerOptions,
 } from "../../../../../initialValues";
-
 import EditFormSection from "../../shared/EditFormSection";
-
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { handleFormVerification } from "../../utils/formUtils";
+import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
 import { setListing, setSavedPages } from "../../createListingPageSlice";
 import FormCheck from "../../shared/FormCheck";
 import YesNoBtns from "../../shared/YesNoBtns";
@@ -68,40 +66,15 @@ export default function SingleFamilyHomeForm(props: FormProps) {
    * @param options T[] (e.g. {id: string, label: string}[] )
    * @param key keyof typeof state
    */
-  function handleOptions<T>(options: T[], key: keyof typeof state) {
-    if (options.length === 0) {
+  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
+    handleDropdown(options, state, key, (obj) =>
       dispatch(
         setListing({
           ...listing,
-          singleFamilyHome: {
-            ...state,
-            [key]: {
-              valid: false,
-              value: options,
-              errorMsg: "Required",
-              required: true,
-            },
-          },
+          singleFamilyHome: obj,
         })
-      );
-    } else if (options.length > 0) {
-      dispatch(
-        setListing({
-          ...listing,
-          singleFamilyHome: {
-            ...state,
-            [key]: {
-              valid: true,
-              value: options,
-              errorMsg: "",
-              required: true,
-            },
-          },
-        })
-      );
-    } else {
-      throw new Error("Something went wrong");
-    }
+      )
+    );
   }
 
   function handleGarage(obj: typeof state.garage) {
@@ -298,7 +271,9 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
-          emit={(options) => handleOptions<HeatingOption>(options, "heating")}
+          emit={(options) =>
+            handleDropdownWrapper<HeatingOption>(options, "heating")
+          }
         />
 
         <Dropdown<CoolingOption>
@@ -310,7 +285,9 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label={"Cooling"}
-          emit={(options) => handleOptions<CoolingOption>(options, "cooling")}
+          emit={(options) =>
+            handleDropdownWrapper<CoolingOption>(options, "cooling")
+          }
         />
 
         <Dropdown<WaterOption>
@@ -322,7 +299,9 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label={"Water"}
-          emit={(options) => handleOptions<WaterOption>(options, "water")}
+          emit={(options) =>
+            handleDropdownWrapper<WaterOption>(options, "water")
+          }
         />
 
         <Dropdown<PowerOption>
@@ -334,7 +313,9 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label={"Power"}
-          emit={(options) => handleOptions<PowerOption>(options, "power")}
+          emit={(options) =>
+            handleDropdownWrapper<PowerOption>(options, "power")
+          }
         />
 
         <YesNoBtns
