@@ -23,130 +23,68 @@ import InputStr from "../../../../shared/inputs/inputStr/InputStr";
 import EditFormSection from "../../shared/EditFormSection";
 import SaveSection from "../../shared/SaveSection";
 import VerifySection from "../../shared/VerifySection";
-import PageBtns from "../../shared/PageBtns-old";
 import styles from "../../styles.module.scss";
+import { FormProps } from "../../types/formProps";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
+import { setListing, setSavedPages } from "../../createListingPageSlice";
+import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
+import YearInput from "../../../../shared/inputs/yearInput/YearInput";
+import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
+import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
+import FormCheck from "../../shared/FormCheck";
 
-interface Props {
-  parent: ListingData;
-  prevPage: () => void;
-  nextPage: () => void;
-  toPageNumber?: (number: number) => void;
-  deleteListing: () => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (obj: ListingData) => void;
-}
+export default function ApartmentBuildingForSaleForm(props: FormProps) {
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const listing = pageState.listing;
+  const state = pageState.listing.apartmentBuilding!;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-export default function ApartmentBuildingForSaleForm({
-  parent,
-  nextPage,
-  prevPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props) {
-  const [state, setState] = useState<ApartmentBuilding>(
-    parent.apartmentBuilding!
-  );
+  if (!state) throw new Error("state is undefined");
 
-  /**
-   * Keeps inputs showing values in parent state on page change
-   * Also catches error messages
-   */
-  useEffect(() => {
-    if (parent.apartmentBuilding) {
-      setState(parent.apartmentBuilding);
-    } else {
-      throw new Error("Single family home object not found in parent");
-    }
-  }, [parent]);
-
-  /**
-   * Given an array of options of type T, set them to state.
-   * @param options T[] (e.g. {id: string, label: string}[] )
-   * @param key keyof typeof state
-   */
-  function handleOptions<T>(options: T[], key: keyof typeof state) {
-    if (options.length === 0) {
-      setState((s) => ({
-        ...s,
-        [key]: {
-          valid: false,
-          value: options,
-          errorMsg: "Required",
-          required: true,
-        },
-      }));
-    } else if (options.length > 0) {
-      setState((s) => ({
-        ...s,
-        [key]: {
-          valid: true,
-          value: options,
-          errorMsg: "",
-          required: true,
-        },
-      }));
-    } else {
-      throw new Error("Something went wrong");
-    }
-  }
-
-  // function handleTwoBtnRow(fieldName: keyof typeof state, obj: TypeTwoBtnRowState) {
-  //   const value = obj.value;
-
-  //   if (value !== true && value !== false) {
-  //     throw new Error(`Must have a value of "true" or "false"`);
-  //   }
-
-  //   setState((s) => ({
-  //     ...s,
-  //     [fieldName]: obj,
-  //   }));
-  // }
-
-  function handleInputStr(object: Str, fieldName: keyof typeof state) {
-    setState((s) => ({
-      ...s,
-      [fieldName]: object,
-    }));
-  }
-
-  function handleVerify(
+  function handleFormVerificationWrapper(
     actionName: VerifyActionName,
-    obj: typeof state,
-    addressValidationApiResponse?: AddressValidationApi_Response
+    obj: typeof state
   ) {
-    if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        apartmentBuilding: obj,
-      });
-    } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        apartmentBuilding: obj,
-        currentPage: 6,
-        savedPages: [1, 2, 3, 4, 5, 6],
-      });
-      // nextPage();
-    } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        apartmentBuilding: obj,
-        savedPages: [1, 2, 3, 4, 5],
-      });
-    } else {
-      throw new Error("Whoops");
-    }
+    handleFormVerification<ApartmentBuilding>({
+      createListingPageState: pageState,
+      actionName,
+      obj,
+      thisPageNum: props.thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            apartmentBuilding: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+    });
   }
+
+  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
+    handleDropdown(options, state, key, (obj) =>
+      dispatch(
+        setListing({
+          ...listing,
+          apartmentBuilding: obj,
+        })
+      )
+    );
+  }
+
   return (
     <form>
       {state.saved === true ? (
         <section>
-          <EditFormSection<typeof state> parent={state} emit={handleVerify} />
+          <EditFormSection<typeof state>
+            parent={state}
+            emit={handleFormVerificationWrapper}
+          />
         </section>
       ) : null}
 
@@ -154,96 +92,164 @@ export default function ApartmentBuildingForSaleForm({
         <header>Apartment Building Features</header>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="totalUnits"
-            placeholder="Units"
-            formatType="number"
-            min={1}
-            max={20}
-            parent={state.totalUnits}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="yearBuilt"
-            placeholder="Year Built"
-            formatType="year"
-            min={1}
-            max={new Date().getFullYear()}
-            parent={state.yearBuilt}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <YearInput
+              state={state.yearBuilt}
+              placeholder="Year built"
+              min={0}
+              max={new Date().getFullYear()}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      yearBuilt: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
+          <div className={styles.md}>
+            <CommaSeparatedWholeNumberInput
+              state={state.totalUnits}
+              placeholder="Units"
+              min={5}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      totalUnits: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="stories"
-            placeholder="Stories"
-            formatType="number"
-            min={1}
-            max={10}
-            parent={state.stories}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.stories}
+              placeholder="Stories"
+              min={1}
+              max={50}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: { ...state, stories: obj },
+                  })
+                )
+              }
+            />
+          </div>
 
-          <InputStr<typeof state>
-            size="md"
-            fieldName="acres"
-            placeholder="Lot Size (Acres)"
-            groupSeparators={[","]}
-            formatType="comma-separated-with-decimal"
-            min={0.01}
-            parent={state.acres}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <CommaSeparatedWholeNumberInput
+              state={state.squareFeet}
+              placeholder="Sqft"
+              min={2000}
+              max={10000000}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      squareFeet: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="squareFeet"
-            placeholder="Square Feet"
-            groupSeparators={[","]}
-            formatType="comma-separated-no-decimal"
-            min={100}
-            parent={state.squareFeet}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="bedrooms"
-            placeholder="Bedrooms"
-            formatType="number"
-            min={1}
-            max={50}
-            parent={state.bedrooms}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <CommaSeparatedWithDecimalInput
+              placeholder="Acres"
+              state={state.acres}
+              min={0}
+              max={1000000}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      acres: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.bedrooms}
+              placeholder="Bedrooms"
+              min={1}
+              max={2000}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      bedrooms: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="fullBathrooms"
-            placeholder="Full Baths"
-            formatType="number"
-            min={0}
-            max={100}
-            parent={state.fullBathrooms}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="halfBathrooms"
-            placeholder="Half Baths"
-            formatType="number"
-            min={0}
-            max={100}
-            parent={state.halfBathrooms}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.fullBathrooms}
+              placeholder="Full baths"
+              min={1}
+              max={1000}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      fullBathrooms: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.halfBathrooms}
+              placeholder="Half baths"
+              min={0}
+              max={1000}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    apartmentBuilding: {
+                      ...state,
+                      halfBathrooms: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <Dropdown<HeatingOption>
@@ -254,9 +260,12 @@ export default function ApartmentBuildingForSaleForm({
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
-          label="Heating"
-          emit={(options) => handleOptions<HeatingOption>(options, "heating")}
+          label={"Heating"}
+          emit={(options) =>
+            handleDropdownWrapper<HeatingOption>(options, "heating")
+          }
         />
+
         <Dropdown<CoolingOption>
           placeHolder={"Select Cooling Option(s)"}
           menuItems={coolingOptions}
@@ -265,9 +274,12 @@ export default function ApartmentBuildingForSaleForm({
           parent={state.cooling.value}
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
-          label="Cooling"
-          emit={(options) => handleOptions<CoolingOption>(options, "cooling")}
+          label={"Cooling"}
+          emit={(options) =>
+            handleDropdownWrapper<CoolingOption>(options, "cooling")
+          }
         />
+
         <Dropdown<WaterOption>
           placeHolder={"Select Water Option(s)"}
           parent={state.water.value}
@@ -276,9 +288,12 @@ export default function ApartmentBuildingForSaleForm({
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
-          label="Water"
-          emit={(options) => handleOptions<WaterOption>(options, "water")}
+          label={"Water"}
+          emit={(options) =>
+            handleDropdownWrapper<WaterOption>(options, "water")
+          }
         />
+
         <Dropdown<PowerOption>
           placeHolder={"Select Power Option(s)"}
           parent={state.power.value}
@@ -287,47 +302,18 @@ export default function ApartmentBuildingForSaleForm({
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
-          label="Power"
-          emit={(options) => handleOptions<PowerOption>(options, "power")}
+          label={"Power"}
+          emit={(options) =>
+            handleDropdownWrapper<PowerOption>(options, "power")
+          }
         />
-
-        {/* End features */}
       </section>
 
-      {/* Save */}
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
-          needsAddressValidation={false}
-          parent={state}
-          parentInitialState={initApartmentBuilding}
-          emit={handleVerify}
-          deleteListing={deleteListing}
-        />
-      ) : null}
-
-      {/* Verify */}
-      {state.beingVerified === true ? (
-        <VerifySection parentName="House" parent={state} emit={handleVerify} />
-      ) : null}
-
-      {state.saved === true ? (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      )}
+      <FormCheck
+        formState={state}
+        initialFormState={initApartmentBuilding}
+        handleFormVerification={handleFormVerificationWrapper}
+      />
     </form>
   );
 }

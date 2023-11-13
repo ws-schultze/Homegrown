@@ -1,10 +1,6 @@
-import { useState, useEffect } from "react";
 import {
-  Str,
   HeatingOption,
-  AddressValidationApi_Response,
   VerifyActionName,
-  ListingData,
   MultiFamilyHome,
   CoolingOption,
   WaterOption,
@@ -18,12 +14,7 @@ import {
   waterOptions,
   powerOptions,
 } from "../../../../../initialValues";
-
-import InputStr from "../../../../shared/inputs/inputStr/InputStr";
-import TwoBtnRow, { TypeTwoBtnRowState } from "../../shared/TwoBtnRow";
 import EditFormSection from "../../shared/EditFormSection";
-import SaveSection from "../../shared/SaveSection";
-import VerifySection from "../../shared/VerifySection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { useAppSelector } from "../../../../../redux/hooks";
@@ -44,7 +35,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  if (!state) throw new Error("multiFamilyHome is undefined");
+  if (!state) throw new Error("state is undefined");
 
   function handleFormVerificationWrapper(
     actionName: VerifyActionName,
@@ -225,7 +216,6 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               }
             />
           </div>
-
           <div className={styles.md}>
             <NumberInput
               state={state.bedrooms}

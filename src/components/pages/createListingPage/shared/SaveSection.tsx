@@ -138,9 +138,11 @@ export default function SaveSection<T extends Address | AddressOptional>({
   return (
     <>
       <section>
-        <header>
-          <>{children}</>
-        </header>
+        {children ? (
+          <header>
+            <>{children}</>
+          </header>
+        ) : null}
 
         <div className={styles.save_section_btns}>
           {loading ? (
@@ -148,7 +150,11 @@ export default function SaveSection<T extends Address | AddressOptional>({
               <Spinner size="small" />
             </div>
           ) : (
-            <button type="button" className={styles.btn} onClick={handleSave}>
+            <button
+              type="button"
+              className={styles.save_btn}
+              onClick={handleSave}
+            >
               Save and continue
             </button>
           )}
