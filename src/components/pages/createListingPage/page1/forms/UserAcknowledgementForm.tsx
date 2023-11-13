@@ -1,0 +1,52 @@
+import styles from "../../styles.module.scss";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../../../redux/hooks";
+import {
+  setSavedPages,
+  setUserAcknowledged,
+} from "../../createListingPageSlice";
+import { useNavigate } from "react-router";
+
+export default function UserAcknowledgementForm({
+  thisPageNum,
+}: {
+  /**
+   * Used by handleVerify to add this page number to the array of
+   * saved pages in the createListingPage state
+   */
+  thisPageNum: number;
+}): JSX.Element {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const state = useAppSelector((s) => s.createListingPage);
+
+  function handleClick() {
+    dispatch(setUserAcknowledged(true));
+    dispatch(setSavedPages(state.savedPages.concat(thisPageNum)));
+    navigate(`/create-listing/${thisPageNum + 1}`);
+  }
+
+  return (
+    <form>
+      <section>
+        <header>Notice</header>
+        <p>All fields are required unless their label ends with *</p>
+        <p>Any unsaved progress will be lost if you refresh the browser.</p>
+        <p>Saved progress will be kept until the browser is closed.</p>
+        <p>
+          Saved progress may be accessed from your profile in the event that you
+          navigate away from this form.
+        </p>
+        <button
+          type="button"
+          className={`btn ${styles.btn} ${
+            state.userAcknowledged === true ? "active" : ""
+          }`}
+          onClick={handleClick}
+        >
+          I understand
+        </button>
+      </section>
+    </form>
+  );
+}

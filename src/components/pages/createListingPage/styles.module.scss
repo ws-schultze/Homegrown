@@ -180,7 +180,13 @@
   display: flex;
   gap: 20px;
   width: 100%;
-  /* justify-content: space-between; */
+  justify-content: space-between;
+  .small {
+    width: 30%;
+  }
+  .md {
+    width: 160px;
+  }
 }
 
 .image_preview_wrap {

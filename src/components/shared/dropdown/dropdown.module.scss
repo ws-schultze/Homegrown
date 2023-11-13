@@ -95,18 +95,22 @@
 }
 
 .tag {
-  background-color: var(--color-primary);
-  color: var(--color-btn-text);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   padding: 0.3rem 0.5rem;
+  border: var(--border);
+  border-color: var(--color-primary);
   border-radius: var(--border-radius);
   gap: 0.5rem;
   .icon_container {
     display: flex;
     align-items: center;
     cursor: pointer;
-    fill: var(--color-bg-primary);
+    svg {
+      fill: var(--color-primary);
+    }
   }
 }
 
