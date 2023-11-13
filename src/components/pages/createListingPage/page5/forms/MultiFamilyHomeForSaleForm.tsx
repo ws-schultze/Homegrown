@@ -26,95 +26,66 @@ import SaveSection from "../../shared/SaveSection";
 import VerifySection from "../../shared/VerifySection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
+import { setListing, setSavedPages } from "../../createListingPageSlice";
+import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
+import YearInput from "../../../../shared/inputs/yearInput/YearInput";
+import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
+import YesNoBtns from "../../shared/YesNoBtns";
+import FormCheck from "../../shared/FormCheck";
 
 export default function MultiFamilyHomeForSaleForm(props: FormProps) {
-  /**
-   * Given an array of options of type T, set them to state.
-   * @param options T[] (e.g. {id: string, label: string}[] )
-   * @param key keyof typeof state
-   */
-  function handleOptions<T>(options: T[], key: keyof typeof state) {
-    if (options.length === 0) {
-      setState((s) => ({
-        ...s,
-        [key]: {
-          valid: false,
-          value: options,
-          errorMsg: "Required",
-          required: true,
-        },
-      }));
-    } else if (options.length > 0) {
-      setState((s) => ({
-        ...s,
-        [key]: {
-          valid: true,
-          value: options,
-          errorMsg: "",
-          required: true,
-        },
-      }));
-    } else {
-      throw new Error("Something went wrong");
-    }
-  }
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const listing = pageState.listing;
+  const state = pageState.listing.multiFamilyHome!;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  function handleTwoBtnRow(
-    fieldName: keyof typeof state,
-    obj: TypeTwoBtnRowState
-  ) {
-    const value = obj.value;
+  if (!state) throw new Error("multiFamilyHome is undefined");
 
-    if (value !== true && value !== false) {
-      throw new Error(`Must have a value of "true" or "false"`);
-    }
-
-    setState((s) => ({
-      ...s,
-      [fieldName]: obj,
-    }));
-  }
-
-  function handleInputStr(object: Str, fieldName: keyof typeof state) {
-    setState((s) => ({
-      ...s,
-      [fieldName]: object,
-    }));
-  }
-
-  function handleVerify(
+  function handleFormVerificationWrapper(
     actionName: VerifyActionName,
-    obj: typeof state,
-    addressValidationApiResponse?: AddressValidationApi_Response
+    obj: typeof state
   ) {
-    if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        multiFamilyHome: obj,
-      });
-    } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        multiFamilyHome: obj,
-        currentPage: 6,
-        savedPages: [1, 2, 3, 4, 5, 6],
-      });
-      // nextPage();
-    } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        multiFamilyHome: obj,
-        savedPages: [1, 2, 3, 4, 5],
-      });
-    } else {
-      throw new Error("Whoops");
-    }
+    handleFormVerification<MultiFamilyHome>({
+      createListingPageState: pageState,
+      actionName,
+      obj,
+      thisPageNum: props.thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            multiFamilyHome: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+    });
   }
+
+  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
+    handleDropdown(options, state, key, (obj) =>
+      dispatch(
+        setListing({
+          ...listing,
+          multiFamilyHome: obj,
+        })
+      )
+    );
+  }
+
   return (
     <form>
       {state.saved === true ? (
         <section>
-          <EditFormSection<typeof state> parent={state} emit={handleVerify} />
+          <EditFormSection<typeof state>
+            parent={state}
+            emit={handleFormVerificationWrapper}
+          />
         </section>
       ) : null}
 
@@ -122,95 +93,155 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
         <header>Multi-Family Home Features</header>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="totalUnits"
-            placeholder="Units"
-            formatType="number"
-            min={1}
-            max={20}
-            parent={state.totalUnits}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="yearBuilt"
-            placeholder="Year Built"
-            formatType="year"
-            min={1}
-            max={new Date().getFullYear()}
-            parent={state.yearBuilt}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <YearInput
+              state={state.yearBuilt}
+              placeholder="Year built"
+              min={0}
+              max={new Date().getFullYear()}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: {
+                      ...state,
+                      yearBuilt: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.totalUnits}
+              placeholder="Units"
+              min={1}
+              max={20}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: { ...state, totalUnits: obj },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="stories"
-            placeholder="Stories"
-            formatType="number"
-            min={1}
-            max={10}
-            parent={state.stories}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="squareFeet"
-            placeholder="Square Feet"
-            groupSeparators={[","]}
-            formatType="comma-separated-no-decimal"
-            min={100}
-            parent={state.squareFeet}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.stories}
+              placeholder="Stories"
+              min={1}
+              max={5}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: { ...state, stories: obj },
+                  })
+                )
+              }
+            />
+          </div>
+          <div className={styles.md}>
+            <CommaSeparatedWholeNumberInput
+              state={state.squareFeet}
+              placeholder="Sqft"
+              min={100}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: {
+                      ...state,
+                      squareFeet: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="unitsWithGarageSpace"
-            placeholder="Units With Garage"
-            groupSeparators={[","]}
-            formatType="comma-separated-no-decimal"
-            min={0}
-            parent={state.unitsWithGarageSpace}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="bedrooms"
-            placeholder="Bedrooms"
-            formatType="number"
-            min={1}
-            max={50}
-            parent={state.bedrooms}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.fullBathrooms}
+              placeholder="Full baths"
+              min={1}
+              max={15}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: {
+                      ...state,
+                      fullBathrooms: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.halfBathrooms}
+              placeholder="Half baths"
+              min={0}
+              max={15}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: {
+                      ...state,
+                      halfBathrooms: obj,
+                    },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.flex_row}>
-          <InputStr<typeof state>
-            size="md"
-            fieldName="fullBathrooms"
-            placeholder="Full Baths"
-            formatType="number"
-            min={0}
-            max={100}
-            parent={state.fullBathrooms}
-            emit={handleInputStr}
-          />
-          <InputStr<typeof state>
-            size="md"
-            fieldName="halfBathrooms"
-            placeholder="Half Baths"
-            formatType="number"
-            min={0}
-            max={100}
-            parent={state.halfBathrooms}
-            emit={handleInputStr}
-          />
+          <div className={styles.md}>
+            <NumberInput
+              state={state.unitsWithGarageSpace}
+              placeholder="Units with garage"
+              min={0}
+              max={5}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: { ...state, unitsWithGarageSpace: obj },
+                  })
+                )
+              }
+            />
+          </div>
+
+          <div className={styles.md}>
+            <NumberInput
+              state={state.bedrooms}
+              placeholder="Bedrooms"
+              min={1}
+              max={20}
+              handleInput={(obj) =>
+                dispatch(
+                  setListing({
+                    ...listing,
+                    multiFamilyHome: { ...state, bedrooms: obj },
+                  })
+                )
+              }
+            />
+          </div>
         </div>
 
         <Dropdown<HeatingOption>
@@ -221,9 +252,12 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
-          label="Heating"
-          emit={(options) => handleOptions<HeatingOption>(options, "heating")}
+          label={"Heating"}
+          emit={(options) =>
+            handleDropdownWrapper<HeatingOption>(options, "heating")
+          }
         />
+
         <Dropdown<CoolingOption>
           placeHolder={"Select Cooling Option(s)"}
           menuItems={coolingOptions}
@@ -232,9 +266,12 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           parent={state.cooling.value}
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
-          label="Cooling"
-          emit={(options) => handleOptions<CoolingOption>(options, "cooling")}
+          label={"Cooling"}
+          emit={(options) =>
+            handleDropdownWrapper<CoolingOption>(options, "cooling")
+          }
         />
+
         <Dropdown<WaterOption>
           placeHolder={"Select Water Option(s)"}
           parent={state.water.value}
@@ -243,9 +280,12 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
-          label="Water"
-          emit={(options) => handleOptions<WaterOption>(options, "water")}
+          label={"Water"}
+          emit={(options) =>
+            handleDropdownWrapper<WaterOption>(options, "water")
+          }
         />
+
         <Dropdown<PowerOption>
           placeHolder={"Select Power Option(s)"}
           parent={state.power.value}
@@ -254,69 +294,50 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           isSearchable={false}
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
-          label="Power"
-          emit={(options) => handleOptions<PowerOption>(options, "power")}
+          label={"Power"}
+          emit={(options) =>
+            handleDropdownWrapper<PowerOption>(options, "power")
+          }
         />
 
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="streetParking"
-          formLayer="1"
+        <YesNoBtns
           label="Street parking"
-          parent={state.streetParking}
-          emit={handleTwoBtnRow}
+          state={state.streetParking}
+          handleSelected={(obj) =>
+            dispatch(
+              setListing({
+                ...listing,
+                multiFamilyHome: {
+                  ...state,
+                  streetParking: obj,
+                },
+              })
+            )
+          }
         />
 
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
-          fieldName="fencedYard"
-          formLayer="1"
+        <YesNoBtns
           label="Fenced yard"
-          parent={state.fencedYard}
-          emit={handleTwoBtnRow}
+          state={state.fencedYard}
+          handleSelected={(obj) =>
+            dispatch(
+              setListing({
+                ...listing,
+                multiFamilyHome: {
+                  ...state,
+                  fencedYard: obj,
+                },
+              })
+            )
+          }
         />
-
-        {/* End Unit Features */}
       </section>
 
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
-          needsAddressValidation={false}
-          parent={state}
-          parentInitialState={initMultiFamilyHome}
-          emit={handleVerify}
-          deleteListing={deleteListing}
-        />
-      ) : null}
-
-      {state.beingVerified === true ? (
-        <VerifySection parentName="House" parent={state} emit={handleVerify} />
-      ) : null}
-
-      {state.saved === true ? (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      )}
+      <FormCheck
+        formState={state}
+        initialFormState={initMultiFamilyHome}
+        handleFormVerification={handleFormVerificationWrapper}
+      />
     </form>
   );
 }

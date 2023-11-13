@@ -61,11 +61,6 @@ export default function SingleFamilyHomeForm(props: FormProps) {
     });
   }
 
-  /**
-   * Given an array of options of type T, set them to state.
-   * @param options T[] (e.g. {id: string, label: string}[] )
-   * @param key keyof typeof state
-   */
   function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
     handleDropdown(options, state, key, (obj) =>
       dispatch(
@@ -224,10 +219,11 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           </div>
 
           <div className={styles.md}>
-            <CommaSeparatedWholeNumber
+            <NumberInput
               state={state.fullBathrooms}
               placeholder="Full baths"
               min={1}
+              max={10}
               handleInput={(obj) =>
                 dispatch(
                   setListing({
@@ -244,10 +240,11 @@ export default function SingleFamilyHomeForm(props: FormProps) {
         </div>
 
         <div>
-          <CommaSeparatedWholeNumber
+          <NumberInput
             state={state.halfBathrooms}
             placeholder="Half baths"
             min={0}
+            max={10}
             handleInput={(obj) =>
               dispatch(
                 setListing({

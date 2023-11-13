@@ -152,21 +152,23 @@ export default function SaveSection<T extends Address | AddressOptional>({
               Save and continue
             </button>
           )}
-          <button type="button" className={styles.btn} onClick={handleClear}>
-            Clear form
-          </button>
+          <div className={styles.bottom_btns}>
+            <button type="button" className={styles.btn} onClick={handleClear}>
+              Clear form
+            </button>
 
-          <button
-            type="button"
-            className={styles.btn}
-            onClick={
-              pageState.editListing === true
-                ? deleteListingFromFirestore
-                : deleteNotYetSubmittedListing
-            }
-          >
-            Delete Listing
-          </button>
+            <button
+              type="button"
+              className={styles.btn}
+              onClick={
+                pageState.editListing === true
+                  ? deleteListingFromFirestore
+                  : deleteNotYetSubmittedListing
+              }
+            >
+              Delete Listing
+            </button>
+          </div>
         </div>
       </section>
     </>

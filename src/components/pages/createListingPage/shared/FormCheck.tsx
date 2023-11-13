@@ -60,7 +60,7 @@ export default function FormCheck({
   handleFormVerification,
 }: FormCheckProps) {
   return (
-    <div>
+    <>
       {formState.saved === false && formState.beingVerified === false ? (
         <SaveSection<typeof formState>
           needsAddressValidation={false}
@@ -71,12 +71,11 @@ export default function FormCheck({
       ) : null}
       {formState.beingVerified === true ? (
         <VerifySection<typeof formState>
-          // parentName="Basic Information"
           parent={formState}
           children={children}
           emit={handleFormVerification}
         />
       ) : null}
-    </div>
+    </>
   );
 }

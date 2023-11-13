@@ -64,7 +64,7 @@ export default function Page5() {
   if (id === "multi-family-home") {
     return (
       <div className={styles.container}>
-        {/* <MultiFamilyHomeForSaleForm thisPageNum={5} /> */}
+        <MultiFamilyHomeForSaleForm thisPageNum={5} />
         <Pagination />
         <Footer />
       </div>

@@ -134,7 +134,6 @@ export function handleFormVerification<T extends Verify>({
 /**
  * T is the type of options on the menu i.e. heating options
  * S is the type of form state i.e. singleFamilyHome
- * K is a keyof ListingData that defines the form state i.e. "singleFamilyHome"
  */
 export function handleDropdown<O, S>(
   options: O[],
