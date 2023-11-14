@@ -21,7 +21,11 @@ import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
@@ -54,6 +58,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
     });
   }

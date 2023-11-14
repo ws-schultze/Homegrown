@@ -48,7 +48,7 @@ export default function EditFormSection<T>({
       readOnly: false,
     };
 
-    emit("edit", s);
+    emit("enableEditing", s);
   }
 
   return (

@@ -1,4 +1,4 @@
-import { Image, ListingData } from "../../../../../types/index";
+import { Image, ListingData, Uploads } from "../../../../../types/index";
 import { db } from "../../../../../firebase.config";
 import { ReactComponent as BellSVG } from "../../assets/bell-regular.svg";
 import { useNavigate, useParams } from "react-router";
@@ -17,8 +17,18 @@ import { toast } from "react-toastify";
 import useDeleteNotYetSubmittedListing from "../../hooks/useDeleteNotYetSubmittedListing";
 import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFirestore";
 import styles from "../../styles.module.scss";
+import { FormProps } from "../../types/formProps";
+import { useEffect } from "react";
 
-export default function ReviewForm() {
+interface Props extends FormProps {
+  /**
+   * <uploads> are stored in CreateListingPage state because they contain files
+   * which are non serializable.
+   */
+  uploads: Uploads;
+}
+
+export default function ReviewForm(props: Props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const pageState = useAppSelector((s) => s.createListingPage);
@@ -31,7 +41,7 @@ export default function ReviewForm() {
   );
 
   function goToPage(num: number) {
-    dispatch(setCurrentPageNumber(num));
+    navigate(`/create-listing/${num}`);
   }
 
   // function deleteNotYetSubmittedListing() {
@@ -186,6 +196,8 @@ export default function ReviewForm() {
     }
   }
 
+  useEffect(() => {}, []);
+
   return (
     <form>
       <section>
@@ -196,7 +208,7 @@ export default function ReviewForm() {
 
         {/* Page 1 -- User Acknowledgment */}
         <div className={styles.review_row}>
-          Notice
+          1. Notice
           <button className="btn" type="button" onClick={() => goToPage(1)}>
             Review
           </button>
@@ -204,7 +216,7 @@ export default function ReviewForm() {
 
         {/* Page 2 -- Basic Info */}
         <div className={styles.review_row}>
-          Basics
+          2. Basics
           <button className="btn" type="button" onClick={() => goToPage(2)}>
             Review
           </button>
@@ -212,7 +224,7 @@ export default function ReviewForm() {
 
         {/* Page 3 -- Listing Address */}
         <div className={styles.review_row}>
-          Address
+          3. Address
           <button className={"btn"} type="button" onClick={() => goToPage(3)}>
             Review
           </button>
@@ -220,8 +232,7 @@ export default function ReviewForm() {
 
         {/* Page 4 -- Lister */}
         <div className={styles.review_row}>
-          {pageState.listing.basicInfo.forSaleBy?.value?.label ||
-            pageState.listing.basicInfo.forRentBy?.value?.label}
+          4. Listed by
           <button className="btn" type="button" onClick={() => goToPage(4)}>
             Review
           </button>
@@ -229,7 +240,7 @@ export default function ReviewForm() {
 
         {/* Page 5 -- Listing Kind */}
         <div className={styles.review_row}>
-          {pageState.listing.basicInfo.listingKind.value?.label}
+          5. Features
           <button className="btn" type="button" onClick={() => goToPage(5)}>
             Review
           </button>
@@ -237,7 +248,7 @@ export default function ReviewForm() {
 
         {/* Page 6 -- Images */}
         <div className={styles.review_row}>
-          Images
+          6. Images
           <button className="btn" type="button" onClick={() => goToPage(6)}>
             Review
           </button>

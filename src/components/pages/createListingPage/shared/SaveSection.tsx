@@ -26,7 +26,10 @@ interface Props<T> {
   /** True if google address validation api is used */
   needsAddressValidation: boolean;
   children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
-  emit: (
+  /**
+   * The obj emit from here is caught by the function assigned to handleFormState in the form's handleVerificationWrapper
+   */
+  handleFormVerification: (
     actionName: VerifyActionName,
     obj: T,
     addressValidationApiResponse?: AddressValidationApi_Response
@@ -38,7 +41,7 @@ export default function SaveSection<T extends Address | AddressOptional>({
   parent,
   needsAddressValidation,
   children,
-  emit,
+  handleFormVerification,
 }: Props<T>): JSX.Element {
   const [loading, setLoading] = useState(false);
   let addressValidationApiResponse: AddressValidationApi_Response | undefined;
@@ -53,7 +56,7 @@ export default function SaveSection<T extends Address | AddressOptional>({
   );
 
   function handleClear() {
-    emit("save", parentInitialState);
+    handleFormVerification("clearForm", parentInitialState);
   }
 
   async function handleSave() {
@@ -116,17 +119,21 @@ export default function SaveSection<T extends Address | AddressOptional>({
 
         if (addressValidationApiResponse) {
           s = setBeingVerifiedToState<T>({ state: s, beingVerified: true });
-          emit("save", s, addressValidationApiResponse);
+          handleFormVerification(
+            "saveAndContinue",
+            s,
+            addressValidationApiResponse
+          );
         }
       } else {
         // No address validation needed
 
         s = setBeingVerifiedToState<T>({ state: s, beingVerified: true });
-        emit("save", s);
+        handleFormVerification("saveAndContinue", s);
       }
     } else if (requiredFields.length > 0) {
       // Empty required fields found
-      emit("save", s);
+      handleFormVerification("saveAndContinue", s);
       toast.warn(
         `Please finish filling out the required fields (${requiredFields})`
       );

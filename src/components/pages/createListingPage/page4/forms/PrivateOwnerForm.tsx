@@ -13,7 +13,11 @@ import { FormProps } from "../../types/formProps";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import { handleProvideAddress } from "../utils/handleProvideAddress";
 import { handleFormVerification } from "../../utils/formUtils";
 import FormCheck from "../../shared/FormCheck";
@@ -65,6 +69,7 @@ export default function PrivateOwnerForm(props: FormProps) {
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
       addressValidationApiResponse,
       setAddressValidationApiResponse,

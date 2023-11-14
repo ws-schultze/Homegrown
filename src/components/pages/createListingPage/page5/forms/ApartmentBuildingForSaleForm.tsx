@@ -1,11 +1,6 @@
-import { useState, useEffect } from "react";
 import {
-  Str,
   HeatingOption,
-  AddressValidationApi_Response,
   VerifyActionName,
-  ListingData,
-  ApartmentBuilding,
   CoolingOption,
   WaterOption,
   PowerOption,
@@ -19,17 +14,18 @@ import {
   powerOptions,
   initApartmentBuilding,
 } from "../../../../../initialValues";
-import InputStr from "../../../../shared/inputs/inputStr/InputStr";
 import EditFormSection from "../../shared/EditFormSection";
-import SaveSection from "../../shared/SaveSection";
-import VerifySection from "../../shared/VerifySection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
@@ -40,6 +36,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
   const pageState = useAppSelector((s) => s.createListingPage);
   const listing = pageState.listing;
   const state = pageState.listing.apartmentBuilding!;
+  const stateName: keyof typeof listing = "apartmentBuilding";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +46,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
     actionName: VerifyActionName,
     obj: typeof state
   ) {
-    handleFormVerification<ApartmentBuilding>({
+    handleFormVerification<typeof state>({
       createListingPageState: pageState,
       actionName,
       obj,
@@ -58,10 +55,11 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
         dispatch(
           setListing({
             ...pageState.listing,
-            apartmentBuilding: obj,
+            [stateName]: obj,
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
     });
   }
@@ -71,7 +69,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
       dispatch(
         setListing({
           ...listing,
-          apartmentBuilding: obj,
+          [stateName]: obj,
         })
       )
     );

@@ -1,22 +1,17 @@
 // For more examples of drag and drop events, check out this post:
 // https://kennethlange.com/drag-and-drop-in-pure-typescript-and-react/
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Spinner from "../../../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
-import PageBtns from "../../shared/PageBtns-old";
+
 import {
-  AddressValidationApi_Response,
   Image,
   ListingData,
-  Uploads,
   VerifyActionName,
 } from "../../../../../types/index";
-import { initUploads } from "../../../../../initialValues";
-import SaveSection from "../../shared/SaveSection";
 import { ReactComponent as PlusIcon } from "../../assets/svg/plusIcon.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/svg/deleteIcon.svg";
-import VerifySection from "../../shared/VerifySection";
 import EditFormSection from "../../shared/EditFormSection";
 import ErrorMsg from "../../../../shared/errorMsg/ErrorMsg";
 import deleteImageFromFirestore from "../../../utils/deleteImageFromFirestore";
@@ -30,42 +25,34 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../../firebase.config";
 import styles from "../../styles.module.scss";
+import FormCheck from "../../shared/FormCheck";
+import { handleFormVerification } from "../../utils/formUtils";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { FormProps } from "../../types/formProps";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
+import { initUploads } from "../../../../../initialValues";
 
-interface Props {
-  parent: ListingData;
-  listingId: string;
-  prevPage: () => void;
-  nextPage: () => void;
-  toPageNumber?: (number: number) => void;
-  deleteListing: () => void;
-  pageNumbers?: number[];
-  currentPage?: number;
-  emit: (obj: ListingData) => void;
-}
+export default function UploadsEditForm(props: FormProps): JSX.Element {
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const listing = pageState.listing;
+  const state = pageState.listing.uploads;
+  const stateName: keyof typeof listing = "uploads";
 
-export default function UploadsEditForm({
-  parent,
-  listingId,
-  prevPage,
-  nextPage,
-  toPageNumber,
-  deleteListing,
-  pageNumbers,
-  currentPage,
-  emit,
-}: Props): JSX.Element {
-  const [state, setState] = useState<Uploads>(parent.uploads);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const [state, setState] = useState<Uploads>(parent.uploads);
+  const params = useParams();
+  const listingId = params.listingId;
+  if (!listingId) throw new Error("listingId param is undefined");
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false); // used for conditional styling
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  /**
-   * Keeps inputs showing values from parent state on page change
-   * Also catches error messages
-   */
-  useEffect(() => {
-    setState(parent.uploads);
-  }, [parent]);
 
   /**
    * Given a selection if images, discard any that have a name that matches
@@ -88,7 +75,7 @@ export default function UploadsEditForm({
           const url = URL.createObjectURL(file);
           images.push({
             file: file,
-            name: makeFileNameForUpload(parent.userRef.uid, file.name),
+            name: makeFileNameForUpload(listing.userRef.uid, file.name),
             url: url,
           });
         } else {
@@ -106,16 +93,16 @@ export default function UploadsEditForm({
         images.map((img) =>
           storeImageInFirestore({
             file: img.file!,
-            userUID: parent.userRef.uid!,
+            userUID: listing.userRef.uid!,
           })
         )
       )
         .then((uploaded) => {
           // Upload success
           const s: ListingData = {
-            ...parent,
+            ...listing,
             uploads: {
-              ...parent.uploads,
+              ...listing.uploads,
               images: {
                 ...state.images,
                 value: [...state.images.value, ...uploaded],
@@ -126,7 +113,8 @@ export default function UploadsEditForm({
             timestamp: serverTimestamp(),
           };
           setLoading(false);
-          emit(s);
+          dispatch(setListing(s));
+          // emit(s);
           console.log("Image upload successful...");
         })
         .catch(() => {
@@ -138,9 +126,13 @@ export default function UploadsEditForm({
         });
 
       // Update listing in firestore
-      const formDataCopy: DocumentData = { ...parent };
-      const docRef = doc(db, "listings", listingId);
-      await updateDoc(docRef, formDataCopy);
+      const formDataCopy: DocumentData = { ...listing };
+      if (listingId) {
+        const docRef = doc(db, "listings", listingId);
+        await updateDoc(docRef, formDataCopy);
+      } else {
+        throw new Error("param of listingId is undefined");
+      }
     } else {
       console.warn("No image uploads found");
     }
@@ -215,9 +207,9 @@ export default function UploadsEditForm({
       setLoading(true);
 
       const s: ListingData = {
-        ...parent,
+        ...listing,
         uploads: {
-          ...parent.uploads,
+          ...listing.uploads,
           images: {
             ...state.images,
             value: uploads,
@@ -231,50 +223,44 @@ export default function UploadsEditForm({
 
       // Update listing in firestore
       const formDataCopy: DocumentData = { ...s };
-      const docRef = doc(db, "listings", listingId);
-      await updateDoc(docRef, formDataCopy);
+      if (listingId) {
+        const docRef = doc(db, "listings", listingId);
+        await updateDoc(docRef, formDataCopy);
 
-      // Update parent to reflect changes without having to reload page
-      emit(s);
+        // Update parent to reflect changes without having to reload page
+        // emit(s);
+        dispatch(setListing(s));
 
-      // Delete images from firestore
-      await deleteImageFromFirestore(image);
+        // Delete images from firestore
+        await deleteImageFromFirestore(image);
 
-      setLoading(false);
+        setLoading(false);
+      } else {
+        throw new Error("param of <listingId> is undefined");
+      }
     }
   }
 
-  /**
-   * Handle when the user clicks "Yes" everything looks correct.
-   * Update uploads and emit to parent.
-   */
-  function handleVerify(
+  function handleFormVerificationWrapper(
     actionName: VerifyActionName,
-    obj: typeof state,
-    addressValidationApiResponse?: AddressValidationApi_Response
+    obj: typeof state
   ) {
-    if (actionName === "save" || actionName === "edit") {
-      emit({
-        ...parent,
-        uploads: obj,
-      });
-    } else if (actionName === "verify" && obj.saved === true) {
-      emit({
-        ...parent,
-        uploads: obj,
-        currentPage: 7,
-        savedPages: [1, 2, 3, 4, 5, 6, 7],
-      });
-      // nextPage();
-    } else if (actionName === "verify" && obj.saved === false) {
-      emit({
-        ...parent,
-        uploads: obj,
-        savedPages: [1, 2, 3, 4, 5, 6],
-      });
-    } else {
-      throw new Error("Whoops");
-    }
+    handleFormVerification<typeof state>({
+      createListingPageState: pageState,
+      actionName,
+      obj,
+      thisPageNum: props.thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            [stateName]: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+    });
   }
 
   if (loading) {
@@ -285,7 +271,10 @@ export default function UploadsEditForm({
     <form>
       {state.saved === true ? (
         <section>
-          <EditFormSection parent={state} emit={handleVerify} />
+          <EditFormSection
+            parent={state}
+            emit={handleFormVerificationWrapper}
+          />
         </section>
       ) : null}
 
@@ -342,42 +331,11 @@ export default function UploadsEditForm({
         <ErrorMsg errorMsg={state.images.errorMsg} />
       </section>
 
-      {state.saved === false && state.beingVerified === false ? (
-        <SaveSection<typeof state>
-          needsAddressValidation={false}
-          parent={state}
-          parentInitialState={initUploads}
-          emit={handleVerify}
-          deleteListing={deleteListing}
-        />
-      ) : null}
-
-      {state.beingVerified === true ? (
-        <VerifySection<typeof state>
-          parentName="Image"
-          parent={state}
-          emit={handleVerify}
-        />
-      ) : null}
-
-      {state.saved === true ? (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          nextPage={nextPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      ) : (
-        <PageBtns
-          deleteListing={deleteListing}
-          prevPage={prevPage}
-          toPageNumber={toPageNumber}
-          pageNumbers={pageNumbers}
-          currentPage={currentPage}
-        />
-      )}
+      <FormCheck
+        formState={state}
+        initialFormState={initUploads}
+        handleFormVerification={handleFormVerificationWrapper}
+      />
     </form>
   );
 }

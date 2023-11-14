@@ -12,7 +12,6 @@ import {
   Townhouse,
   ListingKindValue,
   ListingData,
-  BasicInfo,
   VerifyActionName,
   ApartmentBuilding,
   Apartment,
@@ -42,27 +41,60 @@ import Dropdown from "../../../../shared/dropdown/Dropdown";
 import EditFormSection from "../../shared/EditFormSection";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import DescriptionInput from "../../../../shared/inputs/descriptionInput/DescriptionInput";
 import PriceInput from "../../../../shared/inputs/priceInput/PriceInput";
 import DiscountPriceInput from "../../../../shared/inputs/discountPriceInput/DiscountPriceInput";
 import FormCheck from "../../shared/FormCheck";
 import { useNavigate } from "react-router";
 import { handleFormVerification } from "../../utils/formUtils";
+import { FormProps } from "../../types/formProps";
 
-export default function BasicInfoForm({
-  thisPageNum,
-}: {
-  /**
-   * Used by handleVerify to add this page number to the array of
-   * saved pages in the createListingPage state
-   */
-  thisPageNum: number;
-}) {
-  const state = useAppSelector((s) => s.createListingPage);
-  const basicInfo = state.listing.basicInfo;
+export default function BasicInfoForm(props: FormProps) {
+  const pageState = useAppSelector((s) => s.createListingPage);
+  const listing = pageState.listing;
+  const state = listing.basicInfo;
+  const stateName: keyof typeof listing = "basicInfo";
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  function handleFormVerificationWrapper(
+    actionName: VerifyActionName,
+    obj: typeof state
+  ) {
+    handleFormVerification<typeof state>({
+      createListingPageState: pageState,
+      actionName,
+      obj,
+      thisPageNum: props.thisPageNum,
+      handleFormState: (obj) =>
+        dispatch(
+          setListing({
+            ...pageState.listing,
+            [stateName]: obj,
+          })
+        ),
+      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
+      handleNavigate: (path) => navigate(path),
+    });
+  }
+
+  function handleInput<T>(obj: T, key: keyof typeof state) {
+    dispatch(
+      setListing({
+        ...listing,
+        [stateName]: {
+          ...state,
+          [key]: obj,
+        },
+      })
+    );
+  }
 
   function handleTwoBtnRow(
     obj: TypeBool | ForSaleOrRent | ForRentBy | ForSaleBy
@@ -95,8 +127,8 @@ export default function BasicInfoForm({
   }
 
   function handleForSale(): void {
-    const { company, privateOwner, ...p } = state.listing;
-    const { forRentBy, ...rest } = state.listing.basicInfo;
+    const { company, privateOwner, ...p } = listing;
+    const { forRentBy, ...rest } = state;
 
     // Create new form state object
     const s: ListingData = {
@@ -148,8 +180,8 @@ export default function BasicInfoForm({
   }
 
   function handleForRent(): void {
-    const { agent, owner, ...p } = state.listing;
-    const { forSaleBy, ...rest } = state.listing.basicInfo;
+    const { agent, owner, ...p } = listing;
+    const { forSaleBy, ...rest } = state;
 
     const s: ListingData = {
       ...p,
@@ -205,15 +237,15 @@ export default function BasicInfoForm({
    * 2) Select "Agent" after "Owner" has been selected and information has been filled out --> "Owner" cleanup needed.
    */
   function handleForSaleByAgent(): void {
-    if (state.listing.basicInfo.forSaleBy !== undefined) {
-      const { owner, company, privateOwner, ...o } = state.listing;
+    if (state.forSaleBy !== undefined) {
+      const { owner, company, privateOwner, ...o } = listing;
 
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state.listing.basicInfo,
+          ...listing.basicInfo,
           forSaleBy: {
-            ...state.listing.basicInfo.forSaleBy,
+            ...state.forSaleBy,
             value: { id: "agent", label: "Agent" },
             valid: true,
             errorMsg: "",
@@ -230,13 +262,8 @@ export default function BasicInfoForm({
         )
       ) {
         dispatch(setListing(s));
-        // setState(s.basicInfo);
-        // emit(s);
       } else if (!owner || compareObjects(owner, initOwner) === true) {
         dispatch(setListing(s));
-
-        // setState(s.basicInfo);
-        // emit(s);
       } else {
         throw new Error("Escaped");
       }
@@ -254,14 +281,14 @@ export default function BasicInfoForm({
   function handleForSaleByOwner(): void {
     // If for sale by owner, make sure agent is not in state
 
-    if (state.listing.basicInfo.forSaleBy !== undefined) {
-      const { agent, company, privateOwner, ...o } = state.listing;
+    if (state.forSaleBy !== undefined) {
+      const { agent, company, privateOwner, ...o } = listing;
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state.listing.basicInfo,
+          ...state,
           forSaleBy: {
-            ...state.listing.basicInfo.forSaleBy,
+            ...state.forSaleBy,
             value: { id: "owner", label: "Owner" },
 
             valid: true,
@@ -279,13 +306,8 @@ export default function BasicInfoForm({
         ) === true
       ) {
         dispatch(setListing(s));
-        // setState(s.basicInfo);
-        // emit(s);
       } else if (!agent || compareObjects(agent, initAgent) === true) {
         dispatch(setListing(s));
-
-        // setState(s.basicInfo);
-        // emit(s);
       } else {
         throw new Error("Escaped");
       }
@@ -301,16 +323,16 @@ export default function BasicInfoForm({
    * 2) Select "Company" after "Private Party" has been selected and information has been filled out --> cleanup "Private Party"
    */
   function handleForRentByCompany(): void {
-    if (state.listing.basicInfo.forRentBy !== undefined) {
+    if (state.forRentBy !== undefined) {
       // Remove other seller kinds from state
-      const { agent, owner, privateOwner, ...o } = state.listing;
+      const { agent, owner, privateOwner, ...o } = listing;
 
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state.listing.basicInfo,
+          ...state,
           forRentBy: {
-            ...state.listing.basicInfo.forRentBy,
+            ...state.forRentBy,
             value: { id: "company", label: "Company" },
             valid: true,
             errorMsg: "",
@@ -347,15 +369,15 @@ export default function BasicInfoForm({
    * 2) Select "Private Party" after "Company" has been selected and information has been filled out --> cleanup "Company"
    */
   function handleForRentByPrivateOwner(): void {
-    if (state.listing.basicInfo.forRentBy !== undefined) {
+    if (state.forRentBy !== undefined) {
       // Remove other seller kinds from state
-      const { agent, owner, company, ...o } = state.listing;
+      const { agent, owner, company, ...o } = listing;
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state.listing.basicInfo,
+          ...state,
           forRentBy: {
-            ...state.listing.basicInfo.forRentBy,
+            ...state.forRentBy,
             value: { id: "private-owner", label: "Private Owner" },
             valid: true,
             errorMsg: "",
@@ -449,14 +471,14 @@ export default function BasicInfoForm({
         manufacturedHome,
         land,
         ...o
-      } = state.listing;
+      } = listing;
 
       const s: ListingData = {
         ...o,
         basicInfo: {
-          ...state.listing.basicInfo,
+          ...state,
           listingKind: {
-            ...state.listing.basicInfo.listingKind,
+            ...state.listingKind,
             value: kind,
             valid: true,
             errorMsg: "",
@@ -474,33 +496,12 @@ export default function BasicInfoForm({
     }
   }
 
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: BasicInfo
-  ) {
-    handleFormVerification<BasicInfo>({
-      createListingPageState: state,
-      actionName,
-      obj,
-      thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...state.listing,
-            basicInfo: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
-    });
-  }
-
   return (
     <form>
-      {basicInfo.saved === true ? (
+      {state.saved === true ? (
         <section>
-          <EditFormSection<typeof basicInfo>
-            parent={basicInfo}
+          <EditFormSection<typeof state>
+            parent={state}
             emit={handleFormVerificationWrapper}
           />
         </section>
@@ -511,148 +512,115 @@ export default function BasicInfoForm({
         <DescriptionInput
           minDescriptionLength={20}
           maxDescriptionLength={280}
-          state={state.listing.basicInfo.description}
+          state={state.description}
           placeholder="Property description"
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                basicInfo: {
-                  ...basicInfo,
-                  description: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "description")}
         />
 
-        <TwoBtnRow<typeof basicInfo>
+        <TwoBtnRow<typeof state>
           leftBtnText="For Sale"
           leftBtnValue={{ id: "for-sale", label: "For Sale" }}
           rightBtnText="For Rent"
           rightBtnValue={{ id: "for-rent", label: "For Rent" }}
           label="For sale/rent"
-          state={basicInfo.forSaleOrRent}
+          state={state.forSaleOrRent}
           handleSelected={handleTwoBtnRow}
         />
 
-        {basicInfo.forSaleBy ? (
-          <TwoBtnRow<typeof basicInfo>
+        {state.forSaleBy ? (
+          <TwoBtnRow<typeof state>
             leftBtnText="Agent"
             leftBtnValue={{ id: "agent", label: "Agent" }}
             rightBtnText="Owner"
             rightBtnValue={{ id: "owner", label: "Owner" }}
             label="Listed by"
-            state={basicInfo.forSaleBy}
-            // fieldName="forSaleBy"
+            state={state.forSaleBy}
             handleSelected={handleTwoBtnRow}
           />
         ) : null}
 
-        {basicInfo.forRentBy ? (
-          <TwoBtnRow<typeof basicInfo>
+        {state.forRentBy ? (
+          <TwoBtnRow<typeof state>
             leftBtnText="Company"
             leftBtnValue={{ id: "company", label: "Company" }}
             rightBtnText="Owner"
             rightBtnValue={{ id: "private-owner", label: "Private Owner" }}
             label="Listed by"
-            state={basicInfo.forRentBy}
-            // fieldName="forRentBy"
+            state={state.forRentBy}
             handleSelected={handleTwoBtnRow}
           />
         ) : null}
 
-        {basicInfo.forSaleOrRent.value?.id === "for-sale" ? (
+        {state.forSaleOrRent.value?.id === "for-sale" ? (
           <Dropdown<ListingKindValue>
             placeHolder={"What are you selling?"}
             menuItems={listingKindValuesForSale}
             isMulti={false}
             isSearchable={false}
-            parent={[basicInfo.listingKind.value]}
-            disabled={basicInfo.listingKind.readOnly}
-            errorMsg={basicInfo.listingKind.errorMsg}
+            parent={[state.listingKind.value]}
+            disabled={state.listingKind.readOnly}
+            errorMsg={state.listingKind.errorMsg}
             label={"Listing Kind"}
             emit={handleListingKind}
           />
         ) : null}
 
-        {basicInfo.forSaleOrRent.value?.id === "for-rent" ? (
+        {state.forSaleOrRent.value?.id === "for-rent" ? (
           <Dropdown<ListingKindValue>
             placeHolder={"What are you renting?"}
             menuItems={listingKindValuesForRent}
             isMulti={false}
             isSearchable={false}
-            parent={[basicInfo.listingKind.value]}
-            errorMsg={basicInfo.listingKind.errorMsg}
+            parent={[state.listingKind.value]}
+            errorMsg={state.listingKind.errorMsg}
             label={"Listing Kind"}
-            disabled={basicInfo.listingKind.readOnly}
+            disabled={state.listingKind.readOnly}
             emit={handleListingKind}
           />
         ) : null}
 
         <PriceInput
-          state={basicInfo.price}
+          state={state.price}
           isPriceFilter={false}
           isDiscountPrice={false}
           minPrice={1}
           placeholder={
-            basicInfo.forSaleOrRent &&
-            basicInfo.forSaleOrRent.value?.id === "for-sale"
+            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
               ? "Price"
-              : basicInfo.forSaleOrRent &&
-                basicInfo.forSaleOrRent.value?.id === "for-rent"
+              : state.forSaleOrRent &&
+                state.forSaleOrRent.value?.id === "for-rent"
               ? "Price/month"
               : "Price"
           }
           groupSeparators={[","]}
           currency="USD"
           prefix="$"
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                basicInfo: {
-                  ...basicInfo,
-                  price: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "price")}
         />
 
         <DiscountPriceInput
-          state={basicInfo.priceChange}
+          state={state.priceChange}
           isPriceFilter={false}
           isDiscountPrice={true}
           groupSeparators={[","]}
           currency="USD"
           prefix="$"
           minPrice={0}
-          originalPrice={basicInfo.price.number}
+          originalPrice={state.price.number}
           placeholder={
-            basicInfo.forSaleOrRent &&
-            basicInfo.forSaleOrRent.value?.id === "for-sale"
+            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
               ? "New price*"
-              : basicInfo.forSaleOrRent &&
-                basicInfo.forSaleOrRent.value?.id === "for-rent"
+              : state.forSaleOrRent &&
+                state.forSaleOrRent.value?.id === "for-rent"
               ? "New price/month*"
               : "New price*"
           }
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                basicInfo: {
-                  ...basicInfo,
-                  priceChange: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "priceChange")}
         />
       </section>
+
       <FormCheck
-        formState={basicInfo}
+        formState={state}
         initialFormState={initBasicInfo}
         handleFormVerification={handleFormVerificationWrapper}
       />

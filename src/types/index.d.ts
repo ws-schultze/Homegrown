@@ -26,7 +26,12 @@ export interface Verify {
   required: boolean;
 }
 
-export type VerifyActionName = "save" | "verify" | "edit" | "blur";
+export type VerifyActionName =
+  | "saveAndContinue"
+  | "clearForm"
+  | "enableEditing"
+  | "everythingLooksCorrect"
+  | "everythingDoesNotLookCorrect";
 
 export interface TypeInputBase extends Verify {
   /** String with only numeric characters */
@@ -781,10 +786,6 @@ export interface Uploads extends Verify {
 }
 
 export interface ListingData {
-  // pages: number[];
-  // currentPage: number;
-  // savedPages: number[];
-  // userAcknowledged: boolean;
   address: Address;
   basicInfo: BasicInfo;
   agent?: TypeAgent;

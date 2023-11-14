@@ -11,7 +11,11 @@ import EditFormSection from "../../shared/EditFormSection";
 import { initAddress } from "../../../../../initialValues";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import { useNavigate } from "react-router";
 import FormCheck from "../../shared/FormCheck";
 import { handleFormVerification } from "../../utils/formUtils";
@@ -246,6 +250,7 @@ export default function ListingAddressForm({
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
       addressValidationApiResponse,
       setAddressValidationApiResponse,

@@ -15,14 +15,14 @@ interface Props<T> {
   parent: T;
   addressValidationApiResponse?: AddressValidationApi_Response;
   children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
-  emit: (actionName: VerifyActionName, obj: T) => void;
+  handleFormVerification: (actionName: VerifyActionName, obj: T) => void;
 }
 
 export default function VerifySection<T extends Verify>({
   parent,
   addressValidationApiResponse,
   children,
-  emit,
+  handleFormVerification,
 }: Props<T>) {
   /**
    * Handles when the user clicks "yes" or "no" during form section validation
@@ -74,11 +74,11 @@ export default function VerifySection<T extends Verify>({
           state: s,
           response: addressValidationApiResponse,
         });
-        emit("verify", finalState);
+        handleFormVerification("everythingLooksCorrect", finalState);
         // toast.success(`${parentName} information saved.`);
       } else {
         // No address validation needed
-        emit("verify", s);
+        handleFormVerification("everythingLooksCorrect", s);
         // toast.success(`${parentName} information saved.`);
       }
     } else if (value === false) {
@@ -90,7 +90,7 @@ export default function VerifySection<T extends Verify>({
         saved: false,
         readOnly: false,
       };
-      emit("verify", s);
+      handleFormVerification("everythingDoesNotLookCorrect", s);
     }
   }
 

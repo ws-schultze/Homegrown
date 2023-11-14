@@ -10,9 +10,11 @@ import {
   Owner,
   SingleFamilyHome,
   TypeAgent,
+  Uploads,
 } from "../../../../types";
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
+import styles from "../styles.module.scss";
 
 export type FormState =
   | BasicInfo
@@ -25,6 +27,7 @@ export type FormState =
   | Apartment
   | ApartmentBuilding
   | ManufacturedHome
+  | Uploads
   | Land;
 
 export interface FormCheckProps {
@@ -60,22 +63,22 @@ export default function FormCheck({
   handleFormVerification,
 }: FormCheckProps) {
   return (
-    <>
+    <div className={styles.form_check}>
       {formState.saved === false && formState.beingVerified === false ? (
         <SaveSection<typeof formState>
           needsAddressValidation={false}
           parent={formState}
           parentInitialState={initialFormState}
-          emit={handleFormVerification}
+          handleFormVerification={handleFormVerification}
         />
       ) : null}
       {formState.beingVerified === true ? (
         <VerifySection<typeof formState>
           parent={formState}
           children={children}
-          emit={handleFormVerification}
+          handleFormVerification={handleFormVerification}
         />
       ) : null}
-    </>
+    </div>
   );
 }

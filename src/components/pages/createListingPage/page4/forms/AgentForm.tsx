@@ -11,7 +11,11 @@ import EditFormSection from "../../shared/EditFormSection";
 import { renderMap } from "../../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import NameInput from "../../../../shared/inputs/nameInput/NameInput";
 import AgentLicenseIdInput from "../../../../shared/inputs/agentLicenseIdInput/AgentLicenseIdInput";
 import PhoneNumberInput from "../../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
@@ -49,6 +53,7 @@ export default function AgentForm(props: FormProps) {
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
       addressValidationApiResponse,
       setAddressValidationApiResponse,

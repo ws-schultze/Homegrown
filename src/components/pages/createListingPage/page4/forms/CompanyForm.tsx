@@ -14,7 +14,11 @@ import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { handleFormVerification } from "../../utils/formUtils";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import NameInput from "../../../../shared/inputs/nameInput/NameInput";
 import PhoneNumberInput from "../../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
 import EmailStrInput from "../../../../shared/inputs/emailInput/EmailStrInput";
@@ -48,6 +52,7 @@ export default function CompanyForm(props: FormProps) {
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
       addressValidationApiResponse,
       setAddressValidationApiResponse,

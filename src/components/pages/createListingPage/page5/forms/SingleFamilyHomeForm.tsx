@@ -1,5 +1,4 @@
 import {
-  SingleFamilyHome,
   HeatingOption,
   VerifyActionName,
   CoolingOption,
@@ -23,28 +22,34 @@ import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import FormCheck from "../../shared/FormCheck";
 import YesNoBtns from "../../shared/YesNoBtns";
 import CommaSeparatedWholeNumber from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
+import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 
 export default function SingleFamilyHomeForm(props: FormProps) {
   const pageState = useAppSelector((s) => s.createListingPage);
   const listing = pageState.listing;
   const state = pageState.listing.singleFamilyHome!;
+  const stateName: keyof typeof listing = "singleFamilyHome";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  if (!state) throw new Error("singleFamilyHome is undefined");
+  if (!state) throw new Error("state is undefined");
 
   function handleFormVerificationWrapper(
     actionName: VerifyActionName,
     obj: typeof state
   ) {
-    handleFormVerification<SingleFamilyHome>({
+    handleFormVerification<typeof state>({
       createListingPageState: pageState,
       actionName,
       obj,
@@ -53,12 +58,25 @@ export default function SingleFamilyHomeForm(props: FormProps) {
         dispatch(
           setListing({
             ...pageState.listing,
-            singleFamilyHome: obj,
+            [stateName]: obj,
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
     });
+  }
+
+  function handleInput<T>(obj: T, key: keyof typeof state) {
+    dispatch(
+      setListing({
+        ...listing,
+        [stateName]: {
+          ...state,
+          [key]: obj,
+        },
+      })
+    );
   }
 
   function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
@@ -66,7 +84,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
       dispatch(
         setListing({
           ...listing,
-          singleFamilyHome: obj,
+          [stateName]: obj,
         })
       )
     );
@@ -75,12 +93,12 @@ export default function SingleFamilyHomeForm(props: FormProps) {
   function handleGarage(obj: typeof state.garage) {
     const { garageAttached, garageNumCars, garageSqFt, ...rest } = state;
 
-    // Has garage --> Add garage props to state
+    // Has garage
     if (obj.value === true) {
       dispatch(
         setListing({
           ...listing,
-          singleFamilyHome: {
+          [stateName]: {
             ...state,
             garage: obj,
             garageAttached: initTypeBoolReqNull,
@@ -127,36 +145,16 @@ export default function SingleFamilyHomeForm(props: FormProps) {
               placeholder="Year built"
               min={0}
               max={new Date().getFullYear()}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: {
-                      ...state,
-                      yearBuilt: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "yearBuilt")}
             />
           </div>
 
           <div className={styles.md}>
             <CommaSeparatedWholeNumber
               state={state.squareFeet}
-              placeholder="Sqft"
+              placeholder="Square feet"
               min={100}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: {
-                      ...state,
-                      squareFeet: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "squareFeet")}
             />
           </div>
         </div>
@@ -167,96 +165,47 @@ export default function SingleFamilyHomeForm(props: FormProps) {
               placeholder="Stories"
               min={1}
               max={5}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: { ...state, stories: obj },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "stories")}
             />
           </div>
-
-          <div className={styles.md}>
-            <CommaSeparatedWithDecimalInput
-              placeholder="Acres"
-              state={state.acres}
-              min={0}
-              max={1000000}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: {
-                      ...state,
-                      acres: obj,
-                    },
-                  })
-                )
-              }
-            />
-          </div>
-        </div>
-        <div className={styles.flex_row}>
           <div className={styles.md}>
             <NumberInput
               state={state.bedrooms}
               placeholder="Bedrooms"
               min={1}
               max={20}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: {
-                      ...state,
-                      bedrooms: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "bedrooms")}
             />
           </div>
-
+        </div>
+        <div className={styles.flex_row}>
           <div className={styles.md}>
             <NumberInput
               state={state.fullBathrooms}
-              placeholder="Full baths"
+              placeholder="Full bathrooms"
               min={1}
               max={20}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: {
-                      ...state,
-                      fullBathrooms: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "fullBathrooms")}
+            />
+          </div>
+          <div className={styles.md}>
+            <NumberInput
+              state={state.halfBathrooms}
+              placeholder="Half bathrooms"
+              min={0}
+              max={20}
+              handleInput={(obj) => handleInput(obj, "halfBathrooms")}
             />
           </div>
         </div>
 
-        <div>
-          <NumberInput
-            state={state.halfBathrooms}
-            placeholder="Half baths"
+        <div className={styles.md}>
+          <CommaSeparatedWithDecimalInput
+            placeholder="Acres"
+            state={state.acres}
             min={0}
-            max={20}
-            handleInput={(obj) =>
-              dispatch(
-                setListing({
-                  ...listing,
-                  singleFamilyHome: {
-                    ...state,
-                    halfBathrooms: obj,
-                  },
-                })
-              )
-            }
+            max={1000000}
+            handleInput={(obj) => handleInput(obj, "acres")}
           />
         </div>
 
@@ -319,117 +268,61 @@ export default function SingleFamilyHomeForm(props: FormProps) {
         <YesNoBtns
           state={state.furnished}
           label="Furnished"
-          handleSelected={(obj: TypeBool) =>
-            dispatch(
-              setListing({
-                ...listing,
-                singleFamilyHome: {
-                  ...state,
-                  furnished: obj,
-                },
-              })
-            )
-          }
+          handleSelected={(obj: TypeBool) => handleInput(obj, "furnished")}
         />
 
         <YesNoBtns
           state={state.garage}
           label="Garage"
-          handleSelected={handleGarage}
+          handleSelected={(obj) => handleGarage(obj)}
         />
 
         {state.garage.value === true &&
         state.garageAttached &&
         state.garageNumCars &&
         state.garageSqFt ? (
-          <>
-            <YesNoBtns
-              state={state.garageAttached}
-              leftBtnText="Attached"
-              rightBtnText="Detached"
-              handleSelected={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    singleFamilyHome: {
-                      ...state,
-                      garageAttached: obj,
-                    },
-                  })
-                )
-              }
-            />
-
-            <div className={styles.flex_row}>
-              <div className={styles.md}>
-                <CommaSeparatedWholeNumber
-                  state={state.garageNumCars}
-                  placeholder="Cars"
-                  min={1}
-                  handleInput={(obj) =>
-                    dispatch(
-                      setListing({
-                        ...listing,
-                        singleFamilyHome: {
-                          ...state,
-                          garageNumCars: obj,
-                        },
-                      })
-                    )
-                  }
-                />
-              </div>
-              <div className={styles.md}>
-                <CommaSeparatedWholeNumber
-                  state={state.garageSqFt}
-                  placeholder="Sqft"
-                  min={100}
-                  handleInput={(obj) =>
-                    dispatch(
-                      setListing({
-                        ...listing,
-                        singleFamilyHome: {
-                          ...state,
-                          garageSqFt: obj,
-                        },
-                      })
-                    )
-                  }
-                />
+          <div className={styles.conditional_menu_container}>
+            <label htmlFor="garage-menu">Garage features</label>
+            <div className={styles.conditional_menu}>
+              <YesNoBtns
+                leftBtnText="Attached"
+                rightBtnText="Detached"
+                state={state.garageAttached!}
+                handleSelected={(obj) => handleInput(obj, "garageAttached")}
+              />
+              <div className={styles.flex_row}>
+                <div className={styles.sm}>
+                  <NumberInput
+                    state={state.garageNumCars!}
+                    placeholder="Cars"
+                    min={1}
+                    max={10}
+                    handleInput={(obj) => handleInput(obj, "garageNumCars")}
+                  />
+                </div>
+                <div className={styles.sm}>
+                  <CommaSeparatedWholeNumberInput
+                    state={state.garageSqFt!}
+                    placeholder="Sqft"
+                    min={80}
+                    max={10000}
+                    handleInput={(obj) => handleInput(obj, "garageSqFt")}
+                  />
+                </div>
               </div>
             </div>
-          </>
+          </div>
         ) : null}
 
         <YesNoBtns
           label="Street parking"
           state={state.streetParking}
-          handleSelected={(obj) =>
-            dispatch(
-              setListing({
-                ...listing,
-                singleFamilyHome: {
-                  ...state,
-                  streetParking: obj,
-                },
-              })
-            )
-          }
+          handleSelected={(obj) => handleInput(obj, "streetParking")}
         />
         <YesNoBtns
           label="Fenced yard"
           state={state.fencedYard}
-          handleSelected={(obj) =>
-            dispatch(
-              setListing({
-                ...listing,
-                singleFamilyHome: {
-                  ...state,
-                  fencedYard: obj,
-                },
-              })
-            )
-          }
+          handleSelected={(obj) => handleInput(obj, "fencedYard")}
         />
       </section>
 

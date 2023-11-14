@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useUserContext } from "../../../../UserProvider";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
 
 /**
  * Set the userId to the listing. If the user is not signed in,
@@ -25,7 +24,7 @@ export default function useSetUserRefToListing(
       } else if (!isAuthenticated && !isLoading) {
         navigate("/sign-in");
         handleLoading(false);
-        toast.warn("You must be signed in to create a listing.");
+        // toast.warn("You must be signed in to create a listing.");
       }
     },
     /**

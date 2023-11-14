@@ -15,7 +15,11 @@ export default function Page5() {
   const state = useAppSelector((s) => s.createListingPage);
   const { listingKind } = state.listing.basicInfo;
 
-  const { id } = state.listing.basicInfo.listingKind.value!;
+  let id = "";
+
+  if (state.listing.basicInfo.listingKind.value) {
+    id = state.listing.basicInfo.listingKind.value.id;
+  }
 
   if (listingKind.value === null) {
     return (
@@ -24,9 +28,9 @@ export default function Page5() {
           <section>
             <p>Please complete page 2 in order to populate this page.</p>
           </section>
-          <Pagination />
-          <Footer />
         </form>
+        <Pagination />
+        <Footer />
       </div>
     );
   }
@@ -74,7 +78,7 @@ export default function Page5() {
   if (id === "multi-family-home-unit") {
     return (
       <div className={styles.container}>
-        {/* <MultiFamilyHomeUnitForRentForm thisPageNum={5} /> */}
+        <MultiFamilyHomeUnitForRentForm thisPageNum={5} />
         <Pagination />
         <Footer />
       </div>

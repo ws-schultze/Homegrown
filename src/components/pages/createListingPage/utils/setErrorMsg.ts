@@ -1,4 +1,3 @@
-import { Str, TypeBool, Verify } from "../../../../types/index";
 /**
  * Set a field's error message and valid=false.
  */

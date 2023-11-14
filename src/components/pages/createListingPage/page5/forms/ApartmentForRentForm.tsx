@@ -5,8 +5,6 @@ import {
   CoolingOption,
   WaterOption,
   PowerOption,
-  Str,
-  TypeBool,
 } from "../../../../../types/index";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import {
@@ -17,18 +15,18 @@ import {
   initStrReq,
   initApartment,
 } from "../../../../../initialValues";
-import InputStr from "../../../../shared/inputs/inputStr/InputStr";
-import TwoBtnRow, { TypeTwoBtnRowState } from "../../shared/TwoBtnRow";
 import EditFormSection from "../../shared/EditFormSection";
-import SaveSection from "../../shared/SaveSection";
-import VerifySection from "../../shared/VerifySection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { useAppSelector } from "../../../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import { setListing, setSavedPages } from "../../createListingPageSlice";
+import {
+  setListing,
+  setSavedPages,
+  setUnsavedPages,
+} from "../../createListingPageSlice";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
@@ -62,6 +60,7 @@ export default function ApartmentForRentForm(props: FormProps) {
           })
         ),
       handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
+      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
       handleNavigate: (path) => navigate(path),
     });
   }
@@ -279,30 +278,28 @@ export default function ApartmentForRentForm(props: FormProps) {
         {state.assignedParking.value === true &&
         state.numAssignedSpaces &&
         state.numAssignedSpacesWithCover ? (
-          <>
-            <div className={styles.flex_row}>
-              <div className={styles.md}>
-                <NumberInput
-                  state={state.numAssignedSpaces}
-                  placeholder="Spaces"
-                  min={1}
-                  max={10}
-                  handleInput={(obj) => handleInput(obj, "numAssignedSpaces")}
-                />
-              </div>
-              <div className={styles.md}>
-                <NumberInput
-                  state={state.numAssignedSpacesWithCover}
-                  placeholder="Covered spaces"
-                  min={1}
-                  max={10}
-                  handleInput={(obj) =>
-                    handleInput(obj, "numAssignedSpacesWithCover")
-                  }
-                />
-              </div>
+          <div className={styles.flex_row}>
+            <div className={styles.md}>
+              <NumberInput
+                state={state.numAssignedSpaces}
+                placeholder="Spaces"
+                min={1}
+                max={10}
+                handleInput={(obj) => handleInput(obj, "numAssignedSpaces")}
+              />
             </div>
-          </>
+            <div className={styles.md}>
+              <NumberInput
+                state={state.numAssignedSpacesWithCover}
+                placeholder="Covered spaces"
+                min={1}
+                max={10}
+                handleInput={(obj) =>
+                  handleInput(obj, "numAssignedSpacesWithCover")
+                }
+              />
+            </div>
+          </div>
         ) : null}
 
         <YesNoBtns

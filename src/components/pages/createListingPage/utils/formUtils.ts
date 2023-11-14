@@ -1,22 +1,11 @@
 import { CreateListingPageState } from "../createListingPageSlice";
 import {
   AddressValidationApi_Response,
-  ListingData,
   Verify,
   VerifyActionName,
 } from "../../../../types";
 
-export function handleFormVerification<T extends Verify>({
-  createListingPageState,
-  actionName,
-  obj,
-  thisPageNum,
-  handleFormState,
-  handleSavedPageNumbers,
-  handleNavigate,
-  addressValidationApiResponse,
-  setAddressValidationApiResponse,
-}: {
+export interface HandleFormVerificationProps<T> {
   createListingPageState: CreateListingPageState;
   /**
    * Determines if the page is being saved, edited, or verified
@@ -38,6 +27,13 @@ export function handleFormVerification<T extends Verify>({
    * Dispatches saved page numbers to redux
    */
   handleSavedPageNumbers: (nums: number[]) => void;
+  /**
+   * Dispatches unsaved page numbers to redux
+   */
+  handleUnsavedPageNumbers: (nums: number[]) => void;
+  /**
+   * Change the url params
+   */
   handleNavigate: (path: string) => void;
   /**
    *  Formatted address that is used to overwrite and inputs values that
@@ -53,78 +49,91 @@ export function handleFormVerification<T extends Verify>({
   setAddressValidationApiResponse?: (
     value: React.SetStateAction<AddressValidationApi_Response | undefined>
   ) => void;
-}) {
-  if (addressValidationApiResponse && setAddressValidationApiResponse) {
-    setAddressValidationApiResponse(addressValidationApiResponse);
+}
+
+export function handleFormVerification<T extends Verify>(
+  props: HandleFormVerificationProps<T>
+) {
+  if (
+    props.addressValidationApiResponse &&
+    props.setAddressValidationApiResponse
+  ) {
+    props.setAddressValidationApiResponse(props.addressValidationApiResponse);
   }
 
-  if (actionName === "save") {
-    /**
-     * Set this page to saved
-     */
-    handleFormState(obj);
-    // dispatch(
-    //   setListing({
-    //     ...state.listing,
-    //     address: obj,
-    //   })
-    // );
+  /**
+   * Save and continue btn clicked => Set this page to saved
+   */
+  if (props.actionName === "saveAndContinue") {
+    props.handleFormState(props.obj);
     return;
   }
 
-  if (actionName === "edit") {
-    /**
-     * Remove this page number from saved pages
-     */
-    handleFormState(obj);
-
-    // dispatch(
-    //   setListing({
-    //     ...state.listing,
-    //     address: obj,
-    //   })
-    // );
-    const idx = createListingPageState.savedPages.indexOf(thisPageNum);
-    const savedPagesCopy = [...createListingPageState.savedPages];
-    savedPagesCopy.splice(idx, 1);
-    // dispatch(setSavedPages(savedPagesCopy));
-    handleSavedPageNumbers(savedPagesCopy);
+  /**
+   * Clear form btn clicked => set form to initial value
+   */
+  if (props.actionName === "clearForm") {
+    props.handleFormState(props.obj);
     return;
   }
 
-  if (actionName === "verify" && obj.saved === true) {
-    /**
-     * Verify info and go to next page
-     */
-    // dispatch(
-    //   setListing({
-    //     ...state.listing,
-    //     address: obj,
-    //   })
-    // );
-    handleFormState(obj);
-
-    handleSavedPageNumbers(
-      createListingPageState.savedPages.concat(thisPageNum)
+  /**
+   * Enable editing btn clicked => Remove this page number from saved pages
+   */
+  if (props.actionName === "enableEditing") {
+    // Remove this page number from saved page numbers
+    const idx = props.createListingPageState.savedPages.indexOf(
+      props.thisPageNum
     );
-    handleNavigate(`/create-listing/${thisPageNum + 1}`);
-    // dispatch(setSavedPages(state.savedPages.concat(thisPageNum)));
-    // navigate(`/create-listing/${thisPageNum + 1}`);
+    const savedPagesCopy = [...props.createListingPageState.savedPages];
+    savedPagesCopy.splice(idx, 1);
+
+    // Add this page number to unsaved page numbers
+    const unsavedPagesCopy = [...props.createListingPageState.unsavedPages];
+    unsavedPagesCopy.concat(props.thisPageNum);
+
+    props.handleFormState(props.obj);
+    props.handleSavedPageNumbers(savedPagesCopy);
+    props.handleUnsavedPageNumbers(unsavedPagesCopy);
     return;
   }
-  if (actionName === "verify" && obj.saved === false) {
-    /**
-     * Info does not all look correct, hide verification component,
-     * stay on this page, show save component again.
-     */
-    // dispatch(
-    //   setListing({
-    //     ...state.listing,
-    //     address: obj,
-    //   })
-    // );
-    handleFormState(obj);
 
+  /**
+   * Everything looks correct, save and go to next page
+   */
+  if (
+    props.actionName === "everythingLooksCorrect" &&
+    props.obj.saved === true
+  ) {
+    props.handleFormState(props.obj);
+
+    // Add this page number to saved page numbers
+    props.handleSavedPageNumbers(
+      props.createListingPageState.savedPages.concat(props.thisPageNum)
+    );
+
+    // Remove this page number from unsaved page numbers
+    const idx = props.createListingPageState.unsavedPages.indexOf(
+      props.thisPageNum
+    );
+    const unsavedPagesCopy = [...props.createListingPageState.unsavedPages];
+    unsavedPagesCopy.slice(idx, 1);
+    props.handleUnsavedPageNumbers(unsavedPagesCopy);
+
+    // Navigate to the next form page
+    props.handleNavigate(`/create-listing/${props.thisPageNum + 1}`);
+    return;
+  }
+
+  /**
+   * Info does not all look correct, hide verification component,
+   * stay on this page, show SaveSection component again.
+   */
+  if (
+    props.actionName === "everythingDoesNotLookCorrect" &&
+    props.obj.saved === false
+  ) {
+    props.handleFormState(props.obj);
     return;
   }
 

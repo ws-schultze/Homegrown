@@ -10,6 +10,7 @@ export interface CreateListingPageState {
   currentPageNumber: number;
   currentPageName: string;
   savedPages: number[];
+  unsavedPages: number[];
   editListing: boolean;
 }
 
@@ -17,10 +18,11 @@ export const initialCreateListingPageState: CreateListingPageState = {
   userAcknowledged: false,
   listing: initListingData,
   loading: false,
-  pageNumbers: [1, 2, 3, 4, 5, 6, 7],
+  pageNumbers: [1, 2, 3, 4, 5, 6],
   currentPageNumber: 1,
   currentPageName: "acknowledgment",
   savedPages: [],
+  unsavedPages: [1, 2, 3, 4, 5, 6],
   editListing: false,
 };
 
@@ -63,6 +65,10 @@ export const createListingPageSlice = createSlice({
       ...state,
       savedPages: action.payload,
     }),
+    setUnsavedPages: (state, action: { payload: number[]; type: string }) => ({
+      ...state,
+      unsavedPages: action.payload,
+    }),
     setEditListing: (state, action: { payload: boolean; type: string }) => ({
       ...state,
       editListing: action.payload,
@@ -79,6 +85,7 @@ export const {
   setCurrentPageNumber,
   setCurrentPageName,
   setSavedPages,
+  setUnsavedPages,
   setEditListing,
 } = createListingPageSlice.actions;
 

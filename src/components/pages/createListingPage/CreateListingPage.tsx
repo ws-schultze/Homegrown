@@ -1,16 +1,6 @@
-import { useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Spinner from "../../shared/loaders/Spinner";
-import UserAcknowledgementForm from "./page1/forms/UserAcknowledgementForm";
-import AgentForm from "./page4/forms/AgentForm";
-import ListingAddressForm from "./page3/forms/ListingAddressForm";
-import BasicInfoForm from "./page2/forms/BasicInfoForm";
-import UploadsForm from "./page6/forms/UploadsForm";
-import ReviewForm from "./page7/forms/ReviewForm";
-import Footer from "../../shared/footer/Footer";
-import styles from "./styles.module.scss";
 import { useAppSelector } from "../../../redux/hooks";
-import Pagination from "./shared/Pagination";
 import { useDispatch } from "react-redux";
 import {
   setCurrentPageNumber,
@@ -27,11 +17,14 @@ import Page5 from "./page5/Page5";
 import Page6 from "./page6/Page6";
 import Page7 from "./page7/Page7";
 import Error from "../../shared/error/Error";
+import { Uploads } from "../../../types/index";
+import { initUploads } from "../../../initialValues";
 
 export default function CreateListingPage(): JSX.Element {
   const dispatch = useDispatch();
   const state = useAppSelector((s) => s.createListingPage);
   const listing = state.listing;
+  const [uploads, setUploads] = useState<Uploads>(initUploads);
 
   useCurrentPageNumber((num) => dispatch(setCurrentPageNumber(num)));
 
@@ -96,11 +89,11 @@ export default function CreateListingPage(): JSX.Element {
   }
 
   if (state.currentPageNumber === 6) {
-    return <Page6 />;
+    return <Page6 setUploads={setUploads} uploads={uploads} />;
   }
 
   if (state.currentPageNumber === 7) {
-    return <Page7 />;
+    return <Page7 uploads={uploads} />;
   }
 
   return <Error msg="The page could not be found" />;
