@@ -339,7 +339,7 @@ export default function ProfilePage() {
               </Link>
             ) : (
               <Link
-                to={`/create-listing/${createListingPageState.currentPageNumber}/${createListingPageState.currentPageName}`}
+                to={`/create-listing/${createListingPageState.currentPageNumber}`}
                 className={styles.btn}
               >
                 <MoneySVG />

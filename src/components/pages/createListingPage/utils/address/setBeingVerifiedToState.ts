@@ -24,6 +24,7 @@ export default function setBeingVerifiedToState<
     s = {
       ...state,
       beingVerified: true,
+      readOnly: true,
     };
 
     return s;
@@ -34,6 +35,7 @@ export default function setBeingVerifiedToState<
       ...state,
       valid: false,
       beingVerified: false,
+      readOnly: false,
     };
     return s;
 

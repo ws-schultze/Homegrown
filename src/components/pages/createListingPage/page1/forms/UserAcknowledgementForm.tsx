@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
 import {
   setSavedPages,
+  setUnsavedPages,
   setUserAcknowledged,
 } from "../../createListingPageSlice";
 import { useNavigate } from "react-router";
@@ -18,11 +19,23 @@ export default function UserAcknowledgementForm({
 }): JSX.Element {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const state = useAppSelector((s) => s.createListingPage);
+  const pageState = useAppSelector((s) => s.createListingPage);
 
   function handleClick() {
     dispatch(setUserAcknowledged(true));
-    dispatch(setSavedPages(state.savedPages.concat(thisPageNum)));
+
+    // // Don't add page one to saved pages if it is already saved
+    // if (pageState.savedPages.indexOf(1) >= 0) {
+    // }
+
+    // dispatch(setSavedPages(pageState.savedPages.concat(thisPageNum)));
+
+    // const idx = pageState.unsavedPages.indexOf(1);
+    // const unsavedPagesCopy = [...pageState.unsavedPages];
+    // unsavedPagesCopy.splice(idx, 1);
+    // console.log(unsavedPagesCopy);
+    // dispatch(setUnsavedPages(unsavedPagesCopy));
+
     navigate(`/create-listing/${thisPageNum + 1}`);
   }
 
@@ -40,7 +53,7 @@ export default function UserAcknowledgementForm({
         <button
           type="button"
           className={`btn ${styles.btn} ${
-            state.userAcknowledged === true ? "active" : ""
+            pageState.userAcknowledged === true ? "active" : ""
           }`}
           onClick={handleClick}
         >

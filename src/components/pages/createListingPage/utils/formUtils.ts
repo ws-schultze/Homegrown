@@ -85,16 +85,19 @@ export function handleFormVerification<T extends Verify>(
     const idx = props.createListingPageState.savedPages.indexOf(
       props.thisPageNum
     );
+
     const savedPagesCopy = [...props.createListingPageState.savedPages];
     savedPagesCopy.splice(idx, 1);
 
-    // Add this page number to unsaved page numbers
-    const unsavedPagesCopy = [...props.createListingPageState.unsavedPages];
-    unsavedPagesCopy.concat(props.thisPageNum);
-
-    props.handleFormState(props.obj);
     props.handleSavedPageNumbers(savedPagesCopy);
-    props.handleUnsavedPageNumbers(unsavedPagesCopy);
+
+    // Add this page number to unsaved page numbers
+    props.handleUnsavedPageNumbers(
+      props.createListingPageState.unsavedPages.concat(props.thisPageNum)
+    );
+
+    // Set form state
+    props.handleFormState(props.obj);
     return;
   }
 
@@ -102,9 +105,10 @@ export function handleFormVerification<T extends Verify>(
    * Everything looks correct, save and go to next page
    */
   if (
-    props.actionName === "everythingLooksCorrect" &&
-    props.obj.saved === true
+    props.actionName === "everythingLooksCorrect"
+    // props.obj.saved === true
   ) {
+    console.log("all looks correct");
     props.handleFormState(props.obj);
 
     // Add this page number to saved page numbers
@@ -116,8 +120,14 @@ export function handleFormVerification<T extends Verify>(
     const idx = props.createListingPageState.unsavedPages.indexOf(
       props.thisPageNum
     );
+
+    console.log(idx);
+
     const unsavedPagesCopy = [...props.createListingPageState.unsavedPages];
-    unsavedPagesCopy.slice(idx, 1);
+    unsavedPagesCopy.splice(idx, 1);
+
+    console.log(unsavedPagesCopy);
+
     props.handleUnsavedPageNumbers(unsavedPagesCopy);
 
     // Navigate to the next form page

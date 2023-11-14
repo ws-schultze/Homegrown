@@ -209,7 +209,13 @@ export default function ReviewForm(props: Props) {
         {/* Page 1 -- User Acknowledgment */}
         <div className={styles.review_row}>
           1. Notice
-          <button className="btn" type="button" onClick={() => goToPage(1)}>
+          <button
+            className={`${styles.btn} ${
+              pageState.userAcknowledged ? "" : styles.incomplete
+            }`}
+            type="button"
+            onClick={() => goToPage(1)}
+          >
             Review
           </button>
         </div>
@@ -217,7 +223,13 @@ export default function ReviewForm(props: Props) {
         {/* Page 2 -- Basic Info */}
         <div className={styles.review_row}>
           2. Basics
-          <button className="btn" type="button" onClick={() => goToPage(2)}>
+          <button
+            className={`${styles.btn} ${
+              pageState.unsavedPages.indexOf(2) >= 0 ? styles.incomplete : ""
+            }`}
+            type="button"
+            onClick={() => goToPage(2)}
+          >
             Review
           </button>
         </div>
@@ -225,7 +237,13 @@ export default function ReviewForm(props: Props) {
         {/* Page 3 -- Listing Address */}
         <div className={styles.review_row}>
           3. Address
-          <button className={"btn"} type="button" onClick={() => goToPage(3)}>
+          <button
+            className={`${styles.btn} ${
+              pageState.unsavedPages.indexOf(3) >= 0 ? styles.incomplete : ""
+            }`}
+            type="button"
+            onClick={() => goToPage(3)}
+          >
             Review
           </button>
         </div>
@@ -233,7 +251,13 @@ export default function ReviewForm(props: Props) {
         {/* Page 4 -- Lister */}
         <div className={styles.review_row}>
           4. Listed by
-          <button className="btn" type="button" onClick={() => goToPage(4)}>
+          <button
+            className={`${styles.btn} ${
+              pageState.unsavedPages.indexOf(4) >= 0 ? styles.incomplete : ""
+            }`}
+            type="button"
+            onClick={() => goToPage(4)}
+          >
             Review
           </button>
         </div>
@@ -241,7 +265,13 @@ export default function ReviewForm(props: Props) {
         {/* Page 5 -- Listing Kind */}
         <div className={styles.review_row}>
           5. Features
-          <button className="btn" type="button" onClick={() => goToPage(5)}>
+          <button
+            className={`${styles.btn} ${
+              pageState.unsavedPages.indexOf(5) >= 0 ? styles.incomplete : ""
+            }`}
+            type="button"
+            onClick={() => goToPage(5)}
+          >
             Review
           </button>
         </div>
@@ -249,7 +279,13 @@ export default function ReviewForm(props: Props) {
         {/* Page 6 -- Images */}
         <div className={styles.review_row}>
           6. Images
-          <button className="btn" type="button" onClick={() => goToPage(6)}>
+          <button
+            className={`${styles.btn} ${
+              pageState.unsavedPages.indexOf(6) >= 0 ? styles.incomplete : ""
+            }`}
+            type="button"
+            onClick={() => goToPage(6)}
+          >
             Review
           </button>
         </div>

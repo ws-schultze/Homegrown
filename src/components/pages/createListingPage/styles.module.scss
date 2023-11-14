@@ -120,8 +120,14 @@
   width: 100%;
 
   button {
-    width: 6rem;
+    @include btn;
+    flex-grow: unset;
+    width: 150px !important;
     height: 2.5rem;
+
+    &.incomplete {
+      border-color: red;
+    }
   }
 }
 

@@ -1,21 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  formatCommaSeparatedWithDecimal,
-  formatCompactCurrencyNoDecimal,
-  formatPriceOnChange,
-  formatUSDCommaSeparatedNoDecimal,
-  getKeyDown,
-  handleKeyDown,
-  removeNonNumericChars,
-  repositionCursor,
-} from "../utils";
+import { useRef, useState } from "react";
+import { formatPriceOnChange, handleKeyDown } from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import styles from "../scss/inputs.module.scss";
-import { Str } from "../../../../types";
-import { InputProps, PriceInputProps } from "../inputProps";
+import { PriceInputProps } from "../inputProps";
 import useDiscountPriceErrorMessages from "./hooks/useDiscountPriceErrorMessages";
 import useFormatDiscountPricePercentage from "./hooks/useFormatDiscountPricePercentage";
-import useSetCursorPosition from "./hooks/useSetCursorPosition";
 
 interface Props extends PriceInputProps {
   /**

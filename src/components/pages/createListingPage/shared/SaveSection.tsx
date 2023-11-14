@@ -26,9 +26,6 @@ interface Props<T> {
   /** True if google address validation api is used */
   needsAddressValidation: boolean;
   children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
-  /**
-   * The obj emit from here is caught by the function assigned to handleFormState in the form's handleVerificationWrapper
-   */
   handleFormVerification: (
     actionName: VerifyActionName,
     obj: T,
@@ -56,7 +53,7 @@ export default function SaveSection<T extends Address | AddressOptional>({
   );
 
   function handleClear() {
-    handleFormVerification("clearForm", parentInitialState);
+    handleFormVerification("saveAndContinue", parentInitialState);
   }
 
   async function handleSave() {
@@ -69,6 +66,9 @@ export default function SaveSection<T extends Address | AddressOptional>({
       parentKeys.push(parentKey);
     }
 
+    /**
+     * Show error messages on invalid required fields
+     */
     parentKeys.forEach((k) => {
       const field = parent[k] as Str | TypeBool | Images;
 
@@ -119,9 +119,16 @@ export default function SaveSection<T extends Address | AddressOptional>({
 
         if (addressValidationApiResponse) {
           s = setBeingVerifiedToState<T>({ state: s, beingVerified: true });
+
+          const t: T = {
+            ...s,
+            beingVerified: true,
+            readOnly: true,
+          };
+
           handleFormVerification(
             "saveAndContinue",
-            s,
+            t,
             addressValidationApiResponse
           );
         }

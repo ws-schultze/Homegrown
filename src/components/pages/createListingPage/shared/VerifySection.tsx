@@ -4,10 +4,12 @@ import {
   Str,
   AddressValidationApi_Response,
   VerifyActionName,
+  Images,
 } from "../../../../types/index";
 import setAddressValidationApiResponseToState from "../utils/address/setAddressValidationApiResponseToState";
 import { ReactComponent as AlertSVG } from "../../../../assets/svg/circle-exclamation-solid.svg";
 import styles from "../styles.module.scss";
+import setErrorMsg from "../utils/setErrorMsg";
 
 interface Props<T> {
   /** The name that shows in the toast for a successful save (e.g. Agent, Owner, Company, House etc..) */
@@ -31,55 +33,98 @@ export default function VerifySection<T extends Verify>({
     if (value === true) {
       // User clicked 'yes'
 
-      let state: T = parent;
-      let key: keyof T;
-      let keys: (keyof T)[] = [];
+      // First make sure that the user didn't make some required fields empty
+      let requiredFields: (keyof T)[] = [];
+      let parentKeys: (keyof T)[] = [];
+      let parentKey: keyof T;
+      let newObj: T = parent;
 
-      for (key in parent) {
-        keys.push(key);
+      for (parentKey in parent) {
+        parentKeys.push(parentKey);
       }
 
-      keys.forEach((k) => {
-        // Loop through all fields of parent state and set valid=true, saved=true, and readOnly=true.
+      /**
+       * Show error messages on invalid required fields
+       */
+      parentKeys.forEach((k) => {
+        const field = parent[k] as Str | TypeBool | Images;
 
-        const field = parent[k] as Str | TypeBool;
-        console.log("field: ", field);
+        if (field && field.required === true && field.valid === false) {
+          // Only provide an error message if it doesn't already exist
 
-        if (field && typeof field !== "string" && typeof field !== "boolean") {
-          state = {
-            ...state,
-            [k]: {
-              ...state[k],
-              errorMsg: "",
-              valid: true,
-              saved: true,
-              readOnly: true,
-            },
-          };
+          if (field.errorMsg === "") {
+            // Set error message
+
+            const _field = setErrorMsg<T>(parent, k, "Required");
+
+            newObj = {
+              ...newObj,
+              [k]: _field,
+            };
+          }
+
+          requiredFields.push(k);
         }
       });
 
-      // In parent state, set valid=true and saved=true
-      const s: T = {
-        ...state,
-        beingVerified: false,
-        valid: true,
-        saved: true,
-        readOnly: true,
-      };
+      if (requiredFields.length === 0) {
+        // Since all required fields are valid, set them all to valid,
+        // saved and readonly
 
-      if (addressValidationApiResponse !== undefined) {
-        // Set address validation api response data to state to correct spelling errors or formatting errors
-        const finalState: T = setAddressValidationApiResponseToState({
-          state: s,
-          response: addressValidationApiResponse,
+        let state: T = parent;
+        let key: keyof T;
+        let keys: (keyof T)[] = [];
+
+        for (key in parent) {
+          keys.push(key);
+        }
+
+        keys.forEach((k) => {
+          // Loop through all fields of parent state and set valid=true, saved=true, and readOnly=true.
+
+          const field = parent[k] as Str | TypeBool;
+          console.log("field: ", field);
+
+          if (
+            field &&
+            typeof field !== "string" &&
+            typeof field !== "boolean"
+          ) {
+            state = {
+              ...state,
+              [k]: {
+                ...state[k],
+                errorMsg: "",
+                valid: true,
+                saved: true,
+                readOnly: true,
+              },
+            };
+          }
         });
-        handleFormVerification("everythingLooksCorrect", finalState);
-        // toast.success(`${parentName} information saved.`);
-      } else {
-        // No address validation needed
-        handleFormVerification("everythingLooksCorrect", s);
-        // toast.success(`${parentName} information saved.`);
+
+        // In parent state, set valid=true and saved=true
+        const s: T = {
+          ...state,
+          beingVerified: false,
+          valid: true,
+          saved: true,
+          readOnly: true,
+        };
+
+        if (addressValidationApiResponse !== undefined) {
+          // Set address validation api response data to state to correct spelling errors or formatting errors
+          const finalState: T = setAddressValidationApiResponseToState({
+            state: s,
+            response: addressValidationApiResponse,
+          });
+          handleFormVerification("everythingLooksCorrect", finalState);
+          // toast.success(`${parentName} information saved.`);
+        } else {
+          // No address validation needed
+          handleFormVerification("everythingLooksCorrect", s);
+          // toast.success(`${parentName} information saved.`);
+        }
       }
     } else if (value === false) {
       // User clicked 'no'
@@ -112,7 +157,6 @@ export default function VerifySection<T extends Verify>({
           type="button"
           className={styles.btn}
           onClick={() => handleValidate(false)}
-          disabled={parent.readOnly}
         >
           No
         </button>
@@ -121,7 +165,6 @@ export default function VerifySection<T extends Verify>({
           type="button"
           className={styles.btn}
           onClick={() => handleValidate(true)}
-          disabled={parent.readOnly}
         >
           Yes
         </button>
