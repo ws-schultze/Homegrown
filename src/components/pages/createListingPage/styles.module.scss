@@ -102,28 +102,51 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: auto;
   button {
     @include btn;
     width: 100%;
   }
 }
 
+.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.submit_btn {
+  @include btn;
+  height: 64px;
+  background: green !important;
+  &:hover {
+    color: white !important;
+  }
+}
+
+.delete_btn {
+  @include btn;
+  background: red !important;
+  &:hover {
+    color: white !important;
+  }
+}
+
 .review_row {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid var(--color-border);
-  height: 4rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  height: 80px;
   align-items: center;
-  font-size: 1.2rem;
-  gap: 1rem;
+  font-size: 18px;
   width: 100%;
+  padding: 10px;
 
   button {
     @include btn;
     flex-grow: unset;
     width: 150px !important;
-    height: 2.5rem;
+    height: 50px;
 
     &.incomplete {
       border-color: red;
@@ -135,18 +158,29 @@
   margin-top: auto;
 }
 
-.notice {
+@mixin notice {
   font-size: 16px;
   background: var(--color-bg-secondary);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   padding: 10px;
   border-radius: 5px;
   svg {
     fill: var(--color-primary);
     height: 30px;
     min-width: 30px;
+  }
+}
+
+.notice {
+  @include notice;
+}
+
+.review_warning {
+  @include notice;
+  svg {
+    fill: red;
   }
 }
 

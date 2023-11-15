@@ -1,11 +1,17 @@
 import { Image, ListingData, Uploads } from "../../../../../types/index";
 import { db } from "../../../../../firebase.config";
 import { ReactComponent as BellSVG } from "../../assets/bell-regular.svg";
+import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
+
 import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import { setCurrentPageNumber, setLoading } from "../../createListingPageSlice";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  deleteDoc,
+} from "firebase/firestore";
 import {
   getDownloadURL,
   getStorage,
@@ -19,6 +25,7 @@ import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFires
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { useEffect } from "react";
+import { setLoading } from "../../createListingPageSlice";
 
 interface Props extends FormProps {
   /**
@@ -88,6 +95,12 @@ export default function ReviewForm(props: Props) {
    * @param e FormEvent - submit state
    */
   async function handleSubmit() {
+    // Make sure that all pages are saved and validated
+    if (pageState.unsavedPages.length > 0) {
+      toast.error("Finish any pages with a review btn highlighted in red");
+      return;
+    }
+
     dispatch(setLoading(true));
 
     /**
@@ -196,15 +209,23 @@ export default function ReviewForm(props: Props) {
     }
   }
 
-  useEffect(() => {}, []);
+  const disableBtns = pageState.unsavedPages.indexOf(5) >= 0 ? true : false;
 
   return (
     <form>
       <section>
-        <div className={styles.notice}>
-          <BellSVG />
-          Review any parts of this listing before submission, if you want to.
-        </div>
+        {pageState.unsavedPages.length > 0 ? (
+          <div className={styles.review_warning}>
+            <WarningSVG />
+            Pages with a red review button have not been finished yet. Please go
+            complete them before submitting your listing.
+          </div>
+        ) : (
+          <div className={styles.notice}>
+            <BellSVG />
+            Review any parts of this listing before submission, if you want to.
+          </div>
+        )}
 
         {/* Page 1 -- User Acknowledgment */}
         <div className={styles.review_row}>
@@ -291,38 +312,56 @@ export default function ReviewForm(props: Props) {
         </div>
       </section>
 
-      <>
-        {pageState.editListing === true ? (
-          <div className={styles.review_bottom_btns}>
-            <button type="button" className={styles.btn} onClick={handleSubmit}>
-              Submit Update
-            </button>
-            <button className={styles.btn} onClick={() => navigate("/profile")}>
-              Cancel Update
-            </button>
-            <button
-              type="button"
-              className={styles.btn}
-              onClick={deleteListingFromFirestore}
-            >
-              Delete Listing
-            </button>
-          </div>
-        ) : (
-          <div className={styles.two_btn_row}>
-            <button type="button" className={styles.btn} onClick={handleSubmit}>
-              Submit Listing
-            </button>
-            <button
-              type="button"
-              className={styles.btn}
-              onClick={deleteNotYetSubmittedListing}
-            >
-              Delete Listing
-            </button>
-          </div>
-        )}
-      </>
+      {pageState.editListing === true ? (
+        <div className={styles.review_bottom_btns}>
+          <button
+            type="button"
+            className={`${styles.submit_btn} ${
+              disableBtns ? styles.disabled : ""
+            } `}
+            onClick={handleSubmit}
+          >
+            Submit Update
+          </button>
+
+          <button
+            type="button"
+            className={`${styles.delete_btn} ${
+              disableBtns ? styles.disabled : ""
+            }`}
+            onClick={deleteListingFromFirestore}
+          >
+            Delete Listing
+          </button>
+          <button
+            className={`${styles.btn} ${disableBtns ? styles.disabled : ""}`}
+            onClick={() => navigate("/profile")}
+          >
+            Cancel Update
+          </button>
+        </div>
+      ) : (
+        <div className={styles.review_bottom_btns}>
+          <button
+            type="button"
+            className={`${styles.submit_btn} ${
+              disableBtns ? styles.disabled : ""
+            }`}
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            className={`${styles.delete_btn} ${
+              disableBtns ? styles.disabled : ""
+            }`}
+            onClick={deleteNotYetSubmittedListing}
+          >
+            Delete
+          </button>
+        </div>
+      )}
     </form>
   );
 }

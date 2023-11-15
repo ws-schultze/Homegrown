@@ -22,7 +22,12 @@ export const initialCreateListingPageState: CreateListingPageState = {
   currentPageNumber: 1,
   // currentPageName: "acknowledgment",
   savedPages: [],
-  unsavedPages: [1, 2, 3, 4, 5, 6, 7],
+  /**
+   * The first and last page of the form are not "savable".
+   * The first page is for setting the user acknowledgment to true
+   * The last page is for submitting the data to firestore
+   */
+  unsavedPages: [2, 3, 4, 5, 6],
   editListing: false,
 };
 
