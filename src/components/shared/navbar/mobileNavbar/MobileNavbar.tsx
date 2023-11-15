@@ -93,7 +93,7 @@ export default function MobileNavbar() {
             >
               Home finder
             </Link>
-            {createListingPageState.userAcknowledged ? (
+            {createListingPageState.newListingInProgress ? (
               <Link
                 to={`/create-listing/${createListingPageState.currentPageNumber}`}
                 onClick={closeMenu}

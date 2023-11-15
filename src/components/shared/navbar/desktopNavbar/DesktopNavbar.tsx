@@ -18,6 +18,7 @@ export default function DesktopNavbar({ maxWidth }: Props) {
   const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const placeFilter = useAppSelector((state) => state.placeFilter);
+  const createListingPageState = useAppSelector((s) => s.createListingPage);
 
   function navigateToMapPage(): string {
     if (placeFilter.place) {
@@ -44,14 +45,25 @@ export default function DesktopNavbar({ maxWidth }: Props) {
             Home finder
           </Link>
 
-          <Link
-            to={"/create-listing"}
-            className={` 
-            ${styles["nav-link"]}
-            ${pathMatchRoute("/listings", location) ? "active" : ""}`}
-          >
-            List your property
-          </Link>
+          {createListingPageState.newListingInProgress ? (
+            <Link
+              to={`/create-listing/${createListingPageState.currentPageNumber}`}
+              className={`
+${styles["nav-link"]}
+${pathMatchRoute("/listings", location) ? "active" : ""}`}
+            >
+              Continue your listing
+            </Link>
+          ) : (
+            <Link
+              to={"/create-listing/1"}
+              className={`
+                ${styles["nav-link"]}
+                ${pathMatchRoute("/listings", location) ? "active" : ""}`}
+            >
+              List your property
+            </Link>
+          )}
         </div>
 
         <Link to={"/"} className={styles["logo-container"]}>

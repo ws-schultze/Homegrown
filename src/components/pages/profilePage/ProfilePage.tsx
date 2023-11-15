@@ -309,7 +309,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={handleEditDetails}
               >
-                <EditUserSVG /> Edit Details
+                <EditUserSVG /> Edit details
               </button>
             ) : (
               <button
@@ -329,13 +329,13 @@ export default function ProfilePage() {
               <LockSVG />
               Reset password
             </button>
-            {state.unfinishedListing === null ? (
+            {createListingPageState.newListingInProgress === false ? (
               <Link
                 to={`/create-listing/${createListingPageState.currentPageNumber}`}
                 className={styles.btn}
               >
                 <MoneySVG />
-                <p>List a Property</p>
+                <p>List a property</p>
               </Link>
             ) : (
               <Link
@@ -343,7 +343,7 @@ export default function ProfilePage() {
                 className={styles.btn}
               >
                 <MoneySVG />
-                <p>Continue Listing</p>
+                <p>Continue your listing</p>
               </Link>
             )}
             <button
@@ -352,7 +352,7 @@ export default function ProfilePage() {
               onClick={handleSignOut}
             >
               <SignOutSVG />
-              Sign Out
+              Sign out
             </button>
           </div>
         </form>

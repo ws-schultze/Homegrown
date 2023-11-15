@@ -8,10 +8,10 @@ export interface CreateListingPageState {
   loading: boolean;
   pageNumbers: number[];
   currentPageNumber: number;
-  // currentPageName: string;
   savedPages: number[];
   unsavedPages: number[];
   editListing: boolean;
+  newListingInProgress: boolean;
 }
 
 export const initialCreateListingPageState: CreateListingPageState = {
@@ -20,7 +20,6 @@ export const initialCreateListingPageState: CreateListingPageState = {
   loading: false,
   pageNumbers: [1, 2, 3, 4, 5, 6, 7],
   currentPageNumber: 1,
-  // currentPageName: "acknowledgment",
   savedPages: [],
   /**
    * The first and last page of the form are not "savable".
@@ -29,6 +28,7 @@ export const initialCreateListingPageState: CreateListingPageState = {
    */
   unsavedPages: [2, 3, 4, 5, 6],
   editListing: false,
+  newListingInProgress: false,
 };
 
 export const createListingPageSlice = createSlice({
@@ -78,6 +78,13 @@ export const createListingPageSlice = createSlice({
       ...state,
       editListing: action.payload,
     }),
+    setNewListingInProgress: (
+      state,
+      action: { payload: boolean; type: string }
+    ) => ({
+      ...state,
+      newListingInProgress: action.payload,
+    }),
   },
 });
 
@@ -92,6 +99,7 @@ export const {
   setSavedPages,
   setUnsavedPages,
   setEditListing,
+  setNewListingInProgress,
 } = createListingPageSlice.actions;
 
 export default createListingPageSlice.reducer;

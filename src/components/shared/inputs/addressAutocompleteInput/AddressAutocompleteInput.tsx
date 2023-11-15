@@ -12,7 +12,7 @@ export interface Props extends InputProps {
    * Google Places Autocomplete widget
    * @param state Address | AddressOptional
    */
-  handleCompleteAddressObj: (state: Address | AddressOptional) => void;
+  handleAutocompletedAddress: (state: Address | AddressOptional) => void;
 }
 
 /**
@@ -48,7 +48,7 @@ export default function AddressAutocompleteInput(props: Props) {
       inputRef,
       autocompleteWidget,
       setAutocompleteWidget,
-      props.handleCompleteAddressObj
+      props.handleAutocompletedAddress
     );
   }
 

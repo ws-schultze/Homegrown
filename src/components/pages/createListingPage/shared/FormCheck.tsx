@@ -15,6 +15,7 @@ import {
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import styles from "../styles.module.scss";
+import Error from "../../../shared/error/Error";
 
 export type FormState =
   | BasicInfo
@@ -62,23 +63,30 @@ export default function FormCheck({
   children,
   handleFormVerification,
 }: FormCheckProps) {
-  return (
-    <div className={styles.form_check}>
-      {formState.saved === false && formState.beingVerified === false ? (
+  if (formState.beingVerified === false && formState.saved === false) {
+    return (
+      <div className={styles.form_check}>
         <SaveSection<typeof formState>
           needsAddressValidation={false}
           parent={formState}
           parentInitialState={initialFormState}
           handleFormVerification={handleFormVerification}
         />
-      ) : null}
-      {formState.beingVerified === true ? (
+      </div>
+    );
+  }
+
+  if (formState.beingVerified === true) {
+    return (
+      <div className={styles.form_check}>
         <VerifySection<typeof formState>
           parent={formState}
           children={children}
           handleFormVerification={handleFormVerification}
         />
-      ) : null}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return <p>FormCheck error occurred.</p>;
 }

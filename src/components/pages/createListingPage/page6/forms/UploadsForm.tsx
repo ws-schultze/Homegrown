@@ -1,11 +1,6 @@
 import React, { useState, useRef, Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
-import {
-  Image,
-  ListingData,
-  Uploads,
-  VerifyActionName,
-} from "../../../../../types/index";
+import { Image, VerifyActionName } from "../../../../../types/index";
 import { initUploads } from "../../../../../initialValues";
 import { ReactComponent as PlusIcon } from "../../assets/plusIcon.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/deleteIcon.svg";
@@ -25,6 +20,7 @@ import { useNavigate } from "react-router";
 import { handleFormVerification } from "../../utils/formUtils";
 import { FormProps } from "../../types/formProps";
 import Spinner from "../../../../shared/loaders/Spinner";
+import { Uploads } from "../../../../../types/index";
 
 interface Props extends FormProps {
   /**
@@ -46,8 +42,11 @@ interface Props extends FormProps {
 export default function UploadsForm(props: Props): JSX.Element {
   const pageState = useAppSelector((s) => s.createListingPage);
   const listing = pageState.listing;
-  const state = pageState.listing.uploads;
-  const stateName: keyof typeof listing = "apartmentBuilding";
+  const state: Uploads = {
+    ...pageState.listing.uploads,
+    images: props.uploads.images,
+  };
+  const stateName: keyof typeof listing = "uploads";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -282,7 +281,7 @@ export default function UploadsForm(props: Props): JSX.Element {
       </section>
 
       <FormCheck
-        formState={props.uploads}
+        formState={state}
         initialFormState={initUploads}
         handleFormVerification={handleFormVerificationWrapper}
       />

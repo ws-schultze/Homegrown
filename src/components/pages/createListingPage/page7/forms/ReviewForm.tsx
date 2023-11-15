@@ -25,7 +25,7 @@ import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFires
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { useEffect } from "react";
-import { setLoading } from "../../createListingPageSlice";
+import { reset, setListing, setLoading } from "../../createListingPageSlice";
 
 interface Props extends FormProps {
   /**
@@ -97,7 +97,9 @@ export default function ReviewForm(props: Props) {
   async function handleSubmit() {
     // Make sure that all pages are saved and validated
     if (pageState.unsavedPages.length > 0) {
-      toast.error("Finish any pages with a review btn highlighted in red");
+      toast.error(
+        "Finish any pages with a review button that is highlighted in red"
+      );
       return;
     }
 
@@ -151,6 +153,8 @@ export default function ReviewForm(props: Props) {
             // A full list of error codes is available at
             // https://firebase.google.com/docs/storage/web/handle-errors
             reject(error);
+            toast.error(error.message);
+            setLoading(false);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -162,9 +166,7 @@ export default function ReviewForm(props: Props) {
     }
 
     const _images = await Promise.all(
-      pageState.listing.uploads.images.value.map((image) =>
-        storeImage(image.file!)
-      )
+      props.uploads.images.value.map((image) => storeImage(image.file!))
     ).catch(() => {
       setLoading(false);
       toast.warn("All images must be 2MB or less.");
@@ -178,9 +180,9 @@ export default function ReviewForm(props: Props) {
       formDataCopy = {
         ...pageState.listing,
         uploads: {
-          ...pageState.listing.uploads,
+          ...props.uploads,
           images: {
-            ...pageState.listing.uploads.images,
+            ...props.uploads.images,
             value: _images,
           },
         },
@@ -198,7 +200,8 @@ export default function ReviewForm(props: Props) {
 
       dispatch(setLoading(false));
       toast.success("Listing Created");
-      localStorage.removeItem("unfinished-listing");
+      // localStorage.removeItem("unfinished-listing");
+      dispatch(reset());
       navigate(
         `/explore-listings/details/${formDataCopy.address.formattedAddress.value}/${docRef.id}`
       );
@@ -209,12 +212,17 @@ export default function ReviewForm(props: Props) {
     }
   }
 
-  const disableBtns = pageState.unsavedPages.indexOf(5) >= 0 ? true : false;
+  const disableBtns =
+    pageState.unsavedPages.length > 0 || props.uploads.images.value.length === 0
+      ? true
+      : false;
+
+  const noImagesFound = props.uploads.images.value.length === 0 ? true : false;
 
   return (
     <form>
       <section>
-        {pageState.unsavedPages.length > 0 ? (
+        {disableBtns || noImagesFound ? (
           <div className={styles.review_warning}>
             <WarningSVG />
             Pages with a red review button have not been finished yet. Please go
@@ -302,7 +310,9 @@ export default function ReviewForm(props: Props) {
           6. Images
           <button
             className={`${styles.btn} ${
-              pageState.unsavedPages.indexOf(6) >= 0 ? styles.incomplete : ""
+              pageState.unsavedPages.indexOf(6) >= 0 || noImagesFound
+                ? styles.incomplete
+                : ""
             }`}
             type="button"
             onClick={() => goToPage(6)}

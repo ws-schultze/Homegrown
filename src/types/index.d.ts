@@ -102,7 +102,14 @@ export interface Address extends Verify {
   country: Str;
   formattedAddress: Str;
   geolocation: TypeGeolocation;
-  address_components: TypePlacesApi_Response_AddressComponent[];
+  // address_components: TypePlacesApi_Response_AddressComponent[];
+  address_components: AddressComponent[];
+}
+
+export interface AddressComponent {
+  long_name: string;
+  short_name: string;
+  types: string[];
 }
 
 export interface AddressOptional extends Verify {
@@ -115,7 +122,8 @@ export interface AddressOptional extends Verify {
   country?: Str;
   formattedAddress?: Str;
   geolocation?: TypeGeolocation;
-  address_components?: AddressValidationApi_Response_AddressComponent;
+  // address_components?: AddressValidationApi_Response_AddressComponent;
+  address_components?: AddressComponent[];
 }
 
 export interface AddressValidationApi_Response {

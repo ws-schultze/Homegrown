@@ -1,21 +1,8 @@
-import React, { useState, useRef } from "react";
-import {
-  Str,
-  AddressValidationApi_Response,
-  VerifyActionName,
-  TypeAgent,
-} from "../../../../../types/index";
+import { Str, TypeAgent, ListingData } from "../../../../../types/index";
 import { initAgent } from "../../../../../initialValues";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import EditFormSection from "../../shared/EditFormSection";
 import { renderMap } from "../../../exploreListingsPage/map/mapHelpers";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
 import NameInput from "../../../../shared/inputs/nameInput/NameInput";
 import AgentLicenseIdInput from "../../../../shared/inputs/agentLicenseIdInput/AgentLicenseIdInput";
 import PhoneNumberInput from "../../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
@@ -23,49 +10,26 @@ import EmailStrInput from "../../../../shared/inputs/emailInput/EmailStrInput";
 import AddressAutocompleteInput from "../../../../shared/inputs/addressAutocompleteInput/AddressAutocompleteInput";
 import FormCheck from "../../shared/FormCheck";
 import { FormProps } from "../../types/formProps";
-import { handleFormVerification } from "../../utils/formUtils";
-import { useNavigate } from "react-router";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 
 export default function AgentForm(props: FormProps) {
-  const state = useAppSelector((s) => s.createListingPage);
-  const { agent } = state.listing;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<AddressValidationApi_Response | undefined>(undefined);
-
-  if (!agent) throw new Error("agent is undefined");
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: TypeAgent
-  ) {
-    handleFormVerification<TypeAgent>({
-      createListingPageState: state,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...state.listing,
-            agent: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
-      addressValidationApiResponse,
-      setAddressValidationApiResponse,
-    });
-  }
+  const stateName: keyof ListingData = "agent";
+  const {
+    state,
+    handleFormVerificationWrapper,
+    handleInput,
+    handleAutocompletedAddress,
+  } = useCommonFormLogic<TypeAgent>({
+    pageNumber: props.thisPageNum,
+    stateName: stateName,
+  });
 
   return (
     <form>
-      {agent.saved === true ? (
+      {state.saved === true ? (
         <section>
           <EditFormSection
-            parent={agent}
+            parent={state}
             emit={handleFormVerificationWrapper}
           />
         </section>
@@ -75,116 +39,46 @@ export default function AgentForm(props: FormProps) {
         <header>Agent Information</header>
 
         <NameInput
-          state={agent.firstName}
+          state={state.firstName}
           placeholder="First name"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  firstName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "firstName")}
         />
 
         <NameInput
-          state={agent.middleName}
+          state={state.middleName}
           placeholder="Middle name*"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  middleName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "middleName")}
         />
 
         <NameInput
-          state={agent.lastName}
+          state={state.lastName}
           placeholder="Last name"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  lastName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "lastName")}
         />
 
         <NameInput
-          state={agent.companyName}
+          state={state.companyName}
           placeholder="Company name"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  companyName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "companyName")}
         />
 
         <AgentLicenseIdInput
-          state={agent.licenseId}
+          state={state.licenseId}
           placeholder="License ID"
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  licenseId: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "licenseId")}
         />
 
         <PhoneNumberInput
-          state={agent.phoneNumber}
+          state={state.phoneNumber}
           placeholder="Phone number"
           groupSeparators={[")", "-"]}
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  phoneNumber: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "phoneNumber")}
         />
 
         <EmailStrInput<Str>
-          state={agent.email}
+          state={state.email}
           placeholder="Email"
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                agent: {
-                  ...state.listing.agent!,
-                  email: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "email")}
         />
 
         <Wrapper
@@ -194,143 +88,63 @@ export default function AgentForm(props: FormProps) {
           libraries={["places", "marker"]}
         >
           <AddressAutocompleteInput
-            state={agent.streetAddress}
+            state={state.streetAddress}
             placeholder="Street number"
-            handleInput={(obj) => {
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    streetAddress: obj,
-                  },
-                })
-              );
-            }}
-            handleCompleteAddressObj={(obj) => {
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    streetAddress: obj.streetAddress!,
-                    unitNumber: obj.unitNumber!,
-                    city: obj.city!,
-                    zipCode: obj.zipCode!,
-                    adminAreaLevel2: obj.adminAreaLevel2!,
-                    adminAreaLevel1: obj.adminAreaLevel1!,
-                    country: obj.country!,
-                  },
-                })
-              );
-            }}
+            handleInput={(obj) => handleInput(obj, "streetAddress")}
+            handleAutocompletedAddress={handleAutocompletedAddress}
           />
 
           <NameInput
-            state={agent.unitNumber}
+            state={state.unitNumber}
             placeholder="Unit number"
-            handleInput={(obj) =>
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    unitNumber: obj,
-                  },
-                })
-              )
-            }
+            handleInput={(obj) => handleInput(obj, "unitNumber")}
           />
 
           <NameInput
-            state={agent.city}
+            state={state.city}
             placeholder="City"
-            handleInput={(obj) =>
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    city: obj,
-                  },
-                })
-              )
-            }
+            handleInput={(obj) => handleInput(obj, "city")}
           />
 
           <NameInput
-            state={agent.adminAreaLevel1}
+            state={state.adminAreaLevel1}
             placeholder="State"
-            handleInput={(obj) =>
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    adminAreaLevel1: obj,
-                  },
-                })
-              )
-            }
+            handleInput={(obj) => handleInput(obj, "adminAreaLevel1")}
           />
 
           <NameInput
-            state={agent.zipCode}
+            state={state.zipCode}
             placeholder="Postal Code"
-            handleInput={(obj) =>
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    zipCode: obj,
-                  },
-                })
-              )
-            }
+            handleInput={(obj) => handleInput(obj, "zipCode")}
           />
 
           <NameInput
-            state={agent.country}
+            state={state.country}
             placeholder="Country"
-            handleInput={(obj) =>
-              dispatch(
-                setListing({
-                  ...state.listing,
-                  agent: {
-                    ...state.listing.agent!,
-                    country: obj,
-                  },
-                })
-              )
-            }
+            handleInput={(obj) => handleInput(obj, "country")}
           />
         </Wrapper>
       </section>
 
       <FormCheck
-        formState={agent}
+        formState={state}
         initialFormState={initAgent}
         children={
           <div>
-            {agent.firstName.value}{" "}
-            {agent.middleName && agent.middleName.value.length > 0
-              ? `${agent.middleName.value} ${agent.lastName.value}`
-              : `${agent.lastName.value}`}
+            {state.firstName.value}{" "}
+            {state.middleName && state.middleName.value.length > 0
+              ? `${state.middleName.value} ${state.lastName.value}`
+              : `${state.lastName.value}`}
             <br />
-            License# {agent.licenseId.value}
+            License# {state.licenseId.value}
             <br />
-            {agent.phoneNumber.formatted}
+            {state.phoneNumber.formatted}
             <br />
-            {agent.email.value}
+            {state.email.value}
             <br />
-            {agent.companyName.value}
+            {state.companyName.value}
             <br />
-            {addressValidationApiResponse &&
-            addressValidationApiResponse.result &&
-            addressValidationApiResponse.result.address.formattedAddress
-              ? addressValidationApiResponse.result.address.formattedAddress
-              : null}
+            {state.formattedAddress ? `${state.formattedAddress.value}` : null}
           </div>
         }
         handleFormVerification={handleFormVerificationWrapper}

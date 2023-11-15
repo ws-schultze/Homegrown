@@ -802,6 +802,7 @@ export function handleAutocompleteWidget(
         state: initAddress,
         autocomplete: autocompleteWidget,
       });
+      console.log("autocomplete obj", s);
       handleCompleteAddressObj(s);
       // dispatch(
       //   setListing({

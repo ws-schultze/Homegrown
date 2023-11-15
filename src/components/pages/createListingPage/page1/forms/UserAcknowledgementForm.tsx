@@ -2,6 +2,7 @@ import styles from "../../styles.module.scss";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
 import {
+  setNewListingInProgress,
   setSavedPages,
   setUnsavedPages,
   setUserAcknowledged,
@@ -22,6 +23,7 @@ export default function UserAcknowledgementForm({
   const pageState = useAppSelector((s) => s.createListingPage);
 
   function handleClick() {
+    dispatch(setNewListingInProgress(true));
     dispatch(setUserAcknowledged(true));
 
     // // Don't add page one to saved pages if it is already saved
