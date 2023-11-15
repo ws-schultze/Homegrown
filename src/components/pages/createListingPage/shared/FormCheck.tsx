@@ -9,7 +9,7 @@ import {
   MultiFamilyHomeUnit,
   Owner,
   SingleFamilyHome,
-  TypeAgent,
+  Agent,
   Uploads,
 } from "../../../../types";
 import SaveSection from "./SaveSection";
@@ -20,7 +20,7 @@ import Error from "../../../shared/error/Error";
 export type FormState =
   | BasicInfo
   | Address
-  | TypeAgent
+  | Agent
   | Owner
   | SingleFamilyHome
   | MultiFamilyHome

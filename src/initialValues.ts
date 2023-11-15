@@ -30,7 +30,7 @@ import * as T from "./types/index";
 // } from "./index";
 // import {
 //   Address,
-//   TypeAgent,
+//   Agent,
 //   SingleFamilyHome,
 //   ListingKindValue,
 // } from "./index";
@@ -251,7 +251,7 @@ export const initName: T.Name = {
   lastName: initStrReq,
 };
 
-export const initAgent: T.TypeAgent = {
+export const initAgent: T.Agent = {
   firstName: initStrReq,
   middleName: initStrOpt,
   lastName: initStrReq,

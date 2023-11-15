@@ -499,7 +499,7 @@ export interface ContactInfo {
   email: Str;
 }
 
-export interface TypeAgent extends Name, ContactInfo, Address {
+export interface Agent extends Name, ContactInfo, Address {
   licenseId: Str;
   companyName: Str;
 }
@@ -796,7 +796,7 @@ export interface Uploads extends Verify {
 export interface ListingData {
   address: Address;
   basicInfo: BasicInfo;
-  agent?: TypeAgent;
+  agent?: Agent;
   owner?: Owner;
   company?: Company;
   privateOwner?: PrivateOwner;
@@ -837,7 +837,7 @@ export interface ListingFilters {
   // forSaleBy?: ForSaleBy;
   // forRentBy?: ForRentBy;
   // listedBy:
-  // agent?: TypeAgent;
+  // agent?: Agent;
   // owner?: Owner;
   // company?: Company;
   // privateOwner?: PrivateOwner;

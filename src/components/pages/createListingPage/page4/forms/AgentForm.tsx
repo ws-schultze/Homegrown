@@ -1,4 +1,4 @@
-import { Str, TypeAgent, ListingData } from "../../../../../types/index";
+import { Str, Agent, ListingData } from "../../../../../types/index";
 import { initAgent } from "../../../../../initialValues";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import EditFormSection from "../../shared/EditFormSection";
@@ -19,7 +19,7 @@ export default function AgentForm(props: FormProps) {
     handleFormVerificationWrapper,
     handleInput,
     handleAutocompletedAddress,
-  } = useCommonFormLogic<TypeAgent>({
+  } = useCommonFormLogic<Agent>({
     pageNumber: props.thisPageNum,
     stateName: stateName,
   });

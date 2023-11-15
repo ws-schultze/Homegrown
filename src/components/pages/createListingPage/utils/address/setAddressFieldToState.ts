@@ -3,7 +3,7 @@ import { Address, AddressOptional } from "../../../../../types/index";
 /**
  * Set state for a given address field
  * @param e React.ChangeEvent<HTMLInputElement>
- * @param key keyof typeof state (TypeAgent)
+ * @param key keyof typeof state (Agent)
  */
 export default function setAddressFieldToState<
   T extends Address | AddressOptional
