@@ -1,10 +1,9 @@
 import { initStrOpt, initStrReq } from "../../../../../initialValues";
 import { Owner, PrivateOwner, TypeBool } from "../../../../../types";
-import { TypeTwoBtnRowState } from "../../shared/TwoBtnRow";
 
 export function handleProvideAddress(
   state: Owner | PrivateOwner,
-  obj: TypeTwoBtnRowState,
+  obj: TypeBool,
   dispatcher: (s: Owner | PrivateOwner) => void
 ) {
   const value = obj.value;

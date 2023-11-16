@@ -1,87 +1,35 @@
-import { useState } from "react";
-import {
-  AddressValidationApi_Response,
-  PrivateOwner,
-  VerifyActionName,
-} from "../../../../../types/index";
+import { ListingData, PrivateOwner } from "../../../../../types/index";
 import { initPrivateOwner } from "../../../../../initialValues";
-import { Wrapper } from "@googlemaps/react-wrapper";
-import TwoBtnRow, { TypeTwoBtnRowState } from "../../shared/TwoBtnRow";
 import EditFormSection from "../../shared/EditFormSection";
-import { renderMap } from "../../../exploreListingsPage/map/mapHelpers";
 import { FormProps } from "../../types/formProps";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
-import { handleProvideAddress } from "../utils/handleProvideAddress";
-import { handleFormVerification } from "../../utils/formUtils";
 import FormCheck from "../../shared/FormCheck";
 import NameInput from "../../../../shared/inputs/nameInput/NameInput";
-import AddressAutocompleteInput from "../../../../shared/inputs/addressAutocompleteInput/AddressAutocompleteInput";
 import PhoneNumberInput from "../../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
 import { Str } from "../../../../../types/index";
 import EmailStrInput from "../../../../shared/inputs/emailInput/EmailStrInput";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
+import AddressFields from "../../shared/AddressFields";
+import YesNoBtns from "../../shared/YesNoBtns";
 
 export default function PrivateOwnerForm(props: FormProps) {
-  const state = useAppSelector((s) => s.createListingPage);
-  const { privateOwner } = state.listing;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [addressValidationApiResponse, setAddressValidationApiResponse] =
-    useState<AddressValidationApi_Response | undefined>(undefined);
-
-  if (!privateOwner) throw new Error("privateOwner is undefined");
-
-  function handleProvideAddressWrapper(obj: TypeTwoBtnRowState) {
-    if (!privateOwner) {
-      console.error("privateOwner is undefined");
-      return;
-    }
-    handleProvideAddress(privateOwner, obj, (s) =>
-      dispatch(
-        setListing({
-          ...state.listing,
-          privateOwner: s,
-        })
-      )
-    );
-  }
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: PrivateOwner
-  ) {
-    handleFormVerification<PrivateOwner>({
-      createListingPageState: state,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...state.listing,
-            privateOwner: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
-      addressValidationApiResponse,
-      setAddressValidationApiResponse,
-    });
-  }
+  const stateName: keyof ListingData = "privateOwner";
+  const {
+    state,
+    handleFormVerificationWrapper,
+    handleInput,
+    handleAutocompletedAddress,
+    handleProvideAddressWrapper,
+  } = useCommonFormLogic<PrivateOwner>({
+    pageNumber: props.thisPageNum,
+    stateName: stateName,
+  });
 
   return (
     <form>
-      {privateOwner.saved === true ? (
+      {state.saved === true ? (
         <section>
           <EditFormSection
-            parent={privateOwner}
+            parent={state}
             emit={handleFormVerificationWrapper}
           />
         </section>
@@ -91,260 +39,91 @@ export default function PrivateOwnerForm(props: FormProps) {
         <header>Owner Information</header>
 
         <NameInput
-          state={privateOwner.firstName}
+          state={state.firstName}
           placeholder="First name"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                privateOwner: {
-                  ...state.listing.privateOwner!,
-                  firstName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "firstName")}
         />
 
         <NameInput
-          state={privateOwner.middleName}
+          state={state.middleName}
           placeholder="Middle name"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                privateOwner: {
-                  ...state.listing.privateOwner!,
-                  middleName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "middleName")}
         />
 
         <NameInput
-          state={privateOwner.lastName}
+          state={state.lastName}
           placeholder="Last name"
-          handleInput={(name) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                privateOwner: {
-                  ...state.listing.privateOwner!,
-                  lastName: name,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "lastName")}
         />
 
         <PhoneNumberInput
-          state={privateOwner.phoneNumber}
+          state={state.phoneNumber}
           placeholder="Phone number"
           groupSeparators={[")", "-"]}
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                privateOwner: {
-                  ...state.listing.privateOwner!,
-                  phoneNumber: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "phoneNumber")}
         />
 
         <EmailStrInput<Str>
-          state={privateOwner.email}
+          state={state.email}
           placeholder="Email"
-          handleInput={(obj) =>
-            dispatch(
-              setListing({
-                ...state.listing,
-                privateOwner: {
-                  ...state.listing.privateOwner!,
-                  email: obj,
-                },
-              })
-            )
-          }
+          handleInput={(obj) => handleInput(obj, "email")}
         />
 
-        <TwoBtnRow<typeof state>
-          leftBtnText="Yes"
-          leftBtnValue={true}
-          rightBtnText="No"
-          rightBtnValue={false}
+        <YesNoBtns
+          state={state.provideAddress}
           label="Provide address"
-          state={privateOwner.provideAddress}
-          handleSelected={handleProvideAddressWrapper}
+          handleSelected={(obj) => handleProvideAddressWrapper(obj)}
         />
 
-        {privateOwner.provideAddress.value === true &&
-        privateOwner.streetAddress &&
-        privateOwner.unitNumber &&
-        privateOwner.city &&
-        privateOwner.adminAreaLevel1 &&
-        privateOwner.zipCode &&
-        privateOwner.country ? (
-          <Wrapper
-            apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-            render={renderMap}
-            version="beta"
-            libraries={["places", "marker"]}
-          >
-            <AddressAutocompleteInput
-              state={privateOwner.streetAddress}
-              placeholder="Street number"
-              handleInput={(obj) => {
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      streetAddress: obj,
-                    },
-                  })
-                );
-              }}
-              handleCompleteAddressObj={(obj) => {
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      streetAddress: obj.streetAddress!,
-                      unitNumber: obj.unitNumber!,
-                      city: obj.city!,
-                      zipCode: obj.zipCode!,
-                      adminAreaLevel2: obj.adminAreaLevel2!,
-                      adminAreaLevel1: obj.adminAreaLevel1!,
-                      country: obj.country!,
-                    },
-                  })
-                );
-              }}
-            />
-
-            <NameInput
-              state={privateOwner.unitNumber}
-              placeholder="Unit number"
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      unitNumber: obj,
-                    },
-                  })
-                )
-              }
-            />
-
-            <NameInput
-              state={privateOwner.city}
-              placeholder="City"
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      city: obj,
-                    },
-                  })
-                )
-              }
-            />
-
-            <NameInput
-              state={privateOwner.adminAreaLevel1}
-              placeholder="State"
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      adminAreaLevel1: obj,
-                    },
-                  })
-                )
-              }
-            />
-
-            <NameInput
-              state={privateOwner.zipCode}
-              placeholder="Postal Code"
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      zipCode: obj,
-                    },
-                  })
-                )
-              }
-            />
-
-            <NameInput
-              state={privateOwner.country}
-              placeholder="Country"
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...state.listing,
-                    privateOwner: {
-                      ...state.listing.privateOwner!,
-                      country: obj,
-                    },
-                  })
-                )
-              }
-            />
-          </Wrapper>
+        {state.provideAddress.value === true &&
+        state.streetAddress &&
+        state.unitNumber &&
+        state.city &&
+        state.adminAreaLevel1 &&
+        state.zipCode &&
+        state.country ? (
+          <AddressFields
+            streetAddress={state.streetAddress}
+            unitNumber={state.unitNumber}
+            city={state.city}
+            adminAreaLevel1={state.adminAreaLevel1}
+            zipCode={state.zipCode}
+            country={state.country}
+            handleInput={handleInput}
+            handleAutocompletedAddress={handleAutocompletedAddress}
+          />
         ) : null}
       </section>
 
       <FormCheck
-        formState={privateOwner}
+        formState={state}
         initialFormState={initPrivateOwner}
         children={
           <div>
-            {privateOwner.firstName.value}{" "}
-            {privateOwner.middleName && privateOwner.middleName.value.length > 0
-              ? `${privateOwner.middleName.value} ${privateOwner.lastName.value}`
-              : ` ${privateOwner.lastName.value}`}
+            {state.firstName.value}{" "}
+            {state.middleName && state.middleName.value.length > 0
+              ? `${state.middleName.value} ${state.lastName.value}`
+              : ` ${state.lastName.value}`}
             <br />
-            {privateOwner.phoneNumber.formatted}
+            {state.phoneNumber.formatted}
             <br />
-            {privateOwner.email.value}
-            {privateOwner.provideAddress ? (
+            {state.email.value}
+            {state.provideAddress ? (
               <div>
-                {privateOwner.streetAddress
-                  ? `${privateOwner.streetAddress.formatted}`
+                {state.streetAddress
+                  ? `${state.streetAddress.formatted}`
                   : null}
                 {", "}
-                {privateOwner.unitNumber
-                  ? `${privateOwner.unitNumber.value}`
-                  : null}
+                {state.unitNumber ? `${state.unitNumber.value}` : null}
                 <br />
-                {privateOwner.city ? `${privateOwner.city.formatted}` : null}
+                {state.city ? `${state.city.formatted}` : null}
                 {", "}
-                {privateOwner.adminAreaLevel1
-                  ? `${privateOwner.adminAreaLevel1.formatted}`
+                {state.adminAreaLevel1
+                  ? `${state.adminAreaLevel1.formatted}`
                   : null}
                 <br />
-                {privateOwner.zipCode
-                  ? `${privateOwner.zipCode.formatted}`
-                  : null}{" "}
-                {privateOwner.country
-                  ? `${privateOwner.country.formatted}`
-                  : null}
+                {state.zipCode ? `${state.zipCode.formatted}` : null}{" "}
+                {state.country ? `${state.country.formatted}` : null}
               </div>
             ) : null}
           </div>

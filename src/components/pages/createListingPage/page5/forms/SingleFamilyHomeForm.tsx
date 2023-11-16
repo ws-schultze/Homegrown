@@ -1,12 +1,12 @@
 import {
   HeatingOption,
-  VerifyActionName,
   CoolingOption,
   WaterOption,
   PowerOption,
   TypeBool,
+  ListingData,
+  SingleFamilyHome,
 } from "../../../../../types/index";
-import { initStrReq, initTypeBoolReqNull } from "../../../../../initialValues";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import {
   initSingleFamilyHome,
@@ -18,15 +18,6 @@ import {
 import EditFormSection from "../../shared/EditFormSection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
 import FormCheck from "../../shared/FormCheck";
 import YesNoBtns from "../../shared/YesNoBtns";
 import CommaSeparatedWholeNumber from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
@@ -34,96 +25,20 @@ import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
+import useGarage from "../../hooks/useGarage";
+import useDropdown from "../../hooks/useDropdown";
 
 export default function SingleFamilyHomeForm(props: FormProps) {
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const listing = pageState.listing;
-  const state = pageState.listing.singleFamilyHome!;
-  const stateName: keyof typeof listing = "singleFamilyHome";
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  if (!state) throw new Error("state is undefined");
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: typeof state
-  ) {
-    handleFormVerification<typeof state>({
-      createListingPageState: pageState,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...pageState.listing,
-            [stateName]: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
+  const stateName: keyof ListingData = "singleFamilyHome";
+  const { state, handleFormVerificationWrapper, handleInput } =
+    useCommonFormLogic<SingleFamilyHome>({
+      pageNumber: props.thisPageNum,
+      stateName: stateName,
     });
-  }
 
-  function handleInput<T>(obj: T, key: keyof typeof state) {
-    dispatch(
-      setListing({
-        ...listing,
-        [stateName]: {
-          ...state,
-          [key]: obj,
-        },
-      })
-    );
-  }
-
-  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
-    handleDropdown(options, state, key, (obj) =>
-      dispatch(
-        setListing({
-          ...listing,
-          [stateName]: obj,
-        })
-      )
-    );
-  }
-
-  function handleGarage(obj: typeof state.garage) {
-    const { garageAttached, garageNumCars, garageSqFt, ...rest } = state;
-
-    // Has garage
-    if (obj.value === true) {
-      dispatch(
-        setListing({
-          ...listing,
-          [stateName]: {
-            ...state,
-            garage: obj,
-            garageAttached: initTypeBoolReqNull,
-            garageNumCars: initStrReq,
-            garageSqFt: initStrReq,
-          },
-        })
-      );
-      return;
-    }
-
-    // No garage --> remove garage props from state
-    if (obj.value === false) {
-      dispatch(
-        setListing({
-          ...listing,
-          singleFamilyHome: {
-            ...rest,
-            garage: obj,
-          },
-        })
-      );
-      return;
-    }
-  }
+  const { handleGarage } = useGarage(stateName);
+  const { handleDropdown } = useDropdown<SingleFamilyHome>(stateName);
 
   return (
     <form>
@@ -218,9 +133,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
-          emit={(options) =>
-            handleDropdownWrapper<HeatingOption>(options, "heating")
-          }
+          emit={(options) => handleDropdown<HeatingOption>(options, "heating")}
         />
 
         <Dropdown<CoolingOption>
@@ -232,9 +145,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label={"Cooling"}
-          emit={(options) =>
-            handleDropdownWrapper<CoolingOption>(options, "cooling")
-          }
+          emit={(options) => handleDropdown<CoolingOption>(options, "cooling")}
         />
 
         <Dropdown<WaterOption>
@@ -246,9 +157,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label={"Water"}
-          emit={(options) =>
-            handleDropdownWrapper<WaterOption>(options, "water")
-          }
+          emit={(options) => handleDropdown<WaterOption>(options, "water")}
         />
 
         <Dropdown<PowerOption>
@@ -260,9 +169,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label={"Power"}
-          emit={(options) =>
-            handleDropdownWrapper<PowerOption>(options, "power")
-          }
+          emit={(options) => handleDropdown<PowerOption>(options, "power")}
         />
 
         <YesNoBtns

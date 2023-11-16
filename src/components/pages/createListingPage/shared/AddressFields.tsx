@@ -17,16 +17,6 @@ export default function AddressFields<
   handleInput: (obj: Str, key: keyof T) => void;
   handleAutocompletedAddress: (obj: Address | AddressOptional) => void;
 }) {
-  // if (
-  //   !props.state.streetAddress ||
-  //   !props.state.unitNumber ||
-  //   !props.state.city ||
-  //   !props.state.adminAreaLevel1 ||
-  //   !props.state.zipCode ||
-  //   !props.state.country
-  // )
-  //   throw new Error("state missing a needed key value pair");
-
   return (
     <Wrapper
       apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}

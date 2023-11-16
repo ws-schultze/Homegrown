@@ -5,7 +5,11 @@ import { useNavigate } from "react-router";
 import {
   Address,
   AddressOptional,
+  Owner,
+  PrivateOwner,
+  SingleFamilyHome,
   Str,
+  TypeBool,
   VerifyActionName,
 } from "../../../../types";
 import { handleDropdown, handleFormVerification } from "../utils/formUtils";
@@ -16,6 +20,9 @@ import {
   setUnsavedPages,
 } from "../createListingPageSlice";
 import { ListingData, Verify } from "../../../../types/index";
+import { TypeTwoBtnRowState } from "../shared/TwoBtnRow";
+import { handleProvideAddress } from "../page4/utils/handleProvideAddress";
+import { initStrReq, initTypeBoolReqNull } from "../../../../initialValues";
 
 /**
  * Hook to used to extract logic/state that all create/edit listing forms will use.
@@ -30,8 +37,8 @@ export default function useCommonFormLogic<T extends Verify>(args: {
   state: T;
   handleFormVerificationWrapper: (actionName: VerifyActionName, obj: T) => void;
   handleInput: (obj: T[keyof T], key: keyof T) => void;
-  handleDropdownWrapper: (options: T[], key: keyof typeof state) => void;
   handleAutocompletedAddress: (obj: Address | AddressOptional) => void;
+  handleProvideAddressWrapper: (obj: TypeBool) => void;
 } {
   const pageState = useAppSelector((s) => s.createListingPage);
   const listing = pageState.listing;
@@ -75,17 +82,6 @@ export default function useCommonFormLogic<T extends Verify>(args: {
     );
   }
 
-  function handleDropdownWrapper<O>(options: O[], key: keyof typeof state) {
-    handleDropdown(options, state, key, (obj) =>
-      dispatch(
-        setListing({
-          ...listing,
-          [args.stateName]: obj,
-        })
-      )
-    );
-  }
-
   function handleAutocompletedAddress(obj: Address | AddressOptional) {
     dispatch(
       setListing({
@@ -106,13 +102,37 @@ export default function useCommonFormLogic<T extends Verify>(args: {
     );
   }
 
+  /**
+   * Used one the Owner and Private Owner forms when selecting whether or
+   * not to provide an address. Selecting <Yes> will populate the
+   * address fields of the form to be filled out. Selecting <No>
+   * will leave the address fields off of the form.
+   */
+  function handleProvideAddressWrapper(obj: TypeBool): void {
+    if (!listing[args.stateName]) {
+      console.error("listing[args.stateName] is undefined");
+      return;
+    }
+    handleProvideAddress(
+      listing[args.stateName] as Owner | PrivateOwner,
+      obj,
+      (newState) =>
+        dispatch(
+          setListing({
+            ...listing,
+            [args.stateName]: newState,
+          })
+        )
+    );
+  }
+
   return {
     pageState,
     listing,
     state,
     handleFormVerificationWrapper,
     handleInput,
-    handleDropdownWrapper,
     handleAutocompletedAddress,
+    handleProvideAddressWrapper,
   };
 }

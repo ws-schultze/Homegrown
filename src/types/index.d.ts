@@ -126,6 +126,10 @@ export interface AddressOptional extends Verify {
   address_components?: AddressComponent[];
 }
 
+export interface HasOptionalAddress extends AddressOptional {
+  provideAddress: boolean;
+}
+
 export interface AddressValidationApi_Response {
   result?: {
     verdict: object;

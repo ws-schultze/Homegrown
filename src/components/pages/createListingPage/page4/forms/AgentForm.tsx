@@ -1,16 +1,14 @@
 import { Str, Agent, ListingData } from "../../../../../types/index";
 import { initAgent } from "../../../../../initialValues";
-import { Wrapper } from "@googlemaps/react-wrapper";
 import EditFormSection from "../../shared/EditFormSection";
-import { renderMap } from "../../../exploreListingsPage/map/mapHelpers";
 import NameInput from "../../../../shared/inputs/nameInput/NameInput";
 import AgentLicenseIdInput from "../../../../shared/inputs/agentLicenseIdInput/AgentLicenseIdInput";
 import PhoneNumberInput from "../../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
 import EmailStrInput from "../../../../shared/inputs/emailInput/EmailStrInput";
-import AddressAutocompleteInput from "../../../../shared/inputs/addressAutocompleteInput/AddressAutocompleteInput";
 import FormCheck from "../../shared/FormCheck";
 import { FormProps } from "../../types/formProps";
 import useCommonFormLogic from "../../hooks/useCommonFormLogic";
+import AddressFields from "../../shared/AddressFields";
 
 export default function AgentForm(props: FormProps) {
   const stateName: keyof ListingData = "agent";
@@ -81,49 +79,16 @@ export default function AgentForm(props: FormProps) {
           handleInput={(obj) => handleInput(obj, "email")}
         />
 
-        <Wrapper
-          apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
-          render={renderMap}
-          version="beta"
-          libraries={["places", "marker"]}
-        >
-          <AddressAutocompleteInput
-            state={state.streetAddress}
-            placeholder="Street number"
-            handleInput={(obj) => handleInput(obj, "streetAddress")}
-            handleAutocompletedAddress={handleAutocompletedAddress}
-          />
-
-          <NameInput
-            state={state.unitNumber}
-            placeholder="Unit number"
-            handleInput={(obj) => handleInput(obj, "unitNumber")}
-          />
-
-          <NameInput
-            state={state.city}
-            placeholder="City"
-            handleInput={(obj) => handleInput(obj, "city")}
-          />
-
-          <NameInput
-            state={state.adminAreaLevel1}
-            placeholder="State"
-            handleInput={(obj) => handleInput(obj, "adminAreaLevel1")}
-          />
-
-          <NameInput
-            state={state.zipCode}
-            placeholder="Postal Code"
-            handleInput={(obj) => handleInput(obj, "zipCode")}
-          />
-
-          <NameInput
-            state={state.country}
-            placeholder="Country"
-            handleInput={(obj) => handleInput(obj, "country")}
-          />
-        </Wrapper>
+        <AddressFields
+          streetAddress={state.streetAddress}
+          unitNumber={state.unitNumber}
+          city={state.city}
+          adminAreaLevel1={state.adminAreaLevel1}
+          zipCode={state.zipCode}
+          country={state.country}
+          handleInput={handleInput}
+          handleAutocompletedAddress={handleAutocompletedAddress}
+        />
       </section>
 
       <FormCheck
