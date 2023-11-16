@@ -2,13 +2,13 @@ import { Str, Agent, ListingData } from "../../../../../types/index";
 import { initAgent } from "../../../../../initialValues";
 import EditFormSection from "../../shared/EditFormSection";
 import NameInput from "../../../../shared/inputs/nameInput/NameInput";
-import AgentLicenseIdInput from "../../../../shared/inputs/agentLicenseIdInput/AgentLicenseIdInput";
 import PhoneNumberInput from "../../../../shared/inputs/phoneNumberInput/PhoneNumberInput";
 import EmailStrInput from "../../../../shared/inputs/emailInput/EmailStrInput";
 import FormCheck from "../../shared/FormCheck";
 import { FormProps } from "../../types/formProps";
 import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 import AddressFields from "../../shared/AddressFields";
+import AgentLicenseIdInput from "../../../../shared/inputs/agentLicenseIdinput/AgentLicenseIdInput";
 
 export default function AgentForm(props: FormProps) {
   const stateName: keyof ListingData = "agent";
