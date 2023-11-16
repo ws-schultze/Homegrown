@@ -20,25 +20,24 @@ import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import FormCheck from "../../shared/FormCheck";
 import YesNoBtns from "../../shared/YesNoBtns";
-import CommaSeparatedWholeNumber from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import useCommonFormLogic from "../../hooks/useCommonFormLogic";
-import useGarage from "../../hooks/useGarage";
-import useDropdown from "../../hooks/useDropdown";
 
 export default function SingleFamilyHomeForm(props: FormProps) {
   const stateName: keyof ListingData = "singleFamilyHome";
-  const { state, handleFormVerificationWrapper, handleInput } =
-    useCommonFormLogic<SingleFamilyHome>({
-      pageNumber: props.thisPageNum,
-      stateName: stateName,
-    });
-
-  const { handleGarage } = useGarage(stateName);
-  const { handleDropdown } = useDropdown<SingleFamilyHome>(stateName);
+  const {
+    state,
+    handleFormVerificationWrapper,
+    handleInput,
+    handleDropdown,
+    handleGarage,
+  } = useCommonFormLogic<SingleFamilyHome>({
+    pageNumber: props.thisPageNum,
+    stateName: stateName,
+  });
 
   return (
     <form>
@@ -65,7 +64,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           </div>
 
           <div className={styles.md}>
-            <CommaSeparatedWholeNumber
+            <CommaSeparatedWholeNumberInput
               state={state.squareFeet}
               placeholder="Square feet"
               min={100}
@@ -181,7 +180,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
         <YesNoBtns
           state={state.garage}
           label="Garage"
-          handleSelected={(obj) => handleGarage(obj)}
+          handleSelected={(obj) => handleGarage(obj, state)}
         />
 
         {state.garage.value === true &&
@@ -226,6 +225,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           state={state.streetParking}
           handleSelected={(obj) => handleInput(obj, "streetParking")}
         />
+
         <YesNoBtns
           label="Fenced yard"
           state={state.fencedYard}

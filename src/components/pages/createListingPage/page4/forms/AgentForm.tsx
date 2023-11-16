@@ -87,7 +87,7 @@ export default function AgentForm(props: FormProps) {
           zipCode={state.zipCode}
           country={state.country}
           handleInput={handleInput}
-          handleAutocompletedAddress={handleAutocompletedAddress}
+          handleAutocompletedAddress={(obj) => handleAutocompletedAddress(obj)}
         />
       </section>
 

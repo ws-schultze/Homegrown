@@ -528,11 +528,18 @@ export default function MobileListingOverlayPage() {
                       ) : null}
                     </>
                   ) : null}
-                  {basicInfo.listingKind.value?.id === "land" ||
-                  basicInfo.listingKind.value?.id === "single-family-home" ? (
+                  {land ? (
                     <div className={styles.feature}>
                       <MapSVG />
-                      Lot Size: {land?.acres}
+                      Lot Size: {land.acres.formatted}
+                      {singleFamilyHome?.acres.formatted} Acres
+                    </div>
+                  ) : null}
+
+                  {singleFamilyHome ? (
+                    <div className={styles.feature}>
+                      <MapSVG />
+                      Lot Size: {singleFamilyHome.acres.formatted}
                       {singleFamilyHome?.acres.formatted} Acres
                     </div>
                   ) : null}

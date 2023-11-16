@@ -1,7 +1,6 @@
 import React from "react";
 import * as T from "../../../types/index";
 import isEmail from "validator/lib/isEmail";
-import { initAddress } from "../../../initialValues";
 
 /**
  * Format a string containing only numeric characters into comma separated form format (e.g "123456" --> "123,456")
@@ -779,41 +778,41 @@ export default function makeAutocompleteWidget(
  * @param autocompleteWidget the autocomplete widget gets stored in the components local state and is set by setAutocompleteWidget
  * @param setAutocompleteWidget sets autocomplete widget to component's local state
  */
-export function handleAutocompleteWidget(
-  inputRef: React.MutableRefObject<HTMLInputElement | null>,
-  autocompleteWidget: google.maps.places.Autocomplete | null,
-  setAutocompleteWidget: (
-    value: React.SetStateAction<google.maps.places.Autocomplete | null>
-  ) => void,
-  handleCompleteAddressObj: (addr: T.Address) => void
-) {
-  if (inputRef.current && inputRef.current !== null) {
-    const widget = makeAutocompleteWidget(inputRef);
-    setAutocompleteWidget(widget);
-  } else {
-    console.error(`inputRef is undefined or null.`);
-  }
+// export function handleAutocompleteWidget(
+//   inputRef: React.MutableRefObject<HTMLInputElement | null>,
+//   autocompleteWidget: google.maps.places.Autocomplete | null,
+//   setAutocompleteWidget: (
+//     value: React.SetStateAction<google.maps.places.Autocomplete | null>
+//   ) => void,
+//   handleAutocompletedAddress: (obj: T.Address) => void
+// ) {
+//   if (inputRef.current && inputRef.current !== null) {
+//     const widget = makeAutocompleteWidget(inputRef);
+//     setAutocompleteWidget(widget);
+//   } else {
+//     console.error(`inputRef is undefined or null.`);
+//   }
 
-  // Listen for click on widget item
-  if (autocompleteWidget) {
-    autocompleteWidget.addListener("place_changed", () => {
-      // if (state) {
-      const s = setAutocompletePlaceValuesToState({
-        state: initAddress,
-        autocomplete: autocompleteWidget,
-      });
-      console.log("autocomplete obj", s);
-      handleCompleteAddressObj(s);
-      // dispatch(
-      //   setListing({
-      //     ...pageState.listing,
-      //     agent: s,
-      //   })
-      // );
-    });
-    // });
-  }
-}
+//   // Listen for click on widget item
+//   if (autocompleteWidget) {
+//     autocompleteWidget.addListener("place_changed", () => {
+//       // if (state) {
+//       const s = setAutocompletePlaceValuesToState({
+//         state: initAddress,
+//         autocomplete: autocompleteWidget,
+//       });
+//       console.log("autocomplete obj", s);
+//       handleAutocompletedAddress(s);
+//       // dispatch(
+//       //   setListing({
+//       //     ...pageState.listing,
+//       //     agent: s,
+//       //   })
+//       // );
+//     });
+//     // });
+//   }
+// }
 
 /**
  * Handle when a user clicks on a Google Places API item from the autocomplete dropdown menu
@@ -970,10 +969,10 @@ export function setAutocompletePlaceValuesToState<
       geolocation: {
         ...state.geolocation,
         value: _geolocation,
-        formatted: _geolocation,
+        // formatted: _geolocation,
         valid: true,
       },
-      address_components: place.address_components,
+      addressComponents: place.address_components,
       beingVerified: false,
     };
 

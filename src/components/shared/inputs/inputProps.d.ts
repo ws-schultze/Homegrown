@@ -1,5 +1,4 @@
 import { Address, Str } from "../../../types";
-import { handleAutocompleteWidget } from "./utils";
 
 export interface InputProps {
   /**

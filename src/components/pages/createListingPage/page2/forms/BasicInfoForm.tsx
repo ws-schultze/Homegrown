@@ -12,9 +12,9 @@ import {
   Townhouse,
   ListingKindValue,
   ListingData,
-  VerifyActionName,
   ApartmentBuilding,
   Apartment,
+  BasicInfo,
 } from "../../../../../types/index";
 import {
   initAgent,
@@ -39,62 +39,26 @@ import {
 import compareObjects from "../../../../utils/compareObjects";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import EditFormSection from "../../shared/EditFormSection";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
+import { setListing } from "../../createListingPageSlice";
 import DescriptionInput from "../../../../shared/inputs/descriptionInput/DescriptionInput";
 import PriceInput from "../../../../shared/inputs/priceInput/PriceInput";
 import DiscountPriceInput from "../../../../shared/inputs/discountPriceInput/DiscountPriceInput";
 import FormCheck from "../../shared/FormCheck";
-import { useNavigate } from "react-router";
-import { handleFormVerification } from "../../utils/formUtils";
 import { FormProps } from "../../types/formProps";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 
 export default function BasicInfoForm(props: FormProps) {
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const listing = pageState.listing;
-  const state = listing.basicInfo;
-  const stateName: keyof typeof listing = "basicInfo";
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: typeof state
-  ) {
-    handleFormVerification<typeof state>({
-      createListingPageState: pageState,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...pageState.listing,
-            [stateName]: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
-    });
-  }
-
-  function handleInput<T>(obj: T, key: keyof typeof state) {
-    dispatch(
-      setListing({
-        ...listing,
-        [stateName]: {
-          ...state,
-          [key]: obj,
-        },
-      })
-    );
-  }
+  const stateName: keyof ListingData = "basicInfo";
+  const {
+    listing,
+    state,
+    dispatch,
+    handleFormVerificationWrapper,
+    handleInput,
+  } = useCommonFormLogic<BasicInfo>({
+    pageNumber: props.thisPageNum,
+    stateName: stateName,
+  });
 
   function handleTwoBtnRow(
     obj: TypeBool | ForSaleOrRent | ForRentBy | ForSaleBy
@@ -446,9 +410,9 @@ export default function BasicInfoForm(props: FormProps) {
         case "townhouse":
           init = initTownhouse;
           break;
-        case "manufactured-home":
-          init = initManufacturedHome;
-          break;
+        // case "manufactured-home":
+        //   init = initManufacturedHome;
+        //   break;
         case "land":
           init = initLand;
           break;

@@ -1,11 +1,11 @@
 import {
   HeatingOption,
-  VerifyActionName,
   CoolingOption,
   WaterOption,
   PowerOption,
+  ApartmentBuilding,
+  ListingData,
 } from "../../../../../types/index";
-import {} from "../../../../../initialValues";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import {
   heatingOptions,
@@ -17,63 +17,20 @@ import {
 import EditFormSection from "../../shared/EditFormSection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
 import FormCheck from "../../shared/FormCheck";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 
 export default function ApartmentBuildingForSaleForm(props: FormProps) {
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const listing = pageState.listing;
-  const state = pageState.listing.apartmentBuilding!;
-  const stateName: keyof typeof listing = "apartmentBuilding";
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  if (!state) throw new Error("state is undefined");
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: typeof state
-  ) {
-    handleFormVerification<typeof state>({
-      createListingPageState: pageState,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...pageState.listing,
-            [stateName]: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
+  const stateName: keyof ListingData = "apartmentBuilding";
+  const { state, handleFormVerificationWrapper, handleInput, handleDropdown } =
+    useCommonFormLogic<ApartmentBuilding>({
+      pageNumber: props.thisPageNum,
+      stateName: stateName,
     });
-  }
-
-  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
-    handleDropdown(options, state, key, (obj) =>
-      dispatch(
-        setListing({
-          ...listing,
-          [stateName]: obj,
-        })
-      )
-    );
-  }
 
   return (
     <form>
@@ -96,17 +53,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
               placeholder="Year built"
               min={0}
               max={new Date().getFullYear()}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      yearBuilt: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "yearBuilt")}
             />
           </div>
           <div className={styles.md}>
@@ -114,17 +61,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
               state={state.totalUnits}
               placeholder="Units"
               min={5}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      totalUnits: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "totalUnits")}
             />
           </div>
         </div>
@@ -135,35 +72,17 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
               state={state.stories}
               placeholder="Stories"
               min={1}
-              max={50}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: { ...state, stories: obj },
-                  })
-                )
-              }
+              max={100}
+              handleInput={(obj) => handleInput(obj, "stories")}
             />
           </div>
 
           <div className={styles.md}>
             <CommaSeparatedWholeNumberInput
               state={state.squareFeet}
-              placeholder="Sqft"
-              min={2000}
-              max={10000000}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      squareFeet: obj,
-                    },
-                  })
-                )
-              }
+              placeholder="Square feet"
+              min={100}
+              handleInput={(obj) => handleInput(obj, "squareFeet")}
             />
           </div>
         </div>
@@ -175,17 +94,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
               state={state.acres}
               min={0}
               max={1000000}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      acres: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "acres")}
             />
           </div>
           <div className={styles.md}>
@@ -194,17 +103,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
               placeholder="Bedrooms"
               min={1}
               max={2000}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      bedrooms: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "bedrooms")}
             />
           </div>
         </div>
@@ -213,39 +112,19 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
           <div className={styles.md}>
             <NumberInput
               state={state.fullBathrooms}
-              placeholder="Full baths"
+              placeholder="Full bathrooms"
               min={1}
-              max={1000}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      fullBathrooms: obj,
-                    },
-                  })
-                )
-              }
+              max={2000}
+              handleInput={(obj) => handleInput(obj, "fullBathrooms")}
             />
           </div>
           <div className={styles.md}>
             <NumberInput
               state={state.halfBathrooms}
-              placeholder="Half baths"
+              placeholder="Half bathrooms"
               min={0}
-              max={1000}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    apartmentBuilding: {
-                      ...state,
-                      halfBathrooms: obj,
-                    },
-                  })
-                )
-              }
+              max={2000}
+              handleInput={(obj) => handleInput(obj, "halfBathrooms")}
             />
           </div>
         </div>
@@ -259,9 +138,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
-          emit={(options) =>
-            handleDropdownWrapper<HeatingOption>(options, "heating")
-          }
+          emit={(options) => handleDropdown<HeatingOption>(options, "heating")}
         />
 
         <Dropdown<CoolingOption>
@@ -273,9 +150,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label={"Cooling"}
-          emit={(options) =>
-            handleDropdownWrapper<CoolingOption>(options, "cooling")
-          }
+          emit={(options) => handleDropdown<CoolingOption>(options, "cooling")}
         />
 
         <Dropdown<WaterOption>
@@ -287,9 +162,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label={"Water"}
-          emit={(options) =>
-            handleDropdownWrapper<WaterOption>(options, "water")
-          }
+          emit={(options) => handleDropdown<WaterOption>(options, "water")}
         />
 
         <Dropdown<PowerOption>
@@ -301,9 +174,7 @@ export default function ApartmentBuildingForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label={"Power"}
-          emit={(options) =>
-            handleDropdownWrapper<PowerOption>(options, "power")
-          }
+          emit={(options) => handleDropdown<PowerOption>(options, "power")}
         />
       </section>
 

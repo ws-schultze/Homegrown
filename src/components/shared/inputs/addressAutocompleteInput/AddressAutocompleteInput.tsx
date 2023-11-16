@@ -1,9 +1,13 @@
 import React, { useRef, useState } from "react";
-import { handleAutocompleteWidget, validateName } from "../utils";
+import makeAutocompleteWidget, {
+  setAutocompletePlaceValuesToState,
+  validateName,
+} from "../utils";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import styles from "../scss/inputs.module.scss";
 import { Address, AddressOptional, Str } from "../../../../types";
 import { InputProps } from "../inputProps";
+import { initAddress } from "../../../../initialValues";
 
 export interface Props extends InputProps {
   /**
@@ -44,12 +48,32 @@ export default function AddressAutocompleteInput(props: Props) {
     };
     props.handleInput(s);
 
-    handleAutocompleteWidget(
-      inputRef,
-      autocompleteWidget,
-      setAutocompleteWidget,
-      props.handleAutocompletedAddress
-    );
+    // handleAutocompleteWidget(
+    //   inputRef,
+    //   autocompleteWidget,
+    //   setAutocompleteWidget,
+    //   props.handleAutocompletedAddress
+    // );
+
+    if (inputRef.current && inputRef.current !== null) {
+      const widget = makeAutocompleteWidget(inputRef);
+      setAutocompleteWidget(widget);
+    } else {
+      console.error(`inputRef is undefined or null.`);
+    }
+
+    // Listen for click on widget item
+    if (autocompleteWidget) {
+      autocompleteWidget.addListener("place_changed", () => {
+        // if (state) {
+        const s = setAutocompletePlaceValuesToState({
+          state: initAddress,
+          autocomplete: autocompleteWidget,
+        });
+        console.log("autocomplete obj", s);
+        props.handleAutocompletedAddress(s);
+      });
+    }
   }
 
   return (

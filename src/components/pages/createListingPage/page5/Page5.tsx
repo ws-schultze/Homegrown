@@ -8,8 +8,10 @@ import MultiFamilyHomeForSaleForm from "./forms/MultiFamilyHomeForSaleForm";
 import MultiFamilyHomeUnitForRentForm from "./forms/MultiFamilyHomeUnitForRentForm";
 import ApartmentBuildingForSaleForm from "./forms/ApartmentBuildingForSaleForm";
 import ApartmentForRentForm from "./forms/ApartmentForRentForm";
-import { ManufacturedHome } from "../../../../types/index";
 import Error from "../../../shared/error/Error";
+import CondoForm from "./forms/CondoForm";
+import TownhouseForm from "./forms/TownhouseForm";
+import LandForm from "./forms/LandForm";
 
 export default function Page5() {
   const state = useAppSelector((s) => s.createListingPage);
@@ -79,6 +81,36 @@ export default function Page5() {
     return (
       <div className={styles.container}>
         <MultiFamilyHomeUnitForRentForm thisPageNum={5} />
+        <Pagination />
+        <Footer />
+      </div>
+    );
+  }
+
+  if (id === "condo") {
+    return (
+      <div className={styles.container}>
+        <CondoForm thisPageNum={5} />
+        <Pagination />
+        <Footer />
+      </div>
+    );
+  }
+
+  if (id === "townhouse") {
+    return (
+      <div className={styles.container}>
+        <TownhouseForm thisPageNum={5} />
+        <Pagination />
+        <Footer />
+      </div>
+    );
+  }
+
+  if (id === "land") {
+    return (
+      <div className={styles.container}>
+        <LandForm thisPageNum={5} />
         <Pagination />
         <Footer />
       </div>

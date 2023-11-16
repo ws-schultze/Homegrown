@@ -3,37 +3,40 @@ import {
   CoolingOption,
   WaterOption,
   PowerOption,
+  TypeBool,
   ListingData,
-  MultiFamilyHomeUnit,
+  SingleFamilyHome,
+  Townhouse,
 } from "../../../../../types/index";
-import { initMultiFamilyHomeUnit } from "../../../../../initialValues";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import {
+  initSingleFamilyHome,
   heatingOptions,
   coolingOptions,
   waterOptions,
   powerOptions,
+  initTownhouse,
 } from "../../../../../initialValues";
-import {} from "../../../../../index";
 import EditFormSection from "../../shared/EditFormSection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
-import YearInput from "../../../../shared/inputs/yearInput/YearInput";
-import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
-import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
-import YesNoBtns from "../../shared/YesNoBtns";
 import FormCheck from "../../shared/FormCheck";
+import YesNoBtns from "../../shared/YesNoBtns";
+import YearInput from "../../../../shared/inputs/yearInput/YearInput";
+import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
+import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
+import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 
-export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
-  const stateName: keyof ListingData = "multiFamilyHomeUnit";
+export default function TownhouseForm(props: FormProps) {
+  const stateName: keyof ListingData = "townhouse";
   const {
     state,
     handleFormVerificationWrapper,
     handleInput,
     handleDropdown,
     handleGarage,
-  } = useCommonFormLogic<MultiFamilyHomeUnit>({
+  } = useCommonFormLogic<Townhouse>({
     pageNumber: props.thisPageNum,
     stateName: stateName,
   });
@@ -42,7 +45,7 @@ export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
     <form>
       {state.saved === true ? (
         <section>
-          <EditFormSection<typeof state>
+          <EditFormSection
             parent={state}
             emit={handleFormVerificationWrapper}
           />
@@ -50,8 +53,7 @@ export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
       ) : null}
 
       <section>
-        <header>Multi-Family Home Unit</header>
-
+        <header>Townhouse Features</header>
         <div className={styles.flex_row}>
           <div className={styles.md}>
             <YearInput
@@ -62,17 +64,16 @@ export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
               handleInput={(obj) => handleInput(obj, "yearBuilt")}
             />
           </div>
+
           <div className={styles.md}>
             <CommaSeparatedWholeNumberInput
               state={state.squareFeet}
-              placeholder="Sqft"
+              placeholder="Square feet"
               min={100}
-              max={10000}
               handleInput={(obj) => handleInput(obj, "squareFeet")}
             />
           </div>
         </div>
-
         <div className={styles.flex_row}>
           <div className={styles.md}>
             <NumberInput
@@ -88,50 +89,28 @@ export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
               state={state.bedrooms}
               placeholder="Bedrooms"
               min={1}
-              max={10}
+              max={20}
               handleInput={(obj) => handleInput(obj, "bedrooms")}
             />
           </div>
         </div>
-
         <div className={styles.flex_row}>
           <div className={styles.md}>
             <NumberInput
               state={state.fullBathrooms}
-              placeholder="Full baths"
+              placeholder="Full bathrooms"
               min={1}
-              max={5}
+              max={20}
               handleInput={(obj) => handleInput(obj, "fullBathrooms")}
             />
           </div>
           <div className={styles.md}>
             <NumberInput
               state={state.halfBathrooms}
-              placeholder="Half baths"
-              min={1}
-              max={5}
+              placeholder="Half bathrooms"
+              min={0}
+              max={20}
               handleInput={(obj) => handleInput(obj, "halfBathrooms")}
-            />
-          </div>
-        </div>
-
-        <div className={styles.flex_row}>
-          <div className={styles.md}>
-            <NumberInput
-              state={state.parkingSpaces}
-              placeholder="Parking spaces"
-              min={1}
-              max={10}
-              handleInput={(obj) => handleInput(obj, "parkingSpaces")}
-            />
-          </div>
-          <div className={styles.md}>
-            <NumberInput
-              state={state.unitsInBuilding}
-              placeholder="Units in building"
-              min={1}
-              max={10}
-              handleInput={(obj) => handleInput(obj, "unitsInBuilding")}
             />
           </div>
         </div>
@@ -187,7 +166,7 @@ export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
         <YesNoBtns
           state={state.furnished}
           label="Furnished"
-          handleSelected={(obj) => handleInput(obj, "furnished")}
+          handleSelected={(obj: TypeBool) => handleInput(obj, "furnished")}
         />
 
         <YesNoBtns
@@ -234,27 +213,27 @@ export default function MultiFamilyHomeUnitForRentForm(props: FormProps) {
         ) : null}
 
         <YesNoBtns
-          state={state.streetParking}
           label="Street parking"
+          state={state.streetParking}
           handleSelected={(obj) => handleInput(obj, "streetParking")}
         />
 
         <YesNoBtns
-          state={state.fencedYard}
           label="Fenced yard"
+          state={state.fencedYard}
           handleSelected={(obj) => handleInput(obj, "fencedYard")}
         />
 
         <YesNoBtns
-          state={state.sharedYard}
           label="Shared yard"
+          state={state.sharedYard}
           handleSelected={(obj) => handleInput(obj, "sharedYard")}
         />
       </section>
 
       <FormCheck
         formState={state}
-        initialFormState={initMultiFamilyHomeUnit}
+        initialFormState={initTownhouse}
         handleFormVerification={handleFormVerificationWrapper}
       />
     </form>

@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
-import { handleAutocompleteWidget, validateName } from "../utils";
+import React, { useRef } from "react";
 import ErrorMsg from "../../errorMsg/ErrorMsg";
 import styles from "../scss/inputs.module.scss";
 import { Str } from "../../../../types";
 import { InputProps } from "../inputProps";
+import { validateName } from "../utils";
 
 /**
  * Notice that this component only formats objects of Str

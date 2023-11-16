@@ -72,10 +72,10 @@ export const listingKindValuesForSale: T.ListingKindValue[] = [
     name: "apartmentBuilding",
     label: "Apartment Building",
   },
-  // { id: "condo", name: "condo", label: "Condo" },
-  // { id: "townhouse", name: "townhouse", label: "Townhouse" },
+  { id: "condo", name: "condo", label: "Condo" },
+  { id: "townhouse", name: "townhouse", label: "Townhouse" },
   // { id: "manufactured-home", name: "manufacturedHome", label: "Manufactured Home" },
-  // { id: "land", name: "land", label: "Land" },
+  { id: "land", name: "land", label: "Land" },
 ];
 
 export const listingKindValuesForRent: T.ListingKindValue[] = [
@@ -86,12 +86,10 @@ export const listingKindValuesForRent: T.ListingKindValue[] = [
     label: "Multi-Family Home Unit",
   },
   { id: "apartment", name: "apartment", label: "Apartment" },
-
-  // { id: "condo", name: "condo", label: "Condo" },
-  // { id: "townhouse", name: "townhouse", label: "Townhouse" },
-  // { id: "apartment", name: "apartment", label: "Apartment" },
+  { id: "condo", name: "condo", label: "Condo" },
+  { id: "townhouse", name: "townhouse", label: "Townhouse" },
   // { id: "manufactured-home", name: "manufacturedHome", label: "Manufactured Home" },
-  // { id: "land", name: "land", label: "Land" },
+  { id: "land", name: "land", label: "Land" },
 ];
 
 export const initTypeBoolReqNull: T.TypeBool = {
@@ -236,7 +234,7 @@ export const initAddress: T.Address = {
   country: initStrReq,
   formattedAddress: initStrOpt,
   geolocation: initGeolocationOpt,
-  address_components: [],
+  addressComponents: [],
   beingVerified: false,
   valid: false,
   saved: false,
@@ -269,7 +267,7 @@ export const initAgent: T.Agent = {
   // addressValidationApiResponse: null,
   formattedAddress: initStrOpt,
   geolocation: initGeolocationOpt,
-  address_components: [],
+  addressComponents: [],
   beingVerified: false,
   valid: false,
   saved: false,
@@ -307,7 +305,7 @@ export const initCompany: T.Company = {
   // addressValidationApiResponse: null,
   formattedAddress: initStrOpt,
   geolocation: initGeolocationOpt,
-  address_components: [],
+  addressComponents: [],
   beingVerified: false,
   valid: false,
   saved: false,
@@ -607,17 +605,15 @@ export const initTownhouse: T.Townhouse = {
   bedrooms: initStrReq,
   fullBathrooms: initStrReq,
   halfBathrooms: initStrReq,
+  stories: initStrReq,
 
   heating: initHeatingReq,
   cooling: initCoolingReq,
   water: initWaterReq,
   power: initPowerReq,
 
-  assignedParking: initTypeBoolReqNull,
-  numAssignedSpaces: initStrReq,
-  numAssignedSpacesWithCover: initStrReq,
+  garage: initTypeBoolReqNull,
 
-  unassignedParkingAvailable: initTypeBoolReqNull,
   streetParking: initTypeBoolReqNull,
 
   furnished: initTypeBoolReqNull,
@@ -659,12 +655,12 @@ export const initManufacturedHome: T.ManufacturedHome = {
 };
 
 export const initLand: T.Land = {
-  acres: null,
-  cityWater: null,
-  onGrid: null,
-  roads: null,
-  price: true,
-  priceChangeActive: null,
+  acres: initStrReq,
+  elevation: initStrReq,
+  cityWater: initTypeBoolReqNull,
+  citySewer: initTypeBoolReqNull,
+  cityPower: initTypeBoolReqNull,
+  developedRoads: initTypeBoolReqNull,
   beingVerified: false,
   valid: false,
   saved: false,
@@ -707,11 +703,11 @@ export const allListingTypeValues: T.ListingKindValue[] = [
   { id: "apartment", name: "apartment", label: "Apartment" },
   { id: "condo", name: "condo", label: "Condo" },
   { id: "townhouse", name: "townhouse", label: "Townhouse" },
-  {
-    id: "manufactured-home",
-    name: "manufacturedHome",
-    label: "Manufactured Home",
-  },
+  // {
+  //   id: "manufactured-home",
+  //   name: "manufacturedHome",
+  //   label: "Manufactured Home",
+  // },
   { id: "land", name: "land", label: "Land" },
   null,
 ];

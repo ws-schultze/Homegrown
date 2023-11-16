@@ -2,16 +2,10 @@ import { Image, ListingData, Uploads } from "../../../../../types/index";
 import { db } from "../../../../../firebase.config";
 import { ReactComponent as BellSVG } from "../../assets/bell-regular.svg";
 import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
-
 import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  deleteDoc,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import {
   getDownloadURL,
   getStorage,
@@ -24,8 +18,7 @@ import useDeleteNotYetSubmittedListing from "../../hooks/useDeleteNotYetSubmitte
 import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFirestore";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
-import { useEffect } from "react";
-import { reset, setListing, setLoading } from "../../createListingPageSlice";
+import { reset, setLoading } from "../../createListingPageSlice";
 
 interface Props extends FormProps {
   /**
@@ -363,9 +356,7 @@ export default function ReviewForm(props: Props) {
           </button>
           <button
             type="button"
-            className={`${styles.delete_btn} ${
-              disableBtns ? styles.disabled : ""
-            }`}
+            className={`${styles.delete_btn}`}
             onClick={deleteNotYetSubmittedListing}
           >
             Delete

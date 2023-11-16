@@ -8,6 +8,7 @@ import {
   setUserAcknowledged,
 } from "../../createListingPageSlice";
 import { useNavigate } from "react-router";
+import { Uploads } from "../../../../../types/index";
 
 export default function UserAcknowledgementForm({
   thisPageNum,
@@ -25,19 +26,6 @@ export default function UserAcknowledgementForm({
   function handleClick() {
     dispatch(setNewListingInProgress(true));
     dispatch(setUserAcknowledged(true));
-
-    // // Don't add page one to saved pages if it is already saved
-    // if (pageState.savedPages.indexOf(1) >= 0) {
-    // }
-
-    // dispatch(setSavedPages(pageState.savedPages.concat(thisPageNum)));
-
-    // const idx = pageState.unsavedPages.indexOf(1);
-    // const unsavedPagesCopy = [...pageState.unsavedPages];
-    // unsavedPagesCopy.splice(idx, 1);
-    // console.log(unsavedPagesCopy);
-    // dispatch(setUnsavedPages(unsavedPagesCopy));
-
     navigate(`/create-listing/${thisPageNum + 1}`);
   }
 
@@ -46,11 +34,14 @@ export default function UserAcknowledgementForm({
       <section>
         <header>Notice</header>
         <p>All fields are required unless their label ends with *</p>
-        <p>Any unsaved progress will be lost if you refresh the browser.</p>
-        <p>Saved progress will be kept until the browser is closed.</p>
         <p>
-          Saved progress may be accessed from your profile in the event that you
-          navigate away from this form.
+          All progress except image uploads will be kept until the browser is
+          quit.
+        </p>
+        <p>Image uploads will be lost if the browser is refreshed.</p>
+        <p>
+          In the event that you navigate away from this form, you can resume
+          progress via your profile or the site's top navigation menu.
         </p>
         <button
           type="button"

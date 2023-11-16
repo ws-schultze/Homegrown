@@ -41,6 +41,7 @@ export default function RootBoundary(): JSX.Element {
       );
     }
   } else {
-    return <Container>Something went wrong</Container>;
+    //@ts-ignore
+    return <Container>Something went wrong: {error.message}</Container>;
   }
 }

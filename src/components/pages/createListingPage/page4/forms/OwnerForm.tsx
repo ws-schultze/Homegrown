@@ -17,7 +17,7 @@ export default function OwnerForm(props: FormProps) {
     handleFormVerificationWrapper,
     handleInput,
     handleAutocompletedAddress,
-    handleProvideAddressWrapper,
+    handleProvideAddress,
   } = useCommonFormLogic<Owner>({
     pageNumber: props.thisPageNum,
     stateName: stateName,
@@ -71,7 +71,7 @@ export default function OwnerForm(props: FormProps) {
         <YesNoBtns
           state={state.provideAddress}
           label="Provide address"
-          handleSelected={(obj) => handleProvideAddressWrapper(obj)}
+          handleSelected={(obj) => handleProvideAddress(state, obj)}
         />
 
         {state.provideAddress.value === true &&

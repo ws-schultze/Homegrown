@@ -774,17 +774,17 @@ export function filterListings(
             let _filtered: FetchedListing[] = [];
 
             listings.forEach((listing) => {
-              for (const key in listing.data.address.address_components) {
+              for (const key in listing.data.address.addressComponents) {
                 if (
-                  listing.data.address.address_components[key].types &&
-                  listing.data.address.address_components[key].long_name
+                  listing.data.address.addressComponents[key].types &&
+                  listing.data.address.addressComponents[key].long_name
                 ) {
                   if (
-                    listing.data.address.address_components[key].types.includes(
+                    listing.data.address.addressComponents[key].types.includes(
                       //@ts-ignore
                       "administrative_area_level_1"
                     ) &&
-                    listing.data.address.address_components[
+                    listing.data.address.addressComponents[
                       key
                     ].long_name.includes(place!.name!)
                   ) {

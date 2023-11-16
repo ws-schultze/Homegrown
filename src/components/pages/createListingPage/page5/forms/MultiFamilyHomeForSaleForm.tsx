@@ -1,10 +1,10 @@
 import {
   HeatingOption,
-  VerifyActionName,
   MultiFamilyHome,
   CoolingOption,
   WaterOption,
   PowerOption,
+  ListingData,
 } from "../../../../../types/index";
 import { initMultiFamilyHome } from "../../../../../initialValues";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
@@ -17,62 +17,20 @@ import {
 import EditFormSection from "../../shared/EditFormSection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import YesNoBtns from "../../shared/YesNoBtns";
 import FormCheck from "../../shared/FormCheck";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 
 export default function MultiFamilyHomeForSaleForm(props: FormProps) {
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const listing = pageState.listing;
-  const state = pageState.listing.multiFamilyHome!;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  if (!state) throw new Error("state is undefined");
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: typeof state
-  ) {
-    handleFormVerification<MultiFamilyHome>({
-      createListingPageState: pageState,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...pageState.listing,
-            multiFamilyHome: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
+  const stateName: keyof ListingData = "multiFamilyHome";
+  const { state, handleFormVerificationWrapper, handleInput, handleDropdown } =
+    useCommonFormLogic<MultiFamilyHome>({
+      pageNumber: props.thisPageNum,
+      stateName: stateName,
     });
-  }
-
-  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
-    handleDropdown(options, state, key, (obj) =>
-      dispatch(
-        setListing({
-          ...listing,
-          multiFamilyHome: obj,
-        })
-      )
-    );
-  }
 
   return (
     <form>
@@ -95,17 +53,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Year built"
               min={0}
               max={new Date().getFullYear()}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: {
-                      ...state,
-                      yearBuilt: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "yearBuilt")}
             />
           </div>
           <div className={styles.md}>
@@ -114,14 +62,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Units"
               min={1}
               max={20}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: { ...state, totalUnits: obj },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "totalUnits")}
             />
           </div>
         </div>
@@ -133,32 +74,15 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Stories"
               min={1}
               max={5}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: { ...state, stories: obj },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "stories")}
             />
           </div>
           <div className={styles.md}>
             <CommaSeparatedWholeNumberInput
               state={state.squareFeet}
-              placeholder="Sqft"
+              placeholder="Square feet"
               min={100}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: {
-                      ...state,
-                      squareFeet: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "squareFeet")}
             />
           </div>
         </div>
@@ -170,17 +94,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Full baths"
               min={1}
               max={15}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: {
-                      ...state,
-                      fullBathrooms: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "fullBathrooms")}
             />
           </div>
           <div className={styles.md}>
@@ -189,17 +103,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Half baths"
               min={0}
               max={15}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: {
-                      ...state,
-                      halfBathrooms: obj,
-                    },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "halfBathrooms")}
             />
           </div>
         </div>
@@ -211,14 +115,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Units with garage"
               min={0}
               max={5}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: { ...state, unitsWithGarageSpace: obj },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "unitsWithGarageSpace")}
             />
           </div>
           <div className={styles.md}>
@@ -227,14 +124,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
               placeholder="Bedrooms"
               min={1}
               max={20}
-              handleInput={(obj) =>
-                dispatch(
-                  setListing({
-                    ...listing,
-                    multiFamilyHome: { ...state, bedrooms: obj },
-                  })
-                )
-              }
+              handleInput={(obj) => handleInput(obj, "bedrooms")}
             />
           </div>
         </div>
@@ -248,9 +138,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
-          emit={(options) =>
-            handleDropdownWrapper<HeatingOption>(options, "heating")
-          }
+          emit={(options) => handleDropdown<HeatingOption>(options, "heating")}
         />
 
         <Dropdown<CoolingOption>
@@ -262,9 +150,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label={"Cooling"}
-          emit={(options) =>
-            handleDropdownWrapper<CoolingOption>(options, "cooling")
-          }
+          emit={(options) => handleDropdown<CoolingOption>(options, "cooling")}
         />
 
         <Dropdown<WaterOption>
@@ -276,9 +162,7 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label={"Water"}
-          emit={(options) =>
-            handleDropdownWrapper<WaterOption>(options, "water")
-          }
+          emit={(options) => handleDropdown<WaterOption>(options, "water")}
         />
 
         <Dropdown<PowerOption>
@@ -290,41 +174,19 @@ export default function MultiFamilyHomeForSaleForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label={"Power"}
-          emit={(options) =>
-            handleDropdownWrapper<PowerOption>(options, "power")
-          }
+          emit={(options) => handleDropdown<PowerOption>(options, "power")}
         />
 
         <YesNoBtns
           label="Street parking"
           state={state.streetParking}
-          handleSelected={(obj) =>
-            dispatch(
-              setListing({
-                ...listing,
-                multiFamilyHome: {
-                  ...state,
-                  streetParking: obj,
-                },
-              })
-            )
-          }
+          handleSelected={(obj) => handleInput(obj, "streetParking")}
         />
 
         <YesNoBtns
           label="Fenced yard"
           state={state.fencedYard}
-          handleSelected={(obj) =>
-            dispatch(
-              setListing({
-                ...listing,
-                multiFamilyHome: {
-                  ...state,
-                  fencedYard: obj,
-                },
-              })
-            )
-          }
+          handleSelected={(obj) => handleInput(obj, "fencedYard")}
         />
       </section>
 

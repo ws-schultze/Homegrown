@@ -103,7 +103,7 @@ export interface Address extends Verify {
   formattedAddress: Str;
   geolocation: TypeGeolocation;
   // address_components: TypePlacesApi_Response_AddressComponent[];
-  address_components: AddressComponent[];
+  addressComponents: AddressComponent[];
 }
 
 export interface AddressComponent {
@@ -123,7 +123,7 @@ export interface AddressOptional extends Verify {
   formattedAddress?: Str;
   geolocation?: TypeGeolocation;
   // address_components?: AddressValidationApi_Response_AddressComponent;
-  address_components?: AddressComponent[];
+  addressComponents?: AddressComponent[];
 }
 
 export interface HasOptionalAddress extends AddressOptional {
@@ -480,11 +480,11 @@ export type ListingKindValue =
   | { id: "apartment"; name: "apartment"; label: "Apartment" }
   | { id: "condo"; name: "condo"; label: "Condo" }
   | { id: "townhouse"; name: "townhouse"; label: "Townhouse" }
-  | {
-      id: "manufactured-home";
-      name: "manufacturedHome";
-      label: "Manufactured Home";
-    }
+  // | {
+  //     id: "manufactured-home";
+  //     name: "manufacturedHome";
+  //     label: "Manufactured Home";
+  //   }
   | { id: "land"; name: "land"; label: "Land" }
   | null;
 
@@ -710,17 +710,18 @@ export interface Townhouse extends Verify {
   bedrooms: Str;
   fullBathrooms: Str;
   halfBathrooms: Str;
+  stories: Str;
 
   heating: Heating;
   cooling: Cooling;
   water: Water;
   power: Power;
 
-  assignedParking: TypeBool;
-  numAssignedSpaces?: Str;
-  numAssignedSpacesWithCover?: Str;
+  garage: TypeBool;
+  garageSqFt?: Str;
+  garageNumCars?: Str;
+  garageAttached?: TypeBool;
 
-  unassignedParkingAvailable: TypeBool;
   streetParking: TypeBool;
 
   furnished: TypeBool;
@@ -748,12 +749,12 @@ export interface ManufacturedHome extends Verify {
 }
 
 export interface Land extends Verify {
-  acres: number | null;
-  cityWater: boolean | null;
-  onGrid: boolean | null;
-  roads: boolean | null;
-  price: boolean | null;
-  priceChangeActive: boolean | null;
+  acres: Str;
+  elevation: Str;
+  cityWater: TypeBool;
+  citySewer: TypeBool;
+  cityPower: TypeBool;
+  developedRoads: TypeBool;
 }
 
 export type TimeStamp = FieldValue | null;

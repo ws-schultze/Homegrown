@@ -1,10 +1,10 @@
 import {
   HeatingOption,
-  VerifyActionName,
   Apartment,
   CoolingOption,
   WaterOption,
   PowerOption,
+  ListingData,
 } from "../../../../../types/index";
 import Dropdown from "../../../../shared/dropdown/Dropdown";
 import {
@@ -12,115 +12,30 @@ import {
   coolingOptions,
   waterOptions,
   powerOptions,
-  initStrReq,
   initApartment,
 } from "../../../../../initialValues";
 import EditFormSection from "../../shared/EditFormSection";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
-import { useAppSelector } from "../../../../../redux/hooks";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { handleDropdown, handleFormVerification } from "../../utils/formUtils";
-import {
-  setListing,
-  setSavedPages,
-  setUnsavedPages,
-} from "../../createListingPageSlice";
 import YearInput from "../../../../shared/inputs/yearInput/YearInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import YesNoBtns from "../../shared/YesNoBtns";
 import FormCheck from "../../shared/FormCheck";
+import useCommonFormLogic from "../../hooks/useCommonFormLogic";
 
 export default function ApartmentForRentForm(props: FormProps) {
-  const pageState = useAppSelector((s) => s.createListingPage);
-  const listing = pageState.listing;
-  const state = pageState.listing.apartment!;
-  const stateName: keyof typeof listing = "apartment";
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  if (!state) throw new Error("state is undefined");
-
-  function handleFormVerificationWrapper(
-    actionName: VerifyActionName,
-    obj: typeof state
-  ) {
-    handleFormVerification<Apartment>({
-      createListingPageState: pageState,
-      actionName,
-      obj,
-      thisPageNum: props.thisPageNum,
-      handleFormState: (obj) =>
-        dispatch(
-          setListing({
-            ...pageState.listing,
-            [stateName]: obj,
-          })
-        ),
-      handleSavedPageNumbers: (nums) => dispatch(setSavedPages(nums)),
-      handleUnsavedPageNumbers: (nums) => dispatch(setUnsavedPages(nums)),
-      handleNavigate: (path) => navigate(path),
-    });
-  }
-
-  function handleInput<T>(obj: T, key: keyof typeof state) {
-    dispatch(
-      setListing({
-        ...listing,
-        [stateName]: {
-          ...state,
-          [key]: obj,
-        },
-      })
-    );
-  }
-
-  function handleDropdownWrapper<T>(options: T[], key: keyof typeof state) {
-    handleDropdown(options, state, key, (obj) =>
-      dispatch(
-        setListing({
-          ...listing,
-          [stateName]: obj,
-        })
-      )
-    );
-  }
-
-  function handleAssignedParking(obj: typeof state.assignedParking) {
-    const { numAssignedSpaces, numAssignedSpacesWithCover, ...rest } = state;
-
-    // Has assigned parking
-    if (obj.value === true) {
-      dispatch(
-        setListing({
-          ...listing,
-          apartment: {
-            ...state,
-            assignedParking: obj,
-            numAssignedSpaces: initStrReq,
-            numAssignedSpacesWithCover: initStrReq,
-          },
-        })
-      );
-      return;
-    }
-
-    // Does not have assigned parking
-    if (obj.value === false) {
-      dispatch(
-        setListing({
-          ...listing,
-          apartment: {
-            ...rest,
-            assignedParking: obj,
-          },
-        })
-      );
-      return;
-    }
-  }
+  const stateName: keyof ListingData = "apartment";
+  const {
+    state,
+    handleFormVerificationWrapper,
+    handleInput,
+    handleDropdown,
+    handleAssignedParking,
+  } = useCommonFormLogic<Apartment>({
+    pageNumber: props.thisPageNum,
+    stateName: stateName,
+  });
 
   return (
     <form>
@@ -206,9 +121,7 @@ export default function ApartmentForRentForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
-          emit={(options) =>
-            handleDropdownWrapper<HeatingOption>(options, "heating")
-          }
+          emit={(options) => handleDropdown<HeatingOption>(options, "heating")}
         />
 
         <Dropdown<CoolingOption>
@@ -220,9 +133,7 @@ export default function ApartmentForRentForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.cooling.errorMsg}
           label={"Cooling"}
-          emit={(options) =>
-            handleDropdownWrapper<CoolingOption>(options, "cooling")
-          }
+          emit={(options) => handleDropdown<CoolingOption>(options, "cooling")}
         />
 
         <Dropdown<WaterOption>
@@ -234,9 +145,7 @@ export default function ApartmentForRentForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.water.errorMsg}
           label={"Water"}
-          emit={(options) =>
-            handleDropdownWrapper<WaterOption>(options, "water")
-          }
+          emit={(options) => handleDropdown<WaterOption>(options, "water")}
         />
 
         <Dropdown<PowerOption>
@@ -248,9 +157,7 @@ export default function ApartmentForRentForm(props: FormProps) {
           disabled={state.readOnly}
           errorMsg={state.power.errorMsg}
           label={"Power"}
-          emit={(options) =>
-            handleDropdownWrapper<PowerOption>(options, "power")
-          }
+          emit={(options) => handleDropdown<PowerOption>(options, "power")}
         />
 
         <YesNoBtns
@@ -273,7 +180,7 @@ export default function ApartmentForRentForm(props: FormProps) {
         <YesNoBtns
           state={state.assignedParking}
           label="Assigned parking"
-          handleSelected={(obj) => handleInput(obj, "assignedParking")}
+          handleSelected={(obj) => handleAssignedParking(obj, state)}
         />
         {state.assignedParking.value === true &&
         state.numAssignedSpaces &&
