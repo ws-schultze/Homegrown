@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { FetchedListing } from "../types/index";
 import fetchListings from "./commonAPI";
+import UserAcknowledgementForm from "../components/pages/createListingPage/page1/forms/UserAcknowledgementForm";
 
 export type CommonStateStatus = "idle" | "loading" | "succeeded" | "failed";
 
@@ -12,12 +13,14 @@ export interface CommonState {
   status: CommonStateStatus;
   error: string | null;
   listings: FetchedListing[];
+  userAcknowledgedSiteIsDemo: boolean;
 }
 
 export const initialCommonState: CommonState = {
   status: "loading",
   error: null,
   listings: [],
+  userAcknowledgedSiteIsDemo: false,
 };
 
 /**
@@ -42,7 +45,15 @@ export const commonSlice = createSlice({
       ...state,
       listings: action.payload,
     }),
+    setUserAcknowledgedSiteIsDemo: (
+      state,
+      action: { payload: boolean; type: string }
+    ) => ({
+      ...state,
+      userAcknowledgedSiteIsDemo: action.payload,
+    }),
   },
+
   //https://redux.js.org/tutorials/fundamentals/part-8-modern-redux#immutable-updates-with-immer
   extraReducers: (builder: ActionReducerMapBuilder<CommonState>) => {
     builder
@@ -68,5 +79,6 @@ export const commonSlice = createSlice({
   },
 });
 
-export const { setCommonListings } = commonSlice.actions;
+export const { setCommonListings, setUserAcknowledgedSiteIsDemo } =
+  commonSlice.actions;
 export default commonSlice.reducer;

@@ -1,4 +1,7 @@
+@use "../../../scss/btn" as btn;
+
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -25,6 +28,48 @@
 
   main.loading div {
     opacity: 0.5;
+  }
+
+  .user_acknowledgement_container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 83%);
+    z-index: 999;
+
+    .user_acknowledgement {
+      display: flex;
+      flex-direction: column;
+      width: 90%;
+      background: black;
+      color: antiquewhite;
+      padding: 100px 20px;
+      border: var(--border);
+      border-radius: var(--border-radius);
+
+      .notice {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        svg {
+          fill: #33c1ff;
+          width: 50px;
+        }
+        p {
+          border-left: 2px solid darkorange;
+          padding-left: 10px;
+        }
+      }
+
+      button {
+        @include btn.btn;
+        height: 50px;
+      }
+    }
   }
 }
 .fade {
