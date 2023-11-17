@@ -28,7 +28,7 @@ export default function Root({
   }
 
   if (navigation.state === "loading") {
-    return <Spinner size="large" />;
+    return <Spinner size="large" data-testid="spinner" />;
   }
 
   return (

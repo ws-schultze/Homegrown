@@ -39,6 +39,7 @@ export default function EmailStrInput<T extends Types.Str>(props: Props<T>) {
   return (
     <div className={styles.container}>
       <label
+        htmlFor="email"
         className={` ${
           props.state.value.length > 0 ? styles.show : styles.hide
         }`}
@@ -46,12 +47,14 @@ export default function EmailStrInput<T extends Types.Str>(props: Props<T>) {
         {props.placeholder}
       </label>
       <input
+        id="email"
         placeholder={props.placeholder}
         ref={inputRef}
-        type="text"
+        type="email"
         value={props.state.value}
         onChange={handleChange}
         disabled={props.state.readOnly}
+        autoComplete="on"
       />
       <ErrorMsg errorMsg={props.state.errorMsg} />
     </div>
