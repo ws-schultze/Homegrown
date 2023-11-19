@@ -314,20 +314,22 @@ export default function ExpandingDropdown<T extends DropdownMenuItem | null>({
   }
 
   return (
-    <div>
+    <div className={styles.container_wrap}>
       <label>{label}</label>
       <div className={styles.container}>
         <button
           type="button"
           ref={parentRef}
           onClick={handleInputClick}
-          className={styles.menu_btn}
+          className={styles.menu_toggle_btn}
           disabled={disabled}
         >
           <div className={styles.tags}>{getDisplay()}</div>
           <div className={styles.icon_container}>
             <Icon
-              className={`${styles.icon} ${showMenu ? styles.flipped : ""}`}
+              className={`${styles.icon} ${
+                showMenu ? styles.open : styles.closed
+              }`}
             />
           </div>
         </button>

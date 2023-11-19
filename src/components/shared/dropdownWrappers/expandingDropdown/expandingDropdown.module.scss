@@ -1,10 +1,10 @@
 @use "../scss/flex" as f;
 @use "../../../../scss/btn" as b;
 
-.wrapper {
+.container_wrap {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
   width: 100%;
 }
 
@@ -14,7 +14,7 @@
   // padding: 0 10px;
 }
 
-.menu_btn {
+.menu_toggle_btn {
   @include b.btn;
   @include f.btn;
   width: 100%;
@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 
-.icon_wrap {
+.icon_container {
   @include f.icon-wrap;
 }
 
@@ -39,6 +39,7 @@
 
 .menu {
   @include f.menu;
+  border-top: var(--border);
 
   button {
     @include b.btn;
