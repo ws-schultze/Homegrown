@@ -133,66 +133,60 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           />
         </div>
 
-        {/* <Dropdown<HeatingOption>
-          placeHolder={"Select Heating Option(s)"}
-          parent={state.heating.value}
-          menuItems={heatingOptions}
-          isMulti={true}
-          isSearchable={false}
-          disabled={state.readOnly}
-          errorMsg={state.heating.errorMsg}
-          label={"Heating"}
-          emit={(options) => handleDropdown<HeatingOption>(options, "heating")}
-        /> */}
-        {/* 
         <ExpandingDropdown<HeatingOption>
-          placeHolder={"Select Heating Option(s)"}
-          selectedItems={state.heating.value}
           menuItems={heatingOptions}
           isMulti={true}
           isSearchable={false}
-          disabled={state.readOnly}
+          selectedItems={state.heating.value}
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
+          placeHolder={"Select one or more options"}
+          disabled={state.readOnly}
           handleSelectedItems={(options) =>
             handleDropdown<HeatingOption>(options, "heating")
           }
-        /> */}
+        />
 
-        <Dropdown<CoolingOption>
-          placeHolder={"Select Cooling Option(s)"}
+        <ExpandingDropdown<CoolingOption>
           menuItems={coolingOptions}
           isMulti={true}
           isSearchable={false}
-          parent={state.cooling.value}
-          disabled={state.readOnly}
+          selectedItems={state.cooling.value}
           errorMsg={state.cooling.errorMsg}
           label={"Cooling"}
-          emit={(options) => handleDropdown<CoolingOption>(options, "cooling")}
+          placeHolder={"Select one or more options"}
+          disabled={state.readOnly}
+          handleSelectedItems={(options) =>
+            handleDropdown<CoolingOption>(options, "cooling")
+          }
         />
 
-        <Dropdown<WaterOption>
-          placeHolder={"Select Water Option(s)"}
-          parent={state.water.value}
+        <ExpandingDropdown<WaterOption>
           menuItems={waterOptions}
           isMulti={true}
           isSearchable={false}
-          disabled={state.readOnly}
+          selectedItems={state.water.value}
           errorMsg={state.water.errorMsg}
           label={"Water"}
-          emit={(options) => handleDropdown<WaterOption>(options, "water")}
+          placeHolder={"Select one or more options"}
+          disabled={state.readOnly}
+          handleSelectedItems={(options) =>
+            handleDropdown<WaterOption>(options, "water")
+          }
         />
 
-        <Dropdown<PowerOption>
-          placeHolder={"Select Power Option(s)"}
-          parent={state.power.value}
+        <ExpandingDropdown<PowerOption>
           menuItems={powerOptions}
           isMulti={true}
           isSearchable={false}
-          disabled={state.readOnly}
+          selectedItems={state.power.value}
           errorMsg={state.power.errorMsg}
           label={"Power"}
-          emit={(options) => handleDropdown<PowerOption>(options, "power")}
+          placeHolder={"Select one or more options"}
+          disabled={state.readOnly}
+          handleSelectedItems={(options) =>
+            handleDropdown<PowerOption>(options, "power")
+          }
         />
 
         <YesNoBtns

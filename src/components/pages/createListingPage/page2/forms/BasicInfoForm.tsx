@@ -532,17 +532,6 @@ export default function BasicInfoForm(props: FormProps) {
         ) : null}
 
         {state.forSaleOrRent.value?.id === "for-sale" ? (
-          // <Dropdown<ListingKindValue>
-          //   placeHolder={"What are you selling?"}
-          //   menuItems={listingKindValuesForSale}
-          //   isMulti={false}
-          //   isSearchable={false}
-          //   parent={[state.listingKind.value]}
-          //   disabled={state.listingKind.readOnly}
-          //   errorMsg={state.listingKind.errorMsg}
-          //   label={"Listing Kind"}
-          //   emit={handleListingKind}
-          // />
           <ExpandingDropdown<ListingKindValue>
             menuItems={listingKindValuesForSale}
             isMulti={false}
@@ -557,21 +546,6 @@ export default function BasicInfoForm(props: FormProps) {
         ) : null}
 
         {state.forSaleOrRent.value?.id === "for-rent" ? (
-          // <Dropdown<ListingKindValue>
-          //   placeHolder={"What are you renting?"}
-          //   menuItems={listingKindValuesForRent}
-          //   isMulti={false}
-          //   isSearchable={false}
-          //   parent={[state.listingKind.value]}
-          //   errorMsg={state.listingKind.errorMsg}
-          //   label={"Listing Kind"}
-          //   disabled={state.listingKind.readOnly}
-          //   emit={handleListingKind}
-
-          // />
-
-          // <ListingKindDropdown handleListingKind={handleListingKind} />
-
           <ExpandingDropdown<ListingKindValue>
             menuItems={listingKindValuesForRent}
             isMulti={false}

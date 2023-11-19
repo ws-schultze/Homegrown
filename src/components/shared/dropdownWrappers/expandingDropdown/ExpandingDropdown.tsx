@@ -324,7 +324,7 @@ export default function ExpandingDropdown<T extends DropdownMenuItem | null>({
           className={styles.menu_toggle_btn}
           disabled={disabled}
         >
-          <div className={styles.tags}>{getDisplay()}</div>
+          <div className={styles.tag_container}>{getDisplay()}</div>
           <div className={styles.icon_container}>
             <Icon
               className={`${styles.icon} ${
@@ -360,9 +360,8 @@ export default function ExpandingDropdown<T extends DropdownMenuItem | null>({
             }
           })}
         </div>
-
-        <ErrorMsg errorMsg={errorMsg} />
       </div>
+      <ErrorMsg errorMsg={errorMsg} />
     </div>
   );
 }
