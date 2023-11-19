@@ -25,6 +25,8 @@ import NumberInput from "../../../../shared/inputs/numberInput/NumberInput";
 import CommaSeparatedWithDecimalInput from "../../../../shared/inputs/commaSeparatedNumberWithDecimalInput/CommaSeparatedNumberWithDecimalInput";
 import CommaSeparatedWholeNumberInput from "../../../../shared/inputs/commaSeparatedWholeNumberInput/CommaSeparatedWholeNumberInput";
 import useCommonFormLogic from "../../hooks/useCommonFormLogic";
+import ExpandingDropdownContainer from "../../../../shared/dropdownWrappers/expandingDropdown/ExpandingDropdown";
+import ExpandingDropdown from "../../../../shared/dropdownWrappers/expandingDropdown/ExpandingDropdown";
 
 export default function SingleFamilyHomeForm(props: FormProps) {
   const stateName: keyof ListingData = "singleFamilyHome";
@@ -38,6 +40,14 @@ export default function SingleFamilyHomeForm(props: FormProps) {
     pageNumber: props.thisPageNum,
     stateName: stateName,
   });
+
+  if (!state) {
+    return (
+      <>
+        <p>Help</p>
+      </>
+    );
+  }
 
   return (
     <form>
@@ -123,7 +133,7 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           />
         </div>
 
-        <Dropdown<HeatingOption>
+        {/* <Dropdown<HeatingOption>
           placeHolder={"Select Heating Option(s)"}
           parent={state.heating.value}
           menuItems={heatingOptions}
@@ -133,7 +143,21 @@ export default function SingleFamilyHomeForm(props: FormProps) {
           errorMsg={state.heating.errorMsg}
           label={"Heating"}
           emit={(options) => handleDropdown<HeatingOption>(options, "heating")}
-        />
+        /> */}
+        {/* 
+        <ExpandingDropdown<HeatingOption>
+          placeHolder={"Select Heating Option(s)"}
+          selectedItems={state.heating.value}
+          menuItems={heatingOptions}
+          isMulti={true}
+          isSearchable={false}
+          disabled={state.readOnly}
+          errorMsg={state.heating.errorMsg}
+          label={"Heating"}
+          handleSelectedItems={(options) =>
+            handleDropdown<HeatingOption>(options, "heating")
+          }
+        /> */}
 
         <Dropdown<CoolingOption>
           placeHolder={"Select Cooling Option(s)"}

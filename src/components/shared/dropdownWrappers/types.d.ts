@@ -19,7 +19,7 @@ export interface FlxDropdownMenuStyles {
 export interface FlxDropdownMenuWrapper {
   menuContent: JSX.Element | (JSX.Element | null)[];
   showMenu: boolean;
-  inUse: boolean;
+  inUse?: boolean;
   label: React.ReactNode;
   btnStyles?: FlexDropdownBtnStyles;
   menuStyles?: FlexDropdownMenuStyles;

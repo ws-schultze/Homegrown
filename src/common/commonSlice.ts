@@ -3,9 +3,11 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
-import { FetchedListing } from "../types/index";
+import { FetchedListing, ListingKind, ListingKindValue } from "../types/index";
 import fetchListings from "./commonAPI";
 import UserAcknowledgementForm from "../components/pages/createListingPage/page1/forms/UserAcknowledgementForm";
+import { all } from "axios";
+import { allListingKinds } from "../initialValues";
 
 export type CommonStateStatus = "idle" | "loading" | "succeeded" | "failed";
 
@@ -14,6 +16,7 @@ export interface CommonState {
   error: string | null;
   listings: FetchedListing[];
   userAcknowledgedSiteIsDemo: boolean;
+  allListingKinds: ListingKindValue[];
 }
 
 export const initialCommonState: CommonState = {
@@ -21,6 +24,7 @@ export const initialCommonState: CommonState = {
   error: null,
   listings: [],
   userAcknowledgedSiteIsDemo: false,
+  allListingKinds: allListingKinds,
 };
 
 /**

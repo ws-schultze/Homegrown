@@ -26,7 +26,6 @@ import {
   initForRentBy,
   initForSaleBy,
   initLand,
-  initManufacturedHome,
   initMultiFamilyHome,
   initMultiFamilyHomeUnit,
   initOwner,
@@ -37,7 +36,6 @@ import {
   listingKindValuesForSale,
 } from "../../../../../initialValues";
 import compareObjects from "../../../../utils/compareObjects";
-import Dropdown from "../../../../shared/dropdown/Dropdown";
 import EditFormSection from "../../shared/EditFormSection";
 import { setListing } from "../../createListingPageSlice";
 import DescriptionInput from "../../../../shared/inputs/descriptionInput/DescriptionInput";
@@ -46,10 +44,12 @@ import DiscountPriceInput from "../../../../shared/inputs/discountPriceInput/Dis
 import FormCheck from "../../shared/FormCheck";
 import { FormProps } from "../../types/formProps";
 import useCommonFormLogic from "../../hooks/useCommonFormLogic";
+import ExpandingDropdown from "../../../../shared/dropdownWrappers/expandingDropdown/ExpandingDropdown";
 
 export default function BasicInfoForm(props: FormProps) {
   const stateName: keyof ListingData = "basicInfo";
   const {
+    pageState,
     listing,
     state,
     dispatch,
@@ -372,7 +372,8 @@ export default function BasicInfoForm(props: FormProps) {
    * Set the home type to state
    * @param options List of home type items: [{id: multi-family-home, label: Multi-Family Home}, ...]
    */
-  function handleListingKind(options: ListingKindValue[]): void {
+  function handleListingKind(options: ListingKindValue[] | null): void {
+    console.log("handing items", options);
     if (options && options.length === 1 && options[0] !== null) {
       let init:
         | SingleFamilyHome
@@ -385,6 +386,8 @@ export default function BasicInfoForm(props: FormProps) {
         | Land = initLand;
 
       const id = options[0].id;
+
+      console.log(id);
 
       switch (id) {
         case null:
@@ -454,9 +457,22 @@ export default function BasicInfoForm(props: FormProps) {
 
       // Either no options found or more than one found
     } else {
-      throw new Error(
-        "A listing must have exactly one home type! Make sure that isMulti=false on Dropdown"
-      );
+      // dispatch(
+      //   setListing({
+      //     ...listing,
+      //     basicInfo: {
+      //       ...state,
+      //       listingKind: {
+      //         ...state.listingKind,
+      //         value: null,
+      //         errorMsg: "Listing type is required",
+      //       },
+      //     },
+      //   })
+      // );
+      // throw new Error(
+      //   "A listing must have exactly one home type! Make sure that isMulti=false on Dropdown"
+      // );
     }
   }
 
@@ -516,30 +532,56 @@ export default function BasicInfoForm(props: FormProps) {
         ) : null}
 
         {state.forSaleOrRent.value?.id === "for-sale" ? (
-          <Dropdown<ListingKindValue>
-            placeHolder={"What are you selling?"}
+          // <Dropdown<ListingKindValue>
+          //   placeHolder={"What are you selling?"}
+          //   menuItems={listingKindValuesForSale}
+          //   isMulti={false}
+          //   isSearchable={false}
+          //   parent={[state.listingKind.value]}
+          //   disabled={state.listingKind.readOnly}
+          //   errorMsg={state.listingKind.errorMsg}
+          //   label={"Listing Kind"}
+          //   emit={handleListingKind}
+          // />
+          <ExpandingDropdown<ListingKindValue>
             menuItems={listingKindValuesForSale}
             isMulti={false}
             isSearchable={false}
-            parent={[state.listingKind.value]}
-            disabled={state.listingKind.readOnly}
+            selectedItems={[state.listingKind.value]}
             errorMsg={state.listingKind.errorMsg}
             label={"Listing Kind"}
-            emit={handleListingKind}
+            placeHolder={"What are you selling?"}
+            disabled={state.listingKind.readOnly}
+            handleSelectedItems={handleListingKind}
           />
         ) : null}
 
         {state.forSaleOrRent.value?.id === "for-rent" ? (
-          <Dropdown<ListingKindValue>
-            placeHolder={"What are you renting?"}
+          // <Dropdown<ListingKindValue>
+          //   placeHolder={"What are you renting?"}
+          //   menuItems={listingKindValuesForRent}
+          //   isMulti={false}
+          //   isSearchable={false}
+          //   parent={[state.listingKind.value]}
+          //   errorMsg={state.listingKind.errorMsg}
+          //   label={"Listing Kind"}
+          //   disabled={state.listingKind.readOnly}
+          //   emit={handleListingKind}
+
+          // />
+
+          // <ListingKindDropdown handleListingKind={handleListingKind} />
+
+          <ExpandingDropdown<ListingKindValue>
             menuItems={listingKindValuesForRent}
             isMulti={false}
             isSearchable={false}
-            parent={[state.listingKind.value]}
+            selectedItems={[state.listingKind.value]}
             errorMsg={state.listingKind.errorMsg}
             label={"Listing Kind"}
+            placeHolder={"What are you renting?"}
             disabled={state.listingKind.readOnly}
-            emit={handleListingKind}
+            handleSelectedItems={handleListingKind}
           />
         ) : null}
 
@@ -562,25 +604,28 @@ export default function BasicInfoForm(props: FormProps) {
           handleInput={(obj) => handleInput(obj, "price")}
         />
 
-        <DiscountPriceInput
-          state={state.priceChange}
-          isPriceFilter={false}
-          isDiscountPrice={true}
-          groupSeparators={[","]}
-          currency="USD"
-          prefix="$"
-          minPrice={0}
-          originalPrice={state.price.number}
-          placeholder={
-            state.forSaleOrRent && state.forSaleOrRent.value?.id === "for-sale"
-              ? "New price*"
-              : state.forSaleOrRent &&
-                state.forSaleOrRent.value?.id === "for-rent"
-              ? "New price/month*"
-              : "New price*"
-          }
-          handleInput={(obj) => handleInput(obj, "priceChange")}
-        />
+        {pageState.editListing ? (
+          <DiscountPriceInput
+            state={state.priceChange}
+            isPriceFilter={false}
+            isDiscountPrice={true}
+            groupSeparators={[","]}
+            currency="USD"
+            prefix="$"
+            minPrice={0}
+            originalPrice={state.price.number}
+            placeholder={
+              state.forSaleOrRent &&
+              state.forSaleOrRent.value?.id === "for-sale"
+                ? "New price*"
+                : state.forSaleOrRent &&
+                  state.forSaleOrRent.value?.id === "for-rent"
+                ? "New price/month*"
+                : "New price*"
+            }
+            handleInput={(obj) => handleInput(obj, "priceChange")}
+          />
+        ) : null}
       </section>
 
       <FormCheck

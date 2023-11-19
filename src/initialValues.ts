@@ -74,7 +74,6 @@ export const listingKindValuesForSale: T.ListingKindValue[] = [
   },
   { id: "condo", name: "condo", label: "Condo" },
   { id: "townhouse", name: "townhouse", label: "Townhouse" },
-  // { id: "manufactured-home", name: "manufacturedHome", label: "Manufactured Home" },
   { id: "land", name: "land", label: "Land" },
 ];
 
@@ -88,7 +87,6 @@ export const listingKindValuesForRent: T.ListingKindValue[] = [
   { id: "apartment", name: "apartment", label: "Apartment" },
   { id: "condo", name: "condo", label: "Condo" },
   { id: "townhouse", name: "townhouse", label: "Townhouse" },
-  // { id: "manufactured-home", name: "manufacturedHome", label: "Manufactured Home" },
   { id: "land", name: "land", label: "Land" },
 ];
 
@@ -833,3 +831,26 @@ export const initListingFilters: T.ListingFilters = {
   beds: null,
   baths: null,
 };
+
+export const allListingKinds: T.ListingKindValue[] = [
+  { id: "single-family-home", name: "singleFamilyHome", label: "House" },
+  {
+    id: "multi-family-home",
+    name: "multiFamilyHome",
+    label: "Multi-Family Home",
+  },
+  {
+    id: "multi-family-home-unit",
+    name: "multiFamilyHomeUnit",
+    label: "Multi-Family Home Unit",
+  },
+  {
+    id: "apartment-building",
+    name: "apartmentBuilding",
+    label: "Apartment Building",
+  },
+  { id: "apartment", name: "apartment", label: "Apartment" },
+  { id: "condo", name: "condo", label: "Condo" },
+  { id: "townhouse", name: "townhouse", label: "Townhouse" },
+  { id: "land", name: "land", label: "Land" },
+];

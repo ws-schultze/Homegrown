@@ -1,11 +1,7 @@
 import { useRef } from "react";
 import styles from "./flexDropdownWrapper.module.scss";
 import { ReactComponent as Icon } from "./chevron-down.svg";
-import {
-  AbsDropdownBtnStyles,
-  AbsDropdownMenuStyles,
-  FlxDropdownMenuWrapper,
-} from "../types";
+import { FlxDropdownMenuWrapper } from "../types";
 
 export interface FlexDropdownBtnStyles {
   height: string;

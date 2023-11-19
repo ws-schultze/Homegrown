@@ -85,7 +85,7 @@ export default function useCommonFormLogic<T extends Verify>(args: {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  if (!state) throw new Error("state is undefined");
+  // if (!state) throw new Error("state is undefined");
 
   function handleFormVerificationWrapper(
     actionName: VerifyActionName,

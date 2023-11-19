@@ -480,11 +480,6 @@ export type ListingKindValue =
   | { id: "apartment"; name: "apartment"; label: "Apartment" }
   | { id: "condo"; name: "condo"; label: "Condo" }
   | { id: "townhouse"; name: "townhouse"; label: "Townhouse" }
-  // | {
-  //     id: "manufactured-home";
-  //     name: "manufacturedHome";
-  //     label: "Manufactured Home";
-  //   }
   | { id: "land"; name: "land"; label: "Land" }
   | null;
 

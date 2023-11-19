@@ -16,7 +16,6 @@ import LandForm from "./forms/LandForm";
 export default function Page5() {
   const state = useAppSelector((s) => s.createListingPage);
   const { listingKind } = state.listing.basicInfo;
-
   let id = "";
 
   if (state.listing.basicInfo.listingKind.value) {
@@ -26,7 +25,7 @@ export default function Page5() {
   if (listingKind.value === null) {
     return (
       <div className={styles.container}>
-        <form>
+        <form style={{ justifyContent: "center", fontSize: "18px" }}>
           <section>
             <p>Please complete page 2 in order to populate this page.</p>
           </section>
