@@ -7,12 +7,16 @@ import Spinner from "../../shared/loaders/Spinner";
 import styles from "./contactLandlordPage.module.scss";
 import ListingCard from "../../shared/listingCard/ListingCard";
 import { FetchedListing, TypeFetchedListingData } from "../../../types/index";
+import useScreenSize from "../../../hooks/useScreenSize";
+import { useScreenSizeContext } from "../../../ScreenSizeProvider";
+import Footer from "../../shared/footer/Footer";
 
 export default function ContactLandlordPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [landlord, setLandlord] = useState<DocumentData | null>(null);
   const [listing, setListing] = useState<FetchedListing | null>(null);
+  const screenSize = useScreenSizeContext();
   const params = useParams();
 
   // Fetch landlord
@@ -61,7 +65,7 @@ export default function ContactLandlordPage() {
 
   if (landlord !== null && listing !== null) {
     return (
-      <div className="page-wrap">
+      <>
         <div className={styles.container}>
           <header>
             <p className={styles["landlord-name"]}>
@@ -75,9 +79,11 @@ export default function ContactLandlordPage() {
                 ? `Property Owner: ${listing.data.owner.firstName.value} ${listing.data.owner.lastName.value}`
                 : null}
             </p>
-            <ListingCard listing={listing} />
+            <ListingCard
+              listing={listing}
+              isMobile={screenSize !== "desktop" ? true : false}
+            />
           </header>
-
           <form>
             <div className={styles["msg-container"]}>
               <label htmlFor="message">Email Content</label>
@@ -90,7 +96,6 @@ export default function ContactLandlordPage() {
                 placeholder="Please type your message here..."
               ></textarea>
             </div>
-
             {listing && listing.data.address.formattedAddress.value ? (
               <a
                 href={`mailto:${landlord.email}?Subject=${listing.data.address.formattedAddress.value}&body=${message}`}
@@ -100,7 +105,8 @@ export default function ContactLandlordPage() {
             ) : null}
           </form>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 

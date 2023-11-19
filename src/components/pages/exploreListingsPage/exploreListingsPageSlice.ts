@@ -65,7 +65,10 @@ export const exploreListingsPageSlice = createSlice({
       ...state,
       filteredListings: action.payload,
     }),
-    setListingToOverlay: (state, action) => ({
+    setListingToOverlay: (
+      state,
+      action: { payload: FetchedListing | undefined; type: string }
+    ) => ({
       ...state,
       listingToOverlay: action.payload,
     }),

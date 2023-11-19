@@ -1,4 +1,10 @@
-import { Image, ListingData, Uploads } from "../../../../../types/index";
+import {
+  FetchedListing,
+  Image,
+  ListingData,
+  TypeLatLng,
+  Uploads,
+} from "../../../../../types/index";
 import { db } from "../../../../../firebase.config";
 import { ReactComponent as BellSVG } from "../../assets/bell-regular.svg";
 import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
@@ -19,6 +25,11 @@ import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFires
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { reset, setLoading } from "../../createListingPageSlice";
+import {
+  setHoveredListing,
+  setListingToOverlay,
+  setMapCenter,
+} from "../../../exploreListingsPage/exploreListingsPageSlice";
 
 interface Props extends FormProps {
   /**
@@ -43,45 +54,6 @@ export default function ReviewForm(props: Props) {
   function goToPage(num: number) {
     navigate(`/create-listing/${num}`);
   }
-
-  // function deleteNotYetSubmittedListing() {
-  //   if (window.confirm("Delete your progress, are you sure?")) {
-  //     // localStorage.removeItem("unfinished-listing");
-  //     // setState(initListingData);
-  //     dispatch(reset);
-  //     navigate("/profile");
-  //   }
-  // }
-
-  // async function deleteListingFromDB() {
-  //   if (window.confirm("Are you sure that you want to delete this listing?")) {
-  //     dispatch(setLoading(true));
-
-  //     // Delete images from the listing from storage
-  //     await Promise.all(
-  //       pageState.listing.uploads.images.value.map((image) =>
-  //         deleteImageFromFirestore(image)
-  //       )
-  //     ).catch((error) => {
-  //       dispatch(setLoading(false));
-  //       console.error(
-  //         "An error occurred while attempting to delete the listing's images from the database,",
-  //         error
-  //       );
-  //       return;
-  //     });
-
-  //     // Delete the listing from firestore
-  //     if (params.listingId) {
-  //       await deleteDoc(doc(db, "listings", params.listingId));
-  //     } else {
-  //       throw new Error("Whoops, no listing ID found in params");
-  //     }
-
-  //     navigate("/profile");
-  //     toast.success("Listing Successfully Deleted");
-  //   }
-  // }
 
   /**
    * Handle the forms submission
@@ -146,8 +118,8 @@ export default function ReviewForm(props: Props) {
             // A full list of error codes is available at
             // https://firebase.google.com/docs/storage/web/handle-errors
             reject(error);
-            toast.error(error.message);
             setLoading(false);
+            toast.error(error.message);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -192,11 +164,24 @@ export default function ReviewForm(props: Props) {
        */
 
       dispatch(setLoading(false));
-      toast.success("Listing Created");
       // localStorage.removeItem("unfinished-listing");
       dispatch(reset());
+      const listingToOverlay: FetchedListing = {
+        id: docRef.id,
+        data: formDataCopy,
+      };
+      dispatch(setHoveredListing(listingToOverlay));
+      dispatch(setListingToOverlay(listingToOverlay));
+      const mapCenter: TypeLatLng = {
+        lat: formDataCopy.address.geolocation.value.lat,
+        lng: formDataCopy.address.geolocation.value.lng,
+      };
+      dispatch(setMapCenter(mapCenter));
       navigate(
         `/explore-listings/details/${formDataCopy.address.formattedAddress.value}/${docRef.id}`
+      );
+      toast.success(
+        "Listing created successfully. Refresh the page to see it on the map."
       );
     } else {
       toast.warn("Uploading at least one image is required!");

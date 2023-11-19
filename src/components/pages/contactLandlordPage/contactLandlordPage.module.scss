@@ -20,6 +20,7 @@
     flex-direction: column;
     gap: 10px;
     align-items: center;
+    padding-bottom: 20px;
   }
 
   .msg-container {
@@ -27,10 +28,16 @@
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    width: 500px;
 
     label {
       align-self: flex-start;
       padding: 5px;
+      color: var(--color-text);
+    }
+
+    @include b.md-screen-breakpoint {
+      width: 350px;
     }
   }
 
@@ -48,9 +55,7 @@
     &:focus-within {
       border-color: var(--color-border-hover);
     }
-    @include b.xs-screen {
-      width: 100%;
-    }
+    width: 100%;
   }
 
   button {
