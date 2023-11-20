@@ -250,6 +250,7 @@ export default function UploadsEditForm(props: FormProps): JSX.Element {
       actionName,
       obj,
       thisPageNum: props.thisPageNum,
+      listingId: params.listingId!,
       handleFormState: (obj) =>
         dispatch(
           setListing({

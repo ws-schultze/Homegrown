@@ -1,7 +1,7 @@
 import { FormProps } from "../types/formProps";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { VerifyActionName } from "../../../../types";
 import { handleDropdown, handleFormVerification } from "../utils/formUtils";
 import {
@@ -17,8 +17,10 @@ export default function FormFunctionsTemplate(props: FormProps) {
   const stateName: keyof typeof listing = "singleFamilyHome";
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
 
   if (!state) throw new Error("state is undefined");
+  if (!params.listingId) throw new Error("params.listingId is undefined");
 
   function handleFormVerificationWrapper(
     actionName: VerifyActionName,
@@ -29,6 +31,7 @@ export default function FormFunctionsTemplate(props: FormProps) {
       actionName,
       obj,
       thisPageNum: props.thisPageNum,
+      listingId: params.listingId!,
       handleFormState: (obj) =>
         dispatch(
           setListing({
