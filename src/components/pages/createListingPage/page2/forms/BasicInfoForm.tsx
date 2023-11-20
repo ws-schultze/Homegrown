@@ -578,7 +578,7 @@ export default function BasicInfoForm(props: FormProps) {
           handleInput={(obj) => handleInput(obj, "price")}
         />
 
-        {pageState.editListing ? (
+        {pageState.editingListing ? (
           <DiscountPriceInput
             state={state.priceChange}
             isPriceFilter={false}

@@ -196,6 +196,34 @@ export default function ListingOverlayPage() {
                 </div>
               </div>
 
+              <div className={styles.card}>
+                <p>{basicInfo.description.value}</p>
+              </div>
+
+              <div className={styles.card}>
+                <div className={styles.lister}>
+                  {agent ? (
+                    <span>
+                      Listed by: <br />
+                      {agent.firstName.value}{" "}
+                      {agent.middleName.value.length > 0
+                        ? agent.middleName.value
+                        : null}{" "}
+                      {agent.lastName.value} <br /> DRE# {agent.licenseId.value}{" "}
+                      <br /> Phone# {agent.phoneNumber.formatted}
+                      <br />
+                      {agent.companyName.value}
+                    </span>
+                  ) : owner ? (
+                    <span>For Sale by Owner</span>
+                  ) : company ? (
+                    <span>Listed by: {company.name.value}</span>
+                  ) : privateOwner ? (
+                    <span>For Rent by Owner</span>
+                  ) : null}
+                </div>
+              </div>
+
               <div className={styles.overview}>
                 <div className={styles.features}>
                   {basicInfo.listingKind.value?.id !== "land" ? (
@@ -684,31 +712,7 @@ export default function ListingOverlayPage() {
                     </div>
                   ) : null}
                 </div>
-                <header>Overview</header>
-                <p>{basicInfo.description.value}</p>
-
-                <div className={styles.lister}>
-                  {agent ? (
-                    <span>
-                      Listed by: <br />
-                      {agent.firstName.value}{" "}
-                      {agent.middleName.value.length > 0
-                        ? agent.middleName.value
-                        : null}{" "}
-                      {agent.lastName.value} {" - "} DRE#{" "}
-                      {agent.licenseId.value} {" - "} Phone#{" "}
-                      {agent.phoneNumber.formatted}
-                      <br />
-                      {agent.companyName.value}
-                    </span>
-                  ) : owner ? (
-                    <span>For Sale by Owner</span>
-                  ) : company ? (
-                    <span>Listed by: {company.name.value}</span>
-                  ) : privateOwner ? (
-                    <span>For Rent by Owner</span>
-                  ) : null}
-                </div>
+                {/* <header>Overview</header> */}
 
                 {/* <Feature onClick={() => getTimestamp()}>
                     Listing Updated: {dateLastUpdated}

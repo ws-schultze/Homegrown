@@ -181,7 +181,7 @@ export default function SaveSection<T extends Address | AddressOptional>({
               type="button"
               className={styles.btn}
               onClick={
-                pageState.editListing === true
+                pageState.editingListing === true
                   ? deleteListingFromFirestore
                   : deleteNotYetSubmittedListing
               }

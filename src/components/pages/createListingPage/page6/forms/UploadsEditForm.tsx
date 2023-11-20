@@ -10,8 +10,8 @@ import {
   ListingData,
   VerifyActionName,
 } from "../../../../../types/index";
-import { ReactComponent as PlusIcon } from "../../assets/svg/plusIcon.svg";
-import { ReactComponent as DeleteIcon } from "../../assets/svg/deleteIcon.svg";
+import { ReactComponent as PlusIcon } from "../../assets/plusIcon.svg";
+import { ReactComponent as DeleteIcon } from "../../assets/deleteIcon.svg";
 import EditFormSection from "../../shared/EditFormSection";
 import ErrorMsg from "../../../../shared/errorMsg/ErrorMsg";
 import deleteImageFromFirestore from "../../../utils/deleteImageFromFirestore";
@@ -39,7 +39,7 @@ import {
 import { initUploads } from "../../../../../initialValues";
 
 export default function UploadsEditForm(props: FormProps): JSX.Element {
-  const pageState = useAppSelector((s) => s.createListingPage);
+  const pageState = useAppSelector((s) => s.editListingPage);
   const listing = pageState.listing;
   const state = pageState.listing.uploads;
   const stateName: keyof typeof listing = "uploads";

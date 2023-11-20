@@ -811,7 +811,7 @@ export interface ListingData {
   land?: Land;
   uploads: Uploads;
   review: TypeReview;
-  timestamp: TimeStamp;
+  timestamp: TimeStamp | string;
   userRef: UserRef;
 }
 

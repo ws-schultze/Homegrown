@@ -16,7 +16,7 @@ import PrivateRoute from "./components/shared/privateRoute/PrivateRoute";
 import RootBoundary from "./components/pages/rootBoundary/RootBoundary";
 import Root from "./components/pages/root/Root";
 import ContactLandlordPage from "./components/pages/contactLandlordPage/ContactLandlordPage";
-import EditListingPage from "./components/pages/createListingPage/EditListingPage";
+import EditListingPage from "./components/pages/editListingPage/EditListingPage";
 import CreateListingPage from "./components/pages/createListingPage/CreateListingPage";
 import ProfilePage from "./components/pages/profilePage/ProfilePage";
 import ExploreListingsPage from "./components/pages/exploreListingsPage/ExploreListingsPage";
@@ -55,7 +55,10 @@ export const appRouter = createBrowserRouter(
         path="create-listing/:pageNumber"
         element={<CreateListingPage />}
       />
-      <Route path="edit-listing/:listingId/" element={<EditListingPage />} />
+      <Route
+        path="edit-listing/:pageNumber/:listingId/"
+        element={<EditListingPage />}
+      />
       <Route
         path="contact/:landlordId/:listingId/"
         element={<ContactLandlordPage />}

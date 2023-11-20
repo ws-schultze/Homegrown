@@ -1,0 +1,409 @@
+@use "../../../scss/breakpoints" as bp;
+@use "../../../scss/btn" as btn;
+@use "sass:map";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  align-items: center;
+  color: var(--color-text);
+
+  small {
+    color: var(--color-text);
+    padding: 0 0 0 0.5rem;
+  }
+
+  form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 10px;
+    padding: 10px 0 10px 0;
+    align-items: center;
+    width: 340px;
+    height: fit-content;
+    // border-bottom: var(--border);
+
+    section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      p {
+        border-left: 2px solid var(--color-border);
+        padding-left: 10px;
+        margin: 0;
+      }
+
+      header {
+        display: flex;
+        font-size: 24px;
+        gap: 5px;
+        color: var(--color-text);
+        width: 100%;
+        align-items: center;
+        padding: 10px;
+        justify-content: center;
+        justify-self: center;
+        &:focus {
+          color: green;
+        }
+      }
+    }
+
+    h4 {
+      position: absolute;
+      left: 50%;
+      bottom: -30px;
+      transform: translateX(-50%);
+      color: var(--color-text);
+      background: var(--color-bg-primary);
+      padding: 0 10px;
+    }
+  }
+}
+
+@mixin btn {
+  @include btn.btn;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  font-size: 16px;
+  background: var(--color-bg-primary);
+  color: var(--color-text);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 10px;
+  svg {
+    fill: var(--color-text);
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.btn {
+  @include btn;
+}
+
+.page_btn {
+  flex-grow: unset;
+}
+
+.review_bottom_btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  button {
+    @include btn;
+    width: 100%;
+  }
+}
+
+.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.submit_btn {
+  @include btn;
+  height: 64px;
+  background: green !important;
+  &:hover {
+    color: white !important;
+  }
+}
+
+.delete_btn {
+  @include btn;
+  background: red !important;
+  &:hover {
+    color: white !important;
+  }
+}
+
+.review_row {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  height: 80px;
+  align-items: center;
+  font-size: 18px;
+  width: 100%;
+  padding: 10px;
+
+  button {
+    @include btn;
+    flex-grow: unset;
+    width: 150px !important;
+    height: 50px;
+
+    &.incomplete {
+      border-color: red;
+    }
+  }
+}
+
+.form_check {
+  margin-top: auto;
+}
+
+@mixin notice {
+  font-size: 16px;
+  background: var(--color-bg-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  svg {
+    fill: var(--color-primary);
+    height: 30px;
+    min-width: 30px;
+  }
+}
+
+.notice {
+  @include notice;
+}
+
+.review_warning {
+  @include notice;
+  svg {
+    fill: red;
+  }
+}
+
+.verify_container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.map_container {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  width: 100%;
+}
+
+.two_btn_row {
+  display: flex;
+  gap: 20px;
+  height: 40px;
+}
+
+.save_section_btns {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-top: 10px;
+  .bottom_btns {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.save_btn {
+  @include btn;
+  height: 50px;
+}
+
+.info_to_verify {
+  background: var(--color-bg-primary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  margin: 0;
+  color: var(--color-text);
+}
+
+.flex_row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  // justify-content: space-between;
+}
+.sm {
+  width: 148px;
+}
+.md {
+  width: 160px;
+}
+
+.conditional_menu_container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.conditional_menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  width: 100%;
+  padding: 10px;
+}
+
+.image_preview_wrap {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image_preview {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  .card {
+    overflow: hidden;
+    position: relative;
+
+    img {
+      height: auto;
+      width: 100%;
+      border-radius: var(--border-radius);
+    }
+
+    button {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 3rem;
+      height: 3rem;
+      fill: var(--color-text);
+      background: var(--color-bg-primary);
+      border-radius: 0.5rem;
+      box-shadow: var(--box-shadow);
+    }
+
+    &button:focus svg {
+      fill: var(--color-primary);
+    }
+    .delete {
+      width: 100%;
+      height: 100%;
+      fill: var(--color-text);
+      &:hover {
+        fill: var(--color-primary);
+      }
+    }
+  }
+}
+
+.input_file_wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  display: flex;
+  margin-top: 10px;
+
+  label {
+    height: 12rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+    border-width: 2px;
+    border-radius: var(--border-radius);
+    border: 1px dashed var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-navbar-list-item-icon);
+    fill: var(--color-navbar-list-item-icon);
+    cursor: pointer;
+
+    button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+      gap: 20px;
+      outline: none;
+      border: none;
+      background: none;
+      height: 100%;
+
+      .icon {
+        height: 4rem;
+        cursor: pointer;
+        display: block;
+      }
+    }
+
+    &.drag_active {
+      border: 1px dashed var(--color-primary);
+      fill: var(--color-primary);
+      button {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &:hover {
+    label {
+      border: 1px dashed var(--color-primary);
+      fill: var(--color-primary);
+      button {
+        color: var(--color-primary);
+      }
+    }
+  }
+}
+
+.labeled {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.pagination {
+  width: 340px;
+  height: 64px;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  button {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+// .listing-form__street-address {
+//   position: relative;
+//   margin-top: 1rem;
+// }
+// /*
+//    This is a hack to still have a label on an address input while making chrome respect autocomplete="off"
+// */
+// .listing-form__street-address::before {
+//   content: "Street address";
+//   position: absolute;
+//   bottom: 100%;
+//   color: var(--color-text);
+//   height: 1rem;
+//   padding-bottom: 0.2rem;
+// }

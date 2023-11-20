@@ -10,7 +10,7 @@ export interface CreateListingPageState {
   currentPageNumber: number;
   savedPages: number[];
   unsavedPages: number[];
-  editListing: boolean;
+  editingListing: boolean;
   newListingInProgress: boolean;
 }
 
@@ -27,7 +27,7 @@ export const initialCreateListingPageState: CreateListingPageState = {
    * The last page is for submitting the data to firestore
    */
   unsavedPages: [2, 3, 4, 5, 6],
-  editListing: false,
+  editingListing: false,
   newListingInProgress: false,
 };
 

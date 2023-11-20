@@ -63,6 +63,7 @@ export default function ProfilePage() {
   const auth = getAuth();
   const navigate = useNavigate();
   const createListingPageState = useAppSelector((s) => s.createListingPage);
+  const editListingPageState = useAppSelector((s) => s.editListingPage);
 
   // Fetch the user's listings
   useEffect(() => {
@@ -236,7 +237,7 @@ export default function ProfilePage() {
   }
 
   function handleEdit(listingId: string) {
-    navigate(`/edit-listing/${listingId}`);
+    navigate(`/edit-listing/7/${listingId}`);
   }
 
   function handleUsername(username: Username) {

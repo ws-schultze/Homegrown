@@ -43,13 +43,8 @@ export default function ReviewForm(props: Props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const pageState = useAppSelector((s) => s.createListingPage);
-  const params = useParams();
 
   const { deleteNotYetSubmittedListing } = useDeleteNotYetSubmittedListing();
-  const { deleteListingFromFirestore } = useDeleteListingFromFirestore(
-    pageState.listing.uploads.images,
-    params
-  );
 
   function goToPage(num: number) {
     navigate(`/create-listing/${num}`);
@@ -300,54 +295,24 @@ export default function ReviewForm(props: Props) {
         </div>
       </section>
 
-      {pageState.editListing === true ? (
-        <div className={styles.review_bottom_btns}>
-          <button
-            type="button"
-            className={`${styles.submit_btn} ${
-              disableBtns ? styles.disabled : ""
-            } `}
-            onClick={handleSubmit}
-          >
-            Submit Update
-          </button>
-
-          <button
-            type="button"
-            className={`${styles.delete_btn} ${
-              disableBtns ? styles.disabled : ""
-            }`}
-            onClick={deleteListingFromFirestore}
-          >
-            Delete Listing
-          </button>
-          <button
-            className={`${styles.btn} ${disableBtns ? styles.disabled : ""}`}
-            onClick={() => navigate("/profile")}
-          >
-            Cancel Update
-          </button>
-        </div>
-      ) : (
-        <div className={styles.review_bottom_btns}>
-          <button
-            type="button"
-            className={`${styles.submit_btn} ${
-              disableBtns ? styles.disabled : ""
-            }`}
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-          <button
-            type="button"
-            className={`${styles.delete_btn}`}
-            onClick={deleteNotYetSubmittedListing}
-          >
-            Delete
-          </button>
-        </div>
-      )}
+      <div className={styles.review_bottom_btns}>
+        <button
+          type="button"
+          className={`${styles.submit_btn} ${
+            disableBtns ? styles.disabled : ""
+          }`}
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+        <button
+          type="button"
+          className={`${styles.delete_btn}`}
+          onClick={deleteNotYetSubmittedListing}
+        >
+          Delete
+        </button>
+      </div>
     </form>
   );
 }

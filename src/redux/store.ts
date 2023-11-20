@@ -36,10 +36,15 @@ import createListingPageReducer, {
 
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage";
 
+import editListingPageReducer, {
+  initialEditListingPageState,
+} from "../components/pages/editListingPage/editListingPageSlice";
+
 export const store = configureStore({
   reducer: {
     common: commonReducer,
     createListingPage: createListingPageReducer,
+    editListingPage: editListingPageReducer,
     exploreListings: exploreListingsReducer,
     placeFilter: placeFilterReducer,
     forSaleOrRentFilter: forSaleOrRentReducer,
@@ -61,6 +66,7 @@ export type RootState = ReturnType<typeof store.getState>;
 export const initialRootState: RootState = {
   common: initialCommonState,
   createListingPage: initialCreateListingPageState,
+  editListingPage: initialEditListingPageState,
   exploreListings: initialExploreListingsState,
   placeFilter: initialPlaceFilterState,
   forSaleOrRentFilter: initialForSaleOrRentFilterState,

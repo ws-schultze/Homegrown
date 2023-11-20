@@ -1,13 +1,12 @@
 .container {
   display: flex;
   justify-content: center;
-  position: absolute;
+  position: fixed;
+  top: 0;
   width: 100%;
-  background: #000000c7;
+  background: rgba(0, 0, 0, 0.7803921569);
   height: 100vh;
   overflow: hidden;
-  top: calc(-1 * var(--height-navbar));
-  z-index: 9999;
 }
 
 .overlay {
@@ -18,6 +17,8 @@
   min-height: 100dvh;
   background: var(--color-bg-primary);
   position: relative;
+  border-left: var(--border);
+  border-right: var(--border);
 }
 
 // .position {
