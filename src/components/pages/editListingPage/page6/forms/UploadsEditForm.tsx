@@ -1,13 +1,14 @@
 // For more examples of drag and drop events, check out this post:
 // https://kennethlange.com/drag-and-drop-in-pure-typescript-and-react/
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Dispatch, SetStateAction } from "react";
 import Spinner from "../../../../shared/loaders/Spinner";
 import { toast } from "react-toastify";
 
 import {
   Image,
   ListingData,
+  Uploads,
   VerifyActionName,
 } from "../../../../../types/index";
 import { ReactComponent as PlusIcon } from "../../assets/plusIcon.svg";
@@ -39,20 +40,24 @@ import {
 } from "../../editListingPageSlice";
 import { initUploads } from "../../../../../initialValues";
 
-export default function UploadsEditForm(props: FormProps): JSX.Element {
+interface Props extends FormProps {
+  uploads: Uploads;
+  setUploads: Dispatch<SetStateAction<Uploads>>;
+}
+
+export default function UploadsEditForm(props: Props): JSX.Element {
   const pageState = useAppSelector((s) => s.editListingPage);
   const listing = pageState.listing;
   const state = pageState.listing.uploads;
   const stateName: keyof typeof listing = "uploads";
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [state, setState] = useState<Uploads>(parent.uploads);
   const params = useParams();
-  const listingId = params.listingId;
-  if (!listingId) throw new Error("listingId param is undefined");
   const [dragActive, setDragActive] = useState(false); // used for conditional styling
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const listingId = params.listingId;
+
+  if (!listingId) throw new Error("listingId param is undefined");
 
   /**
    * Given a selection if images, discard any that have a name that matches
@@ -61,9 +66,7 @@ export default function UploadsEditForm(props: FormProps): JSX.Element {
    * @param files selected images to be uploaded
    */
   async function handleUploads(files: File[]) {
-    console.log("handling uploads...");
-
-    // Create an array of images that are to be uploaded
+    console.log("updating uploads...");
 
     if (files.length > 0) {
       let images: Image[] = [];
@@ -94,10 +97,13 @@ export default function UploadsEditForm(props: FormProps): JSX.Element {
           storeImageInFirestore({
             file: img.file!,
             userUID: listing.userRef.uid!,
+            listingId: listingId!,
           })
         )
       )
         .then((uploaded) => {
+          // const now = new Date();
+          // const isoString = now.toISOString();
           // Upload success
           const s: ListingData = {
             ...listing,
@@ -112,9 +118,9 @@ export default function UploadsEditForm(props: FormProps): JSX.Element {
             },
             timestamp: serverTimestamp(),
           };
-          setLoading(false);
+
           dispatch(setListing(s));
-          // emit(s);
+          dispatch(setLoading(false));
           console.log("Image upload successful...");
         })
         .catch(() => {
@@ -155,13 +161,10 @@ export default function UploadsEditForm(props: FormProps): JSX.Element {
   function onClickToUpload(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     e.stopPropagation();
-    setLoading(true);
 
     if (dragActive === false) {
       handleUploads([...(e.target.files || [])]);
     }
-
-    dispatch(setLoading(false));
   }
 
   /**
@@ -204,7 +207,7 @@ export default function UploadsEditForm(props: FormProps): JSX.Element {
       // Delete image from listings
       uploads.splice(index, 1);
 
-      setLoading(true);
+      dispatch(setLoading(true));
 
       const s: ListingData = {
         ...listing,

@@ -10,6 +10,7 @@ import { Image } from "../../../types/index";
 interface Props {
   file: File;
   userUID: string;
+  listingId: string;
 }
 
 /**
@@ -20,11 +21,12 @@ interface Props {
 export default async function storeImageInFirestore({
   file,
   userUID,
+  listingId,
 }: Props): Promise<Image> {
   return new Promise((resolve, reject) => {
     const storage = getStorage();
     const fileName = makeFileNameForUpload(userUID, file.name);
-    const storageRef = ref(storage, "images/" + fileName);
+    const storageRef = ref(storage, `images/${listingId}/` + fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     if (!userUID) {

@@ -1,17 +1,21 @@
 import {
   FetchedListing,
   Image,
-  ListingData,
   TypeLatLng,
   Uploads,
 } from "../../../../../types/index";
 import { db } from "../../../../../firebase.config";
 import { ReactComponent as BellSVG } from "../../assets/bell-regular.svg";
 import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import {
   getDownloadURL,
   getStorage,
@@ -21,7 +25,6 @@ import {
 import makeFileNameForUpload from "../../../utils/makeFileNameForUpload";
 import { toast } from "react-toastify";
 import useDeleteNotYetSubmittedListing from "../../hooks/useDeleteNotYetSubmittedListing";
-import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFirestore";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
 import { reset, setLoading } from "../../createListingPageSlice";
@@ -65,123 +68,168 @@ export default function ReviewForm(props: Props) {
 
     dispatch(setLoading(true));
 
-    /**
-     * Store an image in firestore
-     * @param file File
-     * @returns {file: undefined, url: string} of Image
+    /** 
+     First we need to upload the listing data to firestore, without the images, so that we can get the docRef.id, after listing creation, and then update the newly created listing, to include images, which will be located in </images/docRef.id/imageName>.
      */
-    async function storeImage(file: File): Promise<Image> {
-      return new Promise((resolve, reject) => {
-        const storage = getStorage();
-        const fileName = makeFileNameForUpload(
-          pageState.listing.userRef.uid,
-          file.name
-        );
-        const storageRef = ref(storage, "images/" + fileName);
-        const uploadTask = uploadBytesResumable(storageRef, file);
 
-        if (!pageState.listing.userRef.uid) {
-          throw new Error("Bad userRef.uid");
-        } else if (!file.name) {
-          throw new Error("Bad file.name");
-        } else if (!fileName) {
-          throw new Error("Bad fileName.");
-        } else if (!storageRef) {
-          throw new Error("Bad storageRef.");
-        } else if (!uploadTask) {
-          throw new Error("Bad uploadTask.");
-        }
+    /**
+     * On the initial doc creation, exclude images
+     */
+    // const { images, ...rest } = props.uploads;
 
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-            switch (snapshot.state) {
-              case "paused":
-                console.log("Upload is paused");
-                break;
-              case "running":
-                console.log("Upload is running");
-                break;
-              default:
-                break;
-            }
-          },
-          (error) => {
-            // A full list of error codes is available at
-            // https://firebase.google.com/docs/storage/web/handle-errors
-            reject(error);
-            setLoading(false);
-            toast.error(error.message);
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              resolve({ name: fileName, url: downloadURL });
-            });
-          }
-        );
-      });
-    }
+    const uploadsWithoutImages = {
+      ...pageState.listing,
+      /**
+       * Adding uploads 👇 here was causing the "Insufficient permissions" error
+       * when trying to upload to storage
+       */
+      // uploads: {
+      //   ...rest,
+      // },
+      timestamp: serverTimestamp(),
+    };
 
-    const _images = await Promise.all(
-      props.uploads.images.value.map((image) => storeImage(image.file!))
-    ).catch(() => {
-      setLoading(false);
-      toast.warn("All images must be 2MB or less.");
-      console.warn("All images must be 2MB or less, image upload failed.");
+    /**
+     * Upload dataToSubmit to Firestore
+     */
+    const docRef = await addDoc(
+      collection(db, "listings"),
+      uploadsWithoutImages
+    ).catch((error) => {
+      dispatch(setLoading(false));
+      toast.error(error.message);
+      console.error(error);
       return;
     });
 
-    let formDataCopy: ListingData = { ...pageState.listing };
+    /**
+     * If the docRef exists, then we can upload the images to storage
+     * using the docRef.id as the folder name
+     */
+    if (docRef) {
+      /**
+       * Now that we have the docRef.id, we can upload the images to storage,
+       * in a folder named after the docRef.id (/images/docRef.id/image.name)
+       */
+      const uploadedImages = await Promise.all(
+        props.uploads.images.value.map((image) => storeImage(image.file!))
+      ).catch((error) => {
+        dispatch(setLoading(false));
+        toast.error(error.message);
+        console.error(error.message);
+        return;
+      });
 
-    if (_images && _images.length > 0) {
-      formDataCopy = {
-        ...pageState.listing,
-        uploads: {
-          ...props.uploads,
-          images: {
-            ...props.uploads.images,
-            value: _images,
+      /**
+       * Store an image in firestore at /images/docRef.id/image.name
+       * @param file File
+       * @returns Promise<Image>
+       */
+      async function storeImage(file: File): Promise<Image> {
+        return new Promise((resolve, reject) => {
+          const storage = getStorage();
+          const fileName = makeFileNameForUpload(
+            pageState.listing.userRef.uid,
+            file.name
+          );
+          if (!docRef) {
+            throw new Error("Bad docRef.");
+          }
+          const storageRef = ref(storage, `images/${docRef.id}/` + fileName);
+          // const storageRef = ref(storage, `images/test/` + fileName);
+          const uploadTask = uploadBytesResumable(storageRef, file);
+
+          if (!pageState.listing.userRef.uid) {
+            throw new Error("Bad userRef.uid");
+          } else if (!file.name) {
+            throw new Error("Bad file.name");
+          } else if (!fileName) {
+            throw new Error("Bad fileName.");
+          } else if (!storageRef) {
+            throw new Error("Bad storageRef.");
+          } else if (!uploadTask) {
+            throw new Error("Bad uploadTask.");
+          }
+
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log("Upload is " + progress + "% done");
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+                default:
+                  break;
+              }
+            },
+            (error) => {
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              reject(error);
+              dispatch(setLoading(false));
+              toast.error(error.message);
+            },
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                resolve({ name: fileName, url: downloadURL });
+              });
+            }
+          );
+        });
+      }
+
+      if (uploadedImages && uploadedImages.length > 0) {
+        const dataWithUploads = {
+          ...pageState.listing,
+          uploads: {
+            ...props.uploads,
+            images: {
+              ...props.uploads.images,
+              value: uploadedImages,
+            },
           },
-        },
-        timestamp: serverTimestamp(),
-      };
+          timestamp: serverTimestamp(),
+        };
 
-      /**
-       * Upload formDataCopy to Firestore
-       */
-      const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+        if (docRef) {
+          await updateDoc(docRef, dataWithUploads);
 
-      /**
-       * Listing form data submitted successfully
-       */
+          /**
+           * Listing form data submitted successfully
+           */
+          dispatch(setLoading(false));
+          dispatch(reset());
+          const listingToOverlay: FetchedListing = {
+            id: docRef.id,
+            data: dataWithUploads,
+          };
+          dispatch(setHoveredListing(listingToOverlay));
+          dispatch(setListingToOverlay(listingToOverlay));
+          const mapCenter: TypeLatLng = {
+            lat: dataWithUploads.address.geolocation.value.lat,
+            lng: dataWithUploads.address.geolocation.value.lng,
+          };
+          dispatch(setMapCenter(mapCenter));
+          navigate(
+            `/explore-listings/details/${dataWithUploads.address.formattedAddress.value}/${docRef.id}`
+          );
+          toast.success(
+            "Listing created successfully. Refresh the page to see it on the map."
+          );
+        } else {
+          toast.warn("Uploading at least one image is required!");
+          setLoading(false);
+          throw new Error("Uploading at least one image is required!");
+        }
 
-      dispatch(setLoading(false));
-      // localStorage.removeItem("unfinished-listing");
-      dispatch(reset());
-      const listingToOverlay: FetchedListing = {
-        id: docRef.id,
-        data: formDataCopy,
-      };
-      dispatch(setHoveredListing(listingToOverlay));
-      dispatch(setListingToOverlay(listingToOverlay));
-      const mapCenter: TypeLatLng = {
-        lat: formDataCopy.address.geolocation.value.lat,
-        lng: formDataCopy.address.geolocation.value.lng,
-      };
-      dispatch(setMapCenter(mapCenter));
-      navigate(
-        `/explore-listings/details/${formDataCopy.address.formattedAddress.value}/${docRef.id}`
-      );
-      toast.success(
-        "Listing created successfully. Refresh the page to see it on the map."
-      );
-    } else {
-      toast.warn("Uploading at least one image is required!");
-      setLoading(false);
-      throw new Error("Uploading at least one image is required!");
+        dispatch(setLoading(false));
+      }
     }
   }
 

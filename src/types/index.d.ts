@@ -780,7 +780,7 @@ export interface Image {
 export interface Images {
   value: Image[] | [];
   /** Used when a listing is updated and new images are added */
-  valueFromEdit: Image[] | [];
+  // valueFromEdit: Image[] | [];
   beingVerified: boolean;
   errorMsg: string;
   valid: boolean;
@@ -811,7 +811,7 @@ export interface ListingData {
   land?: Land;
   uploads: Uploads;
   review: TypeReview;
-  timestamp: TimeStamp | string;
+  timestamp: TimeStamp | string | Date;
   userRef: UserRef;
 }
 

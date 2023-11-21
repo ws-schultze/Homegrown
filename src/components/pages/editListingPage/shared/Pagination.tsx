@@ -1,8 +1,6 @@
-import { useDispatch } from "react-redux";
 import { ReactComponent as ArrowLeftSVG } from "../../../../assets/svg/arrow-left-solid.svg";
 import { ReactComponent as ArrowRightSVG } from "../../../../assets/svg/arrow-right-solid.svg";
 import styles from "../styles.module.scss";
-import { setCurrentPageNumber } from "../editListingPageSlice";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useNavigate, useParams } from "react-router";
 
@@ -14,15 +12,15 @@ export default function Pagination(): JSX.Element {
   console.log(id);
 
   function nextPage() {
-    navigate(`/edit-listing/${state.currentPageNumber + 1}/${id}}`);
+    navigate(`/edit-listing/${state.currentPageNumber + 1}/${id}`);
   }
 
   function prevPage() {
-    navigate(`/edit-listing/${state.currentPageNumber - 1}/${id}}`);
+    navigate(`/edit-listing/${state.currentPageNumber - 1}/${id}`);
   }
 
   function toPageNumber(num: number) {
-    navigate(`/edit-listing/${num}/${id}}`);
+    navigate(`/edit-listing/${num}/${id}`);
   }
 
   return (

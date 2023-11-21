@@ -27,6 +27,7 @@ import {
 import { DropdownMenuItem } from "../../../shared/dropdown/Dropdown";
 import { Dispatch } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
+import { serverTimestamp } from "firebase/firestore";
 
 /**
  * Hook to used to extract logic/state that all create/edit listing forms will use.
@@ -80,8 +81,13 @@ export default function useCommonFormLogic<T extends Verify>(args: {
   ): void;
 } {
   const pageState = useAppSelector((s) => s.editListingPage);
-  const listing = pageState.listing;
-  const state = pageState.listing[args.stateName]! as T;
+
+  const { timestamp, ...rest } = pageState.listing;
+
+  // if (!timestamp) throw new Error("timestamp is undefined");
+  const listing = { ...rest, timestamp: JSON.stringify(serverTimestamp()) };
+
+  const state = listing[args.stateName]! as T;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();

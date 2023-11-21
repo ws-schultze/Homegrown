@@ -782,14 +782,14 @@ export const initReview: T.Verify = {
 };
 
 export const initImage: T.Image = {
-  file: undefined,
+  // file: undefined,
   name: "",
   url: "",
 };
 
 export const initImages: T.Images = {
   value: [],
-  valueFromEdit: [],
+  // valueFromEdit: [],
   valid: false,
   errorMsg: "",
   required: true,

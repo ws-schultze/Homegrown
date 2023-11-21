@@ -198,13 +198,28 @@ export default function UploadsForm(props: Props): JSX.Element {
       thisPageNum: props.thisPageNum,
       handleFormState: (obj) => {
         /**
-         * Must also lift up state to CreateListingPage
+         Must also lift up state to CreateListingPage,
+         in order for the state to persist when the user navigates away from this page
          */
         props.setUploads(obj);
+
+        /**
+         Since files are non-serializable, they are stored in the state of createListingPage, and so we take them out before using redux to update the state of createListingPage
+         */
+        const newImageValues = obj.images.value.map((image) => ({
+          name: image.name,
+          url: image.url,
+        }));
+
+        const newObj = {
+          ...obj,
+          images: { ...obj.images, value: newImageValues },
+        };
+
         dispatch(
           setListing({
             ...pageState.listing,
-            [stateName]: obj,
+            [stateName]: newObj,
           })
         );
       },

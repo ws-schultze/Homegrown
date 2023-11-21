@@ -76,6 +76,10 @@ export default function FormCheck({
     );
   }
 
+  if (formState.beingVerified === false && formState.saved === true) {
+    return null;
+  }
+
   if (formState.beingVerified === true) {
     return (
       <div className={styles.form_check}>

@@ -31,6 +31,7 @@ export default function EditListingPage() {
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
+  const [uploads, setUploads] = useState<Uploads>(initUploads);
 
   useCurrentPageNumber((num) => dispatch(setCurrentPageNumber(num)));
 
@@ -38,20 +39,15 @@ export default function EditListingPage() {
   useEffect(() => {
     setLoading(true);
     if (isAuthenticated && userId && !isLoading) {
-      // setState((s) => ({
-      //   ...s,
-      //   userRef: {
-      //     ...s.userRef,
-      //     uid: userId,
-      //   },
-      // }));
-      // dispatch(setListing({
-      //   ...state.listing,
-      //   userRef: {
-      //     ...state.listing.userRef,
-      //     uid:
-      //   }
-      // }))
+      dispatch(
+        setListing({
+          ...state.listing,
+          userRef: {
+            ...state.listing.userRef,
+            uid: userId,
+          },
+        })
+      );
       setLoading(false);
     } else if (!isAuthenticated && !isLoading) {
       navigate("/sign-in");
@@ -68,14 +64,14 @@ export default function EditListingPage() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const listing = docSnap.data() as ListingData;
-          // dispatch(setListingId(params.listingId));
-          // const { ...serializable, timestamp } = listing;
+
           dispatch(
             setListing({
               ...listing,
               timestamp: JSON.stringify(listing.timestamp),
             })
           );
+
           dispatch(setLoading(false));
         } else {
           navigate("/");
@@ -90,30 +86,6 @@ export default function EditListingPage() {
 
     fetchListing();
   }, []);
-
-  // /**
-  //  * Handle the forms submission
-  //  * @param e FormEvent - submit state
-  //  */
-  // async function handleSubmitListingEdit() {
-  //   console.log("Submitting Edit...");
-  //   setLoading(true);
-
-  //   if (params.listingId) {
-  //     // Update listing
-
-  //     let s: DocumentData = { ...state, timestamp: serverTimestamp() };
-  //     const docRef = doc(db, "listings", params.listingId);
-  //     await updateDoc(docRef, s);
-  //     setLoading(false);
-  //     toast.success("Listing Updated");
-  //     navigate(
-  //       `/explore-listings/details/${state.listing.address.formattedAddress.value}/${docRef.id}`
-  //     );
-  //   } else {
-  //     console.error("No listingId passed as a param from App.js");
-  //   }
-  // }
 
   async function deleteListing() {
     if (window.confirm("Are you sure that you want to delete this listing?")) {
@@ -173,7 +145,7 @@ export default function EditListingPage() {
   }
 
   if (state.currentPageNumber === 6) {
-    return <Page6 />;
+    return <Page6 uploads={uploads} setUploads={setUploads} />;
   }
 
   if (state.currentPageNumber === 7) {

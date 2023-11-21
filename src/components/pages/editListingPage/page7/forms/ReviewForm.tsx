@@ -1,9 +1,7 @@
 import {
   FetchedListing,
-  Image,
-  ListingData,
+  TypeFetchedListingData,
   TypeLatLng,
-  Uploads,
 } from "../../../../../types/index";
 import { db } from "../../../../../firebase.config";
 import { ReactComponent as BellSVG } from "../../assets/bell-regular.svg";
@@ -11,22 +9,8 @@ import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import makeFileNameForUpload from "../../../utils/makeFileNameForUpload";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import useDeleteNotYetSubmittedListing from "../../hooks/useDeleteNotYetSubmittedListing";
 import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFirestore";
 import styles from "../../styles.module.scss";
 import { FormProps } from "../../types/formProps";
@@ -69,35 +53,53 @@ export default function ReviewForm(props: Props) {
 
     dispatch(setLoading(true));
 
-    let formDataCopy: ListingData = { ...pageState.listing };
-    const update = { id: params.listingId, data: formDataCopy };
+    let _listing: TypeFetchedListingData = {
+      ...pageState.listing,
+      timestamp: new Date(),
+    };
+
+    console.log(_listing);
+    console.log(params.listingId);
 
     if (params.listingId) {
       const docRef = doc(db, "listings", params.listingId);
-      await updateDoc(docRef, update);
+      await updateDoc(docRef, _listing)
+        .then(() => {
+          /**
+           * Update listing in redux store after making the timestamp serializable
+           */
+          const { timestamp, ...rest } = _listing;
+          const data = {
+            ...rest,
+            timestamp: JSON.stringify(_listing.timestamp),
+          };
 
-      /**
-       * Listing update submitted successfully
-       */
-      dispatch(setLoading(false));
-      dispatch(reset());
-      const listingToOverlay: FetchedListing = {
-        id: docRef.id,
-        data: formDataCopy,
-      };
-      dispatch(setHoveredListing(listingToOverlay));
-      dispatch(setListingToOverlay(listingToOverlay));
-      const mapCenter: TypeLatLng = {
-        lat: formDataCopy.address.geolocation.value.lat,
-        lng: formDataCopy.address.geolocation.value.lng,
-      };
-      dispatch(setMapCenter(mapCenter));
-      navigate(
-        `/explore-listings/details/${formDataCopy.address.formattedAddress.value}/${docRef.id}`
-      );
-      toast.success(
-        "Listing updates successfully. Refresh the page to see it on the map."
-      );
+          /**
+           * Listing update submitted successfully
+           */
+          dispatch(setLoading(false));
+          dispatch(reset());
+          const listingToOverlay: FetchedListing = {
+            id: docRef.id,
+            data: data,
+          };
+          dispatch(setHoveredListing(listingToOverlay));
+          dispatch(setListingToOverlay(listingToOverlay));
+          const mapCenter: TypeLatLng = {
+            lat: data.address.geolocation.value.lat,
+            lng: data.address.geolocation.value.lng,
+          };
+          dispatch(setMapCenter(mapCenter));
+          navigate(
+            `/explore-listings/details/${data.address.formattedAddress.value}/${docRef.id}`
+          );
+          toast.success("Listing updated successfully.");
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Something went wrong. Please try again later.");
+          dispatch(setLoading(false));
+        });
     } else {
       console.error("params.listingId is undefined.");
       dispatch(setLoading(false));
