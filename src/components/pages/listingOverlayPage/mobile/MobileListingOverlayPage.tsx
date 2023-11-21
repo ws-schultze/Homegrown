@@ -216,7 +216,6 @@ export default function MobileListingOverlayPage() {
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
                 setShareLinkCopied(true);
-                console.log("copied");
                 setTimeout(() => {
                   setShareLinkCopied(false);
                 }, 2000);

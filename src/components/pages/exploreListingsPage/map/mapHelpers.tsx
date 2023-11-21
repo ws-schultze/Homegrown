@@ -19,6 +19,8 @@ import styles from "./exploreListingsMap.module.scss";
 
 import { ReactComponent as ExpandSVG } from "./assets/expand-solid.svg";
 import { ReactComponent as CompressSVG } from "./assets/compress-solid.svg";
+import { CommonState } from "../../../../common/commonSlice";
+import { PlaceFilterState } from "../../../shared/listingFilters/placeFilter/placeFilterSlice";
 
 export function isOfTypePlacesRegion(
   keyInput: string | undefined
@@ -1025,60 +1027,80 @@ export function getCurrentFilteredMarkers(
   return currentFilteredMarkers;
 }
 
-/**
- * Hide and show the appropriate filtered markers
- * @param map google.maps.Map
- * @param smallMarkers google.maps.marker.AdvancedMarkerView[]
- * @param largeMarkers google.maps.marker.AdvancedMarkerView[]
- * @param minZoomForLargeMarkers number
- * @param currentFilteredListings FetchedListing[]
- */
-export function updateMarkers(
-  map: google.maps.Map,
-  smallMarkers: google.maps.marker.AdvancedMarkerView[],
-  largeMarkers: google.maps.marker.AdvancedMarkerView[],
-  minZoomForLargeMarkers: number,
-  currentFilteredListings: FetchedListing[]
-) {
-  if (map && smallMarkers && largeMarkers) {
-    const markerSize = getMarkerSize(map, minZoomForLargeMarkers);
-    const currentLargeMarkers = getCurrentMarkers(map, largeMarkers);
-    const currentSmallMarkers = getCurrentMarkers(map, smallMarkers);
+// /**
+//  * Hide and show the appropriate filtered markers
+//  * @param map google.maps.Map
+//  * @param smallMarkers google.maps.marker.AdvancedMarkerView[]
+//  * @param largeMarkers google.maps.marker.AdvancedMarkerView[]
+//  * @param minZoomForLargeMarkers number
+//  * @param currentFilteredListings FetchedListing[]
+//  */
+// export function updateMarkers(
+//   map: google.maps.Map,
+//   smallMarkers: google.maps.marker.AdvancedMarkerView[],
+//   largeMarkers: google.maps.marker.AdvancedMarkerView[],
+//   minZoomForLargeMarkers: number
+//   // commonState: CommonState,
+//   // placeFilterState: PlaceFilterState,
+// ) {
+//   if (map && smallMarkers && largeMarkers) {
+//     const markerSize = getMarkerSize(map, minZoomForLargeMarkers);
+//     const currentLargeMarkers = getCurrentMarkers(map, largeMarkers);
+//     const currentSmallMarkers = getCurrentMarkers(map, smallMarkers);
+//     const allFilteredListings = filterListings(commonState.listings, {
+//       place: placeFilterState.place
+//         ? JSON.parse(placeFilterState.place)
+//         : undefined,
+//       forSaleOrRent: forSaleOrRentFilter.selectedItem,
+//       lowPrice: priceFilter.lowPrice,
+//       highPrice: priceFilter.highPrice,
+//       listingTypes: listingTypeFilter.selectedTypes,
+//       beds: bedAndBathFilter.beds,
+//       baths: bedAndBathFilter.baths,
+//     });
 
-    // Markers to show
-    const currentFilteredSmallMarkers = getCurrentFilteredMarkers(
-      currentSmallMarkers,
-      currentFilteredListings
-    );
-    const currentFilteredLargeMarkers = getCurrentFilteredMarkers(
-      currentLargeMarkers,
-      currentFilteredListings
-    );
+//     const currentFilteredListings = getCurrentListings(
+//       map,
+//       allFilteredListings
+//     );
 
-    // Markers to hide
-    const nonCurrentFilteredSmallMarkers = getNonCurrentFilteredMarkers(
-      smallMarkers,
-      currentFilteredListings
-    );
-    const nonCurrentFilteredLargeMarkers = getNonCurrentFilteredMarkers(
-      largeMarkers,
-      currentFilteredListings
-    );
+//     // Markers to show
+//     const currentFilteredSmallMarkers = getCurrentFilteredMarkers(
+//       currentSmallMarkers,
+//       currentFilteredListings
+//     );
+//     const currentFilteredLargeMarkers = getCurrentFilteredMarkers(
+//       currentLargeMarkers,
+//       currentFilteredListings
+//     );
 
-    // Hide/Show markers
-    if (markerSize === "small") {
-      hideMarkers(nonCurrentFilteredSmallMarkers);
-      hideMarkers(largeMarkers);
-      showMarkers(currentFilteredSmallMarkers, map);
-    } else if (markerSize === "large") {
-      hideMarkers(nonCurrentFilteredLargeMarkers);
-      hideMarkers(smallMarkers);
-      showMarkers(currentFilteredLargeMarkers, map);
-    }
-  } else {
-    console.warn("Escaped");
-  }
-}
+//     // Markers to hide
+//     const nonCurrentFilteredSmallMarkers = getNonCurrentFilteredMarkers(
+//       smallMarkersRef.current,
+//       currentFilteredListings
+//     );
+//     const nonCurrentFilteredLargeMarkers = getNonCurrentFilteredMarkers(
+//       largeMarkersRef.current,
+//       currentFilteredListings
+//     );
+
+//     // Hide/Show markers
+//     if (markerSize === "small") {
+//       hideMarkers(nonCurrentFilteredSmallMarkers);
+//       hideMarkers(largeMarkers);
+//       showMarkers(currentFilteredSmallMarkers, map);
+//     } else if (markerSize === "large") {
+//       hideMarkers(nonCurrentFilteredLargeMarkers);
+//       hideMarkers(smallMarkers);
+//       showMarkers(currentFilteredLargeMarkers, map);
+//     }
+
+//     dispatch(setAllFilteredListings(allFilteredListings));
+//     dispatch(setCurrentFilteredListings(currentFilteredListings));
+//   } else {
+//     console.warn("Escaped");
+//   }
+// }
 
 /**
    * Given a placeId, style the boundary for it, add event listeners to the boundary buttons and fit the bounds to cover the map.
@@ -1096,37 +1118,37 @@ export function updateMarkers(
       countryBoundaries: google.maps.FeatureLayer;
     }
    */
-export function setupBoundaryForPlace(
-  map: google.maps.Map,
-  place: google.maps.places.PlaceResult,
-  boundaries: Boundaries,
-  boundaryStyle: google.maps.FeatureStyleOptions
-) {
-  if (place && place.geometry && place.geometry.location && place.place_id) {
-    const bounds = new google.maps.LatLngBounds();
-    // Extend bounds to include place
-    if (place.geometry.viewport) {
-      bounds.union(place.geometry.viewport);
-    } else {
-      bounds.extend(place.geometry.location);
-    }
+// export function setupBoundaryForPlace(
+//   map: google.maps.Map,
+//   place: google.maps.places.PlaceResult,
+//   boundaries: Boundaries,
+//   boundaryStyle: google.maps.FeatureStyleOptions
+// ) {
+//   if (place && place.geometry && place.geometry.location && place.place_id) {
+//     const bounds = new google.maps.LatLngBounds();
+//     // Extend bounds to include place
+//     if (place.geometry.viewport) {
+//       bounds.union(place.geometry.viewport);
+//     } else {
+//       bounds.extend(place.geometry.location);
+//     }
 
-    // boundsRef.current = bounds;
-    // Apply extended bounds to map if user has not
-    // already set a place filter. This will prevent
-    // a theme change from resetting the bounds and
-    // thus the zoom and center of the map.
-    if (boundaries == null) map.fitBounds(bounds);
+//     // boundsRef.current = bounds;
+//     // Apply extended bounds to map if user has not
+//     // already set a place filter. This will prevent
+//     // a theme change from resetting the bounds and
+//     // thus the zoom and center of the map.
+//     if (boundaries == null) map.fitBounds(bounds);
 
-    // boundariesRef.current = boundaries;
-    // map.fitBounds(bounds);
+//     // boundariesRef.current = boundaries;
+//     // map.fitBounds(bounds);
 
-    // Apply styling to place boundary
-    stylePlaceBoundary(place.place_id, boundaries, boundaryStyle);
-  } else {
-    console.warn("place object is mission some information");
-  }
-}
+//     // Apply styling to place boundary
+//     stylePlaceBoundary(place.place_id, boundaries, boundaryStyle);
+//   } else {
+//     console.warn("place object is mission some information");
+//   }
+// }
 
 // /**
 //  * Given a placeId, style the boundary for it, add event listeners to the boundary buttons and fit the bounds to cover the map.
@@ -1314,5 +1336,49 @@ export function makeMapFullScreenControls(
             );
           }
         };
+  }
+}
+
+/**
+   * Given a placeId, style the boundary for it, add event listeners to the boundary buttons and fit the bounds to cover the map.
+   * // https://developers.google.com/maps/documentation/javascript/examples/place-details
+   * @param placeId string
+   * @param map google.maps.Map
+   * @param hideBoundaryBtn HTMLElement
+   * @param showBoundaryBtn HTMLElement
+   * @param boundaryStyling  google.maps.FeatureStyleOptions
+   * @param boundaries {
+      cityBoundaries: google.maps.FeatureLayer;
+      postalCodeBoundaries: google.maps.FeatureLayer;
+      countyBoundaries: google.maps.FeatureLayer;
+      stateBoundaries: google.maps.FeatureLayer;
+      countryBoundaries: google.maps.FeatureLayer;
+    }
+   */
+export function setupBoundaryForPlace(
+  map: google.maps.Map,
+  place: google.maps.places.PlaceResult,
+  boundaries: Boundaries,
+  boundaryStyle: google.maps.FeatureStyleOptions,
+  boundariesRef: React.MutableRefObject<Boundaries>
+) {
+  if (place && place.geometry && place.geometry.location && place.place_id) {
+    const bounds = new google.maps.LatLngBounds();
+    // Extend bounds to include place
+    if (place.geometry.viewport) {
+      bounds.union(place.geometry.viewport);
+    } else {
+      bounds.extend(place.geometry.location);
+    }
+
+    if (boundaries == null) map.fitBounds(bounds);
+
+    map.fitBounds(bounds);
+
+    boundariesRef.current = boundaries;
+
+    stylePlaceBoundary(place.place_id, boundaries, boundaryStyle);
+  } else {
+    console.warn("place object is missing some information");
   }
 }

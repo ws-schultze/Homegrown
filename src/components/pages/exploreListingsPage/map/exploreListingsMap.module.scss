@@ -1,3 +1,5 @@
+@use "../../../../scss/breakpoints" as b;
+
 .map {
   height: 100%;
   width: 100%;
@@ -276,6 +278,9 @@ when it is positioned seemingly outside of the marker */
 
 .map-fullscreen-btn-container {
   margin: 0 10px;
+  @include b.md-screen-breakpoint {
+    display: none;
+  }
 }
 
 .map-fullscreen-btn {
