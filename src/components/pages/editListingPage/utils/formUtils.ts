@@ -108,7 +108,6 @@ export function handleFormVerification<T extends Verify>(
     props.actionName === "everythingLooksCorrect"
     // props.obj.saved === true
   ) {
-    console.log("all looks correct");
     props.handleFormState(props.obj);
 
     // Add this page number to saved page numbers
@@ -119,12 +118,8 @@ export function handleFormVerification<T extends Verify>(
     // Remove this page number from unsaved page numbers
     const idx = props.pageState.unsavedPages.indexOf(props.thisPageNum);
 
-    console.log(idx);
-
     const unsavedPagesCopy = [...props.pageState.unsavedPages];
     unsavedPagesCopy.splice(idx, 1);
-
-    console.log(unsavedPagesCopy);
 
     props.handleUnsavedPageNumbers(unsavedPagesCopy);
 

@@ -69,7 +69,6 @@ export default function MapTypeDropdown({
     e: React.MouseEvent | React.ChangeEvent,
     item: MapType
   ): void {
-    console.log("forSaleOrRent filter clicked");
     // Keep menu from closing when an item is clicked
     e.stopPropagation();
 

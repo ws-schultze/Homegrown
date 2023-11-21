@@ -8,7 +8,6 @@ export default function useCloseMenu(
 
   useEffect(() => {
     function handler(e: MouseEvent) {
-      console.log("handler called");
       const target = e.target as Node;
 
       // Hide menu when clicking outside of it, ignoring clicks on given btn

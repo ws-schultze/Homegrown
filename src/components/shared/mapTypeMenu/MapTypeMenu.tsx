@@ -7,15 +7,7 @@ import {
   Menu,
   RadioBtn,
 } from "./styledComponents";
-import { useAppSelector } from "../../../redux/hooks";
-import { Provider, useDispatch } from "react-redux";
-import {
-  MapType,
-  MapTypeMenuState,
-  initialMapTypeMenuState,
-  setMapType,
-  setShowMapTypeMenu,
-} from "./mapTypeMenuSlice";
+import { MapType, MapTypeMenuState } from "./mapTypeMenuSlice";
 
 export default function MapTypeMenu({
   map,
@@ -42,7 +34,6 @@ export default function MapTypeMenu({
   const menuItemRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    console.log("ITEM CHANGED");
     setState({
       showMenu: showMenu,
       menuItems: menuItems,

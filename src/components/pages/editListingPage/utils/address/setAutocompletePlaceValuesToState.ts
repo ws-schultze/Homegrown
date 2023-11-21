@@ -165,8 +165,6 @@ export default function setAutocompletePlaceValuesToState<
       beingVerified: false,
     };
 
-    console.log(s);
-
     return s;
 
     // After filling the form with address components from the Autocomplete

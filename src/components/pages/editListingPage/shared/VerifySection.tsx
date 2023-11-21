@@ -83,7 +83,6 @@ export default function VerifySection<T extends Verify>({
           // Loop through all fields of parent state and set valid=true, saved=true, and readOnly=true.
 
           const field = parent[k] as Str | TypeBool;
-          console.log("field: ", field);
 
           if (
             field &&

@@ -78,8 +78,6 @@ export default function UsernameInput(props: Props) {
       errorMsg: errorMsg,
     }));
 
-    console.log("emitting state ", s);
-
     props.emit(s);
   }
 

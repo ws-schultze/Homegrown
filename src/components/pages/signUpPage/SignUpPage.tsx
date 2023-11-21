@@ -11,10 +11,6 @@ import {
 import { db } from "../../../firebase.config";
 import { setDoc, doc, serverTimestamp, FieldValue } from "firebase/firestore";
 import styles from "./signUpPage.module.scss";
-// import { ReactComponent as PersonIcon } from "../../../assets/svg/personIcon.svg";
-// import { ReactComponent as EnvelopeIcon } from "../../../assets/svg/envelopeIcon.svg";
-// import { ReactComponent as LockIcon } from "../../../assets/svg/lockIcon.svg";
-// import { ReactComponent as VisibilityIcon } from "../../../assets/svg/visibilityIcon.svg";
 import EmailInput, {
   Email,
   initEmail,
@@ -23,7 +19,6 @@ import PasswordInput, {
   Password,
   initPassword,
 } from "../../shared/inputs/passwordInput/PasswordInput";
-import SignUpBtn from "../../shared/signUpButton/SignUpBtn";
 import UsernameInput, {
   Username,
   initUsername,
@@ -79,8 +74,6 @@ export default function SignUpPage() {
           displayName: state.username.value,
         });
 
-        console.log("Updated display name: ", user.displayName);
-
         const newUser = {
           username: state.username.value,
           email: state.email.value,
@@ -93,12 +86,10 @@ export default function SignUpPage() {
         // Hide loading spinner
         setState((s) => ({ ...s, loading: false }));
 
-        console.log(state);
-
         // Redirect user to home page
         navigate("/");
       } else {
-        console.log("auth.currentUser is undefined.");
+        console.warn("auth.currentUser is undefined.");
       }
     } catch (error) {
       toast.error("Something went wrong...");

@@ -7,7 +7,6 @@ import Spinner from "../../shared/loaders/Spinner";
 import styles from "./contactLandlordPage.module.scss";
 import ListingCard from "../../shared/listingCard/ListingCard";
 import { FetchedListing, TypeFetchedListingData } from "../../../types/index";
-import useScreenSize from "../../../hooks/useScreenSize";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Footer from "../../shared/footer/Footer";
 
@@ -39,7 +38,6 @@ export default function ContactLandlordPage() {
   useEffect(() => {
     async function fetchListing() {
       if (params.listingId) {
-        console.log("getting listing data for ", params.listingId);
         const docRef = doc(db, "listings", params.listingId);
         const docSnap = await getDoc(docRef);
 

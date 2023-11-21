@@ -31,16 +31,10 @@ export default function ExpandingDropdown<T extends DropdownMenuItem | null>({
   handleSelectedItems: (selectedItems: T[]) => void;
 }): JSX.Element {
   const [showMenu, setShowMenu] = useState(false);
-  // const [selectedItems, setSelectedItems] = useState<T[] | []>(selectedItems);
   const [searchValue, setSearchValue] = useState("");
   const searchRef = useRef<HTMLInputElement | null>(null);
   const parentRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
-
-  // useEffect(() => {
-  //   console.log("getting selected items from parent");
-  //   setSelectedItems(parent);
-  // }, [parent]);
 
   /*
    * Focus the search box when menu opens

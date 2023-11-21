@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-// import "swiper/swiper-bundle.css";
 import { getAuth } from "firebase/auth";
 import { ReactComponent as ShareSVG } from "../assets/share-solid.svg";
 import { ReactComponent as CloseSVG } from "../assets/close-icon.svg";
@@ -11,16 +10,12 @@ import { ReactComponent as SnowflakeSVG } from "../assets/snowflake-regular.svg"
 import { ReactComponent as MapSVG } from "../assets/mapIcon.svg";
 import { ReactComponent as RulerSVG } from "../assets/ruler-combined-solid.svg";
 import { ReactComponent as MagnifyMoneySVG } from "../assets/magnifying-glass-dollar-solid.svg";
-
 import { ReactComponent as StairsSVG } from "../assets/stairs-solid.svg";
 import { ReactComponent as ElevatorSVG } from "../assets/elevator-solid.svg";
-
-// import { ReactComponent as ClockSVG } from "../assets/clock-regular.svg";
 import { ReactComponent as FaucetSVG } from "../assets/faucet-drip-solid.svg";
 import { ReactComponent as PlugSVG } from "../assets/plug-solid.svg";
 import { ReactComponent as EnvelopeSVG } from "../assets/envelopeIcon.svg";
 import { ReactComponent as BedSVG } from "../assets/bed-solid.svg";
-
 import { ReactComponent as BathSVG } from "../assets/bath-solid.svg";
 import { ReactComponent as ToiletSVG } from "../assets/toilet-solid.svg";
 
@@ -36,21 +31,14 @@ import {
   Apartment,
   ApartmentBuilding,
   Condo,
-  Cooling,
-  Heating,
-  ListingData,
   ManufacturedHome,
   MultiFamilyHome,
   MultiFamilyHomeUnit,
-  Power,
-  TypeFetchedListingData,
-  Water,
 } from "../../../../types";
 import { SingleFamilyHome } from "../../../../types/index";
 
 export default function MobileListingOverlayPage() {
   const state = useAppSelector((state) => state.exploreListings);
-  const placeFilter = useAppSelector((state) => state.placeFilter);
   const auth = getAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -77,52 +65,6 @@ export default function MobileListingOverlayPage() {
     uploads,
     userRef,
   } = state!.listingToOverlay!.data;
-
-  // /**
-  //  * Close overlay when container transparent region is clicked
-  //  */
-  // useEffect(() => {
-  //   function handler(e: MouseEvent) {
-  //     const target = e.target as Node;
-
-  //     if (
-  //       state.showFullListingOverlay &&
-  //       containerRef.current &&
-  //       !overlayRef.current?.contains(target)
-  //     ) {
-  //       // navigate(handleNavigate());
-  //       console.log("breaking");
-  //       // dispatch(setShowFullOverlay(false));
-  //     }
-  //   }
-  //   window.addEventListener("click", handler);
-  //   return () => {
-  //     window.removeEventListener("click", handler);
-  //   };
-  // }, []);
-
-  /**
-   * Get the mapPageState from local storage if it is defined.
-   * The mapPageState filers will be used to navigate to
-   * the map page by passing in the forSaleOrRentId and
-   * placeFilter
-   * @returns string
-   */
-  function handleNavigate(): string {
-    if (placeFilter.place) {
-      const place = JSON.parse(placeFilter.place);
-      const path = `/explore-listings/${place.formatted_address}`;
-      return path;
-    } else if (!placeFilter.place) {
-      console.log("breaking things");
-      const path = `/explore-listings/`;
-      return path;
-    } else {
-      console.log("escaped...");
-      const path = ``;
-      return path;
-    }
-  }
 
   function heating(
     listing:
@@ -273,11 +215,11 @@ export default function MobileListingOverlayPage() {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
-                // setShareLinkCopied(true);
+                setShareLinkCopied(true);
                 console.log("copied");
-                // setTimeout(() => {
-                //   setShareLinkCopied(false);
-                // }, 2000);
+                setTimeout(() => {
+                  setShareLinkCopied(false);
+                }, 2000);
               }}
             >
               <ShareSVG className={styles.share_icon} />

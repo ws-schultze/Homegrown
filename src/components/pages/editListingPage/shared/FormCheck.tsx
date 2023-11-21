@@ -15,7 +15,6 @@ import {
 import SaveSection from "./SaveSection";
 import VerifySection from "./VerifySection";
 import styles from "../styles.module.scss";
-import Error from "../../../shared/error/Error";
 
 export type FormState =
   | BasicInfo
@@ -63,7 +62,6 @@ export default function FormCheck({
   children,
   handleFormVerification,
 }: FormCheckProps) {
-  console.log(formState);
   if (formState.beingVerified === false && formState.saved === false) {
     return (
       <div className={styles.form_check}>

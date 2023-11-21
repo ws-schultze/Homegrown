@@ -9,7 +9,6 @@ export default function Pagination(): JSX.Element {
   const navigate = useNavigate();
   const params = useParams();
   const id = params.listingId;
-  console.log(id);
 
   function nextPage() {
     navigate(`/edit-listing/${state.currentPageNumber + 1}/${id}`);

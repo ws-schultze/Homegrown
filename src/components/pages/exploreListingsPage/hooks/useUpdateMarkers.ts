@@ -17,7 +17,6 @@ export default function useUpdateMarkers(
   currentFilteredListings: FetchedListing[]
 ) {
   useEffect(() => {
-    console.log("useUpdateMarkers working...");
     function handler() {
       if (map && smallMarkers && largeMarkers) {
         const markerSize = getMarkerSize(map, minZoomForLargeMarkers);

@@ -66,8 +66,6 @@ export default function UploadsEditForm(props: Props): JSX.Element {
    * @param files selected images to be uploaded
    */
   async function handleUploads(files: File[]) {
-    console.log("updating uploads...");
-
     if (files.length > 0) {
       let images: Image[] = [];
       let toBig: string[] = [];
@@ -121,7 +119,6 @@ export default function UploadsEditForm(props: Props): JSX.Element {
 
           dispatch(setListing(s));
           dispatch(setLoading(false));
-          console.log("Image upload successful...");
         })
         .catch(() => {
           // Upload failure

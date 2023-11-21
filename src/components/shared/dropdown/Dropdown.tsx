@@ -38,7 +38,6 @@ export default function Dropdown<T extends DropdownMenuItem | null>({
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log("getting selected items from parent");
     setSelectedItems(parent);
   }, [parent]);
 

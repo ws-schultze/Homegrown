@@ -4,11 +4,9 @@ import {
   GithubAuthProvider,
   fetchSignInMethodsForEmail,
   signInWithEmailAndPassword,
-  UserCredential,
 } from "firebase/auth";
 import LogoSVGDarkMode from "./assets/github-mark.svg";
 import styles from "../styles.module.scss";
-import { toast } from "react-toastify";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../../firebase.config";
 import { useNavigate } from "react-router";
@@ -43,7 +41,7 @@ export default function GitHubOAuth() {
       // https://cloud.google.com/identity-platform/docs/link-accounts#handling_the_account-exists-with-different-credential_error
       // User tries to sign in with github.
       await signInWithPopup(auth, provider).catch((err) => {
-        console.log(err);
+        console.error(err);
         // User's email already exists.
         if (err.code === "auth/account-exists-with-different-credential") {
           // The pending Github credential.

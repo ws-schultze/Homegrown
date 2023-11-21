@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as T from "../types/index";
 
-import { toast } from "react-toastify";
-import { db } from "../firebase.config";
 import {
-  collection,
   getDocs,
   DocumentData,
   query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
   QueryConstraint,
   CollectionReference,
 } from "firebase/firestore";
@@ -26,8 +19,6 @@ export default function useFetchListings(
   const [isFetchingListings, setIsFetchingListings] = useState<boolean>(false);
   const [fetchedListings, setFetchedListings] =
     useState<T.FetchedListing[] | null>(null);
-
-  // console.log("Fetching listings data");
 
   useEffect(() => {
     async function fetchListings() {

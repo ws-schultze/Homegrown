@@ -19,13 +19,11 @@ import clearMarkerContentClassList, {
   moveMarkerContent,
   showMarkers,
   stylePlaceBoundary,
-  // toggleMarkerHighlight,
   unhighlightMarker,
 } from "./mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 
 import styles from "./exploreListingsMap.module.scss";
-// import "./index.scss"; // styles that override default google styles
 
 import {
   MapMarkerSize,
@@ -45,8 +43,6 @@ import { MapType } from "../../../shared/mapTypeMenu/mapTypeMenuSlice";
 import { useDispatch } from "react-redux";
 import { useMapContext } from "../../../../MapProvider";
 import useSetupMapZoomControls from "./hooks/useSetupMapZoomControls";
-import useSetupMapFullScreenControls from "./hooks/useSetupMapFullScreenControls";
-// import useSetupMapTypeIdControls from "../../../../hooks/useSetupMapTypeIdControls";
 import { roadmapBoundaryStyle } from "./mapStyles";
 import { useScreenSizeContext } from "../../../../ScreenSizeProvider";
 
@@ -498,7 +494,6 @@ export default function ExploreListingsMap(): JSX.Element {
        * @returns map google.maps.Map | undefined
        */
       function initializeMap() {
-        console.log("initializeMap: started");
         if (
           mapDivRef.current &&
           commonState.listings &&
@@ -586,8 +581,6 @@ export default function ExploreListingsMap(): JSX.Element {
         } else {
           throw new Error("Escaped");
         }
-
-        console.log("initializeMap: done");
       }
 
       if (commonState.status === "idle") {
@@ -719,8 +712,6 @@ export default function ExploreListingsMap(): JSX.Element {
       ) {
         const idleHandler = mapRef.current.addListener("idle", () => {
           if (mapRef.current) {
-            console.log("Effect: Map in idle: updating markers");
-
             const mapMarkerSize = getMarkerSize(
               mapRef.current!,
               pageState.mapMinZoomForLargeMarkers
@@ -909,8 +900,6 @@ export default function ExploreListingsMap(): JSX.Element {
                 }
 
                 const boundaries = defineBoundaries(mapRef.current);
-
-                console.log(boundaries);
 
                 boundariesRef.current = boundaries;
 

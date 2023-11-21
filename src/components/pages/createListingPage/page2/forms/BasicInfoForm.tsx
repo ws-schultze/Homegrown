@@ -66,7 +66,6 @@ export default function BasicInfoForm(props: FormProps) {
     const object = obj as ForSaleOrRent | ForRentBy | ForSaleBy;
     switch (object.value?.id) {
       case "for-sale":
-        console.log("SALE");
         handleForSale();
         break;
       case "for-rent":
@@ -373,7 +372,6 @@ export default function BasicInfoForm(props: FormProps) {
    * @param options List of home type items: [{id: multi-family-home, label: Multi-Family Home}, ...]
    */
   function handleListingKind(options: ListingKindValue[] | null): void {
-    console.log("handing items", options);
     if (options && options.length === 1 && options[0] !== null) {
       let init:
         | SingleFamilyHome
@@ -386,8 +384,6 @@ export default function BasicInfoForm(props: FormProps) {
         | Land = initLand;
 
       const id = options[0].id;
-
-      console.log(id);
 
       switch (id) {
         case null:

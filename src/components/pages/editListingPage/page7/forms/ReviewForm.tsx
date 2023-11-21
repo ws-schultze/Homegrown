@@ -58,9 +58,6 @@ export default function ReviewForm(props: Props) {
       timestamp: new Date(),
     };
 
-    console.log(_listing);
-    console.log(params.listingId);
-
     if (params.listingId) {
       const docRef = doc(db, "listings", params.listingId);
       await updateDoc(docRef, _listing)

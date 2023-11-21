@@ -65,12 +65,10 @@ export default function AddressAutocompleteInput(props: Props) {
     // Listen for click on widget item
     if (autocompleteWidget) {
       autocompleteWidget.addListener("place_changed", () => {
-        // if (state) {
         const s = setAutocompletePlaceValuesToState({
           state: initAddress,
           autocomplete: autocompleteWidget,
         });
-        console.log("autocomplete obj", s);
         props.handleAutocompletedAddress(s);
       });
     }

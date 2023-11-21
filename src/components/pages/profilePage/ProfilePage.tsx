@@ -63,7 +63,6 @@ export default function ProfilePage() {
   const auth = getAuth();
   const navigate = useNavigate();
   const createListingPageState = useAppSelector((s) => s.createListingPage);
-  const editListingPageState = useAppSelector((s) => s.editListingPage);
 
   // Fetch the user's listings
   useEffect(() => {
@@ -153,7 +152,6 @@ export default function ProfilePage() {
    * Update the user's profile
    */
   async function handleSubmitDetailsUpdate() {
-    console.log("submitting updates");
     try {
       if (auth.currentUser) {
         // Make sure the signed in user is only able to modify their own profile
@@ -242,7 +240,6 @@ export default function ProfilePage() {
 
   function handleUsername(username: Username) {
     // Set the username
-    console.log("setting state with username: ", username);
     setState((s) => ({
       ...s,
       username: username,

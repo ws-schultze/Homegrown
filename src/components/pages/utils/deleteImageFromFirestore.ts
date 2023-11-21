@@ -9,7 +9,6 @@ export default async function deleteImageFromFirestore(image: Image) {
   await deleteObject(imageRef)
     .then(() => {
       // File deleted successfully
-      console.log(image.name, "deleted successfully");
     })
     .catch((error) => {
       // Uh-oh, an error occurred!

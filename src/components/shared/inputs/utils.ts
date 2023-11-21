@@ -43,7 +43,6 @@ export function formatCommaSeparatedWithDecimal(value: string): string {
     left = value.slice(0, -2);
     right = value.slice(-2);
     formatted = left + "." + right;
-    console.log("left: ", left, " ", "right: ", right);
     return formatted;
   } else if (len === 5) {
     // 123.45
@@ -102,7 +101,6 @@ export function formatCompactCommaSeparatedNoDecimal(value: string): string {
  * @returns string
  */
 export function formatCompactCommaSeparatedWithDecimal(number: number) {
-  console.log("value: ", number);
   return new Intl.NumberFormat("en-US", {
     notation: "compact",
     compactDisplay: "short",
@@ -211,8 +209,6 @@ export function formatYear(value: string, max: number) {
   let fmt = "";
   const len = value.length;
 
-  console.log("len:", len);
-
   if (value === "") {
     fmt = "";
   } else if (len > 0 && len <= max) {
@@ -298,7 +294,6 @@ export function repositionCursor({
         // Two groups separators are defined
       } else if (groupSeparators.length === 2) {
         // console.log("separators === 2");
-        console.log("lastKeyDown", lastKeyDown);
         // console.log(
         //   "formattedValueFromState[modifiedCursorPosition]:",
         //   formattedValueFromState[modifiedCursorPosition]
@@ -318,7 +313,6 @@ export function repositionCursor({
             formattedValueFromState[modifiedCursorPosition] ===
               groupSeparators[1])
         ) {
-          console.log("backspace pressed");
           splitValue.splice(modifiedCursorPosition - 1, 1);
           modifiedCursorPosition -= 1;
         }
@@ -332,8 +326,6 @@ export function repositionCursor({
             formattedValueFromState[modifiedCursorPosition] ===
               groupSeparators[1])
         ) {
-          console.log("delete pressed");
-
           splitValue.splice(modifiedCursorPosition, 1);
           modifiedCursorPosition += 1;
         }
@@ -450,12 +442,10 @@ export function validateName(
 ): { valid: boolean; errorMsg: string } {
   let valid: boolean = false;
   let errorMsg: string = "";
-  console.log(value);
 
   if (required === true) {
     if (value === "") {
       // Invalid
-      console.log("invalid");
 
       valid = false;
       errorMsg = "Required";
@@ -975,8 +965,6 @@ export function setAutocompletePlaceValuesToState<
       addressComponents: place.address_components,
       beingVerified: false,
     };
-
-    console.log(s);
 
     return s;
 

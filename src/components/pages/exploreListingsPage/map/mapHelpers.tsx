@@ -470,7 +470,6 @@ export function moveMarkerContent(
     distanceToRight >= 200
   ) {
     // Move info window down
-    console.log("top y boundary reached");
     element.classList.add(styles["move-down"]);
   } else if (distanceToLeft < 200 && distanceToTop < 200) {
     // Move info window southeast
@@ -528,7 +527,7 @@ export function setMapOnMarkers(
       }
     }
   } else {
-    console.log("Zoom is undefined");
+    console.warn("Zoom is undefined");
   }
 }
 
@@ -812,7 +811,6 @@ export function filterListings(
       forSaleOrRent !== null &&
       forSaleOrRent.id !== "for-sale-or-rent"
     ) {
-      console.log("filterListings: filtering by for-sale/for-rent");
       filtered = filtered.filter(
         (listing) =>
           listing.data.basicInfo.forSaleOrRent.value?.id === forSaleOrRent?.id

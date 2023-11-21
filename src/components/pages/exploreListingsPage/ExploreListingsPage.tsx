@@ -4,12 +4,9 @@ import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAn
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import {
-  setHoveredListing,
-  setListingToOverlay,
-} from "./exploreListingsPageSlice";
+import { setHoveredListing } from "./exploreListingsPageSlice";
 import ExploreListingsMap from "./map/ExploreListingsMap";
 import ForSaleOrRentFilter from "../../shared/listingFilters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import ListingTypeFilter from "../../shared/listingFilters/listingTypeFilter/ListingTypeFilter";
@@ -24,7 +21,6 @@ import styles from "./exploreListingsPage.module.scss";
 import DesktopListingOverlayPage from "../listingOverlayPage/desktop/DesktopListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
-import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
@@ -57,17 +53,14 @@ export interface ExploreListingsFilters {
 export default function ExploreListingsPage(): JSX.Element {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const commonState = useAppSelector((state) => state.common);
   const pageState = useAppSelector((state) => state.exploreListings);
   const placeFilter = useAppSelector((state) => state.placeFilter);
   let place: google.maps.places.PlaceResult | undefined = undefined;
   if (placeFilter.place) {
     place = JSON.parse(placeFilter.place);
   }
-  const params = useParams();
   const listingCardRefs = useRef([]);
   const searchRef = useRef<HTMLInputElement | null>(null);
-  // const mapRef = useRef<HTMLDivElement | null>(null);
   const screenSize = useScreenSizeContext();
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);
@@ -103,12 +96,13 @@ export default function ExploreListingsPage(): JSX.Element {
   //   handleListingToOverlay();
   // }, [params.listingAddress, commonState.listings, dispatch]);
 
+  /**
+   * Sync the url with the listing to overlay
+   */
   useEffect(() => {
     function handler() {
-      // Change url to match the listing to overlay
       if (pageState.showFullListingOverlay) {
         if (pageState.listingToOverlay) {
-          console.log("navigating to listing");
           navigate(
             `/explore-listings/details/${pageState.listingToOverlay.data.address.formattedAddress.value}/${pageState.listingToOverlay.id}`
           );
@@ -116,7 +110,6 @@ export default function ExploreListingsPage(): JSX.Element {
           console.error(`No listing to overlay was found`);
         }
       } else if (!pageState.showFullListingOverlay) {
-        console.log("navigating to map");
         if (placeFilter.place) {
           const place = JSON.parse(placeFilter.place);
           const address = place.formatted_address;
@@ -145,9 +138,6 @@ export default function ExploreListingsPage(): JSX.Element {
    * Sync the searchbox value with placeFilter.place
    */
   useEffect(() => {
-    // console.log(
-    //   "Effect: syncing searchRef.current with placeFilter.place.formatted_address"
-    // );
     if (searchRef && searchRef.current && !place) {
       searchRef.current.value = "";
     }
@@ -177,7 +167,6 @@ export default function ExploreListingsPage(): JSX.Element {
             // ignore clicks on the filter menu btn
             if (openFiltersMenuBtnRef.current) {
               if (!openFiltersMenuBtnRef.current.contains(t)) {
-                console.log("closing menu");
                 setShowFiltersMenu(false);
               }
             }

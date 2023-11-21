@@ -7,11 +7,7 @@ import {
   Str,
 } from "../../../../types/index";
 import { AnyAction } from "@reduxjs/toolkit";
-import {
-  filterListings,
-  getCurrentListings,
-  updateMarkers,
-} from "../map/mapHelpers";
+import { filterListings, getCurrentListings } from "../map/mapHelpers";
 import {
   setAllFilteredListings,
   setCurrentFilteredListings,
@@ -53,7 +49,6 @@ function useFilterChange(
 ) {
   useEffect(() => {
     function handler() {
-      console.log("useFilterChange working...");
       if (status === "idle" && map && map.getBounds() && listings.length > 0) {
         const allFilteredListings = filterListings(listings, {
           place: place ? JSON.parse(place) : undefined,

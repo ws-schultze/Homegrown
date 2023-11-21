@@ -287,7 +287,6 @@ function InputStrInner<T>(
         _valid = valid;
         _errorMsg = errorMsg;
       } else {
-        console.log(min);
         throw new Error(
           "Min must be defined when formatType='comma-separated-no-decimal'."
         );
@@ -390,7 +389,6 @@ function InputStrInner<T>(
       if (max) {
         _formatted = formatYear(_numberStr, 4);
         const { valid, errorMsg } = validateNumber(_number, min, max);
-        console.log(valid, errorMsg);
         _valid = valid;
         _errorMsg = errorMsg;
       } else {
@@ -410,7 +408,6 @@ function InputStrInner<T>(
       let newCursor =
         modifiedCursorPosition + (_formatted.length - value.length);
       newCursor = newCursor <= 0 ? (prefix ? prefix.length : 0) : newCursor;
-      console.log("new cursor: ", newCursor);
       setCursorPosition(newCursor);
     }
 
@@ -437,7 +434,6 @@ function InputStrInner<T>(
   function handleBlur(e: React.FocusEvent): void {
     e.preventDefault();
     e.stopPropagation();
-    console.log("handling blur");
     emit(state, fieldName);
 
     // const s: ListingData = {
