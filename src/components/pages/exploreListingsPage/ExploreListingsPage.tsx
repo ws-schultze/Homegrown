@@ -4,9 +4,12 @@ import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAn
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { setHoveredListing } from "./exploreListingsPageSlice";
+import {
+  setHoveredListing,
+  setListingToOverlay,
+} from "./exploreListingsPageSlice";
 import ExploreListingsMap from "./map/ExploreListingsMap";
 import ForSaleOrRentFilter from "../../shared/listingFilters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import ListingTypeFilter from "../../shared/listingFilters/listingTypeFilter/ListingTypeFilter";
@@ -55,6 +58,7 @@ export default function ExploreListingsPage(): JSX.Element {
   const navigate = useNavigate();
   const pageState = useAppSelector((state) => state.exploreListings);
   const placeFilter = useAppSelector((state) => state.placeFilter);
+  const params = useParams();
   let place: google.maps.places.PlaceResult | undefined = undefined;
   if (placeFilter.place) {
     place = JSON.parse(placeFilter.place);
@@ -65,6 +69,7 @@ export default function ExploreListingsPage(): JSX.Element {
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);
   const openFiltersMenuBtnRef = useRef<HTMLButtonElement | null>(null);
+  // const commonState = useAppSelector((state) => state.common);
 
   // /**
   //  * Set the listing to overlay
@@ -119,7 +124,11 @@ export default function ExploreListingsPage(): JSX.Element {
             console.error("No formatted_address was found on <place>");
           }
         } else if (placeFilter.place === undefined) {
-          navigate(`/explore-listings`);
+          if (pageState.listingToOverlay) {
+            return;
+          } else {
+            navigate(`/explore-listings`);
+          }
         } else {
           console.warn("escaped");
           const path = ``;

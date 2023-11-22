@@ -25,7 +25,10 @@ import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 import styles from "./mobileListingOverlayPage.module.scss";
 import MobileLogo from "../../../shared/logo/mobile/MobileLogo";
-import { setShowFullOverlay } from "../../exploreListingsPage/exploreListingsPageSlice";
+import {
+  setListingToOverlay,
+  setShowFullOverlay,
+} from "../../exploreListingsPage/exploreListingsPageSlice";
 import { useDispatch } from "react-redux";
 import {
   Apartment,
@@ -228,7 +231,12 @@ export default function MobileListingOverlayPage() {
                 <div className={styles.share_link_copied}>Link Copied</div>
               ) : null}
             </button>
-            <button onClick={() => dispatch(setShowFullOverlay(false))}>
+            <button
+              onClick={() => {
+                dispatch(setShowFullOverlay(false));
+                dispatch(setListingToOverlay(undefined));
+              }}
+            >
               <CloseSVG />
             </button>
           </div>

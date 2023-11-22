@@ -28,7 +28,11 @@ import { renderMap } from "../../exploreListingsPage/map/mapHelpers";
 import { useAppSelector } from "../../../../redux/hooks";
 import styles from "./desktopListingOverlayPage.module.scss";
 import { useDispatch } from "react-redux";
-import { setShowFullOverlay } from "../../exploreListingsPage/exploreListingsPageSlice";
+import {
+  setListingToOverlay,
+  setShowFullOverlay,
+} from "../../exploreListingsPage/exploreListingsPageSlice";
+import { setListing } from "../../createListingPage/createListingPageSlice";
 
 export default function ListingOverlayPage() {
   const listing = useAppSelector(
@@ -75,6 +79,7 @@ export default function ListingOverlayPage() {
         containerRef.current?.contains(target) === true
       ) {
         dispatch(setShowFullOverlay(false));
+        dispatch(setListingToOverlay(undefined));
       }
     }
 
@@ -134,7 +139,12 @@ export default function ListingOverlayPage() {
                       </div>
                     ) : null}
                   </button>
-                  <button onClick={() => dispatch(setShowFullOverlay(false))}>
+                  <button
+                    onClick={() => {
+                      dispatch(setShowFullOverlay(false));
+                      dispatch(setListingToOverlay(undefined));
+                    }}
+                  >
                     <CloseSVG />
                     <label>Close</label>
                   </button>

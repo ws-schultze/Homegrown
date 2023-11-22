@@ -9,7 +9,7 @@ import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFirestore";
 import styles from "../../styles.module.scss";
@@ -19,7 +19,9 @@ import {
   setHoveredListing,
   setListingToOverlay,
   setMapCenter,
+  setShowFullOverlay,
 } from "../../../exploreListingsPage/exploreListingsPageSlice";
+import { useScreenSizeContext } from "../../../../../ScreenSizeProvider";
 
 interface Props extends FormProps {}
 
@@ -28,6 +30,7 @@ export default function ReviewForm(props: Props) {
   const dispatch = useDispatch();
   const pageState = useAppSelector((s) => s.editListingPage);
   const params = useParams();
+  const screenSize = useScreenSizeContext();
 
   const { deleteListingFromFirestore } = useDeleteListingFromFirestore(
     pageState.listing.uploads.images,
@@ -87,10 +90,15 @@ export default function ReviewForm(props: Props) {
             lng: data.address.geolocation.value.lng,
           };
           dispatch(setMapCenter(mapCenter));
+          if (screenSize === "desktop") {
+            dispatch(setShowFullOverlay(true));
+          }
           navigate(
             `/explore-listings/details/${data.address.formattedAddress.value}/${docRef.id}`
           );
-          toast.success("Listing updated successfully.");
+          toast.success(
+            "Listing updated successfully. Refresh the page to see the changes."
+          );
         })
         .catch((err) => {
           console.error(err);
