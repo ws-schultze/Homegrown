@@ -38,17 +38,17 @@
     align-items: center;
     justify-content: center;
     background: rgb(0 0 0 / 83%);
-    z-index: 999;
+    z-index: 9999;
 
     .user_acknowledgement {
       display: flex;
       flex-direction: column;
-      width: 90%;
-      background: black;
-      color: antiquewhite;
+      max-width: 500px;
+      color: var(--color-text);
       padding: 100px 20px;
       border: var(--border);
       border-radius: var(--border-radius);
+      background: var(--color-bg-primary);
 
       .notice {
         display: flex;
