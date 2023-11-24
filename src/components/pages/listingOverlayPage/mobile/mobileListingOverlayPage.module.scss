@@ -9,7 +9,7 @@
   height: 100dvh;
   overflow: hidden;
   top: calc(-1 * var(--height-navbar));
-  // z-index: 9999;
+  z-index: 9999;
 }
 
 .header {

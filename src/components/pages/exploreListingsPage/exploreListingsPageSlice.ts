@@ -16,6 +16,7 @@ export interface ExploreListingsState {
   mapMarkerSize: MapMarkerSize;
   mapMinZoomForLargeMarkers: number;
   mapCenter?: TypeLatLng;
+  showListView: boolean;
 }
 
 export const initialExploreListingsState: ExploreListingsState = {
@@ -31,6 +32,7 @@ export const initialExploreListingsState: ExploreListingsState = {
   mapMarkerSize: "small",
   mapMinZoomForLargeMarkers: 11,
   mapCenter: undefined,
+  showListView: false,
 };
 
 export const exploreListingsPageSlice = createSlice({
@@ -103,6 +105,10 @@ export const exploreListingsPageSlice = createSlice({
       ...state,
       mapZoom: action.payload,
     }),
+    setShowListView: (state, action: { payload: boolean; type: string }) => ({
+      ...state,
+      showListView: action.payload,
+    }),
   },
 });
 
@@ -119,6 +125,7 @@ export const {
   setMapMarkerSize,
   setMapCenter,
   setMapZoom,
+  setShowListView,
 } = exploreListingsPageSlice.actions;
 
 export default exploreListingsPageSlice.reducer;
