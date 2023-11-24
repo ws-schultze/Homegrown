@@ -183,6 +183,12 @@
       fill: var(--color-text);
     }
   }
+
+  p {
+    color: var(--color-text);
+    border-top: var(--border);
+    padding-top: 20px;
+  }
 }
 
 .m-filters-close-icon {

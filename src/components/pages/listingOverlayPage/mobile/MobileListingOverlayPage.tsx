@@ -291,10 +291,37 @@ export default function MobileListingOverlayPage() {
               {address.formattedAddress.value}
             </div>
           </div>
+          {/* <div className={styles.description}> */}
+          <p className={styles.description}>{basicInfo.description.value}</p>
+          {/* </div> */}
+
           <div className={styles.images}>
             {uploads.images.value.map((image, i) => (
               <img className={styles.image} key={i} src={image.url} alt="" />
             ))}
+          </div>
+          <div className={styles["listed-by"]}>
+            {agent ? (
+              <span>
+                Listed by: <br />
+                {agent.firstName.value}{" "}
+                {agent.middleName.value.length > 0
+                  ? agent.middleName.value
+                  : null}{" "}
+                {agent.lastName.value}
+                <br />
+                DRE# {agent.licenseId.value} <br />
+                Phone# {agent.phoneNumber.formatted}
+                <br />
+                {agent.companyName.value}
+              </span>
+            ) : owner ? (
+              <span>For Sale by Owner</span>
+            ) : company ? (
+              <span>Listed by: {company.name.value}</span>
+            ) : privateOwner ? (
+              <span>For Rent by Owner</span>
+            ) : null}
           </div>
           <div className={styles.info}>
             <div className={styles.overview}>
@@ -487,32 +514,6 @@ export default function MobileListingOverlayPage() {
                 ) : null}
               </div>
 
-              <p className={styles.description}>
-                {basicInfo.description.value}
-              </p>
-              <div className={styles["listed-by"]}>
-                {agent ? (
-                  <span>
-                    Listed by: <br />
-                    {agent.firstName.value}{" "}
-                    {agent.middleName.value.length > 0
-                      ? agent.middleName.value
-                      : null}{" "}
-                    {agent.lastName.value}
-                    <br />
-                    DRE# {agent.licenseId.value} <br />
-                    Phone# {agent.phoneNumber.formatted}
-                    <br />
-                    {agent.companyName.value}
-                  </span>
-                ) : owner ? (
-                  <span>For Sale by Owner</span>
-                ) : company ? (
-                  <span>Listed by: {company.name.value}</span>
-                ) : privateOwner ? (
-                  <span>For Rent by Owner</span>
-                ) : null}
-              </div>
               <Wrapper
                 apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
                 render={renderMap}

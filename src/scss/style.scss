@@ -470,3 +470,7 @@ input:-internal-autofill-selected {
   fill: var(--color-primary) !important;
   animation: fadeIn 1.5s ease-in infinite alternate;
 }
+
+.pac-container {
+  z-index: 10000 !important;
+}

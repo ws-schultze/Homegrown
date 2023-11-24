@@ -33,6 +33,7 @@ import {
   setShowFullOverlay,
 } from "../../exploreListingsPage/exploreListingsPageSlice";
 import { setListing } from "../../createListingPage/createListingPageSlice";
+import Footer from "../../../shared/footer/Footer";
 
 export default function ListingOverlayPage() {
   const listing = useAppSelector(
@@ -208,30 +209,6 @@ export default function ListingOverlayPage() {
 
               <div className={styles.card}>
                 <p>{basicInfo.description.value}</p>
-              </div>
-
-              <div className={styles.card}>
-                <div className={styles.lister}>
-                  {agent ? (
-                    <span>
-                      Listed by: <br />
-                      {agent.firstName.value}{" "}
-                      {agent.middleName.value.length > 0
-                        ? agent.middleName.value
-                        : null}{" "}
-                      {agent.lastName.value} <br /> DRE# {agent.licenseId.value}{" "}
-                      <br /> Phone# {agent.phoneNumber.formatted}
-                      <br />
-                      {agent.companyName.value}
-                    </span>
-                  ) : owner ? (
-                    <span>For Sale by Owner</span>
-                  ) : company ? (
-                    <span>Listed by: {company.name.value}</span>
-                  ) : privateOwner ? (
-                    <span>For Rent by Owner</span>
-                  ) : null}
-                </div>
               </div>
 
               <div className={styles.overview}>
@@ -745,6 +722,31 @@ export default function ListingOverlayPage() {
                     />
                   </div>
                 </Wrapper>
+
+                {/* <div className={styles.card}> */}
+                <div className={styles.lister}>
+                  {agent ? (
+                    <span>
+                      Listed by: <br />
+                      {agent.firstName.value}{" "}
+                      {agent.middleName.value.length > 0
+                        ? agent.middleName.value
+                        : null}{" "}
+                      {agent.lastName.value} <br /> DRE# {agent.licenseId.value}{" "}
+                      <br /> Phone# {agent.phoneNumber.formatted}
+                      <br />
+                      {agent.companyName.value}
+                    </span>
+                  ) : owner ? (
+                    <span>For Sale by Owner</span>
+                  ) : company ? (
+                    <span>Listed by: {company.name.value}</span>
+                  ) : privateOwner ? (
+                    <span>For Rent by Owner</span>
+                  ) : null}
+                </div>
+                {/* </div> */}
+                <Footer />
               </div>
             </div>
           </>
