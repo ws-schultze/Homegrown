@@ -18,6 +18,52 @@
   flex-grow: 1;
 }
 
+.m_list_view_btn {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 40px;
+  font-size: 18px;
+  color: var(--color-text);
+  background-color: var(--color-bg-primary);
+  border-right: var(--border);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 10px;
+  margin: 10px 0 10px 0;
+  label {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    margin: 0 10px;
+    font-size: 18px;
+    color: var(--color-text);
+  }
+  svg {
+    fill: var(--color-text);
+    width: 30px;
+  }
+}
+
+.m_list_view_close_icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(50%);
+  fill: var(--color-primary);
+  height: 40px;
+  width: 40px;
+  svg {
+    width: 50px;
+  }
+}
+
 .filters {
   display: flex;
   border-bottom: 1px solid var(--color-border);
@@ -25,15 +71,17 @@
   gap: 5px;
 }
 
-.m-filters-container {
+.m-filters-container,
+.m_list_view_container {
   position: fixed;
-  height: calc(100vh - var(--height-navbar));
-  height: calc(100dvh - var(--height-navbar));
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
   pointer-events: none;
   transition: 0.3s;
   overflow-y: auto;
-  z-index: 999;
+  z-index: 9999;
 
   &.is-open {
     pointer-events: all;
@@ -43,7 +91,11 @@
   }
 }
 
-.m-filters {
+.m_list_view_container {
+}
+
+.m-filters,
+.m_list_view {
   position: absolute;
   top: 0;
   left: -100%;
@@ -67,6 +119,41 @@
   &.is-closed {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+.m_list_view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0px;
+  align-items: center;
+  position: relative;
+
+  .cards {
+    margin-top: 50px;
+    z-index: 1;
+  }
+
+  .close_btn {
+    position: fixed;
+    height: 40px;
+    width: 375px;
+    display: flex;
+    background: var(--color-bg-primary);
+    border: var(--border);
+    // border-radius: var(--border-radius);
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    svg {
+      width: 40px;
+      height: 40px;
+      fill: var(--color-text);
+    }
   }
 }
 

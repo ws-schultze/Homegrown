@@ -24,6 +24,7 @@ import styles from "./exploreListingsPage.module.scss";
 import DesktopListingOverlayPage from "../listingOverlayPage/desktop/DesktopListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
+import { ReactComponent as CloseSVG } from "./assets/closeIcon.svg";
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
@@ -67,8 +68,11 @@ export default function ExploreListingsPage(): JSX.Element {
   const searchRef = useRef<HTMLInputElement | null>(null);
   const screenSize = useScreenSizeContext();
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
+  const [showListViewMenu, setShowListViewMenu] = useState(false);
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);
+  const listViewMenuRef = useRef<HTMLDivElement | null>(null);
   const openFiltersMenuBtnRef = useRef<HTMLButtonElement | null>(null);
+  const openListViewBtnRef = useRef<HTMLButtonElement | null>(null);
   // const commonState = useAppSelector((state) => state.common);
 
   // /**
@@ -160,6 +164,13 @@ export default function ExploreListingsPage(): JSX.Element {
    */
   function toggleFiltersMenu() {
     setShowFiltersMenu(!showFiltersMenu);
+  }
+
+  /**
+   * Hide and show the list view menu
+   */
+  function toggleListViewMenu() {
+    setShowListViewMenu(!showListViewMenu);
   }
 
   /**
@@ -347,27 +358,18 @@ export default function ExploreListingsPage(): JSX.Element {
         <SlidersSVG />
       </button>
 
+      {/* mobile filters menu */}
       <div
         className={`${styles["m-filters-container"]} ${
           showFiltersMenu ? styles["is-open"] : styles["is-closed"]
         }`}
       >
-        {/* <CloseSVG className={styles["m-filters-close-icon"]} /> */}
         <div
           className={`${styles["m-filters"]} ${
             showFiltersMenu ? styles["is-open"] : styles["is-closed"]
           }`}
           ref={filtersMenuRef}
         >
-          {/* <button
-            type="button"
-            id="filters-menu-btn"
-            className={styles["m-filters-close-btn"]}
-            onClick={toggleFiltersMenu}
-          >
-            <CloseSVG />
-          </button> */}
-
           <div className={styles["search-box-container"]}>
             <input
               className={styles["m-search-box"]}
@@ -406,6 +408,44 @@ export default function ExploreListingsPage(): JSX.Element {
             btnStyles={mDropdownBtnStyle}
             menuStyles={mDropdownMenuStyle}
           />
+        </div>
+      </div>
+
+      <button
+        ref={openListViewBtnRef}
+        type="button"
+        id="list-view-btn"
+        className={styles.m_list_view_btn}
+        onClick={toggleListViewMenu}
+      >
+        List View
+      </button>
+
+      {/* mobile list view menu */}
+      <div
+        className={`${styles.m_list_view_container} ${
+          showListViewMenu ? styles["is-open"] : styles["is-closed"]
+        }`}
+      >
+        <div
+          className={`${styles.m_list_view} ${
+            showListViewMenu ? styles["is-open"] : styles["is-closed"]
+          }`}
+          ref={listViewMenuRef}
+        >
+          <button
+            type="button"
+            className={styles.close_btn}
+            onClick={toggleListViewMenu}
+          >
+            <CloseSVG />
+          </button>
+
+          <div className={styles.cards}>
+            {pageState.currentFilteredListings.map((listing, i) => (
+              <ListingCard key={listing.id} listing={listing} isMobile={true} />
+            ))}
+          </div>
         </div>
       </div>
 
