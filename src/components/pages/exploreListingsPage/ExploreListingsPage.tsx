@@ -29,6 +29,7 @@ import { ReactComponent as ChevronDownSVG } from "./assets/chevron-down-solid.sv
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
+import MobileListView from "./mobileListView/MobileListView";
 
 const dDropdownBtnStyle = {
   height: "50px",
@@ -168,14 +169,6 @@ export default function ExploreListingsPage(): JSX.Element {
   }
 
   /**
-   * Hide and show the list view menu
-   */
-  function toggleListViewMenu() {
-    dispatch(setShowListView(!pageState.showListView));
-    // setShowListViewMenu(!showListViewMenu);
-  }
-
-  /**
    * Close filters menu when clicking outside of it
    */
   useEffect(() => {
@@ -203,35 +196,6 @@ export default function ExploreListingsPage(): JSX.Element {
       window.removeEventListener("click", handler);
     };
   }, [filtersMenuRef, showFiltersMenu, openFiltersMenuBtnRef]);
-
-  /**
-   * Close list view menu when clicking outside of it
-   */
-  useEffect(() => {
-    function handler(e: MouseEvent) {
-      const t = e.target as Node;
-
-      // if menu is open and click outside it, close menu
-      if (showListViewMenu) {
-        if (listViewMenuRef.current) {
-          if (!listViewMenuRef.current.contains(t)) {
-            // ignore clicks on the menu btn
-            if (openListViewBtnRef.current) {
-              if (!openListViewBtnRef.current.contains(t)) {
-                setShowListViewMenu(false);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    window.addEventListener("click", handler);
-
-    return () => {
-      window.removeEventListener("click", handler);
-    };
-  }, [listViewMenuRef, showListViewMenu, openListViewBtnRef]);
 
   /**
    * DESKTOP RENDER
@@ -442,47 +406,7 @@ export default function ExploreListingsPage(): JSX.Element {
         </div>
       </div>
 
-      <button
-        ref={openListViewBtnRef}
-        type="button"
-        id="list-view-btn"
-        className={styles.m_list_view_btn}
-        onClick={toggleListViewMenu}
-      >
-        List View
-      </button>
-
-      {/* mobile list view menu */}
-
-      <div
-        className={`${styles.m_list_view_container} ${
-          pageState.showListView ? styles["is-open"] : styles["is-closed"]
-        }`}
-      >
-        <div
-          className={`${styles.m_list_view} ${
-            pageState.showListView ? styles["is-open"] : styles["is-closed"]
-          }`}
-          ref={listViewMenuRef}
-        >
-          <button
-            type="button"
-            className={styles.close_btn}
-            onClick={toggleListViewMenu}
-          >
-            <ChevronDownSVG />
-          </button>
-          <div className={styles.cards}>
-            {pageState.currentFilteredListings.map((listing, i) => (
-              <ListingCard key={listing.id} listing={listing} isMobile={true} />
-            ))}
-          </div>
-          <p className={styles.end}>
-            End of listings that are visible on the map
-          </p>
-          <Footer />
-        </div>
-      </div>
+      <MobileListView />
 
       {/* <div className={styles["page-content"]}>
           <div className={styles["listing-cards-container"]}>

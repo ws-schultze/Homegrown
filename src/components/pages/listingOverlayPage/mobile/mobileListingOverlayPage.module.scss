@@ -9,7 +9,7 @@
   height: 100dvh;
   overflow: hidden;
   top: calc(-1 * var(--height-navbar));
-  z-index: 9999;
+  // z-index: 9999;
 }
 
 .header {
@@ -26,7 +26,7 @@
   padding: 0 10px;
   background: var(--color-bg-primary);
   border-bottom: var(--border);
-  z-index: 1001;
+  z-index: 9999;
 
   img {
     height: 40px;

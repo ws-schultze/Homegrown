@@ -18,39 +18,6 @@
   flex-grow: 1;
 }
 
-.m_list_view_btn {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 40px;
-  font-size: 18px;
-  color: var(--color-text);
-  background-color: var(--color-bg-primary);
-  border-right: var(--border);
-  border: var(--border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  padding: 10px;
-  margin: 10px 0 10px 0;
-  label {
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    align-items: center;
-    margin: 0 10px;
-    font-size: 18px;
-    color: var(--color-text);
-  }
-  svg {
-    fill: var(--color-text);
-    width: 30px;
-  }
-}
-
 .m_list_view_close_icon {
   position: absolute;
   right: 20px;
@@ -90,24 +57,6 @@
   }
 }
 
-.m_list_view_container {
-  position: absolute;
-  top: calc(-1 * var(--height-navbar));
-  bottom: 0;
-  width: 100%;
-  pointer-events: none;
-  transition: 0.3s;
-  overflow: hidden;
-  z-index: 9999;
-
-  &.is-open {
-    pointer-events: all;
-    opacity: 1;
-    visibility: visible;
-    background: #0000005c;
-  }
-}
-
 .m-filters {
   position: absolute;
   top: 0;
@@ -132,62 +81,6 @@
   &.is-closed {
     opacity: 0;
     visibility: hidden;
-  }
-}
-
-.m_list_view {
-  width: 100%;
-  height: 85%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 0px;
-  align-items: center;
-  position: absolute;
-  left: 0;
-  bottom: -100%;
-  visibility: hidden;
-  opacity: 0;
-  transition: 0.3s;
-  overflow-y: scroll;
-  background: var(--color-bg-primary);
-  border-top: var(--border);
-
-  &.is-open {
-    bottom: 0;
-    opacity: 1;
-    visibility: visible;
-  }
-  &.is-closed {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .cards {
-    z-index: 1;
-  }
-
-  .close_btn {
-    position: fixed;
-    height: 40px;
-    width: 375px;
-    display: flex;
-    background: var(--color-bg-primary);
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-
-    svg {
-      width: 40px;
-      height: 40px;
-      fill: var(--color-text);
-    }
-  }
-
-  p {
-    color: var(--color-text);
-    border-top: var(--border);
-    padding-top: 20px;
   }
 }
 

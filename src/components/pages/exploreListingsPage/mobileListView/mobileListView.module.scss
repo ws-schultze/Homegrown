@@ -1,0 +1,114 @@
+.open_btn {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 40px;
+  font-size: 18px;
+  color: var(--color-text);
+  background-color: var(--color-bg-primary);
+  border-right: var(--border);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 10px;
+  margin: 10px 0 10px 0;
+  label {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    margin: 0 10px;
+    font-size: 18px;
+    color: var(--color-text);
+  }
+  svg {
+    fill: var(--color-text);
+    width: 30px;
+  }
+}
+
+.container {
+  position: absolute;
+  top: calc(-1 * var(--height-navbar));
+  bottom: 0;
+  width: 100%;
+  pointer-events: none;
+  transition: 0.3s;
+  overflow: hidden;
+  z-index: 9999;
+
+  &.is-open {
+    pointer-events: all;
+    opacity: 1;
+    visibility: visible;
+    background: #0000005c;
+  }
+}
+
+.menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  // gap: 10px;
+  width: 100%;
+  height: calc(100dvh - var(--height-navbar));
+  padding: 0px;
+  align-items: center;
+  bottom: -100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+  background: var(--color-bg-primary);
+  // border-top: var(--border);
+
+  &.is-open {
+    bottom: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+  &.is-closed {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    width: 100%;
+    z-index: 1;
+    overflow-y: scroll;
+  }
+
+  .close_btn {
+    height: 64px;
+    width: 100%;
+    display: flex;
+    background: var(--color-bg-primary);
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: 0.3s;
+
+    svg {
+      width: 40px;
+      height: 40px;
+      fill: var(--color-text);
+    }
+  }
+
+  p {
+    color: var(--color-text);
+    border-top: var(--border);
+    padding-top: 20px;
+  }
+}
+
+.menu_inner {
+  position: relative;
+}
