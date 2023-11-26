@@ -1,4 +1,3 @@
-import { Uploads } from "../../../../types";
 import Footer from "../../../shared/footer/Footer";
 import Pagination from "../shared/Pagination";
 import styles from "../styles.module.scss";

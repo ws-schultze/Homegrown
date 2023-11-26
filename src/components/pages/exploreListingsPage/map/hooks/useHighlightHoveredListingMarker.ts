@@ -19,7 +19,6 @@ export default function useHighlightHoveredListingMarker(
   >
 ) {
   const pageState = useAppSelector((s) => s.exploreListings);
-  const hoveredListing = pageState.hoveredListing;
   const screenSize = useScreenSizeContext();
 
   useEffect(() => {
@@ -100,5 +99,5 @@ export default function useHighlightHoveredListingMarker(
     if (mapRef.current && mapRef.current.getProjection()) {
       handleHoveredListing(pageState.hoveredListing, pageState.mapMarkerSize);
     }
-  }, [pageState.hoveredListing, pageState.mapMarkerSize]);
+  }, [pageState.hoveredListing, pageState.mapMarkerSize, mapRef.current]);
 }

@@ -91,10 +91,15 @@ export default function EditListingPage() {
     if (window.confirm("Are you sure that you want to delete this listing?")) {
       dispatch(setLoading(true));
 
+      if (!params.listingId) {
+        console.error("No listingId found in params");
+        return;
+      }
+
       // Delete images from the listing from storage
       await Promise.all(
         state.listing.uploads.images.value.map((image: Image) =>
-          deleteImageFromFirestore(image)
+          deleteImageFromFirestore(image, params.listingId!)
         )
       ).catch(() => {
         dispatch(setLoading(false));

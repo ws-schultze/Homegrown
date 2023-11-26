@@ -18,9 +18,15 @@ export default function useDeleteListingFromFirestore(
     if (window.confirm("Are you sure that you want to delete this listing?")) {
       dispatch(setLoading(true));
 
+      if (!params.listingId) {
+        throw new Error("Whoops, no listing ID found in params");
+      }
+
       // Delete images from the listing from storage
       await Promise.all(
-        images.value.map((image) => deleteImageFromFirestore(image))
+        images.value.map((image) =>
+          deleteImageFromFirestore(image, params.listingId!)
+        )
       ).catch((error) => {
         dispatch(setLoading(false));
         console.error(

@@ -206,7 +206,7 @@ export default function ProfilePage() {
       // Delete images of the given listing from firestore
       await Promise.all(
         listing.data.uploads.images.value.map((image) =>
-          deleteImageFromFirestore(image)
+          deleteImageFromFirestore(image, listingId)
         )
       ).catch(() => {
         setState((s) => ({

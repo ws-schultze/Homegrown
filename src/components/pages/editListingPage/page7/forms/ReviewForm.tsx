@@ -9,7 +9,7 @@ import { ReactComponent as WarningSVG } from "../../assets/warningSign.svg";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import useDeleteListingFromFirestore from "../../hooks/useDeleteListingFromFirestore";
 import styles from "../../styles.module.scss";
@@ -56,22 +56,31 @@ export default function ReviewForm(props: Props) {
 
     dispatch(setLoading(true));
 
-    let _listing: TypeFetchedListingData = {
+    let update: TypeFetchedListingData = {
       ...pageState.listing,
-      timestamp: new Date(),
+      timestamp: serverTimestamp(),
     };
 
     if (params.listingId) {
       const docRef = doc(db, "listings", params.listingId);
-      await updateDoc(docRef, _listing)
+      await updateDoc(docRef, update)
         .then(() => {
           /**
            * Update listing in redux store after making the timestamp serializable
            */
-          const { timestamp, ...rest } = _listing;
+          // const { timestamp, ...rest } = _listing;
+          const now = new Date();
           const data = {
-            ...rest,
-            timestamp: JSON.stringify(_listing.timestamp),
+            ...update,
+            timestamp: now.toISOString(),
+          };
+          const listingToOverlay: FetchedListing = {
+            id: docRef.id,
+            data: data,
+          };
+          const mapCenter: TypeLatLng = {
+            lat: data.address.geolocation.value.lat,
+            lng: data.address.geolocation.value.lng,
           };
 
           /**
@@ -79,16 +88,8 @@ export default function ReviewForm(props: Props) {
            */
           dispatch(setLoading(false));
           dispatch(reset());
-          const listingToOverlay: FetchedListing = {
-            id: docRef.id,
-            data: data,
-          };
           dispatch(setHoveredListing(listingToOverlay));
           dispatch(setListingToOverlay(listingToOverlay));
-          const mapCenter: TypeLatLng = {
-            lat: data.address.geolocation.value.lat,
-            lng: data.address.geolocation.value.lng,
-          };
           dispatch(setMapCenter(mapCenter));
           if (screenSize === "desktop") {
             dispatch(setShowFullOverlay(true));

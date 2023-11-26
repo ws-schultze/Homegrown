@@ -107,7 +107,7 @@ export default function OwnerForm(props: FormProps) {
             {state.phoneNumber.formatted}
             <br />
             {state.email.value}
-            {state.provideAddress ? (
+            {state.provideAddress.value ? (
               <div>
                 {state.streetAddress
                   ? `${state.streetAddress.formatted}`

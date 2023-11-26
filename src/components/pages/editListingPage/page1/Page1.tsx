@@ -11,7 +11,7 @@ export default function Page1() {
     <div className={styles.container}>
       <UserAcknowledgementForm thisPageNum={1} />
       {state.userAcknowledged ? <Pagination /> : null}
-      <Pagination />
+
       <Footer />
     </div>
   );

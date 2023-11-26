@@ -1,13 +1,8 @@
 import styles from "../../styles.module.scss";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../../redux/hooks";
-import {
-  setSavedPages,
-  setUnsavedPages,
-  setUserAcknowledged,
-} from "../../editListingPageSlice";
+import { setUserAcknowledged } from "../../editListingPageSlice";
 import { useNavigate, useParams } from "react-router";
-import { Uploads } from "../../../../../types/index";
 
 export default function UserAcknowledgementForm({
   thisPageNum,
@@ -25,7 +20,7 @@ export default function UserAcknowledgementForm({
 
   function handleClick() {
     dispatch(setUserAcknowledged(true));
-    navigate(`/edit-listing/${params.listingId}/${thisPageNum + 1}`);
+    navigate(`/edit-listing/${thisPageNum + 1}/${params.listingId}`);
   }
 
   return (

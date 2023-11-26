@@ -32,7 +32,10 @@ import {
   setHoveredListing,
   setListingToOverlay,
   setMapCenter,
+  setShowFullOverlay,
 } from "../../../exploreListingsPage/exploreListingsPageSlice";
+import { useScreenSizeContext } from "../../../../../ScreenSizeProvider";
+import { setCommonListings } from "../../../../../common/commonSlice";
 
 interface Props extends FormProps {
   /**
@@ -46,6 +49,8 @@ export default function ReviewForm(props: Props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const pageState = useAppSelector((s) => s.createListingPage);
+  const commonState = useAppSelector((s) => s.common);
+  const screenSize = useScreenSizeContext();
 
   const { deleteNotYetSubmittedListing } = useDeleteNotYetSubmittedListing();
 
@@ -205,22 +210,37 @@ export default function ReviewForm(props: Props) {
            */
           dispatch(setLoading(false));
           dispatch(reset());
+
+          const now = new Date();
+
+          const serializableData = {
+            ...dataWithUploads,
+            timestamp: now.toISOString(),
+          };
+
           const listingToOverlay: FetchedListing = {
             id: docRef.id,
-            data: dataWithUploads,
+            data: serializableData,
           };
+
           dispatch(setHoveredListing(listingToOverlay));
           dispatch(setListingToOverlay(listingToOverlay));
+          dispatch(
+            setCommonListings([...commonState.listings, listingToOverlay])
+          );
           const mapCenter: TypeLatLng = {
             lat: dataWithUploads.address.geolocation.value.lat,
             lng: dataWithUploads.address.geolocation.value.lng,
           };
           dispatch(setMapCenter(mapCenter));
+          if (screenSize === "desktop") {
+            dispatch(setShowFullOverlay(true));
+          }
           navigate(
             `/explore-listings/details/${dataWithUploads.address.formattedAddress.value}/${docRef.id}`
           );
           toast.success(
-            "Listing created successfully. Refresh the page to see it on the map."
+            "Listing created successfully. You may need to refresh the page."
           );
         } else {
           toast.warn("Uploading at least one image is required!");

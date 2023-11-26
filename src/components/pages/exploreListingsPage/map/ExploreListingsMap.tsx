@@ -1,40 +1,21 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { ReactComponent as ImageSVG } from "../../../../assets/svg/image-regular.svg";
 import { Boundaries, FetchedListing } from "../../../../types/index";
 import { useNavigate } from "react-router-dom";
 import { MapBoundaryBtn } from "./styledComponents";
 import clearMarkerContentClassList, {
-  defineBoundaries,
-  filterListings,
-  getCurrentFilteredMarkers,
-  getCurrentListings,
-  getCurrentMarkers,
-  getMarkerSize,
-  getNonCurrentFilteredMarkers,
-  hideMarkers,
   highlightMarker,
   makeElement,
   moveMarkerContent,
-  setupBoundaryForPlace,
-  showMarkers,
-  stylePlaceBoundary,
   unhighlightMarker,
 } from "./mapHelpers";
-import { useAppSelector } from "../../../../redux/hooks";
 
 import styles from "./exploreListingsMap.module.scss";
 
 import {
-  MapMarkerSize,
-  setAllFilteredListings,
-  setCurrentFilteredListings,
-  setCurrentListings,
   setHoveredListing,
   setListingToOverlay,
-  setMapCenter,
-  setMapMarkerSize,
-  setMapZoom,
   setShowFullOverlay,
 } from "../exploreListingsPageSlice";
 import { setPlace } from "../../../shared/listingFilters/placeFilter/placeFilterSlice";
@@ -44,9 +25,7 @@ import { useMapContext } from "../../../../MapProvider";
 import useSetupMapZoomControls from "./hooks/useSetupMapZoomControls";
 import { roadmapBoundaryStyle } from "./mapStyles";
 import { useScreenSizeContext } from "../../../../ScreenSizeProvider";
-import useRemoveFullScreenBtnOnMobile from "./hooks/useMakeFullScreenBtn";
 import useMakeFullScreenBtn from "./hooks/useMakeFullScreenBtn";
-import BoundariesTesterMap from "../../../shared/boundaryTesterMap/BoundariesTesterMap";
 import useUpdateMarkers from "./hooks/useUpdateMarkers";
 import useInitializeMap from "./hooks/useInitializeMap";
 import useFadeInMapOnLoad from "./hooks/useFadeInMapOnLoad";
@@ -55,6 +34,7 @@ import useMapIdleEvent from "./hooks/useMapIdleEvent";
 import useSearchboxBias from "./hooks/useSearchboxBias";
 import useHighlightHoveredListingMarker from "./hooks/useHighlightHoveredListingMarker";
 import usePlaceFilter from "./hooks/usePlaceFilter";
+import { useAppSelector } from "../../../../redux/hooks";
 
 declare global {
   interface Document {
@@ -90,7 +70,7 @@ export default function ExploreListingsMap(): JSX.Element {
   const largeMarkersRef = useRef<google.maps.marker.AdvancedMarkerView[]>([]);
   const boundariesRef = useRef<Boundaries>(null);
   const mapTypeIdRef = useRef<MapType>("roadmap");
-  // const commonState = useAppSelector((state) => state.common);
+  const commonState = useAppSelector((state) => state.common);
   // const pageState = useAppSelector((state) => state.exploreListings);
 
   /**
@@ -106,6 +86,7 @@ export default function ExploreListingsMap(): JSX.Element {
       listings: FetchedListing[];
       markerSize: "large" | "small";
     }): google.maps.marker.AdvancedMarkerView[] => {
+      console.log("makeMarkers called...");
       let markers: google.maps.marker.AdvancedMarkerView[] = [];
 
       listings.forEach((listing, i) => {
@@ -310,7 +291,7 @@ export default function ExploreListingsMap(): JSX.Element {
 
       return markers;
     },
-    [navigate]
+    [navigate, dispatch]
   );
 
   // /**
@@ -428,6 +409,9 @@ export default function ExploreListingsMap(): JSX.Element {
    * NOTICE: Data-driven styling for boundaries only works on roadmap
    */
   // useSetupMapTypeIdControls(mapRef.current);
+  useEffect(() => {
+    console.log("useEffect: commonState.listings changed");
+  }, [commonState.listings]);
 
   useInitializeMap(
     mapDivRef,
@@ -472,500 +456,6 @@ export default function ExploreListingsMap(): JSX.Element {
     smallMarkersRef,
     setupHideBoundaryBtn
   );
-
-  /**
-   * Initialize the map
-   */
-  // useEffect(
-  //   () => {
-  //     /**
-  //      * Initialize the map
-  //      * @returns map google.maps.Map | undefined
-  //      */
-  //     function initializeMap() {
-  //       if (
-  //         mapDivRef.current &&
-  //         commonState.listings &&
-  //         commonState.listings !== null &&
-  //         commonState.listings.length >= 1
-  //       ) {
-  //         const mapCenter = pageState.mapCenter
-  //           ? pageState.mapCenter
-  //           : commonState.listings[0].data.address.geolocation.value;
-
-  //         const mapZoom = pageState.mapZoom ? pageState.mapZoom : 10;
-
-  //         const mapOptions = {
-  //           mapId: currentMapId,
-  //           center: mapCenter,
-  //           zoom: mapZoom,
-  //           disableDefaultUI: true,
-  //           streetViewControl: true,
-  //           clickableIcons: false,
-  //           streetViewControlOptions: {
-  //             position: google.maps.ControlPosition.RIGHT_TOP,
-  //           },
-  //         };
-
-  //         const map = new window.google.maps.Map(mapDivRef.current, mapOptions);
-
-  //         // map.mapTypes.set("dark", darkStyleMap);
-  //         // map.mapTypes.set("desert", desertStyleMap);
-
-  //         // placeFilter.place already is defined
-  //         if (place) {
-  //           if (place.place_id) {
-  //             const boundaries = defineBoundaries(map);
-
-  //             boundariesRef.current = boundaries;
-
-  //             setupHideBoundaryBtn(map, boundaries);
-
-  //             setupBoundaryForPlace(
-  //               map,
-  //               place,
-  //               boundaries,
-  //               roadmapBoundaryStyle,
-  //               boundariesRef
-  //             );
-  //           }
-  //         }
-
-  //         // Make small markers
-  //         const smallMarkers = makeMarkers({
-  //           map: map,
-  //           listings: commonState.listings,
-  //           markerSize: "small",
-  //         });
-
-  //         // Make large markers
-  //         const largeMarkers = makeMarkers({
-  //           map: map,
-  //           listings: commonState.listings,
-  //           markerSize: "large",
-  //         });
-
-  //         const input = document.getElementById(
-  //           "place-filter-searchbox"
-  //         ) as HTMLInputElement;
-
-  //         const searchBox = new google.maps.places.SearchBox(input);
-
-  //         mapRef.current = map;
-  //         searchBoxRef.current = searchBox;
-  //         smallMarkersRef.current = smallMarkers;
-  //         largeMarkersRef.current = largeMarkers;
-
-  //         // Throw errors if needed
-  //       } else if (mapDivRef === undefined) {
-  //         throw new Error("mapDivRef is undefined");
-  //       } else if (!commonState.listings) {
-  //         throw new Error("listings is undefined");
-  //       } else if (commonState.listings.length < 1) {
-  //         throw new Error("listings.length < 1");
-  //       } else {
-  //         throw new Error("Escaped");
-  //       }
-  //     }
-
-  //     if (commonState.status === "idle") {
-  //       initializeMap();
-  //     }
-  //   },
-  //   /**
-  //    *  By adding the deps:
-  //    * 'place' and 'pageState.mapCenter', this effect will run more than once.
-  //    */
-  //   // eslint-disable-next-line
-  //   [
-  //     currentMapId,
-  //     commonState.status,
-  //     commonState.listings,
-  //     setupHideBoundaryBtn,
-  //     dispatch,
-  //     makeMarkers,
-  //   ]
-  // );
-
-  /**
-   * Fade in the map all tiles loaded
-   */
-  // useEffect(
-  //   () => {
-  //     if (mapRef.current) {
-  //       const listener = mapRef.current.addListener("tilesloaded", () => {
-  //         if (mapDivRef.current) {
-  //           mapDivRef.current.classList.add(styles.fade);
-  //         }
-  //       });
-  //       return () => google.maps.event.removeListener(listener);
-  //     }
-  //   },
-  //   /**
-  //    * mapRef.current must exist otherwise the mapDivRef will fade
-  //    * in and show nothing.
-  //    */
-  //   //eslint-disable-next-line
-  //   [mapRef.current]
-  // );
-
-  // /**
-  //  * Apply fade animation on the mapDivRef when the theme changes
-  //  */
-  // useEffect(() => {
-  //   if (mapDivRef.current) {
-  //     mapDivRef.current.style.opacity = "0";
-  //     mapDivRef.current.classList.remove(styles.fade);
-  //   }
-  // }, [currentMapId]);
-
-  // /**
-  //  * Handle map idle event
-  //  */
-  // useEffect(
-  //   () => {
-  //     if (
-  //       commonState.status === "idle" &&
-  //       mapRef.current &&
-  //       commonState.listings.length > 0
-  //     ) {
-  //       const idleHandler = mapRef.current.addListener("idle", () => {
-  //         if (mapRef.current) {
-  //           const mapMarkerSize = getMarkerSize(
-  //             mapRef.current!,
-  //             pageState.mapMinZoomForLargeMarkers
-  //           );
-
-  //           const currentListings = getCurrentListings(
-  //             mapRef.current!,
-  //             commonState.listings
-  //           );
-
-  //           const mapCenter = {
-  //             lat: mapRef.current?.getCenter()?.lat()!,
-  //             lng: mapRef.current?.getCenter()?.lng()!,
-  //           };
-
-  //           dispatch(setMapZoom(mapRef.current?.getZoom()!));
-  //           dispatch(setMapCenter(mapCenter));
-  //           dispatch(setMapMarkerSize(mapMarkerSize));
-  //           dispatch(setCurrentListings(currentListings));
-  //         } else {
-  //           console.error("mapRef.current is undefined");
-  //         }
-  //       });
-
-  //       /**
-  //        * ========== VERY IMPORTANT ==============
-  //        *
-  //        * If idleHandler does not get removed, it will fire multiple times,
-  //        * using old state, and cause current filtered markers to flash instead
-  //        * of not being hidden then shown
-  //        *
-  //        * Do not wrap idleHandler in another function
-  //        */
-  //       return () => google.maps.event.removeListener(idleHandler);
-  //     }
-  //   },
-  //   /**
-  //    * removed mapRef.current as a dep. seems to not break stuff by doing so
-  //    */
-  //   [
-  //     currentMapId,
-  //     commonState.status,
-  //     commonState.listings,
-  //     pageState.allFilteredListings,
-  //     pageState.mapMinZoomForLargeMarkers,
-  //     dispatch,
-  //   ]
-  // );
-
-  // /**
-  //  * Bias the searchBox to map's current loaded tiles
-  //  */
-  // useEffect(
-  //   () => {
-  //     if (mapRef.current) {
-  //       // Make searchbox biased to current map bounds
-  //       const searchBoxBias = mapRef.current.addListener("tilesloaded", () => {
-  //         if (searchBoxRef.current) {
-  //           searchBoxRef.current!.setBounds(
-  //             mapRef.current!.getBounds() as google.maps.LatLngBounds
-  //           );
-  //         }
-  //       });
-  //       return () => google.maps.event.removeListener(searchBoxBias);
-  //     }
-  //   },
-  //   /**
-  //    * searchBoxRef.current and mapRef.current are needed deps to
-  //    * ensure that boundaries are drawn on the current map with
-  //    * the current searchbox results
-  //    */
-  //   // eslint-disable-next-line
-  //   [searchBoxRef.current, mapRef.current]
-  // );
-
-  // /**
-  //  * Handle hovered listing
-  //  */
-  // useEffect(() => {
-  //   /**
-  //    * Given a hovered listing (which comes from a hovered listing card), change the bg color
-  //    * of that listing's map marker. Color change will happen to either a small marker or large,
-  //    * depending on which current map markers are provided
-  //    * @param hoveredListing FetchedListing | null
-  //    * @param markers google.maps.marker.AdvancedMarkerView[]
-  //    */
-  //   function handleHoveredListing(
-  //     hoveredListing: FetchedListing | undefined,
-  //     markerSize: MapMarkerSize
-  //   ) {
-  //     // Change small marker bg on hover
-  //     if (markerSize === "small") {
-  //       if (hoveredListing) {
-  //         smallMarkersRef.current.forEach((marker) => {
-  //           unhighlightMarker(marker);
-
-  //           const lat = hoveredListing.data.address.geolocation.value.lat;
-  //           const lng = hoveredListing.data.address.geolocation.value.lng;
-
-  //           if (marker.position?.lat === lat && marker.position.lng === lng) {
-  //             highlightMarker(marker);
-  //             if (mapRef.current) {
-  //               if (screenSize === "desktop") {
-  //                 moveMarkerContent(mapRef.current, marker);
-  //               }
-  //             }
-  //           }
-  //         });
-
-  //         // Un-highlight all markers when hovered listing is undefined
-  //       } else if (!hoveredListing) {
-  //         smallMarkersRef.current.forEach((marker) => {
-  //           unhighlightMarker(marker);
-  //           if (screenSize === "desktop") {
-  //             clearMarkerContentClassList(marker);
-  //           }
-  //         });
-  //       }
-
-  //       // Change large marker bg on hover
-  //     } else if (markerSize === "large") {
-  //       if (hoveredListing) {
-  //         largeMarkersRef.current.forEach((marker) => {
-  //           unhighlightMarker(marker);
-
-  //           const lat = hoveredListing.data.address.geolocation.value.lat;
-  //           const lng = hoveredListing.data.address.geolocation.value.lng;
-
-  //           if (marker.position?.lat === lat && marker.position.lng === lng) {
-  //             highlightMarker(marker);
-  //             if (mapRef.current) {
-  //               if (screenSize === "desktop") {
-  //                 moveMarkerContent(mapRef.current, marker);
-  //               }
-  //             }
-  //           }
-  //         });
-
-  //         // Un-highlight all markers when hovered listing is undefined
-  //       } else if (!hoveredListing) {
-  //         largeMarkersRef.current.forEach((marker) => {
-  //           unhighlightMarker(marker);
-  //           if (screenSize === "desktop") {
-  //             clearMarkerContentClassList(marker);
-  //           }
-  //         });
-  //       }
-  //     } else {
-  //       throw new Error(
-  //         `Invalid marker size: ${pageState.mapMarkerSize}. "Marker size must be "small" or "large".`
-  //       );
-  //     }
-  //   }
-  //   if (mapRef.current && mapRef.current.getProjection()) {
-  //     handleHoveredListing(pageState.hoveredListing, pageState.mapMarkerSize);
-  //   }
-  // }, [pageState.hoveredListing, pageState.mapMarkerSize]);
-
-  // /**
-  //  * Handle place change
-  //  */
-  // useEffect(
-  //   () => {
-  //     function handlePlaceChange() {
-  //       if (searchBoxRef.current) {
-  //         searchBoxRef.current.addListener("places_changed", () => {
-  //           if (searchBoxRef.current && mapRef.current) {
-  //             const places = searchBoxRef.current.getPlaces();
-
-  //             if (places && places.length > 0) {
-  //               if (largeMarkersRef.current && smallMarkersRef.current) {
-  //                 // Clear out the old markers in order to have them in the correct location on render.
-  //                 largeMarkersRef.current.forEach((marker) => {
-  //                   marker.map = null;
-  //                 });
-  //                 smallMarkersRef.current.forEach((marker) => {
-  //                   marker.map = null;
-  //                 });
-  //               }
-
-  //               const boundaries = defineBoundaries(mapRef.current);
-
-  //               boundariesRef.current = boundaries;
-
-  //               setupHideBoundaryBtn(mapRef.current, boundaries);
-
-  //               setupBoundaryForPlace(
-  //                 mapRef.current,
-  //                 places[0],
-  //                 boundaries,
-  //                 roadmapBoundaryStyle,
-  //                 boundariesRef
-  //               );
-
-  //               // Make the feature layer visible on other map types
-  //               // if (currentMapTypeId !== 'roadmap') {
-  //               //   boundaries.postalCodeBoundaries.setMap(null); // Remove from current map
-  //               //   featureLayer.setMap(map); // Add to the new map with the changed base map type
-  //               // }
-
-  //               // if (mapTypeIdRef.current === "roadmap") {
-  //               //   console.log("setting road map boundary styling for place");
-
-  //               //   setupBoundaryForPlace(
-  //               //     mapRef.current,
-  //               //     places[0],
-  //               //     boundaries,
-  //               //     roadmapBoundaryStyle
-  //               //   );
-  //               // } else if (mapTypeIdRef.current === "hybrid") {
-  //               //   console.log("setting hybrid map boundary styling for place");
-
-  //               //   setupBoundaryForPlace(
-  //               //     mapRef.current,
-  //               //     places[0],
-  //               //     boundaries,
-  //               //     hybridMapBoundaryStyle
-  //               //   );
-  //               // } else if (mapTypeIdRef.current === "terrain") {
-  //               //   console.log("setting terrain map boundary styling for place");
-
-  //               //   setupBoundaryForPlace(
-  //               //     mapRef.current,
-  //               //     places[0],
-  //               //     boundaries,
-  //               //     terrainMapBoundaryStyle
-  //               //   );
-  //               // } else {
-  //               //   console.warn("setting default boundary styling");
-
-  //               //   setupBoundaryForPlace(
-  //               //     mapRef.current,
-  //               //     places[0],
-  //               //     boundaries,
-  //               //     roadmapBoundaryStyle
-  //               //   );
-  //               // }
-
-  //               // Because lat and lng are functions in a
-  //               // google.maps.places.PlaceResult, and since this
-  //               // place filter must be stringified to be dispatched,
-  //               // turn lat and lng into numbers before stringify,
-  //               // so that after parse the values are useful
-
-  //               // Make the place result serializable
-  //               const p = places[0];
-  //               const _place: google.maps.places.PlaceResult = {
-  //                 ...p,
-  //                 geometry: {
-  //                   ...p.geometry,
-  //                   location: {
-  //                     //@ts-ignore
-  //                     lat: p.geometry?.location?.lat(),
-  //                     //@ts-ignore
-  //                     lng: p.geometry?.location?.lng(),
-  //                   },
-  //                 },
-  //               };
-  //               const strPlace = JSON.stringify(_place);
-  //               dispatch(setPlace(strPlace));
-  //               navigate(`${_place.formatted_address}`, { replace: true });
-  //             }
-  //           }
-  //         });
-  //       }
-  //     }
-  //     handlePlaceChange();
-  //   },
-  //   /**
-  //    * searchBoxRef.current and mapRef.current are needed deps to
-  //    * ensure that boundaries are drawn on the current map with
-  //    * the current searchbox results
-  //    */
-  //   // eslint-disable-next-line
-  //   [
-  //     searchBoxRef.current,
-  //     mapRef.current,
-  //     mapTypeIdRef,
-  //     dispatch,
-  //     navigate,
-  //     setupHideBoundaryBtn,
-  //   ]
-  // );
-
-  // ***** SAVE FOR LATER *****
-  // /**
-  //  * Listen for change in mapTypeId
-  //  */
-  // useEffect(
-  //   () => {
-  //     if (mapRef.current) {
-  //       const mapTypeIdListener = mapRef.current.addListener(
-  //         "maptypeid_changed",
-  //         () => {
-  //           if (mapRef.current) {
-  //             const currentMapTypeId = mapRef.current.getMapTypeId();
-  //             // console.log("currentMapTypeId: ", currentMapTypeId);
-
-  //             // Make the feature layer visible on other map types
-  //             if (currentMapTypeId !== "roadmap") {
-  //               console.log("Updating featureLayer styling...");
-  //               if (boundariesRef.current) {
-  //                 //
-  //                 if (placeFilter.place) {
-  //                   //
-  //                 } else {
-  //                   console.log("placeFilter.place is undefined");
-  //                 }
-  //               } else {
-  //                 console.log("boundariesRef.current is undefined");
-  //               }
-  //             }
-  //           } else {
-  //             console.log("mapRef.current is undefined");
-  //           }
-  //         }
-  //       );
-  //       return () => google.maps.event.removeListener(mapTypeIdListener);
-  //     }
-  //   },
-  //   /**
-  //    * searchBoxRef.current and mapRef.current are needed deps to
-  //    * ensure that boundaries are drawn on the current map with
-  //    * the current searchbox results
-  //    */ // eslint-disable-next-line
-  //   [
-  //     searchBoxRef.current,
-  //     mapRef.current,
-  //     boundariesRef.current,
-  //     place,
-  //     dispatch,
-  //     navigate,
-  //     setupHideBoundaryBtn,
-  //   ]
-  // );
 
   return <div className={styles["map"]} ref={mapDivRef} id="map"></div>;
 }

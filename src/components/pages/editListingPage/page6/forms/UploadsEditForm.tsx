@@ -100,8 +100,8 @@ export default function UploadsEditForm(props: Props): JSX.Element {
         )
       )
         .then((uploaded) => {
-          // const now = new Date();
-          // const isoString = now.toISOString();
+          const now = new Date();
+          const isoString = now.toISOString();
           // Upload success
           const s: ListingData = {
             ...listing,
@@ -114,7 +114,7 @@ export default function UploadsEditForm(props: Props): JSX.Element {
                 errorMsg: "",
               },
             },
-            timestamp: serverTimestamp(),
+            timestamp: isoString,
           };
 
           dispatch(setListing(s));
@@ -129,10 +129,13 @@ export default function UploadsEditForm(props: Props): JSX.Element {
         });
 
       // Update listing in firestore
-      const formDataCopy: DocumentData = { ...listing };
+      const update: DocumentData = {
+        ...listing,
+        timestamp: serverTimestamp(),
+      };
       if (listingId) {
         const docRef = doc(db, "listings", listingId);
-        await updateDoc(docRef, formDataCopy);
+        await updateDoc(docRef, update);
       } else {
         throw new Error("param of listingId is undefined");
       }
@@ -227,14 +230,23 @@ export default function UploadsEditForm(props: Props): JSX.Element {
         const docRef = doc(db, "listings", listingId);
         await updateDoc(docRef, formDataCopy);
 
-        // Update parent to reflect changes without having to reload page
-        // emit(s);
-        dispatch(setListing(s));
+        const now = new Date();
+
+        const serializableListing = {
+          ...s,
+          timestamp: now.toISOString(),
+        };
+
+        dispatch(setListing(serializableListing));
 
         // Delete images from firestore
-        await deleteImageFromFirestore(image);
+        if (params.listingId) {
+          await deleteImageFromFirestore(image, params.listingId);
+        } else {
+          throw new Error("param of <listingId> is undefined");
+        }
 
-        setLoading(false);
+        dispatch(setLoading(false));
       } else {
         throw new Error("param of <listingId> is undefined");
       }

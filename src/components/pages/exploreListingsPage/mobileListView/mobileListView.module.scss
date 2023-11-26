@@ -55,7 +55,7 @@
   flex-direction: column;
   // gap: 10px;
   width: 100%;
-  height: calc(100dvh - var(--height-navbar));
+  height: calc(100dvh - var(--height-navbar) * 2);
   padding: 0px;
   align-items: center;
   bottom: -100%;
@@ -63,7 +63,7 @@
   opacity: 0;
   transition: 0.3s;
   background: var(--color-bg-primary);
-  // border-top: var(--border);
+  border-top: var(--border);
 
   &.is-open {
     bottom: 0;
