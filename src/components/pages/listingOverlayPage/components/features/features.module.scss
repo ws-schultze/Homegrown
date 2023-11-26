@@ -1,0 +1,19 @@
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 30px;
+  gap: 10px;
+  padding: 10px 0;
+  svg {
+    fill: #317491;
+    height: 25px;
+    width: 25px;
+  }
+}
