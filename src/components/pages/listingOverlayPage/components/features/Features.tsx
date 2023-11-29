@@ -251,7 +251,7 @@ export default function Features({ listing }: Props) {
   function pricePerSqft(listing: SingleFamilyHome): JSX.Element {
     return <></>;
   }
-
+  // Does the name change work on github?
   function yearBuilt(
     listing:
       | SingleFamilyHome
