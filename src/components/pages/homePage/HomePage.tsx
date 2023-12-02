@@ -139,7 +139,7 @@ export default function HomePage() {
                   {commonState.listings.map((listing, index) => (
                     //@ts-ignore
                     <swiper-slide class="swiper-slide" key={index}>
-                      <ListingCard listing={listing} />
+                      <ListingCard listing={listing} key={listing.id} />
                       {/* @ts-ignore */}
                     </swiper-slide>
                   ))}
@@ -168,7 +168,7 @@ export default function HomePage() {
                         (listing, index) => (
                           //@ts-ignore
                           <swiper-slide class="swiper-slide" key={index}>
-                            <ListingCard listing={listing} />
+                            <ListingCard listing={listing} key={listing.id} />
                             {/* @ts-ignore */}
                           </swiper-slide>
                         )
@@ -202,7 +202,7 @@ export default function HomePage() {
                           return (
                             //@ts-ignore
                             <swiper-slide class="swiper-slide" key={index}>
-                              <ListingCard listing={listing} />
+                              <ListingCard listing={listing} key={listing.id} />
                               {/* @ts-ignore */}
                             </swiper-slide>
                           );
@@ -223,7 +223,11 @@ export default function HomePage() {
                 <h2>Most Recent Listings</h2>
                 <div className={styles["m-cards"]}>
                   {commonState.listings.map((listing, index) => (
-                    <ListingCard listing={listing} isMobile={true} />
+                    <ListingCard
+                      listing={listing}
+                      isMobile={true}
+                      key={listing.id}
+                    />
                   ))}
                 </div>
               </div>
@@ -234,7 +238,11 @@ export default function HomePage() {
 
                   <div className={styles["m-cards"]}>
                     {exploreState.currentFilteredListings.map((listing) => (
-                      <ListingCard listing={listing} isMobile={true} />
+                      <ListingCard
+                        listing={listing}
+                        isMobile={true}
+                        key={listing.id}
+                      />
                     ))}
                   </div>
                 </div>
@@ -250,7 +258,11 @@ export default function HomePage() {
                         )
                       ) {
                         return (
-                          <ListingCard listing={listing} isMobile={true} />
+                          <ListingCard
+                            listing={listing}
+                            isMobile={true}
+                            key={listing.id}
+                          />
                         );
                       } else {
                         return [];
