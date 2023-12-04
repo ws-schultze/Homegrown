@@ -55,9 +55,10 @@ export default function Root({
       >
         <div className={styles.user_acknowledgement}>
           <div className={styles.notice}>
-            <a href="https://lordicon.com/">
+            {/* <a href="https://lordicon.com/">
               <img src={houseGif} alt="Lordicon" />
-            </a>
+            </a> */}
+            <p>Creator: Sam Schultze</p>
             <h1>Disclaimer</h1>
             <ul>
               <li>This app is for demonstration purposes only.</li>
