@@ -22,14 +22,14 @@ export default function ListingOverlayPage() {
   const listing = useAppSelector(
     (state) => state.exploreListings.listingToOverlay
   );
-  const placeFilter = useAppSelector((state) => state.placeFilter);
+  // const placeFilter = useAppSelector((state) => state.placeFilter);
   const auth = getAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const params = useParams();
+  // const params = useParams();
 
   const {
     basicInfo,
