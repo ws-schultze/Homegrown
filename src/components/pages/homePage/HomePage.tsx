@@ -122,7 +122,7 @@ export default function HomePage() {
           {screenSize === "desktop" ? (
             <>
               <div className={styles["swiper-wrap"]}>
-                <h3>Most Recent Listings</h3>
+                <h3>Most recent listings</h3>
                 {/* @ts-ignore */}
                 <swiper-container
                   ref={swiperElRef}
