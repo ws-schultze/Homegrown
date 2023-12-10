@@ -543,16 +543,20 @@ export default function clearMarkerContentClassList(
   const element = marker.content?.getElementsByClassName(
     styles["info-window"]
   )[0] as HTMLElement;
-  element.classList.remove(
-    styles["move-right"],
-    styles["move-left"],
-    styles["move-down"],
-    styles["move-up"],
-    styles["move-southeast"],
-    styles["move-southwest"],
-    styles["move-northeast"],
-    styles["move-northwest"]
-  );
+  if (element) {
+    element.classList.remove(
+      styles["move-right"],
+      styles["move-left"],
+      styles["move-down"],
+      styles["move-up"],
+      styles["move-southeast"],
+      styles["move-southwest"],
+      styles["move-northeast"],
+      styles["move-northwest"]
+    );
+  } else {
+    console.warn("element is undefined");
+  }
 }
 
 export function defineBoundaries(map: google.maps.Map): {
@@ -768,9 +772,19 @@ export function filterListings(
             );
           }
 
+          // administrative_area_level_2/County
+          // if (place.types.includes("administrative_area_level_1")) {
+          //   console.log(place);
+          //   console.log("filterListings: filtering by state");
+          //   filtered = listings.filter((listing) =>
+          //   if(listing.data.addressComponents)
+          //     listing.data.address.adminAreaLevel1.value.includes(place!.name!)
+          //   );
+          // }
+
           // administrative_area_level_1/State
           if (place.types.includes("administrative_area_level_1")) {
-            // console.log("filterListings: filtering by state");
+            console.log("filtering listings by state:", place.name);
 
             let _filtered: FetchedListing[] = [];
 
@@ -782,14 +796,24 @@ export function filterListings(
                 ) {
                   if (
                     listing.data.address.addressComponents[key].types.includes(
-                      //@ts-ignore
                       "administrative_area_level_1"
-                    ) &&
-                    listing.data.address.addressComponents[
-                      key
-                    ].long_name.includes(place!.name!)
+                    )
                   ) {
-                    _filtered.push(listing);
+                    console.log(
+                      "found a state: ",
+                      listing.data.address.addressComponents[key].long_name
+                    );
+                    if (
+                      listing.data.address.addressComponents[
+                        key
+                      ].long_name.includes(place.name!)
+                    ) {
+                      console.log(
+                        "found a match:",
+                        listing.data.address.formattedAddress.value
+                      );
+                      _filtered.push(listing);
+                    }
                   }
                 }
               }

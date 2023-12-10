@@ -1,5 +1,6 @@
 /* Styles that override default swiper css */
 
+
 .swiper-container {
   /* width: 1500px !important; */
   width: 100%;
@@ -13,11 +14,11 @@ swiper-container::part(button-prev),
 swiper-container::part(button-next) {
   top: 0;
   margin: auto;
-  background-color: #000000b0;
+  background: var(--swiper-btn-bg);
   height: 100%;
-  width: 50px;
+  width: 24px;
   padding: 0 10px;
-  color: var(--color-border);
+  color: var(--color-primary);
   $parent: &;
   &.mobile {
     #{$parent}::part(button-prev),
@@ -25,6 +26,15 @@ swiper-container::part(button-next) {
       width: 0;
     }
   }
+}
+
+swiper-container::part(scrollbar) {
+  background: var(--color-bg-secondary);
+  .swiper-scrollbar-drag {
+    background: var(--color-primary);
+    color: green;
+  }
+  color: var(--color-primary);
 }
 
 .swiper {
@@ -42,21 +52,3 @@ swiper-container::part(button-next) {
   background: red !important;
 }
 
-div
-  > div.swiper-pagination.swiper-pagination-progressbar.swiper-pagination-horizontal
-  > span {
-  background: red !important;
-}
-
-.swiper-button-next svg,
-.swiper-button-prev svg {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transform-origin: center center;
-  fill: green !important;
-  color: red;
-  background: black;
-  /* padding: 10px; */
-  border-radius: var(--border-radius);
-}

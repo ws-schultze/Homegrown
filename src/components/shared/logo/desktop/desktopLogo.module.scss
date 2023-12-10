@@ -1,5 +1,8 @@
 .logo {
+  display: flex;
+  align-self: center;
   height: 50px !important;
+  cursor: pointer;
   :nth-child(1) {
     fill: green;
   }

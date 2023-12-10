@@ -21,6 +21,7 @@ import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Error from "../../shared/error/Error";
 import { ReactComponent as MagnifyingGlassSVG } from "./assets/magnifying-glass-solid.svg";
 
+
 register();
 
 export default function HomePage() {
@@ -131,8 +132,9 @@ export default function HomePage() {
                   }`}
                   slides-per-view="auto"
                   space-between="10"
-                  pagination="true"
-                  pagination-type="progressbar"
+                  pagination="false"
+                  // scrollbar="true"
+                  // pagination-type="progressbar"
                   navigation="true"
                   loop="false"
                 >
@@ -159,8 +161,8 @@ export default function HomePage() {
                       }`}
                       slides-per-view="auto"
                       space-between="10"
-                      pagination="true"
-                      pagination-type="progressbar"
+                      pagination="false"
+                      // pagination-type="progressbar"
                       navigation="true"
                       loop="false"
                     >
