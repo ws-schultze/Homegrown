@@ -21,7 +21,6 @@ import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Error from "../../shared/error/Error";
 import { ReactComponent as MagnifyingGlassSVG } from "./assets/magnifying-glass-solid.svg";
 
-
 register();
 
 export default function HomePage() {
@@ -222,7 +221,7 @@ export default function HomePage() {
           ) : (
             <>
               <div className={styles["m-cards-container"]}>
-                <h2>Most Recent Listings</h2>
+                <h2>Most recent listings</h2>
                 <div className={styles["m-cards"]}>
                   {commonState.listings.map((listing, index) => (
                     <ListingCard
