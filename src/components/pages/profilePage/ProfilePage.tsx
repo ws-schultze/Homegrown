@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import {
-  applyActionCode,
   getAuth,
   sendPasswordResetEmail,
-  updateEmail,
   updateProfile,
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
@@ -183,13 +181,25 @@ export default function ProfilePage() {
           // Update email in firebase
           await verifyBeforeUpdateEmail(auth.currentUser, state.email.value)
             .then(() => {
-              toast.success(
-                `An verification email has been sent to ${state.email.value}. Please verify the email in order to have this change take effect.`
+              toast.info(
+                `A verification email has been sent to ${state.email.value}. Please verify this this account update via the verification email, for the change to take effect.`,
+                {
+                  closeOnClick: true,
+                  autoClose: false,
+                  draggable: true,
+                  theme: "colored",
+                }
               );
             })
             .catch((error) => {
               toast.error(
-                "It has been a while since you last signed in. Please sign out and sign in again in order to update your email."
+                "It has been a while since you last signed in. Please sign out and sign in again in order to update your email.",
+                {
+                  closeOnClick: true,
+                  autoClose: false,
+                  draggable: true,
+                  theme: "colored",
+                }
               );
               console.error(error.message);
             });
@@ -387,6 +397,19 @@ export default function ProfilePage() {
             >
               <SignOutSVG />
               Sign out
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                toast.error("This is a toast", {
+                  closeOnClick: true,
+                  autoClose: false,
+                  draggable: true,
+                  theme: "colored",
+                })
+              }
+            >
+              TOAST
             </button>
           </div>
         </form>
