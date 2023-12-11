@@ -31,7 +31,7 @@ export const initialCommonState: CommonState = {
  * https://github.com/reduxjs/redux-templates/blob/master/packages/cra-template-redux-typescript/template/src/features/counter/counterSlice.ts
  */
 export const fetchListingsAsync = createAsyncThunk(
-  "exploreListings/fetchListings",
+  "commonState/fetchListings",
   async () => {
     const listings = await fetchListings();
     return listings;

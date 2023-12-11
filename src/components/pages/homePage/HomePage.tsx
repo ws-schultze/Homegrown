@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Error from "../../shared/error/Error";
 import { ReactComponent as MagnifyingGlassSVG } from "./assets/magnifying-glass-solid.svg";
+import { FetchedListing } from "../../../types";
 
 register();
 
@@ -179,7 +180,7 @@ export default function HomePage() {
                   </>
                 ) : (
                   <>
-                    <h3>Recent Mendocino County listings</h3>
+                    <h3>Recent Napa County listings</h3>
                     {/* @ts-ignore */}
                     <swiper-container
                       ref={swiperElRef}
@@ -188,29 +189,39 @@ export default function HomePage() {
                       }`}
                       slides-per-view="auto"
                       space-between="10"
-                      pagination="true"
-                      pagination-type="progressbar"
+                      pagination="false"
+                      // pagination-type="progressbar"
                       navigation="true"
                       loop="false"
                     >
-                      {commonState.listings.map((listing, index) => {
-                        // TODO: Make a default set of listings to show here if the user has not recently searched for anything
-                        if (
-                          listing.data.address.adminAreaLevel2.value.includes(
-                            "Mendocino"
-                          )
-                        ) {
-                          return (
-                            //@ts-ignore
-                            <swiper-slide class="swiper-slide" key={index}>
-                              <ListingCard listing={listing} key={listing.id} />
-                              {/* @ts-ignore */}
-                            </swiper-slide>
-                          );
-                        } else {
-                          return [];
-                        }
-                      })}
+                      {commonState.listings
+                        // //@ts-ignore
+                        //   .toReversed()
+                        .map((listing: FetchedListing) => {
+                          // TODO: Make a default set of listings to show here if the user has not recently searched for anything
+                          console.log(listing.data.timestamp);
+                          if (
+                            listing.data.address.adminAreaLevel2.value.includes(
+                              "Napa"
+                            )
+                          ) {
+                            return (
+                              //@ts-ignore
+                              <swiper-slide
+                                class="swiper-slide"
+                                key={listing.id}
+                              >
+                                <ListingCard
+                                  listing={listing}
+                                  key={listing.id}
+                                />
+                                {/* @ts-ignore */}
+                              </swiper-slide>
+                            );
+                          } else {
+                            return [];
+                          }
+                        })}
 
                       {/* @ts-ignore */}
                     </swiper-container>
@@ -249,13 +260,13 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className={styles["m-cards-container"]}>
-                  <h2>Recent Mendocino County listings</h2>
+                  <h2>Recent Napa County listings</h2>
                   <div className={styles["m-cards"]}>
                     {commonState.listings.map((listing) => {
                       // TODO: Make a default set of listings to show here if the user has not recently searched for anything
                       if (
                         listing.data.address.adminAreaLevel2.value.includes(
-                          "Mendocino"
+                          "Napa"
                         )
                       ) {
                         return (

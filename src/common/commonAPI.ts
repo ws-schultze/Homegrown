@@ -3,14 +3,17 @@ import {
   collection,
   getDocs,
   limit,
+  orderBy,
   query,
 } from "firebase/firestore";
 import { FetchedListing } from "../types/index";
 import { db } from "../firebase.config";
+import { list } from "firebase/storage";
 
 export default async function fetchListings() {
   let listings: FetchedListing[] = [];
-  const q = query(collection(db, "listings"), ...[limit(500)]);
+  const listingsRef = collection(db, "listings");
+  const q = query(listingsRef, orderBy("timestamp"), ...[limit(25)]);
   // https://firebase.google.com/docs/firestore/query-data/order-limit-data
 
   await getDocs(q)
