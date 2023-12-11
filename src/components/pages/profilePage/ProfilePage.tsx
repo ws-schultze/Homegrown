@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { getAuth, sendPasswordResetEmail, updateProfile } from "firebase/auth";
+import {
+  applyActionCode,
+  getAuth,
+  sendPasswordResetEmail,
+  updateEmail,
+  updateProfile,
+  verifyBeforeUpdateEmail,
+} from "firebase/auth";
 import {
   updateDoc,
   doc,
@@ -156,10 +163,39 @@ export default function ProfilePage() {
       if (auth.currentUser) {
         // Make sure the signed in user is only able to modify their own profile
 
-        // Update display name in firebase
-        await updateProfile(auth.currentUser, {
-          displayName: state.username.value,
-        });
+        if (state.username.value !== auth.currentUser.displayName) {
+          // Update display name in firebase
+          updateProfile(auth.currentUser, {
+            displayName: state.username.value,
+          })
+            .then(() => {
+              toast.success("Username updated successfully");
+            })
+            .catch((error) => {
+              console.error(error.message);
+            });
+        }
+
+        console.log(state.email.value);
+        console.log(auth.currentUser.email);
+
+        if (state.email.value !== auth.currentUser.email) {
+          // Update email in firebase
+          await verifyBeforeUpdateEmail(auth.currentUser, state.email.value)
+            .then(() => {
+              toast.success(
+                `An verification email has been sent to ${state.email.value}. Please verify the email in order to have this change take effect.`
+              );
+            })
+            .catch((error) => {
+              toast.error(
+                "It has been a while since you last signed in. Please sign out and sign in again in order to update your email."
+              );
+              console.error(error.message);
+            });
+
+          // await applyActionCode(auth, code);
+        }
 
         // Update display name in firestore
         const userRef = doc(db, "users", auth.currentUser.uid);
@@ -181,7 +217,7 @@ export default function ProfilePage() {
           editable: false,
         }));
 
-        toast.success("Profile Updated Successfully");
+        // toast.success("Profile Updated Successfully");
       } else {
         console.error("auth.currentUser is undefined");
       }
