@@ -4,8 +4,8 @@ import styles from "./desktopLogo.module.scss";
 
 export default function DesktopLogo() {
   return (
-    <Link to="/">
+    <Link to="/" className={styles.container}>
       <LogoSVG className={styles.logo} />
     </Link>
-  )
+  );
 }
