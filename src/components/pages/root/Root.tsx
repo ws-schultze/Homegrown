@@ -58,10 +58,10 @@ export default function Root({
             {/* <a href="https://lordicon.com/">
               <img src={houseGif} alt="Lordicon" />
             </a> */}
-            <p>Creator: Sam Schultze</p>
+            <p>Developed by W. S. Schultze</p>
             <h1>Disclaimer</h1>
             <ul>
-              <li>This app is for demonstration purposes only.</li>
+              <li>This is a work in progress.</li>
               <li>All property listings found on this app are fictional.</li>
               <li>
                 No transactions shall occur as a result of using this app.
