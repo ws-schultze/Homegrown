@@ -30,7 +30,6 @@ export default function SignInPage() {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("Signing user in");
     setIsLoading(true);
     try {
       const auth = getAuth();

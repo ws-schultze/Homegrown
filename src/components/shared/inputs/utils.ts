@@ -293,17 +293,6 @@ export function repositionCursor({
         }
         // Two groups separators are defined
       } else if (groupSeparators.length === 2) {
-        // console.log("separators === 2");
-        // console.log(
-        //   "formattedValueFromState[modifiedCursorPosition]:",
-        //   formattedValueFromState[modifiedCursorPosition]
-        // );
-        // console.log("groupSeparators[0]:", groupSeparators[0]);
-        // console.log("groupSeparators[1]:", groupSeparators[1]);
-        // console.log(
-        //   "splitValue.splice(modifiedCursorPosition - 1, 1):",
-        //   splitValue.splice(modifiedCursorPosition - 1, 1)
-        // );
         // Cursor is to right of groupSeparator and backspace is pressed.
         // --> Delete the character to the left of the separator and reposition the cursor.
         if (
@@ -760,49 +749,6 @@ export default function makeAutocompleteWidget(
     throw new Error("Something went wrong");
   }
 }
-/**
- *
- * @param state Some state of type T. If the form is for agent info, then agent will be the state.
- * @param stateSetter If using redux, this is where dispatch(setSomeState(value)) goes.
- * @param inputRef the ref for the input value used to trigger the google places autocomplete widget, such as a street number input.
- * @param autocompleteWidget the autocomplete widget gets stored in the components local state and is set by setAutocompleteWidget
- * @param setAutocompleteWidget sets autocomplete widget to component's local state
- */
-// export function handleAutocompleteWidget(
-//   inputRef: React.MutableRefObject<HTMLInputElement | null>,
-//   autocompleteWidget: google.maps.places.Autocomplete | null,
-//   setAutocompleteWidget: (
-//     value: React.SetStateAction<google.maps.places.Autocomplete | null>
-//   ) => void,
-//   handleAutocompletedAddress: (obj: T.Address) => void
-// ) {
-//   if (inputRef.current && inputRef.current !== null) {
-//     const widget = makeAutocompleteWidget(inputRef);
-//     setAutocompleteWidget(widget);
-//   } else {
-//     console.error(`inputRef is undefined or null.`);
-//   }
-
-//   // Listen for click on widget item
-//   if (autocompleteWidget) {
-//     autocompleteWidget.addListener("place_changed", () => {
-//       // if (state) {
-//       const s = setAutocompletePlaceValuesToState({
-//         state: initAddress,
-//         autocomplete: autocompleteWidget,
-//       });
-//       console.log("autocomplete obj", s);
-//       handleAutocompletedAddress(s);
-//       // dispatch(
-//       //   setListing({
-//       //     ...pageState.listing,
-//       //     agent: s,
-//       //   })
-//       // );
-//     });
-//     // });
-//   }
-// }
 
 /**
  * Handle when a user clicks on a Google Places API item from the autocomplete dropdown menu
@@ -819,7 +765,6 @@ export function setAutocompletePlaceValuesToState<
 }) {
   if (autocomplete) {
     const place = autocomplete.getPlace();
-    // console.log("response from getPlace(): ", place);
     let _streetAddress = "",
       _zipCode = "",
       _city = "",
@@ -828,9 +773,6 @@ export function setAutocompletePlaceValuesToState<
       _country = "",
       _formattedAddress = "",
       _geolocation = { lat: 0, lng: 0 };
-
-    // console.log("place.formatted_address: ", place.formatted_address);
-    // console.log("place_id: ", place.place_id);
 
     // Get each component of the address from the place details,
     // and then fill-in the corresponding field on the form.

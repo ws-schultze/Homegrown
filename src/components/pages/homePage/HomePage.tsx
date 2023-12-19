@@ -32,19 +32,8 @@ export default function HomePage() {
   const swiperElRef = useRef<HTMLDivElement>(null);
   const screenSize = useScreenSizeContext();
 
-  // const swiperProgressBarRef = useRef<HTMLSpanElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   const progressBar = document.querySelector(
-  //     ".swiper-pagination-progressbar-fill"
-  //   ) as HTMLElement;
-  //   if (progressBar) {
-  //     console.log("Styling Bar: ", progressBar);
-  //     progressBar.style.background = "yellow !important";
-  //   }
-  // }, []);
 
   function handleSearchboxPlace(
     place: google.maps.places.PlaceResult | undefined
@@ -194,34 +183,25 @@ export default function HomePage() {
                       navigation="true"
                       loop="false"
                     >
-                      {commonState.listings
-                        // //@ts-ignore
-                        //   .toReversed()
-                        .map((listing: FetchedListing) => {
-                          // TODO: Make a default set of listings to show here if the user has not recently searched for anything
-                          console.log(listing.data.timestamp);
-                          if (
-                            listing.data.address.adminAreaLevel2.value.includes(
-                              "Napa"
-                            )
-                          ) {
-                            return (
-                              //@ts-ignore
-                              <swiper-slide
-                                class="swiper-slide"
-                                key={listing.id}
-                              >
-                                <ListingCard
-                                  listing={listing}
-                                  key={listing.id}
-                                />
-                                {/* @ts-ignore */}
-                              </swiper-slide>
-                            );
-                          } else {
-                            return [];
-                          }
-                        })}
+                      {commonState.listings.map((listing: FetchedListing) => {
+                        // TODO: Make a default set of listings to show here if the user has not recently searched for anything
+
+                        if (
+                          listing.data.address.adminAreaLevel2.value.includes(
+                            "Napa"
+                          )
+                        ) {
+                          return (
+                            //@ts-ignore
+                            <swiper-slide class="swiper-slide" key={listing.id}>
+                              <ListingCard listing={listing} key={listing.id} />
+                              {/* @ts-ignore */}
+                            </swiper-slide>
+                          );
+                        } else {
+                          return [];
+                        }
+                      })}
 
                       {/* @ts-ignore */}
                     </swiper-container>

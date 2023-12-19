@@ -49,9 +49,7 @@ export default function MobileNavbar() {
   return (
     <nav className={styles.container} ref={containerRef}>
       <div className={styles.nav}>
-        <Link to={"/"}>
-          <DesktopLogo />
-        </Link>
+        <DesktopLogo />
 
         <button
           ref={showMenuBtnRef}

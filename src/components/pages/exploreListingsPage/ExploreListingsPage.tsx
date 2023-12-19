@@ -4,13 +4,9 @@ import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAn
 import Footer from "../../shared/footer/Footer";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { renderMap } from "./map/mapHelpers";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import {
-  setHoveredListing,
-  setListingToOverlay,
-  setShowListView,
-} from "./exploreListingsPageSlice";
+import { setHoveredListing } from "./exploreListingsPageSlice";
 import ExploreListingsMap from "./map/ExploreListingsMap";
 import ForSaleOrRentFilter from "../../shared/listingFilters/forSaleOrRentFilter/ForSaleOrRentFilter";
 import ListingTypeFilter from "../../shared/listingFilters/listingTypeFilter/ListingTypeFilter";
@@ -25,7 +21,6 @@ import styles from "./exploreListingsPage.module.scss";
 import DesktopListingOverlayPage from "../listingOverlayPage/desktop/DesktopListingOverlayPage";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { ReactComponent as SlidersSVG } from "./assets/sliders-solid.svg";
-import { ReactComponent as ChevronDownSVG } from "./assets/chevron-down-solid.svg";
 import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
@@ -61,7 +56,6 @@ export default function ExploreListingsPage(): JSX.Element {
   const navigate = useNavigate();
   const pageState = useAppSelector((state) => state.exploreListings);
   const placeFilter = useAppSelector((state) => state.placeFilter);
-  const params = useParams();
   let place: google.maps.places.PlaceResult | undefined = undefined;
   if (placeFilter.place) {
     place = JSON.parse(placeFilter.place);
@@ -70,42 +64,8 @@ export default function ExploreListingsPage(): JSX.Element {
   const searchRef = useRef<HTMLInputElement | null>(null);
   const screenSize = useScreenSizeContext();
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
-  const [showListViewMenu, setShowListViewMenu] = useState(false);
   const filtersMenuRef = useRef<HTMLDivElement | null>(null);
-  const listViewMenuRef = useRef<HTMLDivElement | null>(null);
   const openFiltersMenuBtnRef = useRef<HTMLButtonElement | null>(null);
-  const openListViewBtnRef = useRef<HTMLButtonElement | null>(null);
-  // const commonState = useAppSelector((state) => state.common);
-
-  // /**
-  //  * Set the listing to overlay
-  //  */
-  // useEffect(() => {
-  //   /**
-  //    * Find a listing that has the same formatted address as the one provided
-  //    * in the params
-  //    * @returns FetchedListing | undefined
-  //    */
-  //   function handleListingToOverlay() {
-  //     if (!params.listingAddress) {
-  //       dispatch(setListingToOverlay(undefined));
-  //     } else if (params.listingAddress) {
-  //       if (commonState.listings) {
-  //         commonState.listings.forEach((listing) => {
-  //           if (
-  //             listing.data.address.formattedAddress.value ===
-  //             params.listingAddress
-  //           ) {
-  //             dispatch(setListingToOverlay(listing));
-  //           }
-  //         });
-  //       } else {
-  //         console.log("no listings found");
-  //       }
-  //     }
-  //   }
-  //   handleListingToOverlay();
-  // }, [params.listingAddress, commonState.listings, dispatch]);
 
   /**
    * Sync the url with the listing to overlay

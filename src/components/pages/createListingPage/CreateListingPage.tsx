@@ -36,30 +36,6 @@ export default function CreateListingPage(): JSX.Element {
       )
   );
 
-  // useEffect(() => {
-  //   // const unfinishedListing = localStorage.getItem("unfinished-listing");
-  //   if (listing) {
-  //     console.log("Setting state from local storage");
-  //     const s: typeof state = JSON.parse(unfinishedListing);
-
-  //     // Don't get images from local storage
-  //     const t: typeof state = {
-  //       ...s,
-  //       uploads: {
-  //         ...s.uploads,
-  //         images: {
-  //           ...s.uploads.images,
-  //           value: [],
-  //           valid: false,
-  //           saved: false,
-  //         },
-  //       },
-  //     };
-
-  //     setState(t);
-  //   }
-  // }, []);
-
   useEffect(() => {
     document.getElementById("main-container")?.scrollTo(0, 0);
   }, [state.currentPageNumber]);

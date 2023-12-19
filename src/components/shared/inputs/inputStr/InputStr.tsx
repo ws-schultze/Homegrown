@@ -137,28 +137,7 @@ function InputStrInner<T>(
     }
   }, [formatType]);
 
-  /**
-   * This ref is used to make cursorPosition work, because the ref that gets passed in with props
-   * is a function and hence cannot be used like ref.current as current only exists on an object.
-   */
   const localRef = useRef<HTMLInputElement | null>(null);
-  /**
-  // ====> SAVE THIS <====
-  // To better understand using ref as a function or object use this listener example.
-  // For more info on whats happening here:
-  // https://stackoverflow.com/questions/62238716/using-ref-current-in-react-forwardref
-  useEffect(() => {
-    const node = localRef.current;
-    const listen = (): void => console.log("foo");
-
-    if (node) {
-      node.addEventListener("mouseover", listen);
-      return () => {
-        node.removeEventListener("mouseover", listen);
-      };
-    }
-  }, [ref]);
-   */
 
   if (isPriceChange && isPriceChange === true && originalPrice === undefined) {
     throw new Error("originalPrice must be defined if isPriceChange===true");
@@ -176,7 +155,6 @@ function InputStrInner<T>(
     if (localRef === null) return;
     if (localRef.current === null) return;
     if (localRef && localRef.current) {
-      // console.log("setting cursor pos to: ", cursorPosition);
       localRef.current.setSelectionRange(cursorPosition, cursorPosition);
     }
 

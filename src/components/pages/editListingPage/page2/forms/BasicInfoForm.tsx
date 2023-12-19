@@ -418,7 +418,7 @@ export default function BasicInfoForm(props: FormProps) {
 
         default:
           // throw new Error("Escaped");
-          console.log("Fell through switch stmt here...");
+          console.warn("Fell through switch stmt here...");
       }
 
       const kind = options[0];

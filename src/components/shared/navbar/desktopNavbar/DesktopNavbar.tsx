@@ -66,9 +66,9 @@ ${pathMatchRoute("/listings", location) ? "active" : ""}`}
           )}
         </div>
 
-        <Link to={"/"} className={styles["logo-container"]}>
+        <div className={styles["logo-container"]}>
           <DesktopLogo />
-        </Link>
+        </div>
 
         <div className={styles["nav-right"]}>
           <ProfileBtn />

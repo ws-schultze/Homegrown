@@ -174,9 +174,6 @@ export default function ProfilePage() {
             });
         }
 
-        console.log(state.email.value);
-        console.log(auth.currentUser.email);
-
         if (state.email.value !== auth.currentUser.email) {
           // Update email in firebase
           await verifyBeforeUpdateEmail(auth.currentUser, state.email.value)

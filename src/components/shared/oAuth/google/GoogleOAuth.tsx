@@ -17,7 +17,7 @@ export default function GoogleOAuth() {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log(`Signing in with Google...`);
+      console.log(`Signing in through Google...`);
       // Get the user from the Google sign in
       const auth = getAuth();
       const provider = new GoogleAuthProvider();
@@ -37,6 +37,7 @@ export default function GoogleOAuth() {
       }
       setTimeout(() => {
         setLoading(false);
+        console.log(`Signed in through Google`);
       }, 2000);
       navigate("/");
     } catch (error) {

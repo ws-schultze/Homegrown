@@ -18,7 +18,6 @@ export default function setAutocompletePlaceValuesToState<
 >({ state, autocomplete }: Props<T>) {
   if (autocomplete) {
     const place = autocomplete.getPlace();
-    // console.log("response from getPlace(): ", place);
     let _streetAddress = "",
       _zipCode = "",
       _city = "",
@@ -27,9 +26,6 @@ export default function setAutocompletePlaceValuesToState<
       _country = "",
       _formattedAddress = "",
       _geolocation = { lat: 0, lng: 0 };
-
-    // console.log("place.formatted_address: ", place.formatted_address);
-    // console.log("place_id: ", place.place_id);
 
     // Get each component of the address from the place details,
     // and then fill-in the corresponding field on the form.

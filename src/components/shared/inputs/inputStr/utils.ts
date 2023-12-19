@@ -293,18 +293,6 @@ export function repositionCursor({
         }
         // Two groups separators are defined
       } else if (groupSeparators.length === 2) {
-        // console.log("separators === 2");
-        // console.log("lastKeyDown", lastKeyDown);
-        // console.log(
-        //   "formattedValueFromState[modifiedCursorPosition]:",
-        //   formattedValueFromState[modifiedCursorPosition]
-        // );
-        // console.log("groupSeparators[0]:", groupSeparators[0]);
-        // console.log("groupSeparators[1]:", groupSeparators[1]);
-        // console.log(
-        //   "splitValue.splice(modifiedCursorPosition - 1, 1):",
-        //   splitValue.splice(modifiedCursorPosition - 1, 1)
-        // );
         // Cursor is to right of groupSeparator and backspace is pressed.
         // --> Delete the character to the left of the separator and reposition the cursor.
         if (

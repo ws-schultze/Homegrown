@@ -61,50 +61,6 @@ export default function usePlaceFilter(
                     boundariesRef
                   );
 
-                  // Make the feature layer visible on other map types
-                  // if (currentMapTypeId !== 'roadmap') {
-                  //   boundaries.postalCodeBoundaries.setMap(null); // Remove from current map
-                  //   featureLayer.setMap(map); // Add to the new map with the changed base map type
-                  // }
-
-                  // if (mapTypeIdRef.current === "roadmap") {
-                  //   console.log("setting road map boundary styling for place");
-
-                  //   setupBoundaryForPlace(
-                  //     mapRef.current,
-                  //     places[0],
-                  //     boundaries,
-                  //     roadmapBoundaryStyle
-                  //   );
-                  // } else if (mapTypeIdRef.current === "hybrid") {
-                  //   console.log("setting hybrid map boundary styling for place");
-
-                  //   setupBoundaryForPlace(
-                  //     mapRef.current,
-                  //     places[0],
-                  //     boundaries,
-                  //     hybridMapBoundaryStyle
-                  //   );
-                  // } else if (mapTypeIdRef.current === "terrain") {
-                  //   console.log("setting terrain map boundary styling for place");
-
-                  //   setupBoundaryForPlace(
-                  //     mapRef.current,
-                  //     places[0],
-                  //     boundaries,
-                  //     terrainMapBoundaryStyle
-                  //   );
-                  // } else {
-                  //   console.warn("setting default boundary styling");
-
-                  //   setupBoundaryForPlace(
-                  //     mapRef.current,
-                  //     places[0],
-                  //     boundaries,
-                  //     roadmapBoundaryStyle
-                  //   );
-                  // }
-
                   // Because lat and lng are functions in a
                   // google.maps.places.PlaceResult, and since this
                   // place filter must be stringified to be dispatched,

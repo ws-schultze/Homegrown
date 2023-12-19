@@ -89,7 +89,7 @@ export default function useUpdateMarkers(
       dispatch(setAllFilteredListings(allFilteredListings));
       dispatch(setCurrentFilteredListings(currentFilteredListings));
     } else {
-      console.warn("Escaped");
+      console.warn("Waiting for map and markers to load...");
     }
   }, [
     map,

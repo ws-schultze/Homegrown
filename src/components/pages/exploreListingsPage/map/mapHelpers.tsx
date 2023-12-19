@@ -47,8 +47,6 @@ export function getPlaceFromPlaceId(
   placeId: string
 ): Promise<google.maps.places.PlaceResult> {
   return new Promise((resolve) => {
-    // console.log("getting place from placeId");
-
     const request = {
       placeId: placeId,
       fields: ["name", "formatted_address", "place_id", "geometry", "types"],
@@ -64,7 +62,6 @@ export function getPlaceFromPlaceId(
         place.geometry &&
         place.geometry.location
       ) {
-        // console.log("Got place from ID: ", place.formatted_address);
         resolve(place);
       }
     });
@@ -157,7 +154,6 @@ export function getMarkersToHide(
   // Filter uses the opposite truth returned by markerIsCurrent, because
   // only non current markers are what are wanted to hide
   const markersToHide = markers.filter((marker) => !markerIsCurrent(marker));
-  // console.log(`markers to hide ${markersToHide.length}`);
 
   return markersToHide;
 }
@@ -261,57 +257,7 @@ export function makeElement({
   return div;
 }
 
-/**
- * Creates a popup card for a listing when marker is clicked in mobile size window
- * @param listing FetchedListing
- */
-// export function makeListingPopup(listing: FetchedListing) {
-//   const listingPopup = makeElement({
-//     component: <ListingPopup listing={listing} />,
-//     className: styles["listing-popup"],
-//   });
-
-//   listingPopup.id = `${styles["listing-popup"]}-${listing.id}`;
-
-//   const rootElement = document.getElementById("root");
-
-//   if (rootElement) {
-//     rootElement.appendChild(listingPopup);
-//   } else {
-//     console.log("No root element found ");
-//   }
-// }
-
-/**
- * Used on mobile size window to use popups rather than custom info windows for a selected listing
- */
-// export function toggleMarkerHighlight(
-//   marker: google.maps.marker.AdvancedMarkerView,
-//   listing: FetchedListing
-// ) {
-//   removeAllPopups();
-
-//   if (marker.content && marker.element) {
-//     if (marker.content.classList.contains(styles["active"])) {
-//       // Un-Highlight
-//       marker.content.classList.remove(styles["active"]);
-//       marker.element.style.zIndex = "";
-//     } else {
-//       // Highlight
-//       unhighlightAllMarkers(); // get rid of highlighting on another marker
-//       marker.content.classList.add(styles["active"]);
-//       marker.element.style.zIndex = "1";
-//       makeListingPopup(listing);
-//     }
-//   } else {
-//     throw new Error(
-//       "Either marker.content and/or marker.element is/are null or undefined"
-//     );
-//   }
-// }
-
 export function removeAllPopups() {
-  // console.log("Removing popups");
   const popups = Array.from(
     document.getElementsByClassName(
       styles["listing-popup"]
@@ -319,7 +265,6 @@ export function removeAllPopups() {
   );
   if (popups) {
     popups.forEach((popup: HTMLElement) => {
-      // console.log("removing popup: ", popup);
       popup.remove();
     });
   } else {
@@ -356,7 +301,7 @@ export function unhighlightAllMarkers() {
       marker.classList.remove(styles["active"])
     );
   } else {
-    console.log(`marker(s) not found`);
+    console.warn(`marker(s) not found`);
   }
 }
 
@@ -431,14 +376,12 @@ export function moveMarkerContent(
    * Distance less that 200 triggers move-down
    */
   const distanceToLeft = markerX - mapLeftX;
-  // console.log("dToLeft: ", distanceToLeft);
 
   /**
    * Distance between markerX and mapRightX
    * Distance less that 200 triggers move-down
    */
   const distanceToRight = mapRightX - markerX;
-  // console.log("dToRight: ", distanceToRight);
 
   /**
    * Distance between makerY and mapTopY
@@ -566,7 +509,6 @@ export function defineBoundaries(map: google.maps.Map): {
   stateBoundaries: google.maps.FeatureLayer;
   countryBoundaries: google.maps.FeatureLayer;
 } {
-  // console.log("defining boundaries...");
   //@ts-ignore
   const cityBoundaries = map.getFeatureLayer("LOCALITY");
   //@ts-ignore
@@ -577,7 +519,6 @@ export function defineBoundaries(map: google.maps.Map): {
   const stateBoundaries = map.getFeatureLayer("ADMINISTRATIVE_AREA_LEVEL_1");
   //@ts-ignore
   const countryBoundaries = map.getFeatureLayer("COUNTRY");
-  // console.log("done defining boundaries");
   return {
     cityBoundaries,
     postalCodeBoundaries,
@@ -597,8 +538,6 @@ export function stylePlaceBoundary(
   boundaries: Boundaries,
   style: google.maps.FeatureStyleOptions
 ) {
-  // console.log("styling boundaries...");
-
   // Apply styling to the city layer
   // @ts-ignore
   boundaries.cityBoundaries.style = (options: {
@@ -648,8 +587,6 @@ export function stylePlaceBoundary(
       return style;
     }
   };
-
-  // console.log("done styling boundaries");
 }
 
 export function isFullscreen(element: HTMLElement) {
@@ -722,8 +659,6 @@ export function filterListings(
   listings: FetchedListing[],
   filters: ExploreListingsFilters
 ): FetchedListing[] {
-  // console.log("filterListings: starting");
-
   if (!listings) {
     throw new Error("filterListings: listings are undefined");
   }
@@ -744,13 +679,10 @@ export function filterListings(
   if (listings.length > 0) {
     // Filter by place if it is defined
     if (place) {
-      // console.log("filterListings: filtering by place");
-
       if (place.types) {
         if (place.name) {
           // Filter by locality/city
           if (place.types?.includes("locality")) {
-            // console.log(`filterListings: filtering by locality: `, place.types);
             filtered = listings.filter(
               (listing) => listing.data.address.city.value === place!.name!
             );
@@ -758,7 +690,6 @@ export function filterListings(
 
           // Filter by postal_code/zipCode
           if (place.types.includes("postal_code")) {
-            // console.log("filterListings: filtering by postal_code");
             filtered = listings.filter((listing) =>
               listing.data.address.formattedAddress.value.includes(place!.name!)
             );
@@ -766,26 +697,13 @@ export function filterListings(
 
           // administrative_area_level_2/County
           if (place.types.includes("administrative_area_level_2")) {
-            // console.log("filterListings: filtering by county");
             filtered = listings.filter((listing) =>
               listing.data.address.adminAreaLevel2.value.includes(place!.name!)
             );
           }
 
-          // administrative_area_level_2/County
-          // if (place.types.includes("administrative_area_level_1")) {
-          //   console.log(place);
-          //   console.log("filterListings: filtering by state");
-          //   filtered = listings.filter((listing) =>
-          //   if(listing.data.addressComponents)
-          //     listing.data.address.adminAreaLevel1.value.includes(place!.name!)
-          //   );
-          // }
-
           // administrative_area_level_1/State
           if (place.types.includes("administrative_area_level_1")) {
-            console.log("filtering listings by state:", place.name);
-
             let _filtered: FetchedListing[] = [];
 
             listings.forEach((listing) => {
@@ -799,19 +717,11 @@ export function filterListings(
                       "administrative_area_level_1"
                     )
                   ) {
-                    console.log(
-                      "found a state: ",
-                      listing.data.address.addressComponents[key].long_name
-                    );
                     if (
                       listing.data.address.addressComponents[
                         key
                       ].long_name.includes(place.name!)
                     ) {
-                      console.log(
-                        "found a match:",
-                        listing.data.address.formattedAddress.value
-                      );
                       _filtered.push(listing);
                     }
                   }
@@ -828,7 +738,6 @@ export function filterListings(
         console.warn("filterListings: place.types is undefined");
       }
     } else {
-      // console.log("filterListings: place is undefined, moving to next filter");
     }
 
     // Filter for sale/rent
@@ -848,7 +757,6 @@ export function filterListings(
       filtered.length > 0 &&
       ((lowPrice && lowPrice.number) || (highPrice && highPrice.number))
     ) {
-      // console.log("filterListings: filtering by price");
       // Filter by both min and max price
       if (lowPrice.value !== "" && highPrice.value !== "") {
         filtered = filtered.filter(
@@ -874,7 +782,6 @@ export function filterListings(
 
     // Filter by listing kinds
     if (filtered.length > 0 && listingTypes && listingTypes.length > 0) {
-      // console.log("filterListings: filtering by listing kinds");
       let newFiltered: FetchedListing[] = [];
 
       // Check each listing's kind against each filter kind
@@ -892,7 +799,6 @@ export function filterListings(
 
     // Filter by beds
     if (filtered.length > 0 && beds) {
-      // console.log("filterListings: filtering by beds");
       let newFiltered: FetchedListing[] = [];
       filtered.forEach((listing) => {
         // Maybe refactor ListingData so that is has a .features prop that contains all possible
@@ -912,7 +818,6 @@ export function filterListings(
 
     // Filter by baths
     if (filtered.length > 0 && baths !== null) {
-      // console.log("filterListings: filtering by baths");
       let newFiltered: FetchedListing[] = [];
       filtered.forEach((listing) => {
         // Maybe refactor ListingData so that is has a .features prop that contains all possible
@@ -940,12 +845,6 @@ export function filterListings(
       filtered = newFiltered;
     }
   }
-
-  // filtered.forEach((l, i) => {
-  //   console.log(`filterListings: returning listing-${i}: ${l}`);
-  // });
-
-  // console.log("filterListings: done");
 
   return filtered;
 }

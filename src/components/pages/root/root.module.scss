@@ -51,14 +51,14 @@
       border-radius: var(--border-radius);
       border: var(--border);
       background: var(--color-bg-primary);
-      box-shadow: 0 0 64px transparent;
+      // box-shadow: 0 0 64px transparent;
       transition: box-shadow 0.5s ease;
       @include b.sm-screen-breakpoint {
         border: none;
       }
 
       &:hover {
-        box-shadow: 0 0 64px var(--color-primary);
+        box-shadow: 0 0 30px var(--color-primary);
         .notice p {
           box-shadow: inset 0px 0px 16px var(--color-primary);
         }

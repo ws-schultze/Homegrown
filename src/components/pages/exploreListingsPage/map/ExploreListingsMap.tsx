@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback } from "react";
 import ReactDOM from "react-dom/client";
 import { ReactComponent as ImageSVG } from "../../../../assets/svg/image-regular.svg";
 import { Boundaries, FetchedListing } from "../../../../types/index";
@@ -34,7 +34,6 @@ import useMapIdleEvent from "./hooks/useMapIdleEvent";
 import useSearchboxBias from "./hooks/useSearchboxBias";
 import useHighlightHoveredListingMarker from "./hooks/useHighlightHoveredListingMarker";
 import usePlaceFilter from "./hooks/usePlaceFilter";
-import { useAppSelector } from "../../../../redux/hooks";
 
 declare global {
   interface Document {
@@ -57,7 +56,6 @@ declare global {
 }
 
 export default function ExploreListingsMap(): JSX.Element {
-  // console.log("Map: rendering");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const screenSize = useScreenSizeContext();
@@ -70,8 +68,6 @@ export default function ExploreListingsMap(): JSX.Element {
   const largeMarkersRef = useRef<google.maps.marker.AdvancedMarkerView[]>([]);
   const boundariesRef = useRef<Boundaries>(null);
   const mapTypeIdRef = useRef<MapType>("roadmap");
-  const commonState = useAppSelector((state) => state.common);
-  // const pageState = useAppSelector((state) => state.exploreListings);
 
   /**
    * Make a marker for each given listing and return an array of markers
@@ -86,7 +82,6 @@ export default function ExploreListingsMap(): JSX.Element {
       listings: FetchedListing[];
       markerSize: "large" | "small";
     }): google.maps.marker.AdvancedMarkerView[] => {
-      console.log("makeMarkers called...");
       let markers: google.maps.marker.AdvancedMarkerView[] = [];
 
       listings.forEach((listing, i) => {
@@ -409,9 +404,6 @@ export default function ExploreListingsMap(): JSX.Element {
    * NOTICE: Data-driven styling for boundaries only works on roadmap
    */
   // useSetupMapTypeIdControls(mapRef.current);
-  useEffect(() => {
-    console.log("useEffect: commonState.listings changed");
-  }, [commonState.listings]);
 
   useInitializeMap(
     mapDivRef,
