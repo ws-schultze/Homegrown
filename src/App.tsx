@@ -1,10 +1,5 @@
 import "./css/addressAutoCompleteForm.css";
-// import "./scss/style.scss";
-// import "./css/dropdown.css";
-// import "./css/listing-page.css";
-// import "./components/pages/createListingPage/createListingPage.css";
 import "./css/loaders.css";
-// import "./css/theme-toggle-btn.css";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Route,
@@ -26,6 +21,7 @@ import SignUpPage from "./components/pages/signUpPage/SignUpPage";
 import ForgotPasswordPage from "./components/pages/forgotPasswordPage/ForgotPasswordPage";
 
 import { inject } from "@vercel/analytics";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 inject();
 
@@ -73,5 +69,10 @@ export const appRouter = createBrowserRouter(
 );
 
 export default function App(): JSX.Element {
-  return <RouterProvider router={appRouter} />;
+  return (
+    <>
+      <SpeedInsights />
+      <RouterProvider router={appRouter} />
+    </>
+  );
 }
