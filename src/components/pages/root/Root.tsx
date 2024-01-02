@@ -6,7 +6,6 @@ import MobileNavbar from "../../shared/navbar/mobileNavbar/MobileNavbar";
 import styles from "./root.module.scss";
 import DesktopNavbar from "../../shared/navbar/desktopNavbar/DesktopNavbar";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
-import houseGif from "./assets/wired-outline-63-home.gif";
 import { useAppSelector } from "../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setUserAcknowledgedSiteIsDemo } from "../../../common/commonSlice";
@@ -55,9 +54,6 @@ export default function Root({
       >
         <div className={styles.user_acknowledgement}>
           <div className={styles.notice}>
-            {/* <a href="https://lordicon.com/">
-              <img src={houseGif} alt="Lordicon" />
-            </a> */}
             <p>Developed by W. S. Schultze</p>
             <h1>Disclaimer</h1>
             <ul>

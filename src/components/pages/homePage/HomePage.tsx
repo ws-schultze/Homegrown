@@ -3,7 +3,7 @@ import styles from "./homePage.module.scss";
 import Spinner from "../../shared/loaders/Spinner";
 import { useUserContext } from "../../../UserProvider";
 import { Wrapper } from "@googlemaps/react-wrapper";
-import TopImage from "../../../assets/jpg/francesca-tosolini-XcVm8mn7NUM-unsplash.jpg";
+import TopImage from "./assets/francesca-tosolini-XcVm8mn7NUM-unsplash.jpg";
 import Footer from "../../shared/footer/Footer";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../redux/hooks";
@@ -67,7 +67,7 @@ export default function HomePage() {
             screenSize !== "desktop" ? styles.mobile : ""
           }`}
         >
-          <img src={TopImage} alt="" />
+          <img src={TopImage} alt="" fetchpriority="high" />
           {userContext.isAuthenticated ? (
             <p>Welcome Back</p>
           ) : (

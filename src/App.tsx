@@ -25,6 +25,10 @@ import SignInPage from "./components/pages/signInPage/SignInPage";
 import SignUpPage from "./components/pages/signUpPage/SignUpPage";
 import ForgotPasswordPage from "./components/pages/forgotPasswordPage/ForgotPasswordPage";
 
+import { inject } from "@vercel/analytics";
+
+inject();
+
 export const appRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route

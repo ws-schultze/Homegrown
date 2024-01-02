@@ -1,8 +1,19 @@
 import { DocumentData, FieldValue } from "firebase/firestore";
+import { AriaAttributes, DOMAttributes } from "react";
 
 declare module "*.scss" {
   const content: Record<string, string>;
   export default content;
+}
+
+/**
+ * This is a hack to add the fetchpriority attribute to the HTMLAttributes
+ * Using this to try and reduce the LCP of the home page's top image
+ */
+declare module "react" {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    fetchpriority?: "high" | "low" | "auto";
+  }
 }
 
 export interface DropdownStyles {
