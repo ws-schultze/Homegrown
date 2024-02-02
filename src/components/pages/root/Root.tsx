@@ -54,15 +54,14 @@ export default function Root({
       >
         <div className={styles.user_acknowledgement}>
           <div className={styles.notice}>
-            <p>Developed by W. S. Schultze</p>
-            <h1>Disclaimer</h1>
-            <ul>
-              <li>This is a work in progress.</li>
-              <li>All property listings found on this app are fictional.</li>
-              <li>
-                No transactions shall occur as a result of using this app.
-              </li>
-            </ul>
+            <div>
+              <h1>Welcome 😃</h1>
+              <p>
+                Explore my application’s features to the fullest by creating an
+                account, but note it's a demo version, not for commercial use.
+              </p>
+              <p>- W. S. Schultze</p>
+            </div>
             <button onClick={handleUserAcknowledgment}>I understand</button>
           </div>
         </div>

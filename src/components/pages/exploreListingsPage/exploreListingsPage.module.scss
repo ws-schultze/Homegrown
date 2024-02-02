@@ -205,12 +205,14 @@
   padding: 0px;
   display: flex;
   flex-direction: column;
+  min-width: 670px;
   width: 670px;
   gap: 5px;
   overflow: hidden scroll;
   color: var(--color-text);
   padding: 0px;
   @include b.lg-screen {
+    min-width: 345px;
     width: 345px;
   }
 }
@@ -228,8 +230,7 @@
     margin: 0px;
     padding: 0px;
     justify-content: center;
-    flex-grow: 1;
-
+    justify-content: flex-start;
     li {
       list-style-type: none;
     }

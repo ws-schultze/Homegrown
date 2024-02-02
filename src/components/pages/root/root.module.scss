@@ -59,9 +59,6 @@
 
       &:hover {
         box-shadow: 0 0 30px var(--color-primary);
-        .notice p {
-          box-shadow: inset 0px 0px 16px var(--color-primary);
-        }
       }
 
       .notice {
@@ -82,7 +79,6 @@
         h1 {
           width: 100%;
           border-bottom: 1px solid var(--color-border);
-          // margin-top: 64px;
           display: flex;
           align-items: center;
           margin-block-end: 0;
@@ -92,12 +88,8 @@
           width: 50px;
         }
         p {
-          // box-shadow: inset 0px 0px 16px transparent;
           transition: box-shadow 0.5s ease;
-          border-radius: var(--border-radius);
-          border: var(--border);
           width: fit-content;
-          padding: 10px;
           color: var(--color-text);
         }
       }

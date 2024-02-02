@@ -6,6 +6,7 @@ import styles from "./desktopNavbar.module.scss";
 import ThemeBtn from "../../themeBtn/ThemeBtn";
 import { useAppSelector } from "../../../../redux/hooks";
 import DesktopLogo from "../../logo/desktop/DesktopLogo";
+import { list } from "firebase/storage";
 
 interface Props {
   /**
@@ -42,7 +43,7 @@ export default function DesktopNavbar({ maxWidth }: Props) {
             ${styles["nav-link"]}
             ${pathMatchRoute("/listings", location) ? "active" : ""}`}
           >
-            Home finder
+            Explore listings
           </Link>
 
           {createListingPageState.newListingInProgress ? (
@@ -61,7 +62,7 @@ ${pathMatchRoute("/listings", location) ? "active" : ""}`}
                 ${styles["nav-link"]}
                 ${pathMatchRoute("/listings", location) ? "active" : ""}`}
             >
-              List your property
+              List a property
             </Link>
           )}
         </div>

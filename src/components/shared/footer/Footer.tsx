@@ -8,7 +8,7 @@ export default function Footer() {
       {/* <Link to={"/"} className={styles.link}>
         <img src={logoIconPNG} alt="" />
       </Link> */}
-      &copy; 2023 Home Grown Development
+      &copy; 2023 Homegrown Development
     </div>
   );
 }

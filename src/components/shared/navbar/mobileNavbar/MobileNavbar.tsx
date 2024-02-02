@@ -12,6 +12,7 @@ import { ReactComponent as CloseSVG } from "./assets/close-icon.svg";
 import { useScreenSizeContext } from "../../../../ScreenSizeProvider";
 import MobileLogo from "../../logo/mobile/MobileLogo";
 import DesktopLogo from "../../logo/desktop/DesktopLogo";
+import { list } from "firebase/storage";
 
 export default function MobileNavbar() {
   const createListingPageState = useAppSelector((s) => s.createListingPage);
@@ -89,7 +90,7 @@ export default function MobileNavbar() {
               ${styles["nav-link"]}
               ${pathMatchRoute("/listings", location) ? "active" : ""}`}
             >
-              Home finder
+              Explore listings
             </Link>
             {createListingPageState.newListingInProgress ? (
               <Link

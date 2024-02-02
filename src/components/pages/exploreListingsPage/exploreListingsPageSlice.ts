@@ -27,11 +27,11 @@ export const initialExploreListingsState: ExploreListingsState = {
   showFullListingOverlay: false,
   hoveredListing: undefined,
   mapIsLoading: false,
-  mapZoom: 10,
+  mapZoom: 8,
   mapIsFullScreen: false,
   mapMarkerSize: "small",
   mapMinZoomForLargeMarkers: 11,
-  mapCenter: undefined,
+  mapCenter: { lat: 38.5808, lng: -122.525 },
   showListView: false,
 };
 
