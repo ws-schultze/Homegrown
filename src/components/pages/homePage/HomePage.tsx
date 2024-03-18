@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import styles from "./homePage.module.scss";
 import Spinner from "../../shared/loaders/Spinner";
 import { useUserContext } from "../../../UserProvider";
@@ -61,7 +61,7 @@ export default function HomePage() {
     commonState.listings.length >= 1
   ) {
     return (
-      <>
+      <Suspense fallback={<Spinner size="large" />}>
         <header
           className={`${styles.header} ${
             screenSize !== "desktop" ? styles.mobile : ""
@@ -298,7 +298,7 @@ export default function HomePage() {
           </>
         </div>
         <Footer />
-      </>
+      </Suspense>
     );
   }
 

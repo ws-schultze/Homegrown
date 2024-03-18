@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Link } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { ReactComponent as DeleteIcon } from "../../../assets/svg/deleteIcon.svg";
@@ -12,6 +12,9 @@ import {
   setListingToOverlay,
   setShowFullOverlay,
 } from "../../pages/exploreListingsPage/exploreListingsPageSlice";
+import LazyImage from "../lazyImage/LazyImage";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import HomeJpg from "../../../assets/jpg/buyHome.jpg";
 
 interface Props {
   listing: T.FetchedListing;
@@ -46,9 +49,22 @@ export default function ListingCard({
             }}
           >
             {listing.data.uploads.images.value[0] !== undefined ? (
-              <img
+              // <img
+              //   src={listing.data.uploads.images.value[0].url}
+              //   alt={"listing"}
+              // />
+              <LazyLoadImage
+                loading="lazy"
+                alt={"img"}
+                height={"100%"}
                 src={listing.data.uploads.images.value[0].url}
-                alt={"listing"}
+                width={"100%"}
+                effect="opacity"
+                // placeholderSrc={HomeJpg}
+                // wrapperProps={{
+                //   // If you need to, you can tweak the effect transition using the wrapper style.
+                //   style: { transitionDelay: ".1s" },
+                // }}
               />
             ) : (
               <ImageSVG />

@@ -26,6 +26,32 @@
     overflow-y: auto;
     overflow-x: hidden;
   }
+  .demo_notice {
+    display: flex;
+    background: #003860;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    font-size: large;
+    button {
+      // @include btn.btn;
+      height: fit-content;
+      padding: 10px;
+      background: transparent;
+      :hover {
+        // svg {
+        fill: darkviolet;
+        // }
+      }
+      svg {
+        height: 35px;
+        fill: white;
+      }
+    }
+  }
 
   main.loading div {
     opacity: 0.5;

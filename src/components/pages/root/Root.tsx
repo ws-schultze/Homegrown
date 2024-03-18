@@ -9,6 +9,7 @@ import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { useAppSelector } from "../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setUserAcknowledgedSiteIsDemo } from "../../../common/commonSlice";
+import { ReactComponent as CloseSVG } from "./assets/rectangle-xmark-regular.svg";
 
 export default function Root({
   children,
@@ -44,33 +45,47 @@ export default function Root({
         // Mobile navbar nav doesn't change width
         <MobileNavbar />
       )}
-
-      <div
-        className={styles.user_acknowledgement_container}
-        style={{
-          display:
-            commonState.userAcknowledgedSiteIsDemo === false ? "flex" : "none",
-        }}
-      >
-        <div className={styles.user_acknowledgement}>
-          <div className={styles.notice}>
-            <div>
-              <h1>Welcome 😃</h1>
-              <p>
-                Explore my application’s features to the fullest by creating an
-                account, but note it's a demo version, not for commercial use.
-              </p>
-              <p>- W. S. Schultze</p>
+      {/* <div
+          className={styles.user_acknowledgement_container}
+          style={{
+            display:
+              commonState.userAcknowledgedSiteIsDemo === false ? "flex" : "none",
+          }}
+        >
+          <div className={styles.user_acknowledgement}>
+            <div className={styles.notice}>
+              <div>
+                <h1>Welcome 😃</h1>
+                <p>
+                  Explore my application’s features to the fullest by creating an
+                  account, but note it's a demo version, not for commercial use.
+                </p>
+                <p>- W. S. Schultze</p>
+              </div>
+              <button onClick={handleUserAcknowledgment}>I understand</button>
             </div>
-            <button onClick={handleUserAcknowledgment}>I understand</button>
           </div>
-        </div>
-      </div>
-
+        </div> */}
       <main id="main-container" className={styles.main}>
+        <div
+          className={styles.demo_notice}
+          style={{
+            display:
+              commonState.userAcknowledgedSiteIsDemo === false
+                ? "flex"
+                : "none",
+          }}
+        >
+          <p>
+            This site is for demonstration purposes only, not for commercial
+            use.
+          </p>
+          <button type="button" onClick={handleUserAcknowledgment}>
+            <CloseSVG />
+          </button>
+        </div>
         {children ?? <Outlet />}
       </main>
-
       <ToastContainer
         position="top-right"
         autoClose={5000}

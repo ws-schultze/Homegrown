@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAndBathFilter";
 import Footer from "../../shared/footer/Footer";
@@ -25,6 +25,7 @@ import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
 import MobileListView from "./mobileListView/MobileListView";
+import Spinner from "../../shared/loaders/Spinner";
 
 const dDropdownBtnStyle = {
   height: "50px",
