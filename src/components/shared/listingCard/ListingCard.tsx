@@ -15,6 +15,7 @@ import {
 import LazyImage from "../lazyImage/LazyImage";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import HomeJpg from "../../../assets/jpg/buyHome.jpg";
+import ImageLoad from "../imageLoad/ImageLoad";
 
 interface Props {
   listing: T.FetchedListing;
@@ -49,32 +50,24 @@ export default function ListingCard({
             }}
           >
             {listing.data.uploads.images.value[0] !== undefined ? (
-              // <img
-              //   src={listing.data.uploads.images.value[0].url}
-              //   alt={"listing"}
-              // />
-              <LazyLoadImage
-                loading="lazy"
-                alt={"img"}
-                height={"100%"}
-                src={listing.data.uploads.images.value[0].url}
-                width={"100%"}
-                effect="opacity"
-                // placeholderSrc={HomeJpg}
-                // wrapperProps={{
-                //   // If you need to, you can tweak the effect transition using the wrapper style.
-                //   style: { transitionDelay: ".1s" },
-                // }}
-              />
+              <ImageLoad image={listing.data.uploads.images.value[0]} />
             ) : (
+              // <LazyLoadImage
+              //   loading="lazy"
+              //   alt={"img"}
+              //   height={"100%"}
+              //   src={listing.data.uploads.images.value[0].url}
+              //   width={"100%"}
+              //   effect="opacity"
+              //   onLoad={() => console.log("Hello")}
+              // />
               <ImageSVG />
             )}
             <div className={styles.body}>
               <>
                 <div>
                   <div>
-                    <b>{listing.data.basicInfo.price.shortFormatted}</b>
-                    {" - "}
+                    <b>{listing.data.basicInfo.price.shortFormatted}</b>{" "}
                     {listing.data.basicInfo.listingKind.value?.label}{" "}
                     {listing.data.basicInfo.forSaleOrRent.value?.label}
                   </div>
@@ -93,9 +86,7 @@ export default function ListingCard({
                           listing.data.apartment?.bedrooms.number}
                       </b>
                       bd
-                    </div>
-                    {" - "}
-
+                    </div>{" "}
                     {/* Bathrooms */}
                     <div>
                       <b>
@@ -111,9 +102,7 @@ export default function ListingCard({
                             listing.data.apartment?.halfBathrooms.number! * 0.5}
                       </b>
                       ba
-                    </div>
-                    {" - "}
-
+                    </div>{" "}
                     {/* Square feet */}
                     <div>
                       <b>
@@ -122,7 +111,8 @@ export default function ListingCard({
                             .formatted ||
                           listing.data.apartment?.squareFeet.formatted}
                       </b>
-                      ft<sup>2</sup>
+                      {/* ft<sup>2</sup> */}
+                      sqft
                     </div>
                   </div>
                 ) : null}
@@ -138,11 +128,11 @@ export default function ListingCard({
                 {listing.data.agent ? (
                   <div>Listed by: {listing.data.agent.companyName.value}</div>
                 ) : listing.data.owner ? (
-                  <div>For Sale by Owner</div>
+                  <div>For sale by owner</div>
                 ) : listing.data.company ? (
                   <div>Listed by: {listing.data.company.name.value}</div>
                 ) : listing.data.privateOwner ? (
-                  <div>For Rent by Owner</div>
+                  <div>For rent by owner</div>
                 ) : null}
               </div>
             </div>
