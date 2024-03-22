@@ -7,6 +7,7 @@ import OwnerForm from "./forms/OwnerForm";
 import CompanyForm from "./forms/CompanyForm";
 import PrivateOwnerForm from "./forms/PrivateOwnerForm";
 import ErrorMsg from "../../../shared/errorMsg/ErrorMsg";
+import { Helmet } from "react-helmet";
 
 export default function Page4() {
   const state = useAppSelector((s) => s.editListingPage);
@@ -16,6 +17,10 @@ export default function Page4() {
     if (basicInfo.forSaleBy.value?.id === "agent") {
       return (
         <div className={styles.container}>
+          <Helmet>
+            <title>Homegrown | Edit listing</title>
+            <meta name="edit-listing" content="edit listing page 4" />
+          </Helmet>
           <AgentForm thisPageNum={4} />
           <Pagination />
           <Footer />
@@ -26,6 +31,10 @@ export default function Page4() {
     if (basicInfo.forSaleBy.value?.id === "owner") {
       return (
         <div className={styles.container}>
+          <Helmet>
+            <title>Homegrown | Edit listing</title>
+            <meta name="edit-listing" content="edit listing page 4" />
+          </Helmet>
           <OwnerForm thisPageNum={4} />
           <Pagination />
           <Footer />
@@ -38,6 +47,10 @@ export default function Page4() {
     if (basicInfo.forRentBy.value?.id === "company") {
       return (
         <div className={styles.container}>
+          <Helmet>
+            <title>Homegrown | Edit listing</title>
+            <meta name="edit-listing" content="edit listing page 4" />
+          </Helmet>
           <CompanyForm thisPageNum={4} />
           <Pagination />
           <Footer />
@@ -48,6 +61,10 @@ export default function Page4() {
     if (basicInfo.forRentBy.value?.id === "private-owner") {
       return (
         <div className={styles.container}>
+          <Helmet>
+            <title>Homegrown | Edit listing</title>
+            <meta name="edit-listing" content="edit listing page 4" />
+          </Helmet>
           <PrivateOwnerForm thisPageNum={4} />
           <Pagination />
           <Footer />
@@ -59,6 +76,10 @@ export default function Page4() {
   if (!basicInfo.forRentBy && !basicInfo.forSaleBy) {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 4" />
+        </Helmet>
         <form style={{ justifyContent: "center", fontSize: "18px" }}>
           <section>
             <p>Please complete page 2 in order to populate this page.</p>
@@ -73,6 +94,10 @@ export default function Page4() {
   if (basicInfo.forRentBy && basicInfo.forRentBy?.value === null) {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 4" />
+        </Helmet>
         <form style={{ justifyContent: "center", fontSize: "18px" }}>
           <section>
             <p>Please complete page 2 in order to populate this page.</p>
@@ -87,6 +112,10 @@ export default function Page4() {
   if (basicInfo.forSaleBy && basicInfo.forSaleBy?.value === null) {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 4" />
+        </Helmet>
         <form style={{ justifyContent: "center", fontSize: "18px" }}>
           <section>
             <p>Please complete page 2 in order to populate this page.</p>
@@ -100,6 +129,10 @@ export default function Page4() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+        <title>Homegrown | Edit listing</title>
+        <meta name="edit-listing" content="edit listing page 4" />
+      </Helmet>
       <form style={{ justifyContent: "center", fontSize: "18px" }}>
         <section>
           <p>Please complete page 2 in order to populate this page.</p>

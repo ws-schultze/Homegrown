@@ -21,6 +21,7 @@ import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Error from "../../shared/error/Error";
 import { ReactComponent as MagnifyingGlassSVG } from "./assets/magnifying-glass-solid.svg";
 import { FetchedListing } from "../../../types";
+import { Helmet } from "react-helmet";
 
 register();
 
@@ -62,6 +63,10 @@ export default function HomePage() {
   ) {
     return (
       <Suspense fallback={<Spinner size="large" />}>
+        <Helmet>
+          <title>Homegrown | Welcome</title>
+          <meta name="home" content="home page" />
+        </Helmet>
         <header
           className={`${styles.header} ${
             screenSize !== "desktop" ? styles.mobile : ""

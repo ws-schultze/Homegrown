@@ -14,6 +14,7 @@ import EmailInput, {
 } from "../../shared/inputs/emailInput/EmailInput";
 import Footer from "../../shared/footer/Footer";
 import GoogleOAuth from "../../shared/oAuth/google/GoogleOAuth";
+import { Helmet } from "react-helmet";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +71,10 @@ export default function SignInPage() {
   return (
     <>
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Sign in</title>
+          <meta name="sign-in" content="sign in" />
+        </Helmet>
         <form>
           <EmailInput emit={handleEmail} />
           <PasswordInput emit={handlePassword} />

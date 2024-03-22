@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Suspense } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import BedAndBathFilter from "../../shared/listingFilters/bedAndBathFilter/BedAndBathFilter";
 import Footer from "../../shared/footer/Footer";
@@ -25,7 +25,7 @@ import { AbsDropdownMenu } from "../../shared/dropdownWrappers/types";
 import MobileListingOverlayPage from "../listingOverlayPage/mobile/MobileListingOverlayPage";
 import MobileOverlayCard from "./map/mobileOverlayCard/MobileOverlayCard";
 import MobileListView from "./mobileListView/MobileListView";
-import Spinner from "../../shared/loaders/Spinner";
+import { Helmet } from "react-helmet";
 
 const dDropdownBtnStyle = {
   height: "50px",
@@ -164,6 +164,10 @@ export default function ExploreListingsPage(): JSX.Element {
   if (screenSize === "desktop") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Explore Listings</title>
+          <meta name="explore-listings" content="Explore listings map page" />
+        </Helmet>
         <div className={styles.filters}>
           <input
             className={styles["search-box"]}
@@ -173,25 +177,21 @@ export default function ExploreListingsPage(): JSX.Element {
             ref={searchRef}
             defaultValue={place ? place.formatted_address : ""}
           />
-
           <ForSaleOrRentFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="For Sale or Rent"
             btnStyles={dDropdownBtnStyle}
           />
-
           <PriceFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="Price Range"
             btnStyles={dDropdownBtnStyle}
           />
-
           <ListingTypeFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="Listing Type"
             btnStyles={dDropdownBtnStyle}
           />
-
           <BedAndBathFilter<AbsDropdownMenu>
             menuKind="absolute"
             label="Beds and Baths"
@@ -203,7 +203,6 @@ export default function ExploreListingsPage(): JSX.Element {
             }}
           />
         </div>
-
         <div className={styles["content"]}>
           <div className={styles["listing-cards-container"]}>
             <div className={styles["listing-cards"]}>
@@ -246,7 +245,6 @@ export default function ExploreListingsPage(): JSX.Element {
                   </p>
                 </div>
               ) : null}
-
               <ul>
                 {pageState.currentFilteredListings.length > 0
                   ? pageState.currentFilteredListings.map((listing, i) => (
@@ -268,7 +266,6 @@ export default function ExploreListingsPage(): JSX.Element {
               <Footer />
             </div>
           </div>
-
           <Wrapper
             apiKey={`${process.env.REACT_APP_GOOGLE_API_KEY}`}
             render={renderMap}
@@ -280,7 +277,6 @@ export default function ExploreListingsPage(): JSX.Element {
             </div>
           </Wrapper>
         </div>
-
         {pageState.showFullListingOverlay && pageState.listingToOverlay ? (
           <DesktopListingOverlayPage />
         ) : null}

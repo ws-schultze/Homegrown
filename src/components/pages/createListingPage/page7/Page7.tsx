@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { Uploads } from "../../../../types";
 import Footer from "../../../shared/footer/Footer";
 import Pagination from "../shared/Pagination";
@@ -11,6 +12,10 @@ interface Props {
 export default function Page7(props: Props) {
   return (
     <div className={styles.container}>
+      <Helmet>
+        <title>Homegrown | Create listing</title>
+        <meta name="create-listing" content="create listing page 7" />
+      </Helmet>
       <ReviewForm thisPageNum={7} uploads={props.uploads} />
       <Pagination />
       <Footer />

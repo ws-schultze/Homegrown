@@ -33,6 +33,7 @@ import styles from "./profile.module.scss";
 import { ReactComponent as LockSVG } from "./assets/lockIcon.svg";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import { useAppSelector } from "../../../redux/hooks";
+import { Helmet } from "react-helmet";
 
 export interface TypeProfile {
   username: Username;
@@ -329,6 +330,10 @@ export default function ProfilePage() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+        <title>Homegrown | Profile</title>
+        <meta name="profile" content="profile" />
+      </Helmet>
       {state.loading === false ? (
         <form id={styles["personal-details"]}>
           <header>Personal Details</header>

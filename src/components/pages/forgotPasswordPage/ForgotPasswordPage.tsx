@@ -10,6 +10,7 @@ import EmailInput, {
 import Footer from "../../shared/footer/Footer";
 import { ReactComponent as BellSVG } from "./assets/bell-regular.svg";
 import GoogleOAuth from "../../shared/oAuth/google/GoogleOAuth";
+import { Helmet } from "react-helmet";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<Email>(initEmail);
@@ -39,6 +40,10 @@ export default function ForgotPasswordPage() {
   return (
     <>
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Forgot password</title>
+          <meta name="forgot-password" content="forgot password" />
+        </Helmet>
         <form onSubmit={handleSubmit}>
           <div className={styles.notice}>
             <BellSVG />

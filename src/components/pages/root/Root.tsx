@@ -10,6 +10,7 @@ import { useAppSelector } from "../../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { setUserAcknowledgedSiteIsDemo } from "../../../common/commonSlice";
 import { ReactComponent as CloseSVG } from "./assets/rectangle-xmark-regular.svg";
+import { Helmet } from "react-helmet";
 
 export default function Root({
   children,
@@ -46,26 +47,26 @@ export default function Root({
         <MobileNavbar />
       )}
       {/* <div
-          className={styles.user_acknowledgement_container}
-          style={{
-            display:
-              commonState.userAcknowledgedSiteIsDemo === false ? "flex" : "none",
-          }}
-        >
-          <div className={styles.user_acknowledgement}>
-            <div className={styles.notice}>
-              <div>
-                <h1>Welcome 😃</h1>
-                <p>
-                  Explore my application’s features to the fullest by creating an
-                  account, but note it's a demo version, not for commercial use.
-                </p>
-                <p>- W. S. Schultze</p>
+            className={styles.user_acknowledgement_container}
+            style={{
+              display:
+                commonState.userAcknowledgedSiteIsDemo === false ? "flex" : "none",
+            }}
+          >
+            <div className={styles.user_acknowledgement}>
+              <div className={styles.notice}>
+                <div>
+                  <h1>Welcome 😃</h1>
+                  <p>
+                    Explore my application’s features to the fullest by creating an
+                    account, but note it's a demo version, not for commercial use.
+                  </p>
+                  <p>- W. S. Schultze</p>
+                </div>
+                <button onClick={handleUserAcknowledgment}>I understand</button>
               </div>
-              <button onClick={handleUserAcknowledgment}>I understand</button>
             </div>
-          </div>
-        </div> */}
+          </div> */}
       <main id="main-container" className={styles.main}>
         <div
           className={styles.demo_notice}

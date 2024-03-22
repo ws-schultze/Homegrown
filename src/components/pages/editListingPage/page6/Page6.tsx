@@ -5,6 +5,7 @@ import UploadsEditForm from "./forms/UploadsEditForm";
 import { Uploads } from "../../../../types/index";
 import { Dispatch, SetStateAction } from "react";
 import { FormProps } from "../types/formProps";
+import { Helmet } from "react-helmet";
 
 interface Props {
   uploads: Uploads;
@@ -14,6 +15,10 @@ interface Props {
 export default function Page6(props: Props) {
   return (
     <div className={styles.container}>
+      <Helmet>
+        <title>Homegrown | Edit listing</title>
+        <meta name="edit-listing" content="edit listing page 6" />
+      </Helmet>
       <UploadsEditForm
         thisPageNum={6}
         uploads={props.uploads}

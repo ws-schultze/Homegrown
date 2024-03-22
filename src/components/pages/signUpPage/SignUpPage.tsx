@@ -26,6 +26,7 @@ import UsernameInput, {
 import Spinner from "../../shared/loaders/Spinner";
 import Footer from "../../shared/footer/Footer";
 import GoogleOAuth from "../../shared/oAuth/google/GoogleOAuth";
+import { Helmet } from "react-helmet";
 
 interface State {
   username: Username;
@@ -134,6 +135,10 @@ export default function SignUpPage() {
   return (
     <>
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Sign up</title>
+          <meta name="sign-up" content="sign up" />
+        </Helmet>
         <form id="sign-up-form">
           <UsernameInput emit={handleUserName} />
           <EmailInput emit={handleEmail} />

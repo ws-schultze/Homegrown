@@ -12,6 +12,7 @@ import Error from "../../../shared/error/Error";
 import CondoForm from "./forms/CondoForm";
 import TownhouseForm from "./forms/TownhouseForm";
 import LandForm from "./forms/LandForm";
+import { Helmet } from "react-helmet";
 
 export default function Page5() {
   const state = useAppSelector((s) => s.editListingPage);
@@ -25,6 +26,10 @@ export default function Page5() {
   if (listingKind.value === null) {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <form style={{ justifyContent: "center", fontSize: "18px" }}>
           <section>
             <p>Please complete page 2 in order to populate this page.</p>
@@ -39,6 +44,10 @@ export default function Page5() {
   if (id === "single-family-home") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <SingleFamilyHomeForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -49,6 +58,10 @@ export default function Page5() {
   if (id === "apartment") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <ApartmentForRentForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -59,6 +72,10 @@ export default function Page5() {
   if (id === "apartment-building") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <ApartmentBuildingForSaleForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -69,6 +86,10 @@ export default function Page5() {
   if (id === "multi-family-home") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <MultiFamilyHomeForSaleForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -79,6 +100,10 @@ export default function Page5() {
   if (id === "multi-family-home-unit") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <MultiFamilyHomeUnitForRentForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -89,6 +114,10 @@ export default function Page5() {
   if (id === "condo") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <CondoForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -99,6 +128,10 @@ export default function Page5() {
   if (id === "townhouse") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <TownhouseForm thisPageNum={5} />
         <Pagination />
         <Footer />
@@ -109,6 +142,10 @@ export default function Page5() {
   if (id === "land") {
     return (
       <div className={styles.container}>
+        <Helmet>
+          <title>Homegrown | Edit listing</title>
+          <meta name="edit-listing" content="edit listing page 5" />
+        </Helmet>
         <LandForm thisPageNum={5} />
         <Pagination />
         <Footer />

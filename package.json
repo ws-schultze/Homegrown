@@ -88,6 +88,7 @@
     "@storybook/react": "^6.5.15",
     "@storybook/testing-library": "^0.0.13",
     "@types/google.maps": "^3.52.0",
+    "@types/react-helmet": "^6.1.11",
     "@types/react-lazy-load-image-component": "^1.6.3",
     "@types/validator": "^13.7.12",
     "babel-plugin-named-exports-order": "^0.0.2",

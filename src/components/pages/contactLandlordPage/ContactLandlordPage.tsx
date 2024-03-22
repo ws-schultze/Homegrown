@@ -9,6 +9,7 @@ import ListingCard from "../../shared/listingCard/ListingCard";
 import { FetchedListing, TypeFetchedListingData } from "../../../types/index";
 import { useScreenSizeContext } from "../../../ScreenSizeProvider";
 import Footer from "../../shared/footer/Footer";
+import { Helmet } from "react-helmet";
 
 export default function ContactLandlordPage() {
   const [loading, setLoading] = useState(true);
@@ -65,6 +66,10 @@ export default function ContactLandlordPage() {
     return (
       <>
         <div className={styles.container}>
+          <Helmet>
+            <title>Homegrown | Contact Landlord</title>
+            <meta name="contact" content="contact landlord page" />
+          </Helmet>
           <header>
             <p className={styles["landlord-name"]}>
               {listing.data.agent
