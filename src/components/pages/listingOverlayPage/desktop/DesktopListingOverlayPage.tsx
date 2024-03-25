@@ -17,6 +17,7 @@ import {
   setShowFullOverlay,
 } from "../../exploreListingsPage/exploreListingsPageSlice";
 import Features from "../components/features/Features";
+import ImageLoad from "../../../shared/imageLoad/ImageLoad";
 
 export default function ListingOverlayPage() {
   const listing = useAppSelector(
@@ -80,7 +81,7 @@ export default function ListingOverlayPage() {
           <>
             <div className={styles.images}>
               {uploads.images.value.map((image, i) => (
-                <img key={i} src={image.url} alt="" />
+                <ImageLoad image={image} key={i} />
               ))}
             </div>
 
