@@ -23,7 +23,7 @@
   overflow: hidden;
   // Messes up the swiper if shadow is here
   // box-shadow: var(--box-shadow);
-  background: var(--color-bg-primary);
+  // background: var(--color-bg-primary);
   border: var(--border);
   &:hover {
     border-color: var(--color-primary);
@@ -38,7 +38,7 @@
   width: 375px;
   margin: auto;
   overflow: hidden;
-  background: var(--color-bg-primary);
+  // background: var(--color-bg-primary);
 }
 
 .details {

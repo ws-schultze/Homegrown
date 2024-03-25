@@ -72,33 +72,35 @@ export default function HomePage() {
             screenSize !== "desktop" ? styles.mobile : ""
           }`}
         >
-          <img src={TopImage} alt="" fetchpriority="high" />
-          {userContext.isAuthenticated ? (
-            <p>Welcome Back</p>
-          ) : (
-            <p>Explore The Market</p>
-          )}
-          <div
-            className={`${styles["searchbox-container"]} ${
-              screenSize !== "desktop" ? styles.mobile : ""
-            }`}
-          >
+          <div className={styles.welcome}>
+            {/* <img src={TopImage} alt="" fetchpriority="high" /> */}
+            {userContext.isAuthenticated ? (
+              <p>Welcome Back</p>
+            ) : (
+              <p>Explore The Market</p>
+            )}
             <div
-              className={`${styles.searchbox} ${
+              className={`${styles["searchbox-container"]} ${
                 screenSize !== "desktop" ? styles.mobile : ""
               }`}
             >
-              <MagnifyingGlassSVG className={styles.magnifying_glass} />
-              <input
-                id="place-filter-searchbox"
-                type="search"
-                ref={searchRef}
-                placeholder={
-                  screenSize !== "desktop"
-                    ? "Search listings by location"
-                    : "Search by city, postal code, county, state or country"
-                }
-              />
+              <div
+                className={`${styles.searchbox} ${
+                  screenSize !== "desktop" ? styles.mobile : ""
+                }`}
+              >
+                <MagnifyingGlassSVG className={styles.magnifying_glass} />
+                <input
+                  id="place-filter-searchbox"
+                  type="search"
+                  ref={searchRef}
+                  placeholder={
+                    screenSize !== "desktop"
+                      ? "Search listings by location"
+                      : "Search by city, postal code, county, state or country"
+                  }
+                />
+              </div>
             </div>
           </div>
           <Wrapper

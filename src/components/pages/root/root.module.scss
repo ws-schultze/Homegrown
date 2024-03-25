@@ -7,7 +7,12 @@
   flex-direction: column;
   flex-grow: 1;
   color: var(--color-primary);
-  background: var(--color-bg-primary);
+  // background: var(--color-bg-primary);
+  background: linear-gradient(
+    to top,
+    var(--color-bg-tertiary),
+    var(--color-bg-primary)
+  );
 
   display: flex;
   flex-direction: column;
