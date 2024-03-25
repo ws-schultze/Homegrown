@@ -135,15 +135,14 @@
 
 .images {
   display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-  background: var(--color-bg-secondary);
+  flex-direction: column;
+  // gap: 5px;
+  // flex-wrap: wrap;
+  // background: var(--color-bg-secondary);
   flex-grow: 1;
-  height: 100vh;
+  height: 100dvh;
   overflow-y: scroll;
   img {
-    width: 100%;
-    max-height: 80vh;
     object-fit: cover;
   }
 }

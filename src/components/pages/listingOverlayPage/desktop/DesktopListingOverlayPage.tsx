@@ -81,7 +81,7 @@ export default function ListingOverlayPage() {
           <>
             <div className={styles.images}>
               {uploads.images.value.map((image, i) => (
-                <ImageLoad image={image} key={i} />
+                <ImageLoad image={image} key={i} height={600} />
               ))}
             </div>
 

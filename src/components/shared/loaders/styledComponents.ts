@@ -7,7 +7,7 @@ export const LargeContainer = styled.div`
   bottom: 0;
   left: 0;
   //   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 5000;
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +17,7 @@ export const SmallContainer = styled.div`
   height: 100%;
   width: 100%;
   //   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 5000;
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
