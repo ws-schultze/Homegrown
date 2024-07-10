@@ -1,4 +1,8 @@
-# Setup
+# What Is This App Anyway?
+
+This is a straightforward real estate marketplace application that allows users to create listings for properties they want to sell or rent. All listings are stored in a Firestore database, and images are stored in a Firebase storage bucket. The Google Maps API provides geolocation and interactive map services. Users can create an account and log in to the app. Once logged in, users can create, update, and delete their own listings. All listings are visible to the public.
+
+## Setup
 
 Start by cloning this repo to a location of your choosing.
 
@@ -43,7 +47,7 @@ const analytics = getAnalytics(app);
 
 In the project's root, create a new dot file .env.local and in it, create an environmental variable for each of the firebaseConfig key/value pairs like so:
 
-```
+```javascript
 REACT_APP_GOOGLE_API_KEY = supersecret key
 
 REACT_APP_FIREBASE_AUTH_DOMAIN = something
@@ -59,7 +63,9 @@ REACT_APP_FIREBASE_APP_ID = something
 REACT_APP_FIREBASE_MEASUREMENT_ID = something
 ```
 
-Now these environmental variable can be called from within firebase.config.ts
+Make sure to add this file to your .gitignore file so the keys don't push to github.
+
+Now these environmental variable can be called from within firebase.config.ts as follows:
 
 ```javascript
 // ... same as before ...
@@ -77,7 +83,7 @@ const firebaseConfig = {
 // ... same as before ...
 ```
 
-In order to be able to do some crud actions, apply the following rules to your new firestore database:
+In order to be able to do some crud actions, apply the following rules to your new firestore database from within the firebase console:
 
 ```javascript
 rules_version = '2';
@@ -106,7 +112,7 @@ service cloud.firestore {
 
 ## Storage
 
-Setup storage in the project, then make a storage bucket, other than the default bucket, that will hold images for the project and apply the following rules to it:
+Setup storage in the project, then make a storage bucket other than the default bucket. This non default bucket will hold images for the project. Apply apply the following rules to it:
 
 ```javascript
 rules_version = '2';
@@ -124,3 +130,24 @@ service firebase.storage {
   }
 }
 ```
+
+## Google Maps API
+
+To get map functionality, you will need to get a Google Maps API key. You can get one [here](https://developers.google.com/maps/gmp-get-started). Once you have your key, add it to the .env.local file like so:
+
+```javascript
+REACT_APP_GOOGLE_API_KEY = supersecret key
+//... same as before ...
+```
+
+Note that while enabling the Google Maps API, you will need to enable the following APIs:
+
+1. Maps JavaScript API
+2. Places API
+3. Geocoding API
+4. Address Validation API
+
+## Running the App
+
+To run the app, open a terminal from within the project's root directory and run `npm start`
+The app will open in your default browser at `http://localhost:3000/` unless you have specified another location.
