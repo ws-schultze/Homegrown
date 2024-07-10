@@ -13,7 +13,6 @@ function useSetupMapTypeIdControls(map: google.maps.Map | undefined) {
         const mapTypeMenu = makeElement({
           component: (
             <MapTypeDropdown
-              // menuItems={["roadmap", "hybrid", "terrain", "dark", "desert"]}
               menuItems={["roadmap", "hybrid", "terrain"]}
               defaultMapType="roadmap"
               map={map}
