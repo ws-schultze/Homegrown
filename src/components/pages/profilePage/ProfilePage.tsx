@@ -400,19 +400,6 @@ export default function ProfilePage() {
               <SignOutSVG />
               Sign out
             </button>
-            <button
-              type="button"
-              onClick={() =>
-                toast.error("This is a toast", {
-                  closeOnClick: true,
-                  autoClose: false,
-                  draggable: true,
-                  theme: "colored",
-                })
-              }
-            >
-              TOAST
-            </button>
           </div>
         </form>
       ) : null}
